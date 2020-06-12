@@ -1,0 +1,23 @@
+{
+  "docker": {
+    "image": "",
+    "args": ""
+  },
+  "environment": {
+
+  },
+  "pipeline": [
+    {
+      "name": "prep",
+      "commands": [
+        "echo 'helloo world' "
+      ]
+    },
+    {
+      "name": "build",
+      "commands": [
+        "echo 'building' "
+      ]
+    }
+  ]
+}
