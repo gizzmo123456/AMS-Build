@@ -66,7 +66,7 @@ if __name__ == "__main__":
         exit(1)
 
     print("Deploying docker container, please wait...")
-    dockerRun = "sudo docker run {args} -v $(HOME)/CI-root:/root/CI-root -v $(HOME)/CI-config/test.json:/root/CI-root/pipelineConfig.json {image} python3 /root/CI-root/main-ci-root.py".format(args="-it --rm -v $(HOME):/root/project", image="gizzmo123456/server_info:0.1" )
+    dockerRun = "sudo docker run {args} -v ${HOME}/CI-root:/root/CI-root -v ${HOME}/CI-config/test.json:/root/CI-root/pipelineConfig.json {image} python3 /root/CI-root/main-ci-root.py".format(args="-it --rm -v ${HOME}:/root/project", image="gizzmo123456/server_info:0.1", HOME="{HOME}" )
     print(dockerRun)
     for line in run_process( dockerRun ):  # if the fist word of the first line is error this image does not exist in the repo.
         print(line)
