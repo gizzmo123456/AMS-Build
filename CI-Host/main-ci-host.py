@@ -57,7 +57,7 @@ if __name__ == "__main__":
         for line in run_process( "sudo docker pull {image}".format(image="gizzmo123456/server_info:0.1") ):          # if the fist word of the first line is error this image does not exist in the repo.
             if error and line.split( " " )[ 0 ].lower() != "error":
                 error = False
-                print( " Found!, Pulling image." )
+                print( "Found!, Pulling image." )
             print( line )
 
 
@@ -67,7 +67,7 @@ if __name__ == "__main__":
 
     print("Deploying docker container, please wait...")
 
-    for line in run_process( "sudo docker run {args} -v ../CI-root:/root/CI-root -v ../CI-config/test.json:/root/CI-root/pipelineConfig.json {image} python3 /root/CI-root/main-ci-root.py".format(args="-it --rm -v ~/:/root/project", image="gizzmo123456/server_info:0.1" ) ):  # if the fist word of the first line is error this image does not exist in the repo.
+    for line in run_process( "sudo docker run {args} -v ${HOME}/CI-root:/root/CI-root -v ${HOME}/CI-config/test.json:/root/CI-root/pipelineConfig.json {image} python3 /root/CI-root/main-ci-root.py".format(args="-it --rm -v ${HOME}:/root/project", image="gizzmo123456/server_info:0.1", HOME="{HOME}" ) ):  # if the fist word of the first line is error this image does not exist in the repo.
         print(line)
 
     for line in run_process( "echo 'Im the Precess :)' " ):
