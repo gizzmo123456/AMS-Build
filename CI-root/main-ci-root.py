@@ -3,4 +3,4 @@
 
 
 if __name__ == "__main__":
-    pass
+    print("Start Build Process, Hold Tight...")
