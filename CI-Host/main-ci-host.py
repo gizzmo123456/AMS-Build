@@ -11,33 +11,6 @@ def read_file( file_name ):
 def get_dict_from_json( file_name ):
     return json.loads( read_file( file_name ) )
 
-def build_config_sh(config):
-    """ builds the sh file for each stage.
-    :param config:  the config dict
-    """
-
-    env = ["# set up the environment"]
-    # build the environment section of the sh file
-    for e in config["environment"]:
-        line = "export {0}={1}".format(e, config["environment"][e])
-        env.append(line)
-
-    stages = []
-    stage_names = []
-
-    # build each stage
-    for p in config["pipeline"]:
-        stage = [ "# stage "+p["name"] ]
-        for c in p["commands"]:
-            stage.append( c )
-        stages.append(stage)
-
-    # it worth noting that if we are going to bind mount directories into the image the configs
-    # need to be unique folder, to insure that files are not over writen, before or during use.
-    with open("stage.txt", mode="w") as file:
-        file.write( '\n'.join( stages[0] ) )
-
-
 if __name__ == "__main__":
 
     print("Loading Config...")
