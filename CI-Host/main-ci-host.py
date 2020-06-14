@@ -19,6 +19,7 @@ if __name__ == "__main__":
     project_name = "exampleProject"
     default_shell = "sh"
 
+    docker_root_directory = "/root/AMS-CI"
     base_directory = "${HOME}/unity-ci"
     project_directory = base_directory + "/CI-project"
     build_project_directory = "{project_dir}/{project}/{build}".format(project_dir=project_directory,
@@ -41,11 +42,11 @@ if __name__ == "__main__":
     }
 
     docker_cof = {
-        "ci-root-dest"      : "/root/AMS-CI/CI-root:ro",                                # ci-tool mouth point as read only
-        "ci-config-dest"    : "/root/AMS-CI/pipeline.json:ro",                          # config mouth point as read only
-        "project-dest"      : "/root/project",                                          # project source mount point
-        "build-output-dest" : "/root/project/unityBuild/Builds/StandaloneWindows",      # build output mount point
-        "stdout-dest"       : "/root/AMS-CI/output.txt",                                # stdout mount point
+        "ci-root-dest"      : docker_root_directory + "/CI-root:ro",                    # ci-tool mouth point as read only
+        "ci-config-dest"    : docker_root_directory + "/pipeline.json:ro",              # config mouth point as read only
+        "project-dest"      : "/root/project",                                          # project source mount point    (TODO user defined)
+        "build-output-dest" : "/root/project/unityBuild/Builds/StandaloneWindows",      # build output mount point      (TODO user defined)
+        "stdout-dest"       : docker_root_directory + "/output.txt",                    # stdout mount point
         "image"             : config["docker"]["image"],
         "args"              : config["docker"]["args"]
     }
@@ -103,7 +104,7 @@ if __name__ == "__main__":
                                ci_build_path=local_cof["build-output"], ci_build_dest=docker_cof["build-output-dest"],
                                ci_stdout_path=local_cof["stdout"],      ci_stdout_dest=docker_cof["stdout-dest"],
                                image="gableroux/unity3d:2018.4.2f1-windows",
-                               cmd="python3 /root/CI-root/main-ci-root.py")
+                               cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=docker_root_directory) )
 
     print("Running docker cmd:", dockerRun)
 
