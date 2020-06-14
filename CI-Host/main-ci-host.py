@@ -42,10 +42,10 @@ if __name__ == "__main__":
 
     docker_cof = {
         "ci-root-dest"      : "/root/CI-root:ro",                                       # ci-tool mouth point as read only
-        "ci-config-dest"    : "/root/CI-root/pipeline.json:ro",                         # config mouth point as read only
+        "ci-config-dest"    : "/root/CI-conf/pipeline.json:ro",                         # config mouth point as read only
         "project-dest"      : "/root/project",                                          # project source mount point
         "build-output-dest" : "/root/project/unityBuild/Builds/StandaloneWindows",      # build output mount point
-        "stdout-dest"       : "/root/CI-root/output/output.txt",                        # stdout mount point
+        "stdout-dest"       : "/root/CI-output/output.txt",                             # stdout mount point
         "image"             : config["docker"]["image"],
         "args"              : config["docker"]["args"]
     }
