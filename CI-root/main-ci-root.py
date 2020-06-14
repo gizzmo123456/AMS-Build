@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 # The CI-root directory needs to mounted to /root/CI-root within the container
 #
 
@@ -5,7 +6,7 @@ import subprocess
 
 def run_process( command ):  # Todo: make this common :)
 
-    process = subprocess.Popen( ['python3', '-c', 'import os;os.system("{0}")'.format(command)], stdout=subprocess.PIPE )
+    process = subprocess.Popen( ['sh', '-c', command], stdout=subprocess.PIPE )
 
     while True:
         line = process.stdout.readline().decode( "utf-8" )
