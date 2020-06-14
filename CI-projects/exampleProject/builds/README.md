@@ -1,8 +1,7 @@
 Root folder for all project builds.
 
-the idea is every build gets it own unique build folder 
-which is mounted into the project at 'CI-root/build'
-
-
-the build folder is a copy of 'templateBuild' folder, 
+This idea behind this, we have a master copy of the project that is 
+copied into its own directory for building.
+the build directory will contain the output log, a copy of the project, 
+a copy of the pipeline.json file and a directory for the output build :)
 
