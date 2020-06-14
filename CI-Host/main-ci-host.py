@@ -27,7 +27,7 @@ if __name__ == "__main__":
         "ci-root-dest": "/root/CI-root:ro",                     # ci-tool mouth point as read only
         "ci-config-dest": "/root/CI-config/pipeline.json:ro",   # config mouth point as read only
         "project-dest": "/root/project:ro",                     # project mount point as read only
-        "image": config["docker"]["iamge"],
+        "image": config["docker"]["image"],
         "args": config["docker"]["args"]
     }
 
