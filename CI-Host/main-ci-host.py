@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     error = False
 
-    for line in common.run_process( "sudo docker image inspect {image}".format(image="gizzmo123456/server_info:0.1") ):     # if the first line is an empty list (ie. [] ) no image exist
+    for line in common.run_process( "sudo docker image inspect {image}".format(image="gableroux/unity3d:2018.4.2f1-windows"), shell="sh" ):     # if the first line is an empty list (ie. [] ) no image exist
         if line == "[]":
             error = True
             continue
@@ -66,7 +66,7 @@ if __name__ == "__main__":
 
     if error:   # attempt to pull the image
         print("Attempting pull image from docker...")
-        for line in common.run_process( "sudo docker pull {image}".format(image="gizzmo123456/server_info:0.1") ):          # if the fist word of the first line is error this image does not exist in the repo.
+        for line in common.run_process( "sudo docker pull {image}".format(image="gableroux/unity3d:2018.4.2f1-windows"), shell="sh" ):          # if the fist word of the first line is error this image does not exist in the repo.
             if error and line.split( " " )[ 0 ].lower() != "error":
                 error = False
                 print( "Found!, Pulling image." )
@@ -89,8 +89,8 @@ if __name__ == "__main__":
                                                                image="gableroux/unity3d:2018.4.2f1-windows",
                                                                HOME="{HOME}" )
     print(dockerRun)
-    for line in common.run_process( dockerRun ):  # if the fist word of the first line is error this image does not exist in the repo.
+    for line in common.run_process( dockerRun, shell="sh" ):  # if the fist word of the first line is error this image does not exist in the repo.
         print(line)
 
-    for line in common.run_process( "echo 'Im the Precess :)' " ):
+    for line in common.run_process( "echo 'Im the Precess :)' ", shell="sh" ):
         print( line )
