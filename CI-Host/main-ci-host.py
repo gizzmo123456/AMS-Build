@@ -15,11 +15,11 @@ if __name__ == "__main__":
 
     print( "Loading Config..." )
     default_shell = "sh"
-    config = get_dict_from_json( "../CI-config/test.json" )
+    config = get_dict_from_json( "../CI-projects/exampleProject/pipeline.json" )
 
     local_cof = {
         "ci-root": "${HOME}/unity-ci/CI-root/",
-        "ci-config": "${HOME}/unity-ci/CI-config/test.json",
+        "ci-config": "${HOME}/unity-ci/CI-projects/exampleProject/pipeline.json",
         "project": "${HOME}/project/"
     }
 
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     # and any files created are not passed back into the host system.
     dockerRun = "sudo docker run " \
                 "{args} " \
-                "-v {project_path}:{project_dest}" \
+                "-v {project_path}:{project_dest} " \
                 "-v {ci_root_path}:{ci_root_dest} " \
                 "-v {ci_config_path}:{ci_config_dest} " \
                 "{image} " \

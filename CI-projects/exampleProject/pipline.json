@@ -1,7 +1,7 @@
 {
   "docker": {
-    "image": "",
-    "args": ""
+    "image": "gableroux/unity3d:2018.4.2f1-windows",
+    "args": "-it --rm"
   },
   "environment": {
 
