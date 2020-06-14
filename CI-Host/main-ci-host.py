@@ -20,7 +20,7 @@ if __name__ == "__main__":
     default_shell = "sh"
 
 
-    config = get_dict_from_json( "../CI-projects/exampleProject/pipeline.json" )
+    config = get_dict_from_json( "../CI-projects/exampleProject/master/pipeline.json" )
 
     local_cof = {
         "ci-root"       : "${HOME}/unity-ci/CI-root/",
@@ -37,8 +37,8 @@ if __name__ == "__main__":
         "project-dest"  : "/root/project",                        # project mount point
         "build_output"  : "",
         "output"        : "",
-        "image": config["docker"]["image"],
-        "args": config["docker"]["args"]
+        "image"         : config["docker"]["image"],
+        "args"          : config["docker"]["args"]
     }
 
     print("Local Config:", local_cof)
