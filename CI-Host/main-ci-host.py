@@ -93,8 +93,8 @@ if __name__ == "__main__":
                 "-v {project_path}:{project_dest} " \
                 "-v {ci_root_path}:{ci_root_dest} " \
                 "-v {ci_config_path}:{ci_config_dest} " \
-                "-v {ci_build_path}:{ci_build_dest}" \
-                "-v {ci_stdout_path}:{ci_stdout_dest}" \
+                "-v {ci_build_path}:{ci_build_dest} " \
+                "-v {ci_stdout_path}:{ci_stdout_dest} " \
                 "{image} " \
                 "{cmd}".format(args=docker_cof["args"],
                                project_path=local_cof["project"],       project_dest=docker_cof["project-dest"],
