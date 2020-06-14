@@ -103,7 +103,7 @@ if __name__ == "__main__":
                 "-v ${HOME}/unity-ci/CI-config/test.json:/root/CI-config/pipeline.json " \
                 "{image} " \
                 "python3 /root/CI-root/main-ci-root.py".format(args="-it --rm -v ${HOME}/project:/root/project",
-                                                               image="gizzmo123456/server_info:0.1",
+                                                               image="gableroux/unity3d:2018.4.2f1-windows",
                                                                HOME="{HOME}" )
     print(dockerRun)
     for line in run_process( dockerRun ):  # if the fist word of the first line is error this image does not exist in the repo.
