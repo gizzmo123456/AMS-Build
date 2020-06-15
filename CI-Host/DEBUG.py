@@ -44,7 +44,7 @@ class LOGS:
         LOGS.debug_thread.start()
 
     @staticmethod
-    def print( *argv, message_type=1, sept=' ', output_filename="" ):
+    def print( *argv, message_type=1, sept=' ', output_filename="", print=True ):
 
         if not LOGS.debug_mode or (not LOGS.que_pre_init_msg and not LOGS.inited):
             return
@@ -65,7 +65,7 @@ class LOGS:
         else:
             message_type_name = "MESSAGE"
 
-        LOGS.print_que.put( (time_str, message_type_name, sept.join(argv), output_filename) )
+        LOGS.print_que.put( (time_str, message_type_name, sept.join(argv), output_filename, print) )
 
     @staticmethod
     def debug_print_thread( ):
@@ -79,11 +79,12 @@ class LOGS:
 
         while LOGS.active:
 
-            time, type, message, output_file = LOGS.print_que.get(block=True, timeout=None)
+            time, type, message, output_file, print  = LOGS.print_que.get(block=True, timeout=None)
 
-            if output_file == "":
+            if print:
                 print( " | {0} | {1} | {2} ".format( time, type, message ) )
-            else:
+
+            if output_file != "":
                 LOGS.add_to_logs(output_file, " | {0} | {1} ".format( time, message ))
 
         LOGS.active = False
