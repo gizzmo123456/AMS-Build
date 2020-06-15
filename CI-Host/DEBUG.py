@@ -79,7 +79,12 @@ class LOGS:
 
         while LOGS.active:
 
-            time, type, message, output_file, console = LOGS.print_que.get(block=True, timeout=None)
+            log = LOGS.print_que.get(block=True, timeout=None)
+
+            if len(log) == 5:
+                time, type, message, output_file, console = log
+            else:
+                break
 
             if console:
                 print( " | {0} | {1} | {2} ".format( time, type, message ) )
@@ -114,4 +119,5 @@ class LOGS:
         LOGS.active = False
 
         # we must put an message into the que to make sure it gets un blocked
-        LOGS.print("[Unblock message]")
+        LOGS.print_que.put( ["[Unblock message]"] )
+
