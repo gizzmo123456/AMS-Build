@@ -23,7 +23,7 @@ class Webhook( baseHTTPServer.BaseServer ):
             self.process_request( "", 404, True )
         else:
             self.process_request( "Processing GET request...", 200, True )
-            Webhook.task_queue.put( build_task.BuildTask( "exampleProject", "master" ) )
+            Webhook.task_queue.put( build_task.BuildTask( "exampleProject" ) )
             print( "Processing POST request" )
             print( post_data )
 
@@ -37,5 +37,5 @@ class Webhook( baseHTTPServer.BaseServer ):
             self.process_request("", 404, True)
         else:
             self.process_request("Processing GET request...", 200, True)
-            Webhook.task_queue.put( build_task.BuildTask("exampleProject", "master") )
+            Webhook.task_queue.put( build_task.BuildTask("exampleProject") )
             print("Processing GET request")
