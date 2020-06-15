@@ -23,16 +23,14 @@ class BuildTask:
             # TODO: master needs to be the name of the copied directory
             "ci-config": self.build_project_directory + "/pipeline.json",
             "project": self.build_project_directory + "/project_source/",
-            "build-output": self.build_project_directory + "/build",
-            "stdout": self.build_project_directory + "/output.txt"
+            "build-output": self.build_project_directory + "/build"
         }
 
         self.docker_cof = {
             "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",  # ci-tool mouth point as read only
             "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/pipeline.json:ro",  # config mouth point as read only
-            "project-dest": "/root/project",  # project source mount point    (TODO user defined)
-            "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows",  # build output mount point      (TODO user defined)
-            "stdout-dest": DOCKER_ROOT_DIRECTORY + "/output.txt",  # stdout mount point
+            "project-dest": "/root/project",  # project source mount point                                              (TODO user defined)
+            "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows",  # build output mount point       (TODO user defined)
             "image": self.config[ "docker" ][ "image" ],
             "args": self.config[ "docker" ][ "args" ]
         }
@@ -59,14 +57,12 @@ class BuildTask:
                     "-v {ci_root_path}:{ci_root_dest} " \
                     "-v {ci_config_path}:{ci_config_dest} " \
                     "-v {ci_build_path}:{ci_build_dest} " \
-                    "-v {ci_stdout_path}:{ci_stdout_dest} " \
                     "{image} " \
                     "{cmd}".format( args=self.docker_cof[ "args" ],
                                     project_path=self.local_cof[ "project" ], project_dest=self.docker_cof[ "project-dest" ],
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
                                     ci_config_path=self.local_cof[ "ci-config" ], ci_config_dest=self.docker_cof[ "ci-config-dest" ],
                                     ci_build_path=self.local_cof[ "build-output" ], ci_build_dest=self.docker_cof[ "build-output-dest" ],
-                                    ci_stdout_path=self.local_cof[ "stdout" ], ci_stdout_dest=self.docker_cof[ "stdout-dest" ],
                                     image="gableroux/unity3d:2018.4.2f1-windows",
                                     cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=DOCKER_ROOT_DIRECTORY ) )
 
