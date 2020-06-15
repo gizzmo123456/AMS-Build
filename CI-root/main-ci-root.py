@@ -33,7 +33,7 @@ def build_config_sh(config):
 
 if __name__ == "__main__":
 
-    cmd = "cd /root/project/unityBuild;" \
+    cmd = "cd /root/project/unityBuild; " \
           "source ./preBuild.sh;" \
           "./before_script.sh;" \
           "./build.default2.sh;"
