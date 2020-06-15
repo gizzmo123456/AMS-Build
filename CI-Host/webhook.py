@@ -1,6 +1,7 @@
 import baseHTTPServer
 from urllib.parse import urlparse, parse_qsl
-from http.server import BaseHTTPRequestHandler, HTTPServer  # this must be removed
+
+from http.server import BaseHTTPRequestHandler, HTTPServer  # this must be removed when local testing is complete
 
 
 class Webhook( baseHTTPServer.BaseServer ):
