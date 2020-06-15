@@ -40,7 +40,7 @@ class BuildTask:
     def local_image_exist( self ):
         """check if the docker image in config exist locally"""
         for line in common.run_process( "sudo docker image inspect {image}".format(image=self.docker_cof["image"]), shell=DEFAULT_SHELL ):
-            return line == "[]"  # if the first line is an empty list (ie. [] ) no image exist
+            return not (line == "[]")  # if the first line is an empty list (ie. [] ) no image exist
 
     def pull_image( self ):
         """attempts to pull the docker image from index.docker.io"""
