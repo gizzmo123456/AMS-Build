@@ -1,6 +1,7 @@
 from const import *
 import json
 import common
+import time
 
 # TODO print needs to change to log to file.
 # i think it might be worth using the debugger from game_server :)
@@ -8,11 +9,17 @@ import common
 class BuildTask:
     "Build tasks..."
 
-    def __init__( self, project_name, build_name ):
+    def __init__( self, project_name ):
 
-        self.build_project_directory = "{project_dir}/{project}/{build}".format( project_dir=PROJECT_DIRECTORY,
-                                                                                 project=project_name,
-                                                                                 build=build_name )
+        self.build_name = project_name + str( time.time() )  # todo: build number
+
+        self.master_build_directory = "{project_dir}/{project}/{build}".format( project_dir=PROJECT_DIRECTORY,
+                                                                                project=project_name,
+                                                                                build="master")
+
+        self.build_project_directory = "{project_dir}/{project}/builds/{build}".format( project_dir=PROJECT_DIRECTORY,
+                                                                                        project=project_name,
+                                                                                        build=self.build_name )
 
         self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( relv_proj_dir=RELEVENT_PROJECT_PATH,
                                                                                project=project_name )
@@ -47,6 +54,15 @@ class BuildTask:
                 return False
             print( line )
         return True
+
+    def copy_master_directory( self ):
+
+        cmd = "sudo cp -r {master_dir} {build_dir}".format( master_dir=self.master_build_directory,
+                                                            build_dir=self.build_project_directory )
+
+        for line in common.run_process( cmd, shell=DEFAULT_SHELL ):
+            print( line )
+
 
     def deploy_container( self ):
         """deploys the docker container to run the build"""
@@ -90,8 +106,10 @@ class BuildTask:
             print("Image Found!")
 
         print( "=" * 24 )
-        print( "Deploying docker container, please wait..." )
+        print("Copying master directory")
+        self.copy_master_directory()
 
+        print( "Deploying docker container, please wait..." )
         self.deploy_container()
         # TODO: clean up...
 
