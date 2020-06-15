@@ -1,14 +1,15 @@
 # TODO.
 
 - [x] Finishing mapping file path
-- [ ] Add copy master, to build folder
-- [ ] Add build log
+- [wip] Add copy master, to build folder
+- [wip] Add build log
 - [ ] redesign the json file.
 
 - [wip] Add Basic webhook
+- - [ ] test 
 - [ ] add simple webpage
 
 ============================================
 
-- [ ] Add Job Queue
+- [wip] Add Job Queue
 - [ ]  
