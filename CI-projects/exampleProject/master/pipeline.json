@@ -3,6 +3,22 @@
     "image": "gableroux/unity3d:2018.4.2f1-windows",
     "args": "-it --rm"
   },
+  "webhook": {
+    "name": "push",
+    "method": "POST",
+    "project_request_name": "exampleProject",
+    "authorized_actors": [
+      "ashley sands"
+    ],
+    "master-commands": [
+      "cd testCIGame/",
+      "sudo git pull origin master "
+    ],
+    "pre-build-command": [
+      "cd testCIGame/",
+      "git checkout --detach {build_hash}"
+    ]
+  },
   "environment": {
 
   },
