@@ -5,6 +5,7 @@ import build_task
 import common
 import webhook
 import threading
+import time
 from http.server import HTTPServer
 import queue
 
@@ -61,7 +62,7 @@ if __name__ == "__main__":
             # find if there is any available resources to launch the task
             # - clean up old task
             for i in range(len(active_tasks), -1, -1):
-                if not active_tasks[i].is_alive():
+                if not active_tasks[i][0].is_alive():
                     active_tasks.pop(i)
             # - start new tasks
             while len(active_tasks) < max_running_tasks and len(pending_task) > 0:
@@ -69,6 +70,9 @@ if __name__ == "__main__":
                 worker = threading.Thread( target=task_worker, args=(start_task,) )
                 worker.start()
                 active_tasks.append( worker, start_task )
+                start_task = None
+            # time for a nap
+            time.sleep(1000)
 
     #alive = False
     DEBUG.LOGS.close()
