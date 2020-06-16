@@ -1,7 +1,7 @@
 from const import *
 import json
 import common
-import time
+from datetime import datetime
 
 # TODO print needs to change to log to file.
 # i think it might be worth using the debugger from game_server :)
@@ -11,42 +11,51 @@ class BuildTask:
 
     def __init__( self, trigger_actor, project_name, build_hash, master_commands=[], pre_build_commands=[] ):
 
+        self.format_values = {
+            # directorys
+            "project_dir":          PROJECT_DIRECTORY,
+            "relv_proj_dir":        RELEVENT_PROJECT_PATH,
+            "master_dir":           "",
+            "build_dir":            "",
+            "master_source_dir":    "",
+            "build_source_dir":     "",
+            # project
+            "project":              project_name,
+            "master_build_name":    "master",
+            # build
+            "build_name":           "",
+            "build_hash":           build_hash,
+            "build_index":          0,
+            # util
+            "actor":                trigger_actor,
+            "now":                  datetime.now().strftime("/%d%m/%Y @ %H:%M:%S")
+        }
+
         # load config file
-        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( relv_proj_dir=RELEVENT_PROJECT_PATH,
-                                                                               project=project_name )
+        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
         self.config = common.get_dict_from_json( self.config )
 
         # create build name, and define fine corresponding directories
-        self.build_name = "{project}_{build_hash}_build_{build_index}".format(project=project_name,
-                                                               build_hash=build_hash,
-                                                               build_index=0 )    # todo index me :)
-
-        self.master_build_directory = "{project_dir}/{project}/{build}".format( project_dir=PROJECT_DIRECTORY,
-                                                                                project=project_name,
-                                                                                build="master")
-
-        self.build_project_directory = "{project_dir}/{project}/builds/{build}".format( project_dir=PROJECT_DIRECTORY,
-                                                                                        project=project_name,
-                                                                                        build=self.build_name )
+        self.format_values["build_name"] = "{project}_{build_hash}_build_{build_index}".format( **self.format_values )
+        self.format_values["master_dir"] = "{project_dir}/{project}/{master_build_name}".format( **self.format_values )
+        self.format_values["build_dir"]  = "{project_dir}/{project}/builds/{build_name}".format( **self.format_values )
+        self.format_values["master_source_dir"] = self.format_values["master_dir"] + "/project_source"
+        self.format_values["build_source_dir"] = self.format_values["build_dir"] + "/project_source"
 
         # prepare the build.
         # - run master commands in project source
         # - copy master directory to build directory
         # - run pre build commands
-        for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format(
-                master_source_dir=self.master_build_directory+"/project_source"), shell="bash"):
+        #Todo: combin these three
+        for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
             print(line)
 
-        for line in common.run_process( "sudo cp -r {master_dir} {build_dir} "
-                                        "cd {build_dir} "
-                                        "sudo echo {created} >> createdBy.txt".format(
-                master_dir=self.master_build_directory,
-                build_dir=self.build_project_directory,
-                created="Build triggered by " + trigger_actor + " at " + str( time.time() )), shell="bash" ):
+        for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
+                                        "cd {build_dir}; "
+                                        "sudo echo created by {actor} - {now} >> createdBy.txt;".format( **self.format_values ), shell="bash" ):
             print(line)
 
-        for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format(
-                master_source_dir=self.build_project_directory+"/project_source"), shell="bash"):
+        for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
             print(line)
 
         # create the local and docker configs
@@ -80,15 +89,6 @@ class BuildTask:
                 return False
             print( line )
         return True
-
-    def copy_master_directory( self ):
-
-        cmd = "sudo cp -r {master_dir} {build_dir}".format( master_dir=self.master_build_directory,
-                                                            build_dir=self.build_project_directory )
-
-        for line in common.run_process( cmd, shell=DEFAULT_SHELL ):
-            print( line )
-
 
     def deploy_container( self ):
         """deploys the docker container to run the build"""
@@ -132,8 +132,6 @@ class BuildTask:
             print("Image Found!")
 
         print( "=" * 24 )
-        print("Copying master directory")
-        self.copy_master_directory()
 
         print( "Deploying docker container, please wait..." )
         self.deploy_container()
