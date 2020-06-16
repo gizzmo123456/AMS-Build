@@ -39,6 +39,8 @@ if __name__ == "__main__":
             # task.execute()
             print("Task de queued :)")
             pass
+        else:
+            print("???")
 
     #alive = False
     DEBUG.LOGS.close()
