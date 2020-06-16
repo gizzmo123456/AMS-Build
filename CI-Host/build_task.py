@@ -41,7 +41,7 @@ class BuildTask:
                 master_source_dir=self.master_build_directory+"/project_source/testCIGame",         # note: this should only go as far as project source. testCIGame should e in the pipeline file.
                 master_dir=self.master_build_directory,
                 build_dir =self.master_build_directory,
-                created="Build triggered by "+trigger_actor+" at "+time.time() ), shell="bash"):
+                created="Build triggered by "+trigger_actor+" at "+str(time.time()) ), shell="bash"):
             print(line)
 
         # create the local and docker configs
