@@ -9,9 +9,12 @@ from datetime import datetime
 class BuildTask:
     "Build tasks..."
 
-    def __init__( self, trigger_actor, project_name, build_hash, master_commands=[], pre_build_commands=[] ):
-
-        self.format_values = {
+    def __init__( self, trigger_actor, project_name, build_hash, webhook=False, webhook_name="" ):
+        """ if webhook is is True, webhook_name must be set in the project pipeline
+            otherwise the task will be ignored on execution.
+            TBH this serves as a workaround until the webhook is able to do it own look up :)
+        """
+        self.format_values = {      # values are public to the pipeline file
             # directorys
             "project_dir":          PROJECT_DIRECTORY,
             "relv_proj_dir":        RELEVENT_PROJECT_PATH,
@@ -42,11 +45,21 @@ class BuildTask:
         self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
         self.config = common.get_dict_from_json( self.config )
 
+        # just to save the headack
+        # valid if not a webhook or is webhook and webhook name is defined in project name and request actor is defined in the webhook auth users
+        self.valid = not webhook or ( webhook and "webhook" in self.config and "name" in self.config["webhook"] and
+                                      self.config["webhook"]["name"] == webhook_name and "authorized_actors" in self.config["webhook"] and
+                                      trigger_actor in self.config["webhook"]["authorized_actors"] )
+
+        if not self.valid:
+            return
+
         # prepare the build.
         # - run master commands in project source
         # - copy master directory to build directory
         # - run pre build commands
-        if len(master_commands) > 0:
+        if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master_commands"]) > 0:
+            master_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["master-commands"] ]     # add format values to commands
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
                 print(line)
 
@@ -55,7 +68,8 @@ class BuildTask:
                                         "sudo echo created by {actor} - {now} >> createdBy.txt;".format( **self.format_values ), shell="bash" ):
             print(line)
 
-        if len(pre_build_commands) > 0:
+        if webhook and "pre-build-commands" in self.config["webhook"] and len(self.config["webhook"]["pre-build-commands"]) > 0:
+            pre_build_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["pre-build-commands"] ]   # add format values to commands
             for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
                 print(line)
 
@@ -114,6 +128,10 @@ class BuildTask:
             print( line )
 
     def execute( self ):
+
+        if not self.valid:
+            print("Invalid task, ignoring...")
+            return
 
         print( "Local Config:", self.local_cof )
         print( "Docker Config:", self.docker_cof )

@@ -21,15 +21,21 @@ class Webhook( baseHTTPServer.BaseServer ):
         content_len = int( self.headers[ 'Content-Length' ] )
         post_data = json.loads( self.rfile.read( content_len ) )
 
-        if path != "/request":
+        if path != "/request" and "name" not in query or "project" not in query:
             self.process_request( "Error: ...", 404, False )
         else:
             actor = post_data["actor"]["display_name"]
             project_request_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
-            Webhook.task_queue.put( build_task.BuildTask( actor, "exampleProject", build_hash ) )
-            print( "Processing POST request" )
+            task = build_task.BuildTask( actor, query["project"],
+                                                          build_hash, webhook=True,
+                                                          webhook_name=query["name"] )
+            if task.valid:
+                Webhook.task_queue.put( build_task )
+                print( "Processing POST request" )
+            else:
+                print( "Invalid task")
 
             self.process_request( "Ok", 200, False )
 
