@@ -61,7 +61,8 @@ class BuildTask:
         if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master-commands"]) > 0:
             master_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["master-commands"] ]     # add format values to commands
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
-                _print(line, output_filename=self.stdout_filepath, console=False)
+                # _print(line, output_filename=self.stdout_filepath, console=False) # hmm what to do about this. the file does not exist uptill the next set of commands
+                _print(line, output_filename="", console=True)
 
 
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
