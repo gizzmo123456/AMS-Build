@@ -27,4 +27,5 @@ def read_file( file_name ):
 
 
 def get_dict_from_json( file_name ):
+
     return json.loads( read_file( file_name ) )

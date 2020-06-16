@@ -39,6 +39,6 @@
     }
   ],
   "cleanup": {
-    "remove_build_source": true,
+    "remove_build_source": "true"
   }
 }
