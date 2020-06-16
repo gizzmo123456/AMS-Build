@@ -50,7 +50,7 @@ if __name__ == "__main__":
         print( "Task de queued :)" )
 
         # wait to start pending task,  collecting new task as they are submitted
-        while len(pending_task) > 0 and task_queue.empty():
+        while task is not None and len(pending_task) > 0 and task_queue.empty():
             if task is not None:
                 if isinstance( task, build_task.BuildTask ):
                     pending_task.append( task )
