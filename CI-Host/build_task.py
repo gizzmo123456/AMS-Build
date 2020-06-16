@@ -34,13 +34,14 @@ class BuildTask:
         # - copy master directory to build directory
         # - run pre build commands
         for line in common.run_process("cd {master_source_dir}; "
-                                       "git pull origin master; "
+                                       "ls;"
+                                       "sudo git pull origin master; "
                                        "sudo cp -r {master_dir} {build_dir}; "
                                        "cd {build_dir}; "
                                        "echo {created} >> createdBy.txt".format(
                 master_source_dir=self.master_build_directory+"/project_source/testCIGame",         # note: this should only go as far as project source. testCIGame should e in the pipeline file.
                 master_dir=self.master_build_directory,
-                build_dir =self.master_build_directory,
+                build_dir =self.build_project_directory,
                 created="Build triggered by "+trigger_actor+" at "+str(time.time()) ), shell="bash"):
             print(line)
 

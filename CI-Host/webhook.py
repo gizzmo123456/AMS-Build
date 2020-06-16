@@ -29,7 +29,6 @@ class Webhook( baseHTTPServer.BaseServer ):
 
             Webhook.task_queue.put( build_task.BuildTask( actor, "exampleProject", build_hash ) )
             print( "Processing POST request" )
-            print( post_data )
 
             self.process_request( "Ok", 200, False )
 
