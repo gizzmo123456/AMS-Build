@@ -16,7 +16,7 @@
     ],
     "pre-build-commands": [
       "cd testCIGame/",
-      "git checkout --detach {build_hash}"
+      "sudo git checkout --detach {build_hash}"
     ]
   },
   "environment": {
