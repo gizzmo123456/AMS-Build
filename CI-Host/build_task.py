@@ -64,8 +64,7 @@ class BuildTask:
                 print(line)
 
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
-                                        "cd {build_dir}; "
-                                        "sudo echo 'created by {actor} - {now}' >> createdBy.txt;".format( **self.format_values ), shell="bash" ):
+                                        "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
             print(line)
 
         if webhook and "pre-build-commands" in self.config["webhook"] and len(self.config["webhook"]["pre-build-commands"]) > 0:
