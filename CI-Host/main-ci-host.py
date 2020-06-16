@@ -23,6 +23,7 @@ def web_interface():
 
 def task_worker(job):
 
+    _print("Starting new task")
     job.execute()
 
 
@@ -64,6 +65,7 @@ if __name__ == "__main__":
             for i in range(len(active_tasks), -1, -1):
                 if not active_tasks[i][0].is_alive():
                     active_tasks.pop(i)
+                _print("complete task removed")
             # - start new tasks
             while len(active_tasks) < max_running_tasks and len(pending_task) > 0:
                 start_task = pending_task.pop(0)
