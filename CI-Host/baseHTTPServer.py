@@ -1,5 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer      # we use this lib so we dont have to install flask :)
-
+import DEBUG
+_print = DEBUG.LOGS.print
 
 host = "0.0.0.0"
 port = 8081
@@ -14,7 +15,7 @@ class BaseServer(BaseHTTPRequestHandler):
         self.process_request()
 
     def process_request( self, content="i'm a teapot", status=418, GET=True ):
-        print( "GET:", GET, "POST", not GET, "request: ", self.path )
+        _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
         # send headed
         self.send_response( status )

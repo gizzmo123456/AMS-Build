@@ -3,6 +3,8 @@ from urllib.parse import urlparse, parse_qsl
 import build_task
 import json
 import common
+import DEBUG
+_print = DEBUG.LOGS.print
 
 from http.server import BaseHTTPRequestHandler, HTTPServer  # this must be removed when local testing is complete
 
@@ -23,7 +25,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
         if path != "/request" and "name" not in query or "project" not in query:
             self.process_request( "Error: ...", 404, False )
-            print( "Bad request, maybe name or project not set?" )
+            _print( "Bad request, maybe name or project not set?" )
         else:
             actor = post_data["actor"]["display_name"]
             project_request_name = post_data["repository"]
@@ -34,9 +36,9 @@ class Webhook( baseHTTPServer.BaseServer ):
                                                           webhook_name=query["name"] )
             if task.valid:
                 Webhook.task_queue.put( task )
-                print( "Processing POST request" )
+                _print( "Processing POST request" )
             else:
-                print( "Invalid task")
+                _print( "Invalid task")
 
             self.process_request( "Ok", 200, False )
 

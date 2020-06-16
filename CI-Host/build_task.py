@@ -1,7 +1,8 @@
 from const import *
-import json
 import common
 from datetime import datetime
+import DEBUG
+_print = DEBUG.LOGS.print
 
 # TODO print needs to change to log to file.
 # i think it might be worth using the debugger from game_server :)
@@ -45,6 +46,8 @@ class BuildTask:
         self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
         self.config = common.get_dict_from_json( self.config )
 
+        self.stdout_filepath = "{build_dir}/output.txt".format( **self.format_values["build_dir"] )
+
         # just to save the headack
         # valid if not a webhook or is webhook and webhook name is defined in project name and request actor is defined in the webhook auth users
         self.valid = not webhook or ( webhook and "webhook" in self.config and "name" in self.config["webhook"] and
@@ -61,16 +64,17 @@ class BuildTask:
         if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master-commands"]) > 0:
             master_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["master-commands"] ]     # add format values to commands
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
-                print(line)
+                _print(line, output_filename=self.stdout_filepath, console=False)
+
 
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
                                         "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
-            print(line)
+            _print(line, output_filename=self.stdout_filepath, console=False)
 
         if webhook and "pre-build-commands" in self.config["webhook"] and len(self.config["webhook"]["pre-build-commands"]) > 0:
             pre_build_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["pre-build-commands"] ]   # add format values to commands
             for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
-                print(line)
+                _print(line, output_filename=self.stdout_filepath, console=False)
 
         # create the local and docker configs
         # to map local to docker
@@ -100,7 +104,7 @@ class BuildTask:
         for line in common.run_process( "sudo docker pull {image}".format(image=self.docker_cof["image"]), shell=DEFAULT_SHELL ):          # if the fist word of the first line is error this image does not exist in the repo.
             if line.split( " " )[ 0 ].lower() == "error":   # if the first word of the first line is error the image does not exist
                 return False
-            print( line )
+            _print(line, output_filename=self.stdout_filepath, console=False)
         return True
 
     def deploy_container( self ):
@@ -123,33 +127,33 @@ class BuildTask:
 
 
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
-            print( line )
+            _print(line, output_filename=self.stdout_filepath, console=False)
 
     def execute( self ):
 
         if not self.valid:
-            print("Invalid task, ignoring...")
+            _print("Invalid task, ignoring...", output_filename=self.stdout_filepath)
             return
 
-        print( "Local Config:", self.local_cof )
-        print( "Docker Config:", self.docker_cof )
-        print( "=" * 24 )
+        _print( "Local Config:", self.local_cof, output_filename=self.stdout_filepath, console=False )
+        _print( "Docker Config:", self.docker_cof, output_filename=self.stdout_filepath, console=False )
+        _print( "=" * 24, output_filename=self.stdout_filepath, console=False )
 
-        print( "Verifying image exist..." )
+        _print( "Verifying image exist...", output_filename=self.stdout_filepath, console=False )
         image_exist = self.local_image_exist()
         if not image_exist:
-            print("Image does not exist locally")
+            _print("Image does not exist locally", output_filename=self.stdout_filepath, console=False)
             image_exist = self.pull_image()
             if not image_exist:
-                print("Image does not exist on index.docker.io (must be public)")
+                _print("Image does not exist on index.docker.io (must be public)", output_filename=self.stdout_filepath, console=False)
                 return 1
             else:
-                print("Pulled Image!")
+                _print("Pulled Image!", output_filename=self.stdout_filepath, console=False)
         else:
-            print("Image Found!")
+            _print("Image Found!", output_filename=self.stdout_filepath, console=False)
 
-        print( "=" * 24 )
+        _print( "=" * 24, output_filename=self.stdout_filepath, console=False )
 
-        print( "Deploying docker container, please wait..." )
+        _print( "Deploying docker container, please wait...", output_filename=self.stdout_filepath, console=False )
         self.deploy_container()
         # TODO: clean up...

@@ -48,16 +48,16 @@ if __name__ == "__main__":
 
         # wait for a task to come in while theres no pending
         task = task_queue.get(block=True, timeout=None)
-        print( "Task de queued :)" )
+        _print( "Task de queued :)" )
 
         # wait to start pending task,  collecting new task as they are submitted
         while task is not None or len(pending_task) > 0 and task_queue.empty():
             if task is not None:
                 if isinstance( task, build_task.BuildTask ):
                     pending_task.append( task )
-                    print("task_pending")
+                    _print("task_pending")
                 else:
-                    print("invalid task")
+                    _print("invalid task")
                 task = None
             # find if there is any available resources to launch the task
             # - clean up old task
