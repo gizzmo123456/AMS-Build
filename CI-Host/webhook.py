@@ -2,6 +2,7 @@ import baseHTTPServer
 from urllib.parse import urlparse, parse_qsl
 import build_task
 import json
+import common
 
 from http.server import BaseHTTPRequestHandler, HTTPServer  # this must be removed when local testing is complete
 

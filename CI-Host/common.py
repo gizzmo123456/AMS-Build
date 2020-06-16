@@ -2,6 +2,7 @@
 # Common function between CI-host and root.
 
 import subprocess
+import json
 
 def run_process( command, shell="python3" ):
 
@@ -17,3 +18,13 @@ def run_process( command, shell="python3" ):
             yield line
 
     process.kill()
+
+
+def read_file( file_name ):
+
+    with open(file_name) as file:
+        return ''.join( file.readlines() )
+
+
+def get_dict_from_json( file_name ):
+    return json.loads( read_file( file_name ) )

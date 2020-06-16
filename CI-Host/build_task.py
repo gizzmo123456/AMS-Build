@@ -14,12 +14,12 @@ class BuildTask:
         # load config file
         self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( relv_proj_dir=RELEVENT_PROJECT_PATH,
                                                                                project=project_name )
-        self.config = self.get_dict_from_json( self.config )
+        self.config = common.get_dict_from_json( self.config )
 
         # create build name, and define fine corresponding directories
-        self.build_name = "{name}_{hash}_build_{index}".format(name=project_name,
-                                                               hash=build_hash,
-                                                               index=0 )    # todo index me :)
+        self.build_name = "{project}_{build_hash}_build_{build_index}".format(project=project_name,
+                                                               build_hash=build_hash,
+                                                               build_index=0 )    # todo index me :)
 
         self.master_build_directory = "{project_dir}/{project}/{build}".format( project_dir=PROJECT_DIRECTORY,
                                                                                 project=project_name,
@@ -33,16 +33,20 @@ class BuildTask:
         # - run master commands in project source
         # - copy master directory to build directory
         # - run pre build commands
-        for line in common.run_process("cd {master_source_dir}; "
-                                       "ls;"
-                                       "sudo git pull origin master; "
-                                       "sudo cp -r {master_dir} {build_dir}; "
-                                       "cd {build_dir}; "
-                                       "echo {created} >> createdBy.txt".format(
-                master_source_dir=self.master_build_directory+"/project_source/testCIGame",         # note: this should only go as far as project source. testCIGame should e in the pipeline file.
+        for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format(
+                master_source_dir=self.master_build_directory+"/project_source"), shell="bash"):
+            print(line)
+
+        for line in common.run_process( "sudo cp -r {master_dir} {build_dir} "
+                                        "cd {build_dir} "
+                                        "sudo echo {created} >> createdBy.txt".format(
                 master_dir=self.master_build_directory,
-                build_dir =self.build_project_directory,
-                created="Build triggered by "+trigger_actor+" at "+str(time.time()) ), shell="bash"):
+                build_dir=self.build_project_directory,
+                created="Build triggered by " + trigger_actor + " at " + str( time.time() )), shell="bash" ):
+            print(line)
+
+        for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format(
+                master_source_dir=self.build_project_directory+"/project_source"), shell="bash"):
             print(line)
 
         # create the local and docker configs
@@ -134,11 +138,3 @@ class BuildTask:
         print( "Deploying docker container, please wait..." )
         self.deploy_container()
         # TODO: clean up...
-
-    def read_file( self, file_name ):
-
-        with open(file_name) as file:
-            return ''.join( file.readlines() )
-
-    def get_dict_from_json( self, file_name ):
-        return json.loads( self.read_file( file_name ) )
