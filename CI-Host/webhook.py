@@ -27,7 +27,7 @@ class Webhook( baseHTTPServer.BaseServer ):
             project_request_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
-            Webhook.task_queue.put( build_task.BuildTask( "exampleProject" ) )
+            Webhook.task_queue.put( build_task.BuildTask( actor, "exampleProject", build_hash ) )
             print( "Processing POST request" )
             print( post_data )
 
