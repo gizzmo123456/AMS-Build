@@ -63,9 +63,9 @@ class BuildTask:
         self.local_cof = {
             "ci-root": "{root_dir}/CI-root/".format( root_dir=BASE_DIRECTORY ),
             # TODO: master needs to be the name of the copied directory
-            "ci-config": self.build_project_directory + "/pipeline.json",
-            "project": self.build_project_directory + "/project_source/",
-            "build-output": self.build_project_directory + "/build"
+            "ci-config": self.format_values["build_dir"] + "/pipeline.json",
+            "project": self.format_values["build_source_dir"],
+            "build-output": self.format_values["build_dir"] + "/build"
         }
 
         self.docker_cof = {
