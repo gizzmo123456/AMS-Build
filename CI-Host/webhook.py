@@ -33,7 +33,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                                                           build_hash, webhook=True,
                                                           webhook_name=query["name"] )
             if task.valid:
-                Webhook.task_queue.put( build_task )
+                Webhook.task_queue.put( task )
                 print( "Processing POST request" )
             else:
                 print( "Invalid task")

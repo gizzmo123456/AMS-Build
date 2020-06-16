@@ -40,7 +40,7 @@ if __name__ == "__main__":
             print("Task de queued :)")
             pass
         else:
-            print("???")
+            print("???", type(task) )
 
     #alive = False
     DEBUG.LOGS.close()
