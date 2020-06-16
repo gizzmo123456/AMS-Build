@@ -38,7 +38,7 @@ class BuildTask:
                                        "sudo cp -r {master_dir} {build_dir}; "
                                        "cd {build_dir}; "
                                        "echo {created} >> createdBy.txt".format(
-                master_source_dir=self.master_build_directory+"/project_source",
+                master_source_dir=self.master_build_directory+"/project_source/testCIGame",         # note: this should only go as far as project source. testCIGame should e in the pipeline file.
                 master_dir=self.master_build_directory,
                 build_dir =self.master_build_directory,
                 created="Build triggered by "+trigger_actor+" at "+time.time() ), shell="bash"):
