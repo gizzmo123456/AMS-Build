@@ -71,7 +71,7 @@ if __name__ == "__main__":
                 start_task = pending_task.pop(0)
                 worker = threading.Thread( target=task_worker, args=(start_task,) )
                 worker.start()
-                active_tasks.append( worker, start_task )
+                active_tasks.append( (worker, start_task) )
                 start_task = None
             # time for a nap
             time.sleep(1000)
