@@ -22,7 +22,7 @@ class BaseServer(BaseHTTPRequestHandler):
         self.send_header( 'Access-Control-Allow-origin', '*' )
         self.end_headers()
 
-        if content == "" and status not 200:
+        if content == "" and status is not 200:
             content = "Error " + str( status )
         # reply
         self.wfile.write( content.encode() )
