@@ -62,7 +62,7 @@ if __name__ == "__main__":
                 task = None
             # find if there is any available resources to launch the task
             # - clean up old task
-            for i in range(len(active_tasks), -1, -1):
+            for i in range(len(active_tasks)-1, -1, -1):
                 if not active_tasks[i][0].is_alive():
                     active_tasks.pop(i)
                 _print("complete task removed")
