@@ -37,5 +37,8 @@
         "echo 'building' "
       ]
     }
-  ]
+  ],
+  "cleanup": {
+    "remove_build_source": true,
+  }
 }

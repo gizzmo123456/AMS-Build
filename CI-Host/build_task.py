@@ -4,9 +4,6 @@ from datetime import datetime
 import DEBUG
 _print = DEBUG.LOGS.print
 
-# TODO print needs to change to log to file.
-# i think it might be worth using the debugger from game_server :)
-# As that can handle both print and log to file called from different threads
 class BuildTask:
     "Build tasks..."
 
@@ -86,10 +83,10 @@ class BuildTask:
         }
 
         self.docker_cof = {
-            "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",  # ci-tool mouth point as read only
-            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/pipeline.json:ro",  # config mouth point as read only
-            "project-dest": "/root/project",  # project source mount point                                              (TODO user defined)
-            "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows",  # build output mount point       (TODO user defined)
+            "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                  # ci-tool mouth point as read only
+            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/pipeline.json:ro",          # config mouth point as read only
+            "project-dest": self.config[ "docker" ][ "project-dest" ],              # project source mount point
+            "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],    # build output mount point
             "image": self.config[ "docker" ][ "image" ],
             "args": self.config[ "docker" ][ "args" ]
         }
@@ -122,7 +119,7 @@ class BuildTask:
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
                                     ci_config_path=self.local_cof[ "ci-config" ], ci_config_dest=self.docker_cof[ "ci-config-dest" ],
                                     ci_build_path=self.local_cof[ "build-output" ], ci_build_dest=self.docker_cof[ "build-output-dest" ],
-                                    image="gableroux/unity3d:2018.4.2f1-windows",
+                                    image=self.docker_cof["image"],
                                     cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=DOCKER_ROOT_DIRECTORY ) )
 
 
