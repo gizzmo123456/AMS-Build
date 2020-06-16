@@ -9,9 +9,17 @@ import time
 class BuildTask:
     "Build tasks..."
 
-    def __init__( self, project_name ):
+    def __init__( self, trigger_actor, project_name, build_hash, master_commands=[], pre_build_commands=[] ):
 
-        self.build_name = project_name + str( time.time() )  # todo: build number
+        # load config file
+        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( relv_proj_dir=RELEVENT_PROJECT_PATH,
+                                                                               project=project_name )
+        self.config = self.get_dict_from_json( self.config )
+
+        # create build name, and define fine corresponding directories
+        self.build_name = "{name}_{hash}_build_{index}".format(name=project_name,
+                                                               hash=build_hash,
+                                                               index=0 )    # todo index me :)
 
         self.master_build_directory = "{project_dir}/{project}/{build}".format( project_dir=PROJECT_DIRECTORY,
                                                                                 project=project_name,
@@ -21,10 +29,23 @@ class BuildTask:
                                                                                         project=project_name,
                                                                                         build=self.build_name )
 
-        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( relv_proj_dir=RELEVENT_PROJECT_PATH,
-                                                                               project=project_name )
-        self.config = self.get_dict_from_json( self.config )
+        # prepare the build.
+        # - run master commands in project source
+        # - copy master directory to build directory
+        # - run pre build commands
+        for line in common.run_process("cd {master_source_dir}; "
+                                       "git pull origin master; "
+                                       "sudo cp -r {master_dir} {build_dir}; "
+                                       "cd {build_dir}; "
+                                       "echo {created} >> createdBy.txt".format(
+                master_source_dir=self.master_build_directory+"/project_source",
+                master_dir=self.master_build_directory,
+                build_dir =self.master_build_directory,
+                created="Build triggered by "+trigger_actor+" at "+time.time() ), shell="bash"):
+            print(line)
 
+        # create the local and docker configs
+        # to map local to docker
         self.local_cof = {
             "ci-root": "{root_dir}/CI-root/".format( root_dir=BASE_DIRECTORY ),
             # TODO: master needs to be the name of the copied directory

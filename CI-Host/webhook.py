@@ -1,6 +1,7 @@
 import baseHTTPServer
 from urllib.parse import urlparse, parse_qsl
 import build_task
+import json
 
 from http.server import BaseHTTPRequestHandler, HTTPServer  # this must be removed when local testing is complete
 
@@ -17,12 +18,17 @@ class Webhook( baseHTTPServer.BaseServer ):
         query = parse_qsl( request.query )
 
         content_len = int( self.headers[ 'Content-Length' ] )
-        post_data = self.rfile.read( content_len )
+        post_data = json.loads( self.rfile.read( content_len ) )
 
         if path != "/request":
-            self.process_request( "", 404, True )
+            self.process_request( "Error: ...", 404, True )
         else:
-            self.process_request( "Processing GET request...", 200, True )
+            self.process_request( "Ok", 200, True )
+
+            actor = post_data["actor"]
+            project_request_name = post_data["repository"]
+            build_hash = post_data["push"]["changes"]["new"]["target"]["hash"]
+
             Webhook.task_queue.put( build_task.BuildTask( "exampleProject" ) )
             print( "Processing POST request" )
             print( post_data )
@@ -36,6 +42,4 @@ class Webhook( baseHTTPServer.BaseServer ):
         if path != "/request":
             self.process_request("", 404, True)
         else:
-            self.process_request("Processing GET request...", 200, True)
-            Webhook.task_queue.put( build_task.BuildTask("exampleProject") )
-            print("Processing GET request")
+            self.process_request("", 404, True)
