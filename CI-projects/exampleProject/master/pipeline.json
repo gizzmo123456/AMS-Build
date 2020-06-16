@@ -14,7 +14,7 @@
       "cd testCIGame/",
       "sudo git pull origin master "
     ],
-    "pre-build-command": [
+    "pre-build-commands": [
       "cd testCIGame/",
       "git checkout --detach {build_hash}"
     ]
