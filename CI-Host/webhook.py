@@ -16,7 +16,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
         request = urlparse( self.path )
         path = request.path
-        query = parse_qsl( request.query )
+        query = dict(parse_qsl( request.query ))
 
         content_len = int( self.headers[ 'Content-Length' ] )
         post_data = json.loads( self.rfile.read( content_len ) )
