@@ -23,6 +23,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
         if path != "/request" and "name" not in query or "project" not in query:
             self.process_request( "Error: ...", 404, False )
+            print( "Bad request, maybe name or project not set?" )
         else:
             actor = post_data["actor"]["display_name"]
             project_request_name = post_data["repository"]
