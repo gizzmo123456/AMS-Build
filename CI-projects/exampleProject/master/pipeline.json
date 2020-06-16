@@ -1,7 +1,9 @@
 {
   "docker": {
     "image": "gableroux/unity3d:2018.4.2f1-windows",
-    "args": "-it --rm"
+    "args": "-it --rm",
+    "project-dest": "/root/project",
+    "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows"
   },
   "webhook": {
     "name": "push",

@@ -76,7 +76,6 @@ class BuildTask:
         # to map local to docker
         self.local_cof = {
             "ci-root": "{root_dir}/CI-root/".format( root_dir=BASE_DIRECTORY ),
-            # TODO: master needs to be the name of the copied directory
             "ci-config": self.format_values["build_dir"] + "/pipeline.json",
             "project": self.format_values["build_source_dir"],
             "build-output": self.format_values["build_dir"] + "/build"
