@@ -48,8 +48,8 @@ class BuildTask:
         # just to save the headack
         # valid if not a webhook or is webhook and webhook name is defined in project name and request actor is defined in the webhook auth users
         self.valid = not webhook or ( webhook and "webhook" in self.config and "name" in self.config["webhook"] and
-                                      self.config["webhook"]["name"] == webhook_name and "authorized_actors" in self.config["webhook"] and
-                                      trigger_actor in self.config["webhook"]["authorized_actors"] )
+                                      self.config["webhook"]["name"] == webhook_name and "authorized-actors" in self.config["webhook"] and
+                                      trigger_actor in self.config["webhook"]["authorized-actors"] )
 
         if not self.valid:
             return
@@ -58,7 +58,7 @@ class BuildTask:
         # - run master commands in project source
         # - copy master directory to build directory
         # - run pre build commands
-        if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master_commands"]) > 0:
+        if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master-commands"]) > 0:
             master_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["master-commands"] ]     # add format values to commands
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
                 print(line)

@@ -7,7 +7,7 @@
     "name": "push",
     "method": "POST",
     "project_request_name": "exampleProject",
-    "authorized_actors": [
+    "authorized-actors": [
       "ashley sands"
     ],
     "master-commands": [
