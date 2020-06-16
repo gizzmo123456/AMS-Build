@@ -31,32 +31,33 @@ class BuildTask:
             "now":                  datetime.now().strftime("/%d%m/%Y @ %H:%M:%S")
         }
 
-        # load config file
-        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
-        self.config = common.get_dict_from_json( self.config )
-
-        # create build name, and define fine corresponding directories
+        # create build name, and define corresponding directories
         self.format_values["build_name"] = "{project}_{build_hash}_build_{build_index}".format( **self.format_values )
         self.format_values["master_dir"] = "{project_dir}/{project}/{master_build_name}".format( **self.format_values )
         self.format_values["build_dir"]  = "{project_dir}/{project}/builds/{build_name}".format( **self.format_values )
         self.format_values["master_source_dir"] = self.format_values["master_dir"] + "/project_source"
         self.format_values["build_source_dir"] = self.format_values["build_dir"] + "/project_source"
 
+        # load config file
+        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
+        self.config = common.get_dict_from_json( self.config )
+
         # prepare the build.
         # - run master commands in project source
         # - copy master directory to build directory
         # - run pre build commands
-        #Todo: combin these three
-        for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
-            print(line)
+        if len(master_commands) > 0:
+            for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
+                print(line)
 
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
                                         "cd {build_dir}; "
                                         "sudo echo created by {actor} - {now} >> createdBy.txt;".format( **self.format_values ), shell="bash" ):
             print(line)
 
-        for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
-            print(line)
+        if len(pre_build_commands) > 0:
+            for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
+                print(line)
 
         # create the local and docker configs
         # to map local to docker
