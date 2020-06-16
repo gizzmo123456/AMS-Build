@@ -21,17 +21,18 @@ class Webhook( baseHTTPServer.BaseServer ):
         post_data = json.loads( self.rfile.read( content_len ) )
 
         if path != "/request":
-            self.process_request( "Error: ...", 404, True )
+            self.process_request( "Error: ...", 404, False )
         else:
-            self.process_request( "Ok", 200, True )
-
             actor = post_data["actor"]
             project_request_name = post_data["repository"]
-            build_hash = post_data["push"]["changes"]["new"]["target"]["hash"]
+            build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
             Webhook.task_queue.put( build_task.BuildTask( "exampleProject" ) )
             print( "Processing POST request" )
             print( post_data )
+
+            self.process_request( "Ok", 200, False )
+
 
     def do_GET( self ):
 
