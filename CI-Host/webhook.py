@@ -23,7 +23,7 @@ class Webhook( baseHTTPServer.BaseServer ):
         if path != "/request":
             self.process_request( "Error: ...", 404, False )
         else:
-            actor = post_data["actor"]
+            actor = post_data["actor"]["display_name"]
             project_request_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
