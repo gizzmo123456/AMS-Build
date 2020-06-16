@@ -90,6 +90,7 @@ class LOGS:
                 print( " | {0} | {1} | {2} ".format( time, type, message ) )
 
             if output_file != "":
+                print(output_file)
                 LOGS.add_to_logs(output_file, " | {0} | {1} ".format( time, message ))
 
         LOGS.active = False
@@ -105,12 +106,7 @@ class LOGS:
     @staticmethod
     def add_to_logs( file_path, message ):
 
-        if os.path.exists(file_path):
-            file_mode = 'a'
-        else:
-            file_mode = 'w'
-
-        with open(file_path, file_mode) as log:
+        with open(file_path, "a") as log:
             log.write( "\n"+message )
 
     @staticmethod
