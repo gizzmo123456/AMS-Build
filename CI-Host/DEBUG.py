@@ -89,7 +89,7 @@ class LOGS:
             if console:
                 print( " | {0} | {1} | {2} ".format( time, type, message ) )
 
-            if output_file != "":
+            if output_file:
                 print(output_file)
                 LOGS.add_to_logs(output_file, " | {0} | {1} ".format( time, message ))
 
