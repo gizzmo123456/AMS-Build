@@ -101,6 +101,29 @@ class BuildTask:
         _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
+    def get_config_value( self, *keys ):
+        """Gets the config value at keys
+        :param keys: each key of the config value ie.
+                    keys "webhook", "name" would return config[webhook][name]
+                    or "pipeline", "commands", 0 would return config[pipeline][commands][0]
+                    Returns None if no set.
+        """
+        value = self.config
+        for key in keys:
+            # key is not valid if not a dict or list or if the key is an int and the value is not a list
+            if type(value) is not list or type(value) is not dict or (type(value) is list and type(key) is not int):
+                return None
+            # if value is a list, this key is an int and in range
+            elif type(value) is list and type(key) is int and key >= 0 and key < len(key):
+                value = value[key]
+            # if the key is the dict
+            elif key in value:
+                value = value[key]
+            else: # not defined.
+                return None
+
+        return value
+
 
     def local_image_exist( self ):
         """check if the docker image in config exist locally"""
