@@ -24,7 +24,7 @@ def web_interface():
 def task_worker(job):
 
     _print("Starting new task")
-    # job.execute()
+    job.execute()
     _print("job "+job.format_values["build_hash"]+" complete")
 
 if __name__ == "__main__":
