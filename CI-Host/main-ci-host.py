@@ -48,6 +48,7 @@ def task_worker(job):
 
     _print("job "+job.format_values["build_hash"]+" complete")
 
+
 if __name__ == "__main__":
 
     alive = True
@@ -57,8 +58,8 @@ if __name__ == "__main__":
 
     task_queue = queue.Queue()
     max_running_tasks = 1
-    pending_task = [] # task object
-    active_tasks = [] # tuple (thread, task object)
+    pending_tasks = [] # task object
+    active_tasks = []  # tuple (thread, task object)
 
     webhook.Webhook.task_queue = task_queue
 
@@ -72,10 +73,10 @@ if __name__ == "__main__":
         _print( "Task de queued :)" )
 
         # wait to start pending task,  collecting new task as they are submitted
-        while task is not None or len(pending_task) > 0 and task_queue.empty():
+        while task is not None or len(pending_tasks) > 0 and task_queue.empty():
             if task is not None:
                 if isinstance( task, build_task.BuildTask ):
-                    pending_task.append( task )
+                    pending_tasks.append( task )
                     _print("task_pending")
                 else:
                     _print("invalid task")
@@ -85,13 +86,16 @@ if __name__ == "__main__":
             for i in range(len(active_tasks)-1, -1, -1):
                 if not active_tasks[i][0].is_alive():
                     active_tasks.pop(i)
-                    _print("complete task removed")
+                    _print("complete task removed ({active_tasks}/{max_task})".format(active_tasks=len(active_tasks), max_task=max_running_tasks))
             # - start new tasks
-            while len(active_tasks) < max_running_tasks and len(pending_task) > 0:
-                start_task = pending_task.pop(0)
+            while len(active_tasks) < max_running_tasks and len(pending_tasks) > 0:
+                start_task = pending_tasks.pop(0)
                 worker = threading.Thread( target=task_worker, args=(start_task,) )
                 worker.start()
                 active_tasks.append( (worker, start_task) )
+                _print( "Active task {active_tasks} of {max_tasks} | current pending {pending}".format(active_tasks=len(active_tasks),
+                                                                                                       max_tasks=max_running_tasks,
+                                                                                                       pending=len(pending_tasks) ))
                 start_task = None
             # time for a nap
             time.sleep(1)
