@@ -36,7 +36,7 @@
     }
   ],
   "cleanup": {
-    "remove_build_source": "true",
-    "7z_build": "true"
+    "remove_build_source": true,
+    "7z_build": true
   }
 }
