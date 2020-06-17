@@ -96,8 +96,10 @@ class BuildTask:
             "args": self.config[ "docker" ][ "args" ]
         }
 
-        _print( "\nSUCCESSFULLY INITIALIZED BUILD TASK", output_filename=self.stdout_filepath, console=False )
-        _print( "Waiting to start task...\n", output_filename=self.stdout_filepath, console=False )
+        _print( "="*25, output_filename=self.stdout_filepath, console=False )
+        _print( "SUCCESSFULLY INITIALIZED BUILD TASK", output_filename=self.stdout_filepath, console=False )
+        _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
+        _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
 
     def local_image_exist( self ):

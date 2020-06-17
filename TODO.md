@@ -21,3 +21,4 @@
 - [ ] build cooldown
 - [ ] only build lastest in queue
 - [ ] multi-project
+- [x] Fix debug print to file and output file path 
