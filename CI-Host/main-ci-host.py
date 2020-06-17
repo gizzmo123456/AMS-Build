@@ -51,6 +51,7 @@ def task_worker(job):
 
 if __name__ == "__main__":
 
+    thr_lock_tasks = threading.Lock()
     alive = True
 
     DEBUG.LOGS.init()
