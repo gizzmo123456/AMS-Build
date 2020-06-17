@@ -41,7 +41,7 @@ class LOGS:
     def print( *argv, message_type=1, sept=' ', output_filename="", console=True ):
 
         if not LOGS.debug_mode or (not LOGS.que_pre_init_msg and not LOGS.inited):
-            print("Warning, Debug Log no initilized")
+            print("Warning, Debug Log not initilized")
             return
 
         now = datetime.datetime.utcnow()
