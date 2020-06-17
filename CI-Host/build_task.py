@@ -29,7 +29,7 @@ class BuildTask:
             "build_index":          0,
             # util
             "actor":                trigger_actor,
-            "now":                  datetime.now().strftime("/%d%m/%Y @ %H:%M:%S")
+            "created":              datetime.now().strftime("/%d%m/%Y @ %H:%M:%S")
         }
 
         # create build name, and define corresponding directories
