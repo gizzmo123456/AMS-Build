@@ -85,7 +85,7 @@ if __name__ == "__main__":
             for i in range(len(active_tasks)-1, -1, -1):
                 if not active_tasks[i][0].is_alive():
                     active_tasks.pop(i)
-                _print("complete task removed")
+                    _print("complete task removed")
             # - start new tasks
             while len(active_tasks) < max_running_tasks and len(pending_task) > 0:
                 start_task = pending_task.pop(0)
@@ -94,7 +94,7 @@ if __name__ == "__main__":
                 active_tasks.append( (worker, start_task) )
                 start_task = None
             # time for a nap
-            time.sleep(1000)
+            time.sleep(1)
 
     #alive = False
     DEBUG.LOGS.close()
