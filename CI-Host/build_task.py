@@ -54,6 +54,7 @@ class BuildTask:
         if not self.valid:
             return
 
+        print("Starting master/pre-build commands: OUTPUT FILE PATH: ", self.stdout_filepath)
         # prepare the build.
         # - run master commands in project source
         # - copy master directory to build directory
