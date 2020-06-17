@@ -26,12 +26,6 @@
   },
   "pipeline": [
     {
-      "name": "prep",
-      "commands": [
-        "echo 'Prep stange' "
-      ]
-    },
-    {
       "name": "build",
       "commands": [
         "cd /root/project/unityBuild",
@@ -39,15 +33,10 @@
         "./before_script.sh",
         "./build.default2.sh"
       ]
-    },
-    {
-      "name": "package",
-      "commands": [
-        "echo 'Package Stage' "
-      ]
     }
   ],
   "cleanup": {
-    "remove_build_source": "true"
+    "remove_build_source": "true",
+    "7z_build": "true"
   }
 }

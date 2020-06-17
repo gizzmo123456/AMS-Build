@@ -12,7 +12,7 @@ class BuildTask:
             otherwise the task will be ignored on execution.
             TBH this serves as a workaround until the webhook is able to do it own look up :)
         """
-        self.format_values = {      # values are public to the pipeline file
+        self.format_values = {      # values are public to the pipeline file    # it might be worth passing this into the contatiner.
             # directorys
             "project_dir":          PROJECT_DIRECTORY,
             "relv_proj_dir":        RELEVENT_PROJECT_PATH,
