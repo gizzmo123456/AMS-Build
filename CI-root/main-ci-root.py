@@ -46,7 +46,7 @@ if __name__ == "__main__":
         print( "Executing ", cmd )
         print( "Start Build Process, Hold Tight..." )
 
-        for line in common.run_process( env + cmd, shell="bash" ):
+        for line in common.run_process( env + "; " + cmd, shell="bash" ):
             print( line )
 
         print("Pipeline stage ", stage["name"].upper(), "Complete")
