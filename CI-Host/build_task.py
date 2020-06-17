@@ -111,7 +111,7 @@ class BuildTask:
         value = self.config
         for key in keys:
             # key is not valid if not a dict or list or if the key is an int and the value is not a list
-            if type(value) is not list or type(value) is not dict or (type(value) is list and type(key) is not int):
+            if (type(value) is not list and type(value) is not dict) or (type(value) is list and type(key) is not int):
                 return None
             # if value is a list, this key is an int and in range
             elif type(value) is list and type(key) is int and key >= 0 and key < len(key):

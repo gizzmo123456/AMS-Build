@@ -34,6 +34,8 @@ def task_worker(job):
         for line in common.run_process("cd {build_dir}; sudo z7 a {build_name}.7z /Build/ -sdel;".format( **job.format_values ), "bash"):
             _print( line, output_filename=job.stdout_filepath, console=False)
         _print("Zipping Complete", output_filename=job.stdout_filepath)
+    else:
+        _print( "Skipping Zipping", output_filename=job.stdout_filepath )
 
     if cleanup is not None:
         _print( "Cleaning Source...", output_filename=job.stdout_filepath )
@@ -41,6 +43,8 @@ def task_worker(job):
         for line in common.run_process( "cd {build_dir}; sudo rm -r {build_source_dir}".format( **job.format_values ), "bash" ):
             _print( line, output_filename=job.stdout_filepath, console=False )
         _print( "Build Source Removed", output_filename=job.stdout_filepath )
+    else:
+        _print( "Skipping Clean up", output_filename=job.stdout_filepath )
 
     _print("job "+job.format_values["build_hash"]+" complete")
 

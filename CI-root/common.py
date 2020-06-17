@@ -4,6 +4,7 @@
 import subprocess
 import json
 
+
 def run_process( command, shell="python3" ):
 
     process = subprocess.Popen( [shell, '-c', command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
@@ -25,6 +26,7 @@ def run_process( command, shell="python3" ):
             yield line_out
 
     process.kill()
+
 
 def read_file( file_name ):
 
