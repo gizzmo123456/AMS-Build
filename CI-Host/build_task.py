@@ -68,12 +68,12 @@ class BuildTask:
 
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
                                         "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
-            _print(line, output_filename=self.stdout_filepath, console=False)
+            _print(line, output_filename=self.stdout_filepath, console=True)
 
         if webhook and "pre-build-commands" in self.config["webhook"] and len(self.config["webhook"]["pre-build-commands"]) > 0:
             pre_build_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["pre-build-commands"] ]   # add format values to commands
             for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
-                _print(line, output_filename=self.stdout_filepath, console=False)
+                _print(line, output_filename=self.stdout_filepath, console=True)
 
         # create the local and docker configs
         # to map local to docker
