@@ -19,7 +19,7 @@ def run_process( command, shell="python3" ):
         if line_out:
             yield line_out
 
-        line_in = process.stdout.readline().decode( "utf-8" )
+        line_in = process.stdin.readline().decode( "utf-8" )
 
         if line_in:
             yield line_in
