@@ -33,15 +33,27 @@ def build_config_sh(config):
 
 if __name__ == "__main__":
 
-    cmd = "cd /root/project/unityBuild; " \
-          "source ./preBuild.sh;" \
-          "./before_script.sh;" \
-          "./build.default2.sh;"
+    pipeline_filepath = "/root/AMS-CI/CI-config/pipeline.json"
+    pipeline = common.get_dict_from_json( pipeline_filepath )
 
-    print(cmd)
-    print("Start Build Process, Hold Tight...")
+    env = "".join( [ "export {var}={value}; ".format(var=e, value=pipeline["environment"][e]) for e in pipeline["environment"] ] )
+    stages = pipeline["pipline"]
 
-    for line in common.run_process( cmd, shell="bash" ):
-        print( line )
+    for stage in stages:
+        print("Starting pipeline stage ", stage["name"].upper())
+        cmd = '; '.join( stage["commands"] )
 
-    print( "Build Complete " )
+        print( "Executing ", cmd )
+        print( "Start Build Process, Hold Tight..." )
+
+        for line in common.run_process( env + cmd, shell="bash" ):
+            print( line )
+
+        print("Pipeline stage ", stage["name"].upper(), "Complete")
+
+    # cmd = "cd /root/project/unityBuild; " \
+    #      "source ./preBuild.sh;" \
+    #      "./before_script.sh;" \
+    #      "./build.default2.sh;"
+
+    print( "All Stages Complete :D" )

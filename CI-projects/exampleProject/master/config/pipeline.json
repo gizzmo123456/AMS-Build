@@ -28,13 +28,19 @@
     {
       "name": "prep",
       "commands": [
-        "echo 'helloo world' "
+        "echo 'Prep stange' "
       ]
     },
     {
       "name": "build",
       "commands": [
-        "echo 'building' "
+        "echo 'Build stage' "
+      ]
+    },
+    {
+      "name": "package",
+      "commands": [
+        "echo 'Package Stage' "
       ]
     }
   ],
