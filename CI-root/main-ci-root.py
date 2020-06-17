@@ -40,10 +40,11 @@ if __name__ == "__main__":
     stages = pipeline["pipeline"]
 
     for stage in stages:
+        print("="*25)
         print("Starting pipeline stage ", stage["name"].upper())
         cmd = '; '.join( stage["commands"] )
 
-        print( "Executing ", cmd )
+        print( "Executing ", env + "; " + cmd )
         print( "Start Build Process, Hold Tight..." )
 
         for line in common.run_process( env + "; " + cmd, shell="bash" ):
