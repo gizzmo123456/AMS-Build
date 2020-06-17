@@ -66,7 +66,7 @@ class BuildTask:
                 _print(line, output_filename=self.stdout_filepath, console=False)  # the output does not exist as of yet...
 
 
-        for line in common.run_process( "sudo cp -r {master_dir} {build_dir} -v; "
+        for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
                                         "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
             _print(line, output_filename=self.stdout_filepath, console=False)
 
