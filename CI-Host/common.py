@@ -19,6 +19,9 @@ def run_process( command, shell="python3" ):
             if line_out[-1] == "\n":
                 line_out = line_out[:-1]
 
+            if line_out[-1] == "\r":
+                line_out = line_out[:-1]
+
             yield line_out
 
     process.kill()
