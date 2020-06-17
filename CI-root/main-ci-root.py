@@ -37,7 +37,7 @@ if __name__ == "__main__":
     pipeline = common.get_dict_from_json( pipeline_filepath )
 
     env = "".join( [ "export {var}={value}; ".format(var=e, value=pipeline["environment"][e]) for e in pipeline["environment"] ] )
-    stages = pipeline["pipline"]
+    stages = pipeline["pipeline"]
 
     for stage in stages:
         print("Starting pipeline stage ", stage["name"].upper())
