@@ -39,15 +39,18 @@ if __name__ == "__main__":
     env = "".join( [ "export {var}={value}; ".format(var=e, value=pipeline["environment"][e]) for e in pipeline["environment"] ] )
     stages = pipeline["pipeline"]
 
+    if len(env) > 0 and env[-1] != ";":  # ensure the last car of env is `;`
+        env += "; "
+
     for stage in stages:
         print("="*25)
         print("Starting pipeline stage ", stage["name"].upper())
         cmd = '; '.join( stage["commands"] )
 
-        print( "Executing ", env + "; " + cmd )
+        print( "Executing ", env + cmd )
         print( "Start Build Process, Hold Tight..." )
 
-        for line in common.run_process( env + "; " + cmd, shell="bash" ):
+        for line in common.run_process( env + cmd, shell="bash" ):
             print( line )
 
         print("Pipeline stage ", stage["name"].upper(), "Complete")
