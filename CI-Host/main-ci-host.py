@@ -28,16 +28,16 @@ def task_worker(job):
     zip = job.get_config_value( "cleanup", "7z_build" )
     cleanup = job.get_config_value( "cleanup", "remove_build_source")
 
-    if zip is not None:
+    if zip is not None and zip is True:
         _print("Zipping build...", output_filename=job.stdout_filepath)
         # zip the build, removing zipped files
-        for line in common.run_process("cd {build_dir}; sudo z7 a {build_name}.7z /Build/ -sdel;".format( **job.format_values ), "bash"):
+        for line in common.run_process("cd {build_dir}; sudo 7z a {build_name}.7z ./Build/ -sdel;".format( **job.format_values ), "bash"):
             _print( line, output_filename=job.stdout_filepath, console=False)
         _print("Zipping Complete", output_filename=job.stdout_filepath)
     else:
         _print( "Skipping Zipping", output_filename=job.stdout_filepath )
 
-    if cleanup is not None:
+    if cleanup is not None and zip is True:
         _print( "Cleaning Source...", output_filename=job.stdout_filepath )
         # remove the (copied) source folder
         for line in common.run_process( "cd {build_dir}; sudo rm -r {build_source_dir}".format( **job.format_values ), "bash" ):
