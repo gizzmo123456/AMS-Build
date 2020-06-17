@@ -40,7 +40,7 @@ class LOGS:
         LOGS.debug_thread.start()
 
     @staticmethod
-    def print( *argv, message_type=1, sept=' ', output_filename="aaa", console=True ):
+    def print( *argv, message_type=1, sept=' ', output_filename="", console=True ):
         """
 
         :param argv:
@@ -71,7 +71,7 @@ class LOGS:
         else:
             message_type_name = "MESSAGE"
 
-        LOGS.print_que.put( (time_str, message_type_name, sept.join(argv), output_filename, console, queue_fileoutput) )
+        LOGS.print_que.put( (time_str, message_type_name, sept.join(argv), output_filename, console) )
 
     @staticmethod
     def debug_print_thread( ):
@@ -87,7 +87,7 @@ class LOGS:
 
             log = LOGS.print_que.get(block=True, timeout=None)
 
-            if len(log) == 6:
+            if len(log) == 5:
                 print(log)
                 log_time, log_type, message, output_file, console = log
             elif len(log) == 1 and log[0] == QUEUE_UNBLOCK_MESSAGE:
@@ -119,6 +119,7 @@ class LOGS:
                 LOGS.file_queue[file_path].append(message)
             else:
                 LOGS.file_queue[file_path] = [ message ]
+            print("message Queued for writing")
             return
         else:
             if file_path in LOGS.file_queue:
