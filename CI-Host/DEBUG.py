@@ -4,6 +4,7 @@ import datetime
 import time
 import os.path
 
+QUEUE_UNBLOCK_MESSAGE = "[Unblock message]"
 
 # treat as if static :)
 class LOGS:
@@ -21,7 +22,6 @@ class LOGS:
     active = False
     print_que = q.Queue()    # Queue of tuples (type, message)
     debug_thread = None
-    print_debug_intervals = 0 #1
 
     @staticmethod
     def init():
@@ -41,6 +41,7 @@ class LOGS:
     def print( *argv, message_type=1, sept=' ', output_filename="", console=True ):
 
         if not LOGS.debug_mode or (not LOGS.que_pre_init_msg and not LOGS.inited):
+            print("Warning, Debug Log no initilized")
             return
 
         now = datetime.datetime.utcnow()
@@ -76,16 +77,19 @@ class LOGS:
             log = LOGS.print_que.get(block=True, timeout=None)
 
             if len(log) == 5:
-                time, type, message, output_file, console = log
-            else:
+                log_time, log_type, message, output_file, console = log
+            elif len(log) == 1 and log[0] == QUEUE_UNBLOCK_MESSAGE:
                 break
+            else:
+                print("Error: Invalid Log Message (", log, ") ")
+                continue
 
             if console:
-                print( " | {0} | {1} | {2} ".format( time, type, message ) )
+                print( " | {0} | {1} | {2} ".format( log_time, log_type, message ) )
 
             if output_file:
                 print(output_file)
-                LOGS.add_to_logs(output_file, " | {0} | {1} ".format( time, message ))
+                LOGS.add_to_logs(output_file, " | {0} | {1} ".format( log_time, message ))
 
         LOGS.active = False
         print("dead debug thread")
@@ -102,5 +106,5 @@ class LOGS:
         LOGS.active = False
 
         # we must put an message into the que to make sure it gets un blocked
-        LOGS.print_que.put( ["[Unblock message]"] )
+        LOGS.print_que.put( [ QUEUE_UNBLOCK_MESSAGE ] )
 
