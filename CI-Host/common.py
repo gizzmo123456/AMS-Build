@@ -9,16 +9,25 @@ def run_process( command, shell="python3" ):
     process = subprocess.Popen( [shell, '-c', command], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE )
 
     while True:
-        line = process.stdout.readline().decode( "utf-8" )
-        if not line:
+        line_err = process.stderr.readline().decode( "utf-8" )
+
+        if line_err:
+            yield line_err
+
+        line_out = process.stdout.readline().decode( "utf-8" )
+
+        if line_out:
+            yield line_out
+
+        line_in = process.stdout.readline().decode( "utf-8" )
+
+        if line_in:
+            yield line_in
+
+        if not line_out and not line_err and not line_in:
             break
-        else:
-            if line[-1:] == '\n':   # remove the new line char so we don't get double new lines :)
-                line = line[:-1]
-            yield line
 
     process.kill()
-
 
 def read_file( file_name ):
 
