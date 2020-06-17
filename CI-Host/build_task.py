@@ -40,7 +40,7 @@ class BuildTask:
         self.format_values["build_source_dir"] = self.format_values["build_dir"] + "/project_source"
 
         # load config file
-        self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
+        self.config = "{relv_proj_dir}/{project}/master/config/pipeline.json".format( **self.format_values )
         self.config = common.get_dict_from_json( self.config )
 
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
