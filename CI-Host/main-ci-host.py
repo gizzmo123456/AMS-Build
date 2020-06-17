@@ -32,7 +32,6 @@ if __name__ == "__main__":
     alive = True
 
     DEBUG.LOGS.init()
-    DEBUG.LOGS.set_log_to_file( message=True, warning=True, error=True, fatal=True )
     _print = DEBUG.LOGS.print
 
     task_queue = queue.Queue()

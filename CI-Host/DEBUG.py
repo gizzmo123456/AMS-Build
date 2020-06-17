@@ -23,12 +23,6 @@ class LOGS:
     debug_thread = None
     print_debug_intervals = 0 #1
 
-    __log_messages_to_file = False
-    __log_warning_to_file = False
-    __log_errors_to_file = True
-    __log_fatal_to_file = True
-
-
     @staticmethod
     def init():
         """This must be called to start the debug thread
@@ -95,13 +89,6 @@ class LOGS:
 
         LOGS.active = False
         print("dead debug thread")
-
-    @staticmethod
-    def set_log_to_file( message=False, warning=False, error=True, fatal=True ):
-        LOGS.__log_messages_to_file = message
-        LOGS.__log_warning_to_file = warning
-        LOGS.__log_error_to_file = error
-        LOGS.__log_fatal_to_file = fatal
 
     @staticmethod
     def add_to_logs( file_path, message ):
