@@ -88,7 +88,6 @@ class LOGS:
             log = LOGS.print_que.get(block=True, timeout=None)
 
             if len(log) == 5:
-                print(log)
                 log_time, log_type, message, output_file, console = log
             elif len(log) == 1 and log[0] == QUEUE_UNBLOCK_MESSAGE:
                 print("Error: DEAD!")
@@ -101,7 +100,6 @@ class LOGS:
                 print( " | {0} | {1} | {2} ".format( log_time, log_type, message ) )
 
             if output_file:
-                print("output file "+output_file)
                 LOGS.add_to_logs(output_file, " | {0} | {1} ".format( log_time, message ))
 
         LOGS.active = False

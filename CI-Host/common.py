@@ -15,6 +15,10 @@ def run_process( command, shell="python3" ):
         if not line_out:
             break
         elif line_out:
+            # remove the new line char :)
+            if line_out[-1] == "\n":
+                line_out = line_out[:-1]
+
             yield line_out
 
     process.kill()
