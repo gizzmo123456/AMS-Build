@@ -6,6 +6,7 @@ import threading
 import time
 from http.server import HTTPServer
 import queue
+import common
 
 def web_hook():
 
@@ -23,6 +24,24 @@ def task_worker(job):
 
     _print("Starting new task")
     job.execute()
+
+    zip = job.get_config_value( "cleanup", "7z_build" )
+    cleanup = job.get_config_value( "cleanup", "remove_build_source")
+
+    if zip is not None:
+        _print("Zipping build...", output_filename=job.stdout_filepath)
+        # zip the build, removing zipped files
+        for line in common.run_process("cd {build_dir}; sudo z7 a {build_name}.7z /Build/ -sdel;".format( **job.format_values ), "bash"):
+            _print( line, output_filename=job.stdout_filepath, console=False)
+        _print("Zipping Complete", output_filename=job.stdout_filepath)
+
+    if cleanup is not None:
+        _print( "Cleaning Source...", output_filename=job.stdout_filepath )
+        # remove the (copied) source folder
+        for line in common.run_process( "cd {build_dir}; sudo rm -r {build_source_dir}".format( **job.format_values ), "bash" ):
+            _print( line, output_filename=job.stdout_filepath, console=False )
+        _print( "Build Source Removed", output_filename=job.stdout_filepath )
+
     _print("job "+job.format_values["build_hash"]+" complete")
 
 if __name__ == "__main__":
