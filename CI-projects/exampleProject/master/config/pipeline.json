@@ -34,7 +34,10 @@
     {
       "name": "build",
       "commands": [
-        "echo 'Build stage' "
+        "cd /root/project/unityBuild",
+        "source ./preBuild.sh",
+        "./before_script.sh",
+        "./build.default2.sh"
       ]
     },
     {
