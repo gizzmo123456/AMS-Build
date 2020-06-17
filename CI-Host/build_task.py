@@ -43,7 +43,7 @@ class BuildTask:
         self.config = "{relv_proj_dir}/{project}/master/pipeline.json".format( **self.format_values )
         self.config = common.get_dict_from_json( self.config )
 
-        self.stdout_filepath = "{build_dir}/output.txt".format( **self.format_values )
+        self.stdout_filepath = "{relv_proj_dir}/output.txt".format( **self.format_values )
 
         # just to save the headack
         # valid if not a webhook or is webhook and webhook name is defined in project name and request actor is defined in the webhook auth users
