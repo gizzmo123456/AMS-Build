@@ -38,7 +38,7 @@ class LOGS:
         LOGS.debug_thread.start()
 
     @staticmethod
-    def print( *argv, message_type=1, sept=' ', output_filename="", console=True ):
+    def print( *argv, message_type=1, sept=' ', output_filename="aaa", console=True ):
 
         if not LOGS.debug_mode or (not LOGS.que_pre_init_msg and not LOGS.inited):
             print("Warning, Debug Log not initilized")
@@ -88,7 +88,7 @@ class LOGS:
                 print( " | {0} | {1} | {2} ".format( log_time, log_type, message ) )
 
             if output_file:
-                print(output_file)
+                print("output file "+output_file)
                 LOGS.add_to_logs(output_file, " | {0} | {1} ".format( log_time, message ))
 
         LOGS.active = False
