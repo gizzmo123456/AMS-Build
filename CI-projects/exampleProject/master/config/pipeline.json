@@ -37,7 +37,7 @@
         "cd /root/project/unityBuild",
         "source ./preBuild.sh",
         "./before_script.sh",
-        "sudo ./build.default2.sh"
+        "./build.default2.sh"
       ]
     },
     {

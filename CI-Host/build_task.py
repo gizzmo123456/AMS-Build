@@ -89,7 +89,7 @@ class BuildTask:
 
         self.docker_cof = {
             "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                  # ci-tool mouth point as read only
-            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",          # config mouth point as read only
+            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",              # config mouth point as read only
             "project-dest": self.config[ "docker" ][ "project-dest" ],              # project source mount point
             "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],    # build output mount point
             "image": self.config[ "docker" ][ "image" ],
