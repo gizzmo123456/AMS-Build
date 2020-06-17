@@ -2,7 +2,6 @@
 # The CI-root directory needs to mounted to /root/CI-root within the container
 #
 
-import subprocess
 import common
 
 def build_config_sh(config):

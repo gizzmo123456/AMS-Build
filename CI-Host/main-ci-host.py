@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
-
 import DEBUG
 import build_task
-import common
 import webhook
 import threading
 import time
