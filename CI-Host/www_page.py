@@ -15,20 +15,23 @@ class WWWPage():
         return user_access_level >= self.uac
 
     def get_access_page( self, user_access_level ):
-
+        """returns this page if user has access otherwise returns no access page (ie login)"""
         if self.access( user_access_level ):
-            return self.file_name
+            return self
         else:
-            return self.no_access_www_page.file_name
+            return self.no_access_www_page
 
-    def load_template( self, user_access_level ):
+    def load_template( self ):
 
         root = "./www/"
-        return common.read_file( root + self.get_access_page( user_access_level ) )
+        return common.read_file( root + self.file_name )
 
     def load_page( self, user_access_level, requested_path, get_data, post_data ):
 
-        www_page = self
+        # find and display the correct content for user access level,
+
+        www_page = self.get_access_page( user_access_level )
+        all_cookies = []
         redirect, content, cookies = None, {"message": ""}, None
 
         if www_page.content_callback is not None:
@@ -36,7 +39,9 @@ class WWWPage():
 
         while redirect is not None:
             www_page = redirect
+            if type( cookies ) is list:
+                all_cookies.extend( cookies )
             if www_page.content_callback is not None:
                 redirect, content, cookies = www_page.content_callback( user_access_level, requested_path, get_data, post_data )
 
-        return www_page.load_template( user_access_level ).format( **content ), www_page.status, cookies
+        return www_page.load_template().format( **content ), www_page.status, all_cookies
