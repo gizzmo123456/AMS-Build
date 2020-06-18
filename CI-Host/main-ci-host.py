@@ -19,7 +19,7 @@ def web_hook():
 
     wh_server.server_close()
 
-def web_interface():
+def www_interface():
 
     wi_server = HTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
     webhook.Webhook.task_queue = task_queue
 
     webhook_thread = threading.Thread( target=web_hook )
-    web_interface_thread = threading.Thread( target=web_interface() )
+    web_interface_thread = threading.Thread( target=www_interface() )
 
     webhook_thread.start()
     web_interface_thread.start()
