@@ -29,8 +29,10 @@ class WWWPage():
     def load_page( self, user_access_level, requested_path, get_data, post_data ):
 
         www_page = self
-        redirect, content = None, {"message": ""}
-        cookies = []
+        redirect, content, cookies = None, {"message": ""}, None
+
+        if www_page.content_callback is not None:
+            redirect, content, cookies = www_page.content_callback( user_access_level, requested_path, get_data, post_data )
 
         while redirect is not None:
             www_page = redirect

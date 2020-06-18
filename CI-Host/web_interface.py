@@ -78,7 +78,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
             post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
-            print(post_data)
 
         user_access_level = self.get_user_access_level( session_id )
         output_page, status, cookies = self.get_page( path, user_access_level, get_data, post_data )
@@ -119,6 +118,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
     def auth_user_content( self, uac, request_path, get_data, post_data ):
         """ returns redirect page, content, cookie content"""
+        print( "Auth User..." )
         if uac == 0 and "user" in post_data and "password" in post_data:
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
