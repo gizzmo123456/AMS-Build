@@ -34,29 +34,29 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
     def do_POST( self ):
 
-        request = urlparse( self.path ).split("/")  # ams-ci /
-        path = request.path
+        request = urlparse( self.path )
+        path = request.path.split("/")  # ams-ci /
         query = dict(parse_qsl( request.query ))
 
         content_len = int( self.headers[ 'Content-Length' ] )
         post_data = json.loads( self.rfile.read( content_len ) )
 
-        if len( request ) > 0 and request[0].lowwer() == "auth":
+        if len( path ) > 0 and path[0].lowwer() == "auth":
             self.process_request( "Helloo World", 200, False )
         else:
             self.process_request( "I'm Lost", 404, False )
 
     def do_GET( self ):
 
-        request = urlparse( self.path ).split("/")  # ams-ci /
-        path = request.path
+        request = urlparse( self.path )
+        path = request.path.split("/")  # ams-ci /
         query = parse_qsl( request.query )
 
-        if len(request) == 0 or request[1].lower() != "ams-ci":
+        if len(path) == 0 or path[1].lower() != "ams-ci":
             page = "I'm Lost!"
             page_status = 404
             page_content = {}
-        elif len( request ) == 2 and request[1] == "style.css":
+        elif len( path ) == 2 and path[1].lower() == "style.css":
             page = self.read_page( "stylesheet", 0 )
             page_status = 200
             page_content = {}
