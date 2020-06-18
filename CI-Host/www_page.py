@@ -2,14 +2,14 @@ import common
 
 class WWWPage():
 
-    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_page=None ):
+    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_www_page=None ):
 
         self.page_name = page_name
         self.file_name = file_name
         self.status = status
         self.content_callback = content_callback
         self.uac = minimal_user_access_level
-        self.no_access_page = no_access_page
+        self.no_access_www_page = no_access_www_page
 
     def access( self, user_access_level ):
         return user_access_level >= self.uac
@@ -17,9 +17,9 @@ class WWWPage():
     def get_access_page( self, user_access_level ):
 
         if self.access( user_access_level ):
-            return self.page_name
+            return self.file_name
         else:
-            return self.no_access_page
+            return self.no_access_www_page.file_name
 
     def load_template( self, user_access_level ):
 

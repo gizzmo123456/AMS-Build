@@ -38,10 +38,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.thr_lock_session_id = threading.Lock()
 
         self.pages = {
-            "not_found": WWWPage( "not_found",  "not_found.html",   404, None                                 ),
-            "index":     WWWPage( "index",      "index.html",       200, None,                      1, "auth" ),
-            "auth":      WWWPage( "auth",       "login.html",       200, self.auth_user_content               ),
-            "content":   WWWPage( "content",    "",                 200, None,                      1, "auth" ),
+            "not_found": WWWPage( "not_found",  "not_found.html",   404, None                                               ),
+            "auth":      WWWPage( "auth",       "login.html",       200, self.auth_user_content                             ),
+            "index":     WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   ),
+            "content":   WWWPage( "content",    "",                 200, None,                      1, self.pages["auth"]   ),
         }
 
         # TODO: theses should be dicts for json
