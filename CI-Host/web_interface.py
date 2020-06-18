@@ -107,7 +107,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         if type( requested_path ) is list and path_len > 0:
 
-            if requested_path[0].lowwer() == "ams-ci":
+            if requested_path[0].lower() == "ams-ci":
                 if path_len > 1:              # content request (html or json)
                     page = self.pages["content"]
                 else:
