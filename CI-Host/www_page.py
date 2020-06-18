@@ -31,6 +31,10 @@ class WWWPage():
         # find and display the correct content for user access level,
 
         www_page = self.get_access_page( user_access_level )
+
+        if www_page is None:
+            return "An error has happened :(", 200, []
+
         all_cookies = []
         redirect, content, cookies = None, {"message": ""}, None
 
