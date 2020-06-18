@@ -14,7 +14,7 @@ class BaseServer(BaseHTTPRequestHandler):
     def do_GET( self ):
         self.process_request()
 
-    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=[] ):
+    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None ):
         _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
         # send headed
@@ -22,8 +22,9 @@ class BaseServer(BaseHTTPRequestHandler):
         self.send_header( 'Content-type', 'text/html' )
         self.send_header( 'Access-Control-Allow-origin', '*' )
 
-        for c in cookies:
-            self.send_header("Set-Cookie", c.output(header='', sep=''))
+        if cookies is not None and type( cookies ) is list:
+            for c in cookies:
+                self.send_header("Set-Cookie", c.output(header='', sep=''))
 
         self.end_headers()
 
