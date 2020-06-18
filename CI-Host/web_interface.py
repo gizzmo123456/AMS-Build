@@ -119,7 +119,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                     sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes( 16, "big" ) ).hexdigest()
 
                 user.set_cookie("session_id", sess_id)
-                user.access_level = self.UAC_USER
+                user.set_access_level( self.UAC_USER )
                 self.sessions[ sess_id ] = user
 
                 # queue the session expiry
