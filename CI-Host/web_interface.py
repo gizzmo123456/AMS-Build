@@ -8,7 +8,7 @@ import os
 from const import *
 import hashlib
 import time
-from www_page import WWWPage
+from www_page import WWWPage, WWWUser
 
 
 class WebInterface( baseHTTPServer.BaseServer ):
@@ -49,7 +49,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.active_builds = ""
         self.queued_tasks = ""
 
-        self.sessions = {}      # { session key: tuple ( expires, data {} )
+        self.sessions = {}      # { `session key`: `WWWUser` }
 
         super().__init__(request, client_address, server)   # this MUST be called at the end otherwise the others vars don't initialize
 
@@ -72,34 +72,22 @@ class WebInterface( baseHTTPServer.BaseServer ):
         post_data = {}
 
         session_id = None
+        user = WWWUser()
+
         if "session_id" in cookie_data:
             session_id = cookie_data[session_id].value
+            if session_id in self.sessions:
+                user = self.sessions[session_id]
 
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
             post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
 
-        user_access_level = self.get_user_access_level( session_id )
-        output_page, status, cookies = self.get_page( path, user_access_level, get_data, post_data )
+        output_page, status, cookies = self.get_page( path, user, get_data, post_data )
 
-        self.process_request( output_page, status, GET, cookies )
+        self.process_request( output_page, status, GET, user.cookies )
 
-    def get_user_access_level( self, sess_id ):
-        """
-            Access levels:
-                0: No Access
-                1: Default Access
-        """
-        if sess_id is None or sess_id not in self.sessions:
-            return 0
-        else:
-            if time.time() > self.sessions[sess_id][0]: # session expired
-                del self.sessions[sess_id]
-                return 0
-            self.sessions[ sess_id ][0] = time.time() + self.DEFAULT_SESSION_LENGTH  # update the expiry date
-            return 1
-
-    def get_page( self, requested_path, user_access_level, get_data, post_data ):
+    def get_page( self, requested_path, user, get_data, post_data ):
         """ returns tuple (name of page template, status, content callback)
             All function require uac, get and post data params and must return final page, json content (as dict)
         """
@@ -114,27 +102,28 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 else:
                     page = self.pages["index"]
 
-        return page.load_page(user_access_level, requested_path, get_data, post_data)
+        return page.load_page(user, requested_path, get_data, post_data)
 
-    def auth_user_content( self, uac, request_path, get_data, post_data ):
-        """ returns redirect page, content, cookie content"""
+    def auth_user_content( self, user, request_path, get_data, post_data ):
+        """ returns redirect page, content """
+
         print( "Auth User..." )
-        if uac == 0 and "user" in post_data and "password" in post_data:
+        if not user.aruthorized() and "user" in post_data and "password" in post_data:
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
                 sess_id = hashlib.md5( time.time_ns().to_bytes(16, "big") ).hexdigest()
-                expires = time.time() + self.DEFAULT_SESSION_LENGTH  # 1hr
+
                 while sess_id in self.sessions: # ensure that the new session id is unique
                     sess_id = hashlib.md5( time.time_ns().to_bytes( 16, "big" ) ).hexdigest()
 
-                self.sessions[ sess_id ] = (expires, {})
+                user.set_cookie("session_id", sess_id)
+                user.access_level = self.UAC_USER
+                self.sessions[ sess_id ] = user
+
                 # queue the session expiry
                 threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
-                sess_cookie = SimpleCookie()
-                sess_cookie["session_id"] = sess_id
-
-                return self.pages["index"], {}, [sess_cookie]  # redirect content
+                return self.pages["index"], {"message", "login successful :)"}  # redirect content
             else:
                 return None, {"message": "Invalid Login"}, []
 

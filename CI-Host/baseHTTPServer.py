@@ -22,9 +22,11 @@ class BaseServer(BaseHTTPRequestHandler):
         self.send_header( 'Content-type', 'text/html' )
         self.send_header( 'Access-Control-Allow-origin', '*' )
 
-        if cookies is not None and type( cookies ) is list:
+        if cookies is not None:
+            cookies = cookies.output( header='Set-Cookie:', sep="-" ).split("-")
+            print( "Setting cookies...", cookies )
             for c in cookies:
-                self.send_header("Set-Cookie", c.output(header='', sep=''))
+                self.send_header( *cookies.output(header='Set-Cookie').split(":") )
 
         self.end_headers()
 
