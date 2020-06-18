@@ -45,7 +45,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             )
         self.pages["index"]     = WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   )
         self.pages["content"]   = WWWPage( "content",    None,               200, None,                      1, self.pages["auth"]   )
-        self.pages["style"]     = WWWPage( "style",      "default.css",      200, None,                                              )
 
 
         # TODO: theses should be dicts for json
@@ -102,7 +101,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             if requested_path[0].lower() == "ams-ci":
                 if path_len > 1:              # content request (html or json)
                     if requested_path[1] == "style":
-                        page = self.pages["style"]
+                        return common.read_file( "./root/" + "default.css" )
                     else:
                         page = self.pages["content"]
                 else:
