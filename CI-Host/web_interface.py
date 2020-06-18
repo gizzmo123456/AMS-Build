@@ -56,6 +56,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
             page = "I'm Lost!"
             page_status = 404
             page_content = {}
+        elif len( request ) == 2 and request[1] == "style.css":
+            page = self.read_page( "stylesheet", 0 )
+            page_status = 404
+            page_content = {}
         else:
             page = self.read_page("index", self.get_user_access_level( "g43gdGFwe45ggsd34FG43qtgfrea32gds43" ))
             page_status = 200
@@ -77,7 +81,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     def read_page( self, page_name, user_access_level ):
 
         root = "./www/"
-        pages = { "index": ("index.html", 1), "auth": ("login.html", 0) }   # (page, access level)
+        pages = { "index": ("index.html", 1), "auth": ("login.html", 0), "stylesheet": ("defaul.css", 0) }   # (page, access level)
         no_access = pages["auth"][0]
 
         if page_name in pages and user_access_level >= pages[page_name][1]:
