@@ -74,7 +74,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             post_data = json.loads( self.rfile.read( content_len ) )
 
         user_access_level = self.get_user_access_level( "arwsArGthgbfSDtvcXFER5tgSdaF86feyftghbvcx37uey65thgvfdszz54eh" )
-        page, status, content_callback = self.get_page( path, user_access_level )
+        page, status, content_callback = self.get_page( path, user_access_level, get_data, post_data )
         page_content = {"message": ""}
 
         if status == 200:
