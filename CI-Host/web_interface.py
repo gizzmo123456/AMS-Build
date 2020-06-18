@@ -9,7 +9,7 @@ from const import *
 import hashlib
 import time
 from www_page import WWWPage, WWWUser
-
+import math
 
 class WebInterface( baseHTTPServer.BaseServer ):
     """
@@ -111,7 +111,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if not user.authorized() and "user" in post_data and "password" in post_data:
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
-                sess_id = hashlib.md5( time.time_ns().to_bytes(16, "big") ).hexdigest()
+                sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes(16, "big") ).hexdigest()
 
                 while sess_id in self.sessions: # ensure that the new session id is unique
                     sess_id = hashlib.md5( time.time_ns().to_bytes( 16, "big" ) ).hexdigest()
