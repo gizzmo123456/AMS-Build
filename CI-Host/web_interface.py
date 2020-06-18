@@ -33,6 +33,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
     UAC_MOD     = 2
     UAC_ADMIN   = 3
 
+    sessions = { }  # { `session key`: `WWWUser` }
+
     def __init__( self, request, client_address, server ):
 
         self.thr_lock_update_tasks = threading.Lock()
@@ -49,7 +51,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.active_builds = ""
         self.queued_tasks = ""
 
-        self.sessions = {}      # { `session key`: `WWWUser` }
 
         super().__init__(request, client_address, server)   # this MUST be called at the end otherwise the others vars don't initialize
 
@@ -78,6 +79,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             session_id = cookie_data["session_id"].value
             if session_id in self.sessions:
                 user = self.sessions[session_id]
+                print("user authorized via session cookie")
 
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
@@ -121,7 +123,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 self.sessions[ sess_id ] = user
 
                 # queue the session expiry
-                threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
+                # threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
                 return self.pages["index"], {"message": "login successful :)"}  # redirect content
 
