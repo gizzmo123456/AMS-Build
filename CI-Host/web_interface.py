@@ -23,7 +23,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
             ams-ci / auth                                               [Authorizes user]
     """
 
-    def init( self ):
+    def __init__( self, request, client_address, server ):
+        super().__init__(request, client_address, server)
         self.thr_lock_update_tasks = threading.Lock()
 
         # TODO: theses should be dicts for json
