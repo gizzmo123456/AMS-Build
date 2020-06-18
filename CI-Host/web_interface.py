@@ -72,7 +72,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
-            post_data = json.loads( self.rfile.read( content_len ) )
+            try:
+                post_data = json.loads( self.rfile.read( content_len ) )
+            except:
+                print("Bad post data...")
 
         user_access_level = self.get_user_access_level( "arwsArGthgbfSDtvcXFER5tgSdaF86feyftghbvcx37uey65thgvfdszz54eh" )
         output_page, status = self.get_page( path, user_access_level, get_data, post_data )
