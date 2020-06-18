@@ -42,7 +42,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                                               )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             )
         self.pages["index"]     = WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   )
-        self.pages["content"]   = WWWPage( "content",    "",                 200, None,                      1, self.pages["auth"]   )
+        self.pages["content"]   = WWWPage( "content",    None,               200, None,                      1, self.pages["auth"]   )
 
 
         # TODO: theses should be dicts for json

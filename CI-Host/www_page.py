@@ -75,6 +75,10 @@ class WWWPage:
     def load_template( self ):
 
         root = "./www/"
+
+        if self.file_name is None:
+            return "Its dark down here.", 200
+
         return common.read_file( root + self.file_name )
 
     def load_page( self, user, requested_path, get_data, post_data ):
