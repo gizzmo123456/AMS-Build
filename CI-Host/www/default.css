@@ -1,0 +1,39 @@
+
+body{
+    width: 100%;
+}
+
+#content-hold{
+    display: inline;
+    width: 100%;
+}
+
+#queue_hold{
+    position: relative;
+    display: inline-block;
+    width: 25%;
+    min-height: 300px;
+    border: black solid 3px;
+    margin: -3px;
+    margin-left: 3px;
+}
+
+#main_hold{
+    position: relative;
+    margin-left: 6px;
+    display: inline-block;
+    border: black solid 3px;
+    width: 70%
+}
+
+p, h1, h2, h3, h4, h5{
+    padding: 4px;
+    margin-left: 8px;
+    margin-top: 4px;
+}
+
+h4{
+    border-bottom: black dashed 2px;
+    margin: 8px;
+}
+

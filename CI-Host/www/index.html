@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>AMS CI</title>
-</head>
-<body>
-    <h3>AMS CI</h3>
-    <div id="active_task_hold">
-        <h5>Active Tasks</h5>
-        <p>{active_tasks}</p>
-    </div>
-    <div id="queued_tasks_hold">
-        <h5>Queued Tasks</h5>
-        <p>{queued_tasks}</p>
-    </div>
-    <div id="projects_hold">
-        <h5>Projects</h5>
-        <p>{projects}</p>
-    </div>
-    <div id="builds_hold">
-        <h5>Builds for {selected_project}</h5>
-        <p>{builds}</p>
-    </div>
-</body>
+
+<html>
+    <head>
+        <title>AMSci</title>
+        <link rel="stylesheet" type="text/css" href="./style.css">
+    </head>
+    <body>
+        <div id="header_hold">
+            <h2>AMS CI</h2>
+        </div>
+        <div id="content-hold">
+            <div id="queue_hold">
+                <div id="active_task_hold">
+                    <h4>Active Tasks</h4>
+                    <p>{active_tasks}</p>
+                </div>
+                <div id="queued_tasks_hold">
+                    <h4>Queued Tasks</h4>
+                    <p>{queued_tasks}</p>
+                </div>
+            </div>
+            <div id="main_hold">
+                <div id="projects_hold">
+                    <h4>Projects</h4>
+                    <p>{projects}</p>
+                </div>
+                <div id="builds_hold">
+                    <h4>Builds for {selected_project}</h4>
+                    <p>{builds}</p>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
