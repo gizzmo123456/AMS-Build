@@ -80,7 +80,7 @@ class WWWPage:
         root = "./www/"
 
         if self.file_name is None:
-            return "Its dark down here."
+            return "Its dark down here, in the " + self.page_name
 
         return common.read_file( root + self.file_name )
 

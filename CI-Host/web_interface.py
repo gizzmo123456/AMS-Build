@@ -66,7 +66,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         request = urlparse( self.path )
         path = request.path.split( "/" )  # ams-ci /
-        path.pop(0)                       # remove the first element, as every path starts with `/` so the first is always empty
+        path = [ p for p in path if p != ""]                       # remove the empties
 
         cookie_data = SimpleCookie( self.headers.get('Cookie') )
         get_data = dict( parse_qsl( request.query ) )
