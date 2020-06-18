@@ -5,6 +5,9 @@ import json
 import common
 import os
 from const import *
+import hashlib
+import time
+from www_page import WWWPage
 
 
 class WebInterface( baseHTTPServer.BaseServer ):
@@ -22,10 +25,24 @@ class WebInterface( baseHTTPServer.BaseServer ):
         Pages:                                                          (POST only)
             ams-ci / auth                                               [Authorizes user]
     """
+    DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
+
+    UAC_NO_AUTH = 0
+    UAC_USER    = 1
+    UAC_MOD     = 2
+    UAC_ADMIN   = 3
 
     def __init__( self, request, client_address, server ):
-        super().__init__(request, client_address, server)
+
         self.thr_lock_update_tasks = threading.Lock()
+        self.thr_lock_session_id = threading.Lock()
+
+        self.pages = {
+            "not_found": WWWPage( "not_found",  "not_found.html",   404, None                         ),
+            "index":     WWWPage( "index",      "index.html",       200, None,              1, "auth" ),
+            "auth":      WWWPage( "auth",       "login.html",       200, self.auth_user               ),
+            "content":   WWWPage( "content",    "",                 200, None,              1, "auth" ),
+        }
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
@@ -33,40 +50,38 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         self.sessions = {}      # { session key: tuple ( expires, data {} )
 
+        super().__init__(request, client_address, server)   # this MUST be called at the end otherwise the others vars don't initialize
+
     def do_POST( self ):
 
-        request = urlparse( self.path )
-        path = request.path.split("/")  # ams-ci /
-        query = dict(parse_qsl( request.query ))
-
-        content_len = int( self.headers[ 'Content-Length' ] )
-        post_data = json.loads( self.rfile.read( content_len ) )
-
-        if len( path ) > 0 and path[0].lowwer() == "auth":
-            self.process_request( "Helloo World", 200, False )
-        else:
-            self.process_request( "I'm Lost", 404, False )
+        self.do_request( False )
 
     def do_GET( self ):
 
+        self.do_request( True )
+
+    def do_request( self, GET=True ):
+
         request = urlparse( self.path )
-        path = request.path.split("/")  # ams-ci /
-        query = parse_qsl( request.query )
+        path = request.path.split( "/" )  # ams-ci /
+        get_data = dict( parse_qsl( request.query ) )
 
-        if len(path) == 0 or path[1].lower() != "ams-ci":
-            page = "I'm Lost!"
-            page_status = 404
-            page_content = {}
-        elif len( path ) == 2 and path[1].lower() == "style.css":
-            page = self.read_page( "stylesheet", 0 )
-            page_status = 200
-            page_content = {}
-        else:
-            page = self.read_page("index", self.get_user_access_level( "g43gdGFwe45ggsd34FG43qtgfrea32gds43" ))
-            page_status = 200
-            page_content = { "active_tasks": "No Active Task", "queued_tasks": "No Queued Tasks", "projects": "No Projects Available", "builds": "Select a Project to view available builds"}
+        content_len = 0
+        post_data = {}
 
-        self.process_request( page.format( **page_content ), page_status, True )
+        if not GET:
+            content_len = int( self.headers[ 'Content-Length' ] )
+            post_data = json.loads( self.rfile.read( content_len ) )
+
+        user_access_level = self.get_user_access_level( "arwsArGthgbfSDtvcXFER5tgSdaF86feyftghbvcx37uey65thgvfdszz54eh" )
+        page, status, content_callback = self.get_page( path, user_access_level )
+        page_content = {"message": ""}
+
+        if status == 200:
+            page, page_content = content_callback( user_access_level, get_data, post_data )   # we must make sure that the message element is not overwriten
+
+        output_page = self.build_page(page, page_content, get_data)
+        self.process_request( output_page, status, GET )
 
     def get_user_access_level( self, sess_id ):
         """
@@ -77,20 +92,46 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if sess_id not in self.sessions:
             return 0
         else:
+            if time.time() > self.sessions[sess_id][0]: # session expired
+                del self.sessions[sess_id]
+                return 0
+            self.sessions[ sess_id ][0] = time.time() + self.DEFAULT_SESSION_LENGTH  # update the expiry date
             return 1
 
-    def read_page( self, page_name, user_access_level ):
+    def get_page( self, requested_path, user_access_level, get_data, post_data ):
+        """ returns tuple (name of page template, status, content callback)
+            All function require uac, get and post data params and must return final page, json content (as dict)
+        """
+        page = self.pages["not_found"]
+        path_len = len( requested_path )
 
-        root = "./www/"
-        pages = { "index": ("index.html", 1), "auth": ("login.html", 0), "stylesheet": ("defaul.css", 0) }   # (page, access level)
-        no_access = pages["auth"][0]
+        if type( requested_path ) is list and path_len > 0:
 
-        if page_name in pages and user_access_level >= pages[page_name][1]:
-            page_to_load = pages[page_name]
-        else:
-            page_to_load = no_access
+            if requested_path[0].lowwer() == "ams-ci":
+                if path_len > 1:              # content request (html or json)
+                    page = self.pages["content"]
+                else:
+                    page = self.pages["index"]
 
-        return common.read_file( root + page_to_load )
+        return page.load_page(user_access_level, requested_path, get_data, post_data)
+
+    def auth_user_content( self, uac, request_path, get_data, post_data ):
+        """ returns redirect page, content"""
+        if uac == 0 and "user" in post_data and "password" in post_data:
+            if post_data["user"] == "admin" and post_data["password"] == "password!2E":
+                # auth user
+                sess_id = hashlib.md5( time.time_ns().to_bytes(16, "big") ).hexdigest()
+                expires = time.time() + self.DEFAULT_SESSION_LENGTH  # 1hr
+                while sess_id in self.sessions: # ensure that the new session id is unique
+                    sess_id = hashlib.md5( time.time_ns().to_bytes( 16, "big" ) ).hexdigest()
+
+                self.sessions[ sess_id ] = (expires, {})
+                # queue the session expiry
+                threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
+
+                return self.pages["index"], {}  # redirect content
+            else:
+                return None, {"message": "Invalid Login"}
 
     def list_projects( self ):
         """ returns list of projects dict { "name": pname }
@@ -135,3 +176,15 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.queued_tasks = queued_tasks_str
         self.thr_lock_update_tasks.release()
 
+    def expire_session( self, session_id, ttl ):
+
+        while session_id in self.sessions:
+            time.sleep( ttl )
+            self.thr_lock_session_id.acquire()
+
+            if time.time() < session_id[ session_id ][0]:
+                ttl = self.sessions[ session_id ][0] - time.time()
+            else:
+                del self.sessions[session_id]
+
+            self.thr_lock_session_id.release()
