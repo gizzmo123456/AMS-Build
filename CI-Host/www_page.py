@@ -2,6 +2,7 @@ import common
 import time
 from http.cookies import SimpleCookie
 import web_interface
+import re
 
 class WWWUser:
 
@@ -45,6 +46,22 @@ class WWWPage:
         self.minimal_user_access_level = minimal_user_access_level
         self.no_access_www_page = no_access_www_page
 
+        self.content_dict = self._build_content_dict()  # all values in dict are required on the page.
+
+    def _build_content_dict( self ):
+
+        page = self.load_template()
+        keys = re.findall("{[a-zA-Z_][a-zA-Z0-9-_]*}", page)
+        content = {}
+
+        for k in keys:
+            content[ re.findall("[a-zA-Z_][a-zA-Z0-9-_]*", k)[0] ] = ""
+
+        return content
+
+    def build_content( self, content ):
+        return { **self.content_dict, **content }    # overwrite the values in content dict
+
     def access( self, user ):
         return user.get_access_level() >= self.minimal_user_access_level
 
@@ -82,4 +99,4 @@ class WWWPage:
             else:
                 break
 
-        return www_page.load_template().format( **content ), www_page.status
+        return www_page.load_template().format( **www_page.build_content( content ) ), www_page.status
