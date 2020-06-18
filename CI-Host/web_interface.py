@@ -75,7 +75,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         user = WWWUser()
 
         if "session_id" in cookie_data:
-            session_id = cookie_data[session_id].value
+            session_id = cookie_data["session_id"].value
             if session_id in self.sessions:
                 user = self.sessions[session_id]
 
