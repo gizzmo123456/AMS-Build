@@ -72,7 +72,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
-            post_data = dict( parse_qsl( self.rfile.read( content_len ) ) )
+            post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
             print(post_data)
 
         user_access_level = self.get_user_access_level( "arwsArGthgbfSDtvcXFER5tgSdaF86feyftghbvcx37uey65thgvfdszz54eh" )
