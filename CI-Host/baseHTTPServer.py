@@ -26,7 +26,7 @@ class BaseServer(BaseHTTPRequestHandler):
             cookies = cookies.output( header='Set-Cookie:', sep="-" ).split("-")
             print( "Setting cookies...", cookies )
             for c in cookies:
-                self.send_header( *cookies.output(header='Set-Cookie').split(":") )
+                self.send_header( *c.output(header='Set-Cookie').split(":") )
 
         self.end_headers()
 
