@@ -83,7 +83,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             content_len = int( self.headers[ 'Content-Length' ] )
             post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
 
-        output_page, status, cookies = self.get_page( path, user, get_data, post_data )
+        output_page, status = self.get_page( path, user, get_data, post_data )
 
         self.process_request( output_page, status, GET, user.cookies )
 
@@ -108,7 +108,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """ returns redirect page, content """
 
         print( "Auth User..." )
-        if not user.aruthorized() and "user" in post_data and "password" in post_data:
+        if not user.aurthorized() and "user" in post_data and "password" in post_data:
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
                 sess_id = hashlib.md5( time.time_ns().to_bytes(16, "big") ).hexdigest()
