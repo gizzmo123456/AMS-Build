@@ -85,9 +85,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
             content_len = int( self.headers[ 'Content-Length' ] )
             post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
 
-        output_page, status = self.get_page( path, user, get_data, post_data )
+        output_page, status, content_type = self.get_page( path, user, get_data, post_data )
 
-        self.process_request( output_page, status, GET, user.cookies )
+        self.process_request( output_page, status, GET, user.cookies, content_type )
 
     def get_page( self, requested_path, user, get_data, post_data ):
         """ returns tuple (name of page template, status, content callback)
@@ -95,19 +95,21 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """
         page = self.pages["not_found"]
         path_len = len( requested_path )
+        content_type = "text/html"
 
         if type( requested_path ) is list and path_len > 0:
 
             if requested_path[0].lower() == "ams-ci":
                 if path_len > 1:              # content request (html or json)
                     if requested_path[1] == "style.css":
-                        return common.read_file( "./www/" + "default.css" ), 200
+                        return common.read_file( "./www/" + "default.css" ), 200, "text/css"
                     else:
                         page = self.pages["content"]
                 else:
                     page = self.pages["index"]
 
-        return page.load_page(user, requested_path, get_data, post_data)
+        content, status = page.load_page(user, requested_path, get_data, post_data)
+        return content, status, content_type
 
     def auth_user_content( self, user, request_path, get_data, post_data ):
         """ returns redirect page, content """

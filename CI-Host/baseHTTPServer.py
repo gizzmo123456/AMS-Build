@@ -14,12 +14,12 @@ class BaseServer(BaseHTTPRequestHandler):
     def do_GET( self ):
         self.process_request()
 
-    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None ):
+    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None, content_type="text/html" ):
         _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
         # send headed
         self.send_response( status, 'OK' )
-        self.send_header( 'Content-type', 'text/html' )
+        self.send_header( 'Content-type', content_type )
         self.send_header( 'Access-Control-Allow-origin', '*' )
 
         if cookies is not None:
