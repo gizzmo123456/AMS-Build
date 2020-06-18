@@ -123,7 +123,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # queue the session expiry
                 threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
-                return self.pages["index"], {"message", "login successful :)"}  # redirect content
+                return self.pages["index"], {"message": "login successful :)"}  # redirect content
 
         return None, {"message": "Invalid Login"}
 
