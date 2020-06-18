@@ -1,5 +1,6 @@
 import threading
 import baseHTTPServer
+from http.cookies import SimpleCookie
 from urllib.parse import urlparse, parse_qsl
 import json
 import common
@@ -65,20 +66,24 @@ class WebInterface( baseHTTPServer.BaseServer ):
         request = urlparse( self.path )
         path = request.path.split( "/" )  # ams-ci /
         path.pop(0)                       # remove the first element, as every path starts with `/` so the first is always empty
-        get_data = dict( parse_qsl( request.query ) )
 
-        content_len = 0
+        cookie_data = SimpleCookie( self.headers.get('Cookie') )
+        get_data = dict( parse_qsl( request.query ) )
         post_data = {}
+
+        session_id = None
+        if "session_id" in cookie_data:
+            session_id = cookie_data[session_id].value
 
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
             post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
             print(post_data)
 
-        user_access_level = self.get_user_access_level( "arwsArGthgbfSDtvcXFER5tgSdaF86feyftghbvcx37uey65thgvfdszz54eh" )
-        output_page, status = self.get_page( path, user_access_level, get_data, post_data )
+        user_access_level = self.get_user_access_level( session_id )
+        output_page, status, cookies = self.get_page( path, user_access_level, get_data, post_data )
 
-        self.process_request( output_page, status, GET )
+        self.process_request( output_page, status, GET, cookies )
 
     def get_user_access_level( self, sess_id ):
         """
@@ -86,7 +91,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 0: No Access
                 1: Default Access
         """
-        if sess_id not in self.sessions:
+        if sess_id is None or sess_id not in self.sessions:
             return 0
         else:
             if time.time() > self.sessions[sess_id][0]: # session expired
@@ -113,7 +118,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         return page.load_page(user_access_level, requested_path, get_data, post_data)
 
     def auth_user_content( self, uac, request_path, get_data, post_data ):
-        """ returns redirect page, content"""
+        """ returns redirect page, content, cookie content"""
         if uac == 0 and "user" in post_data and "password" in post_data:
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
@@ -126,9 +131,12 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # queue the session expiry
                 threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
-                return self.pages["index"], {}  # redirect content
+                sess_cookie = SimpleCookie()
+                sess_cookie["session_id"] = sess_id
+
+                return self.pages["index"], {}, [sess_cookie]  # redirect content
             else:
-                return None, {"message": "Invalid Login"}
+                return None, {"message": "Invalid Login"}, []
 
     def list_projects( self ):
         """ returns list of projects dict { "name": pname }

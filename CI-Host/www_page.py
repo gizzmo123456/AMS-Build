@@ -30,13 +30,11 @@ class WWWPage():
 
         www_page = self
         redirect, content = None, {"message": ""}
-
-        if www_page.content_callback is not None:
-            www_page.content_callback( user_access_level, requested_path, get_data, post_data )
+        cookies = []
 
         while redirect is not None:
             www_page = redirect
             if www_page.content_callback is not None:
-                redirect, content = www_page.content_callback( user_access_level, requested_path, get_data, post_data )
+                redirect, content, cookies = www_page.content_callback( user_access_level, requested_path, get_data, post_data )
 
-        return www_page.load_template( user_access_level ).format( **content ), www_page.status
+        return www_page.load_template( user_access_level ).format( **content ), www_page.status, cookies
