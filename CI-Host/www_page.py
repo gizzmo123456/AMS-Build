@@ -79,5 +79,7 @@ class WWWPage:
 
             if www_page.content_callback is not None:
                 redirect, content = www_page.content_callback( user, requested_path, get_data, post_data )
+            else:
+                break
 
         return www_page.load_template().format( **content ), www_page.status

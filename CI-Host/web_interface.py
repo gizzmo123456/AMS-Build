@@ -114,7 +114,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes(16, "big") ).hexdigest()
 
                 while sess_id in self.sessions: # ensure that the new session id is unique
-                    sess_id = hashlib.md5( time.time_ns().to_bytes( 16, "big" ) ).hexdigest()
+                    sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes( 16, "big" ) ).hexdigest()
 
                 user.set_cookie("session_id", sess_id)
                 user.access_level = self.UAC_USER
