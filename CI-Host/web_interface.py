@@ -37,11 +37,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.thr_lock_update_tasks = threading.Lock()
         self.thr_lock_session_id = threading.Lock()
 
-        self.pages = {}
-        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                                               ),
-        self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             ),
-        self.pages["index"]     = WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   ),
-        self.pages["content"]   = WWWPage( "content",    "",                 200, None,                      1, self.pages["auth"]   ),
+        self.pages = { }
+        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                                               )
+        self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             )
+        self.pages["index"]     = WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   )
+        self.pages["content"]   = WWWPage( "content",    "",                 200, None,                      1, self.pages["auth"]   )
 
 
         # TODO: theses should be dicts for json
@@ -74,13 +74,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
             post_data = json.loads( self.rfile.read( content_len ) )
 
         user_access_level = self.get_user_access_level( "arwsArGthgbfSDtvcXFER5tgSdaF86feyftghbvcx37uey65thgvfdszz54eh" )
-        page, status, content_callback = self.get_page( path, user_access_level, get_data, post_data )
-        page_content = {"message": ""}
+        output_page, status = self.get_page( path, user_access_level, get_data, post_data )
 
-        if status == 200:
-            page, page_content = content_callback( user_access_level, get_data, post_data )   # we must make sure that the message element is not overwriten
-
-        output_page = self.build_page(page, page_content, get_data)
         self.process_request( output_page, status, GET )
 
     def get_user_access_level( self, sess_id ):
