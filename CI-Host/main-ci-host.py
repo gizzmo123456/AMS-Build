@@ -2,23 +2,31 @@
 import DEBUG
 import build_task
 import webhook
+import web_interface
 import threading
 import time
 from http.server import HTTPServer
 import queue
 import common
 
+
 def web_hook():
 
-    server = HTTPServer( ("0.0.0.0", 8081), webhook.Webhook )
+    wh_server = HTTPServer( ("0.0.0.0", 8081), webhook.Webhook )
 
     while alive:
-        server.serve_forever()
+        wh_server.serve_forever()
 
-    server.server_close()
+    wh_server.server_close()
 
 def web_interface():
-    pass
+
+    wi_server = HTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
+
+    while alive:
+        wi_server.serve_forever()
+
+    wi_server.server_close()
 
 def task_worker(job):
 
@@ -64,8 +72,11 @@ if __name__ == "__main__":
 
     webhook.Webhook.task_queue = task_queue
 
-    webhook_thread = threading.Thread( target=web_hook, args=() )
+    webhook_thread = threading.Thread( target=web_hook )
+    web_interface_thread = threading.Thread( target=web_interface() )
+
     webhook_thread.start()
+    web_interface_thread.start()
 
     while alive:
 

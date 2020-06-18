@@ -58,7 +58,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             page_content = {}
         elif len( request ) == 2 and request[1] == "style.css":
             page = self.read_page( "stylesheet", 0 )
-            page_status = 404
+            page_status = 200
             page_content = {}
         else:
             page = self.read_page("index", self.get_user_access_level( "g43gdGFwe45ggsd34FG43qtgfrea32gds43" ))
