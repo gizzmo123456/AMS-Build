@@ -100,7 +100,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
             if requested_path[0].lower() == "ams-ci":
                 if path_len > 1:              # content request (html or json)
-                    if requested_path[1] == "style":
+                    if requested_path[1] == "style.css":
                         return common.read_file( "./www/" + "default.css" ), 200
                     else:
                         page = self.pages["content"]
