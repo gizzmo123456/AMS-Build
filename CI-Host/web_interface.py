@@ -124,8 +124,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
                 return self.pages["index"], {"message", "login successful :)"}  # redirect content
-            else:
-                return None, {"message": "Invalid Login"}, []
+
+        return None, {"message": "Invalid Login"}
 
     def list_projects( self ):
         """ returns list of projects dict { "name": pname }

@@ -67,7 +67,7 @@ class WWWPage:
         www_page = self.get_access_page( user )
 
         if www_page is None:
-            return "Its dark down here.", 200, []
+            return "Its dark down here.", 200
 
         redirect, content = None, {"message": ""}
 
