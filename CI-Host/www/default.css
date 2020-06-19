@@ -26,10 +26,16 @@ body{
     width: 70%
 }
 
+input{
+    margin-left: 6px;
+}
+s
 #form-hold{
     margin-left: auto;
     margin-right: auto;
     border: black solid 3px;
+    padding: 8px;
+    width: 300px;
 }
 
 p, h1, h2, h3, h4, h5{
