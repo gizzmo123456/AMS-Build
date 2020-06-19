@@ -44,7 +44,7 @@ def update_queue_info( a_tasks, p_tasks ):
 
     for t in a_tasks:
         at = t[1]
-        task["active_tasks"].append ( '"task_name": "{build_name}", '
+        tasks["active_tasks"].append ( '"task_name": "{build_name}", '
                                       '"task_hash": "{build_hash}", '
                                       '"project": "{project}", '
                                       '"created_by": "{actor}", '
@@ -52,11 +52,11 @@ def update_queue_info( a_tasks, p_tasks ):
                                       '"start_at": {started_build} '.format( **at.format_values ) )
 
     for t in p_tasks:
-        t["active_tasks"].append ( '"task_name": "{build_name}", '
-                                   '"task_hash": "{build_hash}", '
-                                   '"project": "{project}", '
-                                   '"created_by": "{actor}", '
-                                   '"created_at": {created}, '.format( **pt.format_values ) )
+        tasks["pending_tasks"].append ( '"task_name": "{build_name}", '
+                                        '"task_hash": "{build_hash}", '
+                                        '"project": "{project}", '
+                                        '"created_by": "{actor}", '
+                                        '"created_at": {created}, '.format( **t.format_values ) )
 
     threading.Thread( target=common.create_json_file, args=( "./data/queue_info.json", tasks ) ).start()
     _print( "Building Queue File Compleat" )
