@@ -5,7 +5,8 @@ import webhook
 import web_interface
 import threading
 import time
-from http.server import ThreadingHTTPServer, HTTPServer
+from http.server import HTTPServer
+from baseHTTPServer import ThreadHTTPServer
 import queue
 import common
 
@@ -27,7 +28,7 @@ def www_interface():
     # Use the threaded HTTPServer for the web interface,
     # so we're not handing around while files are downloaded
     # and pre-sockets are opened
-    wi_server = ThreadingHTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
+    wi_server = ThreadHTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
 
     while alive:
         wi_server.serve_forever()

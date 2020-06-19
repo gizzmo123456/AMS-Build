@@ -1,10 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer      # we use this lib so we dont have to install flask :)
+import socketserver
 import DEBUG
 _print = DEBUG.LOGS.print
 
 host = "0.0.0.0"
 port = 8081
-
 
 class BaseServer(BaseHTTPRequestHandler):
 
@@ -38,11 +38,8 @@ class BaseServer(BaseHTTPRequestHandler):
         self.wfile.write( content.encode() )
 
 
-if __name__ == "__main__":
-
-    server = HTTPServer( (host, port), BaseServer )
-
-    while True:
-        server.serve_forever()
-
-    server.server_close()
+class ThreadHTTPServer(socketserver.ThreadingMixIn, HTTPServer):
+    def finish_request(self, request, client_address):
+        request.settimeout(30)
+        # "super" can not be used because BaseServer is not created from object
+        HTTPServer.finish_request(self, request, client_address)
