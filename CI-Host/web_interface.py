@@ -102,11 +102,12 @@ class WebInterface( baseHTTPServer.BaseServer ):
             if requested_path[0].lower() == "ams-ci":
                 if path_len > 1:              # content request (html or json)
                     if requested_path[1] == "style.css":
-                        return common.read_file( "./www/" + "default.css" ), 200, "text/css"
+                        return common.read_file( "./www/default.css" ), 200, "text/css"
                     elif requested_path[1] == "logout":
                         if user.session_id in self.sessions:
                             del self.sessions[ user.session_id ]
                             user.session_id = ""
+                            user.set_access_level(0)
                         page = self.pages[ "index" ]
                     else:
                         page = self.pages["content"]
