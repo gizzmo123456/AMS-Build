@@ -8,12 +8,14 @@
 <body>
 <h3>CI - Login</h3>
     <p id="message">{message}</p>
-    <form action="/ams-ci/" method="post">
-        <p>User</p>
-        <input name="user">
-        <p>Password</p>
-        <input name="password" type="password"> <br /><br />
-        <input type="submit">
-    </form>
+    <div id="form-hold" >
+        <form action="/ams-ci/" method="post">
+            <p>User</p>
+            <input name="user">
+            <p>Password</p>
+            <input name="password" type="password"> <br /><br />
+            <input type="submit">
+        </form>
+    </div>
 </body>
 </html>
