@@ -107,7 +107,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         if user.session_id in self.sessions:
                             del self.sessions[ user.session_id ]
                             user.session_id = ""
-                            page = self.pages[ "index" ]
+                        page = self.pages[ "index" ]
                     else:
                         page = self.pages["content"]
                 else:
