@@ -149,8 +149,10 @@ if __name__ == "__main__":
                                                                                                        max_tasks=max_running_tasks,
                                                                                                        pending=len(pending_tasks) ))
                 start_task = None
-                if update_queue_file:   # this could be threaded, if we copy the list
-                    update_queue_info( active_tasks, pending_tasks )
+
+            if update_queue_file:   # this could be threaded, if we copy the list
+                update_queue_info( active_tasks, pending_tasks )
+                update_queue_file = False
 
             # time for a nap
             time.sleep(1)
