@@ -5,13 +5,16 @@ import webhook
 import web_interface
 import threading
 import time
-from http.server import HTTPServer
+from http.server import ThreadingHTTPServer, HTTPServer
 import queue
 import common
 
 
 def web_hook():
 
+    # Use the single thread HTTPServer for the web hook,
+    # we only want to handle a single connection at a time
+    # to ensure that the request are executed in order :)
     wh_server = HTTPServer( ("0.0.0.0", 8081), webhook.Webhook )
 
     while alive:
@@ -21,7 +24,10 @@ def web_hook():
 
 def www_interface():
 
-    wi_server = HTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
+    # Use the threaded HTTPServer for the web interface,
+    # so we're not handing around while files are downloaded
+    # and pre-sockets are opened
+    wi_server = ThreadingHTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
 
     while alive:
         wi_server.serve_forever()
