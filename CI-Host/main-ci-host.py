@@ -11,6 +11,8 @@ import queue
 import common
 from filelock import FileLock
 
+SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
+SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
 TASK_FINISHED = "~TASK-FINISHED~"
 
 def web_hook():
@@ -45,11 +47,11 @@ def update_queue_info( a_tasks, p_tasks ):
     for t in a_tasks:
         at = t[1]
         tasks["active_tasks"].append ( '"task_name": "{build_name}", '
-                                      '"task_hash": "{build_hash}", '
-                                      '"project": "{project}", '
-                                      '"created_by": "{actor}", '
-                                      '"created_at": {created}, '
-                                      '"start_at": {started_build} '.format( **at.format_values ) )
+                                       '"task_hash": "{build_hash}", '
+                                       '"project": "{project}", '
+                                       '"created_by": "{actor}", '
+                                       '"created_at": {created}, '
+                                       '"start_at": {started_build} '.format( **at.format_values ) )
 
     for t in p_tasks:
         tasks["pending_tasks"].append ( '"task_name": "{build_name}", '
@@ -64,7 +66,10 @@ def update_queue_info( a_tasks, p_tasks ):
 def task_worker(job):
 
     _print("Starting new task")
-    job.execute()
+    if SKIP_TASK_EXECUTION:
+        time.sleep( SKIP_TASK_DELAY )
+    else:
+        job.execute()
 
     zip = job.get_config_value( "cleanup", "7z_build" )
     cleanup = job.get_config_value( "cleanup", "remove_build_source")
