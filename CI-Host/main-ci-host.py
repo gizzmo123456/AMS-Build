@@ -10,7 +10,6 @@ from baseHTTPServer import ThreadHTTPServer
 import queue
 import common
 
-
 def web_hook():
 
     # Use the single thread HTTPServer for the web hook,
