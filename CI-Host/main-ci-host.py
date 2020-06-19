@@ -107,9 +107,6 @@ if __name__ == "__main__":
     pending_tasks = [] # task object
     active_tasks = []  # tuple (thread, task object)
 
-    update_queue_info( active_tasks, pending_tasks )
-    exit()
-
     webhook.Webhook.task_queue = task_queue
 
     webhook_thread = threading.Thread( target=web_hook )
