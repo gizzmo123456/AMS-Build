@@ -1,0 +1,18 @@
+{
+  "projects": [
+    {
+      "name": "example_project",
+      "builds": [
+        {
+          "name": "example_543tygve564fas45werf43tg_Build0",
+          "hash": "543tygve564fas45werf43tg",
+          "build_id": 0,
+          "created_by": "ashley sands",
+          "created_at": 0,
+          "status": "pass",
+          "link": "127.0.0.1/ams-ci/dl/{project_name}/{hash}"
+        }
+      ]
+    }
+  ]
+}

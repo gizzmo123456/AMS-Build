@@ -44,6 +44,7 @@ def read_file( file_name, lock=False ):
 
     return data
 
+
 def get_dict_from_json( file_name ):
 
     return json.loads( read_file( file_name ) )
@@ -66,6 +67,8 @@ def write_file( filepath, string, append=False, lock=True ):
 
 def create_json_file(filepath, data):
 
+    _print( "Dumping json data to file", filepath )
+
     try:
         fwrite = json.dumps( data )
     except Exception as e:
@@ -73,3 +76,5 @@ def create_json_file(filepath, data):
         return
 
     write_file( filepath, fwrite)
+
+    _print( "Dumped json data to file: ", filepath, "Complete" )

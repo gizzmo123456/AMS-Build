@@ -9,6 +9,9 @@ from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
 import queue
 import common
+from filelock import FileLock
+
+TASK_FINISHED = "~TASK-FINISHED~"
 
 def web_hook():
 
@@ -33,6 +36,31 @@ def www_interface():
         wi_server.serve_forever()
 
     wi_server.server_close()
+
+def update_queue_info( a_tasks, p_tasks ):
+
+    _print( "Building Queue Info File" )
+    tasks = { "active_tasks": [], "pending_tasks": [] }
+
+    for at in a_tasks:
+        at = at[1]
+        task["active_tasks"].append ( '"task_name": "{build_name}", '
+                                      '"task_hash": "{build_hash}", '
+                                      '"project": "{project}", '
+                                      '"created_by": "{actor}", '
+                                      '"created_at": {created}, '
+                                      '"start_at": {started_build} '.format( **at.format_values ) )
+
+    for pt in p_tasks:
+        pt = pt[1]
+        task["active_tasks"].append ( '"task_name": "{build_name}", '
+                                      '"task_hash": "{build_hash}", '
+                                      '"project": "{project}", '
+                                      '"created_by": "{actor}", '
+                                      '"created_at": {created}, '.format( **pt.format_values ) )
+
+    threading.Thread( target=common.create_json_file("./data/queue_info.json"), args=( tasks, ) ).start()
+    _print( "Building Queue File Compleat" )
 
 def task_worker(job):
 
@@ -61,12 +89,16 @@ def task_worker(job):
         _print( "Skipping Clean up", output_filename=job.stdout_filepath, console=False )
 
     _print("job "+job.format_values["build_hash"]+" complete")
-
+    # insert a TASK FINISHED message into the task que to unblock
+    # so we can safely update the web_interface without any threading issues
+    # it also makes sure that the task is removed from the active task list.
+    task_queue.put(TASK_FINISHED)
 
 if __name__ == "__main__":
 
     thr_lock_tasks = threading.Lock()
     alive = True
+    update_queue_file = False
 
     DEBUG.LOGS.init()
     _print = DEBUG.LOGS.print
@@ -95,8 +127,9 @@ if __name__ == "__main__":
             if task is not None:
                 if isinstance( task, build_task.BuildTask ):
                     pending_tasks.append( task )
-                    _print("task_pending")
-                else:
+                    update_queue_file = True
+                    _print("task_pending (total: {pending}) ".format( pending=len(pending_tasks) ) )
+                elif task != TASK_FINISHED:
                     _print("invalid task")
                 task = None
             # find if there is any available resources to launch the task
@@ -104,6 +137,7 @@ if __name__ == "__main__":
             for i in range(len(active_tasks)-1, -1, -1):
                 if not active_tasks[i][0].is_alive():
                     active_tasks.pop(i)
+                    update_queue_file = True
                     _print("complete task removed ({active_tasks}/{max_task})".format(active_tasks=len(active_tasks), max_task=max_running_tasks))
             # - start new tasks
             while len(active_tasks) < max_running_tasks and len(pending_tasks) > 0:
@@ -111,10 +145,14 @@ if __name__ == "__main__":
                 worker = threading.Thread( target=task_worker, args=(start_task,) )
                 worker.start()
                 active_tasks.append( (worker, start_task) )
+                update_queue_file = True
                 _print( "Active task {active_tasks} of {max_tasks} | current pending {pending}".format(active_tasks=len(active_tasks),
                                                                                                        max_tasks=max_running_tasks,
                                                                                                        pending=len(pending_tasks) ))
                 start_task = None
+                if update_queue_file:   # this could be threaded, if we copy the list
+                    update_queue_info( active_tasks, pending_tasks )
+
             # time for a nap
             time.sleep(1)
 
