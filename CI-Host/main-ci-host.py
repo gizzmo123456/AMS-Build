@@ -42,8 +42,8 @@ def update_queue_info( a_tasks, p_tasks ):
     _print( "Building Queue Info File" )
     tasks = { "active_tasks": [], "pending_tasks": [] }
 
-    for at in a_tasks:
-        at = at[1]
+    for t in a_tasks:
+        at = t[1]
         task["active_tasks"].append ( '"task_name": "{build_name}", '
                                       '"task_hash": "{build_hash}", '
                                       '"project": "{project}", '
@@ -51,15 +51,14 @@ def update_queue_info( a_tasks, p_tasks ):
                                       '"created_at": {created}, '
                                       '"start_at": {started_build} '.format( **at.format_values ) )
 
-    for pt in p_tasks:
-        pt = pt[1]
-        task["active_tasks"].append ( '"task_name": "{build_name}", '
-                                      '"task_hash": "{build_hash}", '
-                                      '"project": "{project}", '
-                                      '"created_by": "{actor}", '
-                                      '"created_at": {created}, '.format( **pt.format_values ) )
+    for t in p_tasks:
+        t["active_tasks"].append ( '"task_name": "{build_name}", '
+                                   '"task_hash": "{build_hash}", '
+                                   '"project": "{project}", '
+                                   '"created_by": "{actor}", '
+                                   '"created_at": {created}, '.format( **pt.format_values ) )
 
-    threading.Thread( target=common.create_json_file("./data/queue_info.json"), args=( tasks, ) ).start()
+    threading.Thread( target=common.create_json_file, args=( "./data/queue_info.json", tasks ) ).start()
     _print( "Building Queue File Compleat" )
 
 def task_worker(job):
@@ -107,6 +106,9 @@ if __name__ == "__main__":
     max_running_tasks = 1
     pending_tasks = [] # task object
     active_tasks = []  # tuple (thread, task object)
+
+    update_queue_info( active_tasks, pending_tasks )
+    exit()
 
     webhook.Webhook.task_queue = task_queue
 

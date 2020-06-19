@@ -107,3 +107,11 @@ class WWWPage:
                 break
 
         return www_page.load_template().format( **www_page.build_content( content ) ), www_page.status
+
+class JSONPage:
+
+    def handle_request( self, requested_path, get_data ):
+        """ returns a tuple (json string, fileName to formate data into) """
+
+        if requested_path[1].lower() == "project":
+            return '{"projects": [ {"name": "p1", "total_builds": 0, "last Build Status": "Success"}, {"name": "p2", "total_builds": 0, "last Build Status": "Success"}]}'
