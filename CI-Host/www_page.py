@@ -49,7 +49,6 @@ class WWWPage:
         self.content_callback = content_callback
         self.minimal_user_access_level = minimal_user_access_level
         self.no_access_www_page = no_access_www_page
-
         self.content_dict = self._build_content_dict()  # all values in dict are required on the page.
 
     def _build_content_dict( self ):
@@ -80,9 +79,6 @@ class WWWPage:
 
         root = "./www/"
 
-        if self.file_name is None:
-            return "Its dark down here, in the " + self.page_name
-
         return common.read_file( root + self.file_name )
 
     def load_page( self, user, requested_path, get_data, post_data ):
@@ -107,12 +103,15 @@ class WWWPage:
             else:
                 break
 
-        return www_page.load_template().format( **www_page.build_content( content ) ), www_page.status
+        page_output = "Error: No Content :("
 
-class JSONPage:
+        if self.page_name is None:          # return the raw json data
+            page_output = json.dumps( www_page.build_content( content ) )
+        elif isinstance( content, list ):   # if content is list, we need to return the template for all elements
+            page_output = ""
+            for c in content:
+                page_output += www_page.load_template().format( **www_page.build_content( c ) )
+        elif isinstance( content, dict):    # if content is dict, we only have to format it into the template
+            page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
-    def handle_request( self, requested_path, get_data ):
-        """ returns a tuple (json string, fileName to formate data into) """
-
-        if requested_path[1].lower() == "project":
-            return '{"projects": [ {"name": "p1", "total_builds": 0, "last Build Status": "Success"}, {"name": "p2", "total_builds": 0, "last Build Status": "Success"}]}'
+        return page_output, www_page.status
