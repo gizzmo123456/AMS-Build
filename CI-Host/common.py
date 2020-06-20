@@ -29,6 +29,7 @@ def run_process( command, shell="python3" ):
 
     process.kill()
 
+
 def read_file( file_name, lock=False ):
 
     lock_file = FileLock( file_name+".lock" )
@@ -45,9 +46,10 @@ def read_file( file_name, lock=False ):
     return data
 
 
-def get_dict_from_json( file_name ):
+def get_dict_from_json( file_name, lock_file=False ):
 
-    return json.loads( read_file( file_name ) )
+    return json.loads( read_file( file_name, lock_file ) )
+
 
 def write_file( filepath, string, append=False, lock=True ):
 

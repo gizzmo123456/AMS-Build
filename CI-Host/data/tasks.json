@@ -1,5 +1,5 @@
 {
-  "active_tasks": [
+  "active": [
     {
       "task_name": "name",
       "task_hash": "asdf4565yhgrt765uhjte56y456yrgtr7465",
@@ -9,7 +9,7 @@
       "start_at": 346765764757876584930
     }
   ],
-  "pending_tasks": [
+  "pending": [
     {
       "task_name": "name",
       "task_hash": "asdf4565yhgrt765uhjte56y456yrgtr7465",

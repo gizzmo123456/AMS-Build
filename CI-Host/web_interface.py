@@ -44,8 +44,15 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                                               )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             )
         self.pages["index"]     = WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   )
-        self.pages["content"]   = WWWPage( "content",    None,               200, None,                      1, self.pages["auth"]   )
 
+        # API html templates, use GET param 'template={template name}' to format json data into a html template.
+        # if template is 'none' or not supplied, the raw json is returned
+        self.pages["api"] = {}
+        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,             200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks" , "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["projects"]       = WWWPage( "api-queue-tasks" , "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["builds"]         = WWWPage( "api-queue-tasks" , "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
@@ -66,10 +73,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         request = urlparse( self.path )
         path = request.path.split( "/" )  # ams-ci /
-        path = [ p for p in path if p != ""]                       # remove the empties
+        path = [ p for p in path if p != "" ]                       # remove the empties
 
         cookie_data = SimpleCookie( self.headers.get('Cookie') )
-        print( self.headers )
+
         get_data = dict( parse_qsl( request.query ) )
         post_data = {}
 
@@ -110,8 +117,12 @@ class WebInterface( baseHTTPServer.BaseServer ):
                             user.session_id = ""
                             user.set_access_level(0)
                         page = self.pages[ "index" ]
-                    else:
-                        page = self.pages["content"]
+                    elif requested_path[1] == "api":
+                        page = self.pages["api"]["raw"]
+                        content_type = "application/json"
+                        if "template" in get_data and get_data["template"] in self.pages["api"]:
+                            page = self.pages["api"][ get_data["template"] ]
+                            content_type = "text/html"
                 else:
                     page = self.pages["index"]
 
@@ -141,6 +152,65 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 return self.pages["index"], {"message": "login successful :)"}  # redirect content
 
         return None, {"message": "Invalid Login"}
+
+    def api_content( self, user, request_path, get_data, post_data):
+        """ Gets the json data for api path.
+            Path format. /ams-ci/api/{api-path}
+            api-paths:
+            /projects                        returns all projects  (from projects.json)
+            /tasks                           returns all queue and active tasks (from tasks.json)
+            ===========================
+            The path following '/project' or '/task' filters the data in a linear fashion. starting at root
+            The path must be the keys in json file, if the key returns a list, then it returns a list
+            for keys=value
+            ie.
+            path:
+            /projects                                                           -> a list of all projects
+            /projects/name/{name}                                               -> if >1 project is found a list of projects otherwise a dict with the project info
+            /projects/name/{name}/builds                                        -> same as above, except only build data
+            /projects/name/{name}/builds/name/{name}                            -> same as above, except only builds with name {name}
+            /projects/name/{name}/builds/created_by/ashley sands/status/failed  -> would return all builds in project that where create by ashley sands that failed
+
+        """
+        # remove the root from the request path, make it all lower
+        request = [ r.lower() for r in request_path[2:] ]
+        request_length = len( request )
+        data = {}
+
+        if request_length > 0:
+            if request[0] == "projects" or request[0] == "project":
+                data = common.get_dict_from_json("./data/projects.json")
+            elif request[0] == "tasks":
+                data = common.get_dict_from_json("./data/tasks.json")
+
+        # filter the data.
+        filter_key = None
+        if request_length > 1:
+            for f in request[1:]:
+                if isinstance( data, dict ):
+                    if f in data:
+                        data = data[f]
+                    else:
+                        return {}
+                elif isinstance( data, list ):
+                    if filter_key is None:
+                        # remove all elements that do not have a key of f
+                        for i in range( len(data)+1, -1, -1 ):
+                            if f not in data[i]:
+                                data.pop(i)
+                        filter_key = f
+                    else:
+                        # remove all elements where filter_key value does not equal f
+                        for i in range( len(data)+1, -1, -1 ):
+                            if data[i][filter_key] != f:
+                                data.pop(i)
+                        if len(data) == 1:      # it no longer needs to be a list :)
+                            data = data[0]
+                        elif len(data) == 0:    # no data left to filter :)
+                            return []
+                        filter_key = None
+
+        return data
 
     def list_projects( self ):
         """ returns list of projects dict { "name": pname }

@@ -46,19 +46,19 @@ def update_queue_info( a_tasks, p_tasks ):
 
     for t in a_tasks:
         at = t[1]
-        tasks["active_tasks"].append ( '"task_name": "{build_name}", '
-                                       '"task_hash": "{build_hash}", '
-                                       '"project": "{project}", '
-                                       '"created_by": "{actor}", '
-                                       '"created_at": {created}, '
-                                       '"start_at": {started_build} '.format( **at.format_values ) )
+        tasks["active"].append ( '"task_name": "{build_name}", '
+                                 '"task_hash": "{build_hash}", '
+                                 '"project": "{project}", '
+                                 '"created_by": "{actor}", '
+                                 '"created_at": {created}, '
+                                 '"start_at": {started_build} '.format( **at.format_values ) )
 
     for t in p_tasks:
-        tasks["pending_tasks"].append ( '"task_name": "{build_name}", '
-                                        '"task_hash": "{build_hash}", '
-                                        '"project": "{project}", '
-                                        '"created_by": "{actor}", '
-                                        '"created_at": {created}, '.format( **t.format_values ) )
+        tasks["pending"].append ( '"task_name": "{build_name}", '
+                                  '"task_hash": "{build_hash}", '
+                                  '"project": "{project}", '
+                                  '"created_by": "{actor}", '
+                                  '"created_at": {created}, '.format( **t.format_values ) )
 
     threading.Thread( target=common.create_json_file, args=( "./data/tasks.json", tasks ) ).start()
     _print( "Building Queue File Compleat" )
