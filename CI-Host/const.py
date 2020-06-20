@@ -1,3 +1,6 @@
+APP_NAME = "ams-ci"
+APP_VERSION             = 0.1
+
 # AMS-CI setup
 DEFAULT_SHELL = "sh"
 DOCKER_ROOT_DIRECTORY = "/root/AMS-CI"

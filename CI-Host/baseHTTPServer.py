@@ -1,12 +1,18 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer      # we use this lib so we dont have to install flask :)
 import socketserver
 import DEBUG
+from const import *
+
 _print = DEBUG.LOGS.print
 
 host = "0.0.0.0"
 port = 8081
 
+
 class BaseServer(BaseHTTPRequestHandler):
+
+    def version_string( self ):
+        return "{app_name}/{version}".format( app_name=APP_NAME, version=APP_VERSION )
 
     def do_POST( self ):
         self.process_request(GET=False)
