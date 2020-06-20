@@ -120,9 +120,12 @@ class WebInterface( baseHTTPServer.BaseServer ):
                     elif requested_path[1] == "api":
                         page = self.pages["api"]["raw"]
                         content_type = "application/json"
-                        if "template" in get_data and get_data["template"] in self.pages["api"]:
-                            page = self.pages["api"][ get_data["template"] ]
+                        if "template" in get_data:
                             content_type = "text/html"
+                            if get_data["template"] in self.pages["api"]:
+                                page = self.pages["api"][ get_data["template"] ]
+                            else:
+                                page = self.pages["not_found"]
                 else:
                     page = self.pages["index"]
 
