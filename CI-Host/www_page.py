@@ -53,6 +53,9 @@ class WWWPage:
 
     def _build_content_dict( self ):
 
+        if self.file_name is None:
+            return {}
+
         page = self.load_template()
         keys = re.findall(r"{([a-zA-Z_][a-zA-Z0-9-_]*)}", page)
         content = {}
