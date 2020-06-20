@@ -7,15 +7,15 @@
 
 - [x] Add Basic webhook
 - - [x] test 
-- [ ] add simple webpage
+- [wip] add simple webpage
 
 ============================================
 
 - [x] Add Job Queue
 
 ==========================================
-- [ ] add clean up
-- [ ] add lock files
+- [x] add clean up
+- [x] add lock files
 - [x] pipeline
 - [ ] build index
 - [ ] build cooldown
@@ -31,3 +31,9 @@
        one that available only on the host and there other available in both
        ie, it does not make sence to share the local paths in the container
        as don't exist, while some like now are dynamic )
+
+==========================
+
+it would be better to store info queue and project info in redis?
+see https://pypi.org/project/redis/ for py lib
+ 
