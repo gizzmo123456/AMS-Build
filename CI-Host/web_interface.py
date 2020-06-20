@@ -184,8 +184,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 data = common.get_dict_from_json("./data/tasks.json")
             else:
                 data = { "status": 404, "message": "Data not found in api (Request: {request}) :(".format( request='/'.join( request ) ) }
+                request_length = 0  # set the request length to zero to avoid filtering
+
         else:
             data = {"status": 404, "message": "Data not found in api (No Data Requested) :("}
+            request_length = 0  # set the request length to zero to avoid filtering
 
         # filter the data.
         filter_key = None
