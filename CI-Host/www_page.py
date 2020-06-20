@@ -3,6 +3,7 @@ import time
 from http.cookies import SimpleCookie
 import web_interface
 import re
+import json
 
 class WWWUser:
 
@@ -54,11 +55,11 @@ class WWWPage:
     def _build_content_dict( self ):
 
         page = self.load_template()
-        keys = re.findall(r"{[a-zA-Z_][a-zA-Z0-9-_]*}", page)
+        keys = re.findall(r"{([a-zA-Z_][a-zA-Z0-9-_]*)}", page)
         content = {}
 
         for k in keys:
-            content[ re.findall(r"[a-zA-Z_][a-zA-Z0-9-_]*", k)[0] ] = ""
+            content[ k ] = ""
 
         return content
 
