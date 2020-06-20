@@ -109,7 +109,7 @@ class WWWPage:
         page_output = "Error: No Content :("
 
         if self.file_name is None:          # return the raw json data
-            page_output = json.dumps( www_page.build_content( content ) )
+            page_output = json.dumps( content )
         elif isinstance( content, list ):   # if content is list, we need to return the template for all elements
             page_output = ""
             for c in content:
