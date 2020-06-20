@@ -69,6 +69,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         path = [ p for p in path if p != ""]                       # remove the empties
 
         cookie_data = SimpleCookie( self.headers.get('Cookie') )
+        print( self.headers )
         get_data = dict( parse_qsl( request.query ) )
         post_data = {}
 

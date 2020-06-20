@@ -120,6 +120,7 @@ if __name__ == "__main__":
     webhook_thread.start()
     web_interface_thread.start()
 
+    exit();
     while alive:
 
         # wait for a task to come in while theres no pending
