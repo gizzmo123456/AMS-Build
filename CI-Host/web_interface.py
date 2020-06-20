@@ -182,8 +182,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 data = common.get_dict_from_json("./data/projects.json")
             elif request[0] == "tasks":
                 data = common.get_dict_from_json("./data/tasks.json")
+            else:
+                data = { "status": 404, "message": "Data not found in api (Request: {request}) :(".format( request='/'.join( request ) ) }
         else:
-            data = {"status": 404, "message": "Data not found in api ({request}) :(".format(request='/'.join(request) )}
+            data = {"status": 404, "message": "Data not found in api (No Data Requested) :("}
 
         # filter the data.
         filter_key = None
