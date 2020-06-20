@@ -60,7 +60,7 @@ def update_queue_info( a_tasks, p_tasks ):
                                         '"created_by": "{actor}", '
                                         '"created_at": {created}, '.format( **t.format_values ) )
 
-    threading.Thread( target=common.create_json_file, args=( "./data/queue_info.json", tasks ) ).start()
+    threading.Thread( target=common.create_json_file, args=( "./data/tasks.json", tasks ) ).start()
     _print( "Building Queue File Compleat" )
 
 def task_worker(job):
