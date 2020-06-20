@@ -205,13 +205,13 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 elif isinstance( data, list ):
                     if filter_key is None:
                         # remove all elements that do not have a key of f
-                        for i in range( len(data)+1, -1, -1 ):
+                        for i in range( len(data)-1, -1, -1 ):
                             if f not in data[i]:
                                 data.pop(i)
                         filter_key = f
                     else:
                         # remove all elements where filter_key value does not equal f
-                        for i in range( len(data)+1, -1, -1 ):
+                        for i in range( len(data)-1, -1, -1 ):
                             if data[i][filter_key] != f:
                                 data.pop(i)
                         if len(data) == 1:      # it no longer needs to be a list :)
