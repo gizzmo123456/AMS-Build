@@ -48,16 +48,15 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
         self.pages["api"] = {}
-        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,             200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks" , "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["projects"]       = WWWPage( "api-queue-tasks" , "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["builds"]         = WWWPage( "api-queue-tasks" , "not_found.html", 200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                         200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks" , "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["projects"]       = WWWPage( "api-queue-tasks" , "api-templates/project.html", 200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["builds"]         = WWWPage( "api-queue-tasks" , "api-templates/build.html",   200, self.api_content, 1, self.pages["auth"] )
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
         self.queued_tasks = ""
-
 
         super().__init__(request, client_address, server)   # this MUST be called at the end otherwise the others vars don't initialize
 
