@@ -182,6 +182,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 data = common.get_dict_from_json("./data/projects.json")
             elif request[0] == "tasks":
                 data = common.get_dict_from_json("./data/tasks.json")
+        else:
+            data = {"status": 404, "message": "Data not found in api ({request}) :(".format(request='/'.join(request) )}
 
         # filter the data.
         filter_key = None
@@ -191,7 +193,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                     if f in data:
                         data = data[f]
                     else:
-                        return {}
+                        data = {}
+                        break
                 elif isinstance( data, list ):
                     if filter_key is None:
                         # remove all elements that do not have a key of f
@@ -207,10 +210,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         if len(data) == 1:      # it no longer needs to be a list :)
                             data = data[0]
                         elif len(data) == 0:    # no data left to filter :)
-                            return []
+                            data = []
+                            break
                         filter_key = None
 
-        return data
+        return None, data
 
     def list_projects( self ):
         """ returns list of projects dict { "name": pname }
