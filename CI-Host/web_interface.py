@@ -43,16 +43,16 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages = { }
         self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                                               )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             )
-        self.pages["index"]     = WWWPage( "index",      "index.html",       200, None,                      1, self.pages["auth"]   )
+        self.pages["index"]     = WWWPage( "index",      "index.html",       200, self.index_content,        1, self.pages["auth"]   )
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
         self.pages["api"] = {}
         self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                         200, self.api_content, 1, self.pages["auth"] )
         self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks" , "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["projects"]       = WWWPage( "api-queue-tasks" , "api-templates/project.html", 200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["builds"]         = WWWPage( "api-queue-tasks" , "api-templates/build.html",   200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html", 200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",   200, self.api_content, 1, self.pages["auth"] )
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
