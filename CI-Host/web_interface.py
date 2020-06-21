@@ -1,7 +1,7 @@
 import threading
 import baseHTTPServer
 from http.cookies import SimpleCookie
-from urllib.parse import urlparse, parse_qsl
+from urllib.parse import urlparse, parse_qsl, unquote
 import json
 import common
 import os
@@ -70,7 +70,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
     def do_request( self, GET=True ):
 
-        request = urlparse( self.path )
+        request = urlparse( unquote( self.path ) )
         path = request.path.split( "/" )  # ams-ci /
         path = [ p for p in path if p != "" ]                       # remove the empties
 
