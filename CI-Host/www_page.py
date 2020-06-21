@@ -1,6 +1,7 @@
 import common
 import time
 from http.cookies import SimpleCookie
+from http import HTTPStatus
 import web_interface
 import re
 import json
@@ -93,7 +94,7 @@ class WWWPage:
         if www_page is None:
             return "Its dark down here.", 200
 
-        redirect, content = None, {"message": ""}
+        redirect, content, status = None, {"message": ""}, www_page.status
 
         if www_page.content_callback is not None:
             redirect, content = www_page.content_callback( user, requested_path, get_data, post_data )
@@ -119,4 +120,7 @@ class WWWPage:
         elif isinstance( content, dict):    # if content is dict, we only have to format it into the template
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
-        return page_output, www_page.status
+        if page_output == "":
+            status = HTTPStatus.NO_CONTENT
+
+        return page_output, status
