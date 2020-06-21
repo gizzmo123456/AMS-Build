@@ -28,6 +28,14 @@ body{
 
 }
 
+#form-hold{
+    margin-left: auto;
+    margin-right: auto;
+    border: black solid 3px;
+    padding: 8px;
+    width: 300px;
+}
+
 #main_hold{
     position: absolute;
     margin-left: 6px;
@@ -39,24 +47,18 @@ body{
     box-sizing: border-box;
 }
 
-#form-hold{
-    margin-left: auto;
-    margin-right: auto;
-    border: black solid 3px;
-    padding: 8px;
-    width: 300px;
+#builds_hold{
+    position: absolute;
+    width: 100%;
+    min-height: 100px;
+}
+
+.outter_item_hold{
+    max-height: 50%;
 }
 
 .item_hold{
-    min-height: 10%;
-    max-height: 45%;
     overflow-y: auto;
-}
-
-#builds_hold{
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
 }
 
 p, a, h1, h2, h3, h4, h5{
