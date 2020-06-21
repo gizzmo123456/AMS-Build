@@ -50,7 +50,7 @@ body{
 .item_hold{
     min-height: 10%;
     max-height: 45%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #builds_hold{
