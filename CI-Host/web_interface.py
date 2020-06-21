@@ -178,7 +178,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             print("Error: template not found")
             return default_message
 
-        content, status = self.pages[ template ].load_page(user, request_path, [], [])
+        content, status = self.pages["api"][ template ].load_page(user, request_path, [], [])
 
         if status != HTTPStatus.OK and status != HTTPStatus.NOT_FOUND:
             return default_message
