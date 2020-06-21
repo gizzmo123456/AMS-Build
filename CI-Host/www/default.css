@@ -26,10 +26,6 @@ body{
     width: 70%
 }
 
-input{
-    margin-left: 6px;
-}
-
 #form-hold{
     margin-left: auto;
     margin-right: auto;
@@ -49,12 +45,20 @@ h4{
     margin: 8px;
 }
 
+/* login form */
+.login-form, .form-lable{
+    width: 100%;
+    box-sizing: border-box;
+}
 
+p.form-lable{
+    padding: 2px;
+    margin: 0px;
+}
 
 /* Task template    */
 /* project template */
 /* build template   */
-/* Template items shared among all templates*/
 #template-item-hold{
     border-bottom: black groove 1px;
     margin: 6px;

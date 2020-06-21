@@ -7,14 +7,14 @@
 </head>
 <body>
 <h3>CI - Login</h3>
-    <p id="message">{message}</p>
     <div id="form-hold" >
         <form action="/ams-ci/" method="post">
-            <p>User</p>
-            <input name="user">
-            <p>Password</p>
-            <input name="password" type="password"> <br /><br />
-            <input type="submit">
+            <p id="message">{message}</p>
+            <p class="form-label" >User</p>
+            <input name="user" class="login-form" />
+            <p  class="form-label">Password</p>
+            <input name="password" type="password" class="login-form" /> <br /><br />
+            <input type="submit" class="login-input" />
         </form>
     </div>
 </body>
