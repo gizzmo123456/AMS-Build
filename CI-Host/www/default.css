@@ -52,12 +52,9 @@ body{
     min-height: 100px;
 }
 
-.outer_item_hold{
-    max-height: 50%;
-}
-
-.item_hold{
+.items_hold{
     overflow-y: auto;
+    max-height: 200px;
 }
 
 p, a, h1, h2, h3, h4, h5{
