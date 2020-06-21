@@ -48,12 +48,11 @@ body{
 }
 
 #builds_hold{
-    position: absolute;
     width: 100%;
     min-height: 100px;
 }
 
-.outter_item_hold{
+.outer_item_hold{
     max-height: 50%;
 }
 
