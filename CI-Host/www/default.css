@@ -57,7 +57,7 @@ h4{
 /* Template items shared among all templates*/
 #template-item-hold{
     border-bottom: black groove 1px;
-    margin: 3px;
+    margin: 6px;
 }
 
 p.template-item-name{
@@ -83,4 +83,14 @@ a.template-item-inline{
     padding: 1px;
     padding-left: 2px;
     padding-right: 2px;
+}
+
+a.template-item-inline:hover{
+    color: #a0a0a0;
+    border: 1px solid #707070;
+}
+
+a.template-item-inline:active{
+    color: #202020;
+    border: 1px solid black;
 }
