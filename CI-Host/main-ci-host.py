@@ -42,7 +42,7 @@ def www_interface():
 def update_queue_info( a_tasks, p_tasks ):
 
     _print( "Building Queue Info File" )
-    tasks = { "active_tasks": [], "pending_tasks": [] }
+    tasks = { "active": [], "pending": [] }
 
     for t in a_tasks:
         at = t[1]
