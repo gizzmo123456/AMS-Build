@@ -111,6 +111,7 @@ class WWWPage:
         if self.file_name is None:          # return the raw json data
             page_output = json.dumps( content )
         elif isinstance( content, list ):   # if content is list, we need to return the template for all elements
+            print("------CONTENT LEN ", len(content), " CONTENT: ", content)
             page_output = ""
             for c in content:
                 page_output += www_page.load_template().format( **www_page.build_content( c ) )
