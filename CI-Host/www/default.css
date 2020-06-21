@@ -56,11 +56,13 @@ h4{
 /* build template   */
 /* Template items shared among all templates*/
 #template-item-hold{
-    border-bottom: black groove 1px;   
+    border-bottom: black groove 1px;
+    margin: 3px;
 }
 
 p.template-item-name{
     font-weight: bold;
+    display: inline-block;
 }
 
 p.template-item-info{
@@ -73,4 +75,10 @@ a.template-item, a.template-item-inline{
 
 a.template-item-inline{
     display: inline;
+    font-size: 8px;
+    color: #505050;
+    border: 1px solid black;
+    padding: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
