@@ -167,8 +167,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
             "selected_project": "[None Selected]"
         }
 
-
-
         return None, page_content
 
     def get_api_content( self, user, request_path, template, default_message ):
@@ -178,7 +176,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         if template not in self.pages["api"]:
             print("Error: template not found")
-            return default_message
+            return "Error: Template not found"
 
         # we must add elements to make up the pre API path, as they are removed, in api_content
         # if not we have a invalid request.
