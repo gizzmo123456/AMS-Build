@@ -161,7 +161,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
             "active_tasks": "No Active Tasks",
             "queued_tasks": "No Queued Tasks",
             "projects": "No Projects",
-            "builds": "Select a project to view available builds"
+            "builds": "Select a project to view available builds",
+            "selected_project": "[None Selected]"
         }
 
         return None, page_content
