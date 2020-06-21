@@ -184,7 +184,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # if not we have a invalid request.
         pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
 
-        content, status = self.pages["api"][ template ].load_page(user, request_path, [], [])
+        content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
 
         if status == HTTPStatus.NOT_FOUND:
             return "Error: Content Not Found"
