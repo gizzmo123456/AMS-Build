@@ -46,7 +46,7 @@ h4{
 }
 
 /* login form */
-.login-form, .form-lable{
+.login-form, .form-label{
     width: 100%;
     box-sizing: border-box;
 }
