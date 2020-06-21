@@ -4,6 +4,7 @@
     <head>
         <title>AMSci</title>
         <link rel="stylesheet" type="text/css" href="/ams-ci/style.css">
+        <script src="/ams-ci/js/pageLoader.js" >
     </head>
     <body>
         <div id="header_hold">
@@ -15,13 +16,13 @@
             <div id="queue_hold">
                 <div id="active_task_hold" class="outer_item_hold">
                     <h4>Active Tasks</h4>
-                    <div class="items_hold">
+                    <div id="items-active-tasks" class="items_hold">
                         {active_tasks}
                     </div>
                 </div>
                 <div id="queued_tasks_hold" class="outer_item_hold">
                     <h4>Queued Tasks</h4>
-                    <div class="items_hold">
+                    <div id="items-queued-tasks" class="items_hold">
                         {queued_tasks}
                     </div>
                 </div>
