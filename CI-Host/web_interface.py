@@ -1,6 +1,7 @@
 import threading
 import baseHTTPServer
 from http.cookies import SimpleCookie
+from http import HTTPStatus
 from urllib.parse import urlparse, parse_qsl, unquote
 import json
 import common
@@ -160,12 +161,31 @@ class WebInterface( baseHTTPServer.BaseServer ):
         page_content = {
             "active_tasks": "No Active Tasks",
             "queued_tasks": "No Queued Tasks",
-            "projects": "No Projects",
+            "projects": self.get_api_content(user, ["projects"], "projects", "No Projects"),
             "builds": "Select a project to view available builds",
             "selected_project": "[None Selected]"
         }
 
+
+
         return None, page_content
+
+    def get_api_content( self, user, request_path, template, default_message ):
+        """ Use to get the API content locally
+            `Request path` is the json filtering, see path in api_content for more info
+        """
+        if template not in self.pages["api"]:
+            print("Error: template not found")
+            return default_message
+
+        content, status = self.pages[ template ].load_page(user, request_path, [], [])
+
+        if status != HTTPStatus.OK and status != HTTPStatus.NOT_FOUND:
+            return default_message
+        elif status == HTTPStatus.NOT_FOUND:
+            return "Error: Content Not Found"
+
+        return content
 
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
