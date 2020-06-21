@@ -3,6 +3,11 @@ body{
     width: 100%;
 }
 
+#site-title{
+    text-align: center;
+    width: 100%;
+}
+
 #content-hold{
     display: inline;
     width: 100%;
@@ -54,6 +59,7 @@ h4{
 p.form-label{
     padding: 2px;
     margin: 0px;
+    font-weight: bolder;
 }
 
 /* Task template    */
@@ -69,7 +75,6 @@ p.template-item-name{
     font-weight: bold;
     display: inline-block;
     text-transform: capitalize;
-    font-weight: bolder;
 }
 
 p.template-item-info{
