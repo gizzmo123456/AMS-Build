@@ -112,7 +112,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 if path_len >= self.API_ROOT_PATH_LENGTH:              # content request (html or json)
                     if requested_path[1] == "style.css":
                         return common.read_file( "./www/default.css" ), 200, "text/css"
-                    elif len(requested_path) > self.API_ROOT_PATH_LENGTH+1 and requested_path[1] == "js":
+                    elif len(requested_path) >= self.API_ROOT_PATH_LENGTH+1 and requested_path[1] == "js":
                         try:
                             return common.read_file("./www/js/{page}".format( page='/'.join( requested_path[2:] ) )), HTTPStatus.OK, "text/javascript"
                         except:
