@@ -155,6 +155,17 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         return None, {"message": "Invalid Login"}
 
+    def index_content( self, user, request_path, get_data, post_data):
+
+        page_content = {
+            "active_task": "No Active Tasks",
+            "queued_tasks": "No Queued Tasks",
+            "projects": "No Projects",
+            "builds": "Select a project to view available builds"
+        }
+
+        return None, page_content
+
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
             Path format. /ams-ci/api/{api-path}
