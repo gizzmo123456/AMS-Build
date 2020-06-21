@@ -160,8 +160,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
     def index_content( self, user, request_path, get_data, post_data):
 
         page_content = {
-            "active_tasks": self.get_api_content(user, ["tasks", "active"], "active_tasks", "No Active Tasks"),
-            "queued_tasks": self.get_api_content(user, ["tasks", "pending"], "queued_tasks", "No Queued Tasks"),
+            "active_tasks": self.get_api_content(user, ["tasks", "active"], "active_task", "No Active Tasks"),
+            "queued_tasks": self.get_api_content(user, ["tasks", "pending"], "queued_task", "No Queued Tasks"),
             "projects": self.get_api_content(user, ["projects"], "projects", "No Projects"),
             "builds": "Select a project to view available builds",
             "selected_project": "[None Selected]"
