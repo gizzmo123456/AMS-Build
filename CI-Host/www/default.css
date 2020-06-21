@@ -5,7 +5,9 @@ body{
 
 #site-title{
     text-align: center;
-    width: 100%;
+    padding: 4px;
+    margin: 4px;
+    display: inline;
 }
 
 #content-hold{
@@ -19,16 +21,20 @@ body{
     width: 25%;
     min-height: 300px;
     border: black solid 3px;
-    margin: -3px;
+    margin: -0px;
     margin-left: 3px;
+    margin-right: 3px;
+    box-sizing: border-box;
+
 }
 
 #main_hold{
-    position: relative;
-    margin-left: 6px;
+    position: absolute;
+    margin-left: 1%;
     display: inline-block;
     border: black solid 3px;
-    width: 70%
+    width: 73%;
+    box-sizing: border-box;
 }
 
 #form-hold{
@@ -43,6 +49,10 @@ p, a, h1, h2, h3, h4, h5{
     padding: 4px;
     margin-left: 8px;
     margin-top: 4px;
+}
+
+a.logout{
+
 }
 
 h4{
