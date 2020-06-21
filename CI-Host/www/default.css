@@ -1,6 +1,6 @@
 
 body{
-    width: 100%;
+    width: 99%;
 }
 
 #site-title{
@@ -11,7 +11,6 @@ body{
 }
 
 #content-hold{
-    display: inline;
     width: 100%;
 }
 
@@ -19,7 +18,8 @@ body{
     position: relative;
     display: inline-block;
     width: 25%;
-    min-height: 300px;
+    min-height: 250px;
+    max-height: 70%;
     border: black solid 3px;
     margin: -0px;
     margin-left: 3px;
@@ -32,6 +32,8 @@ body{
     position: absolute;
     margin-left: 6px;
     display: inline-block;
+    min-height: 250px;
+    max-height: 70%;
     border: black solid 3px;
     width: 73%;
     box-sizing: border-box;
@@ -43,6 +45,18 @@ body{
     border: black solid 3px;
     padding: 8px;
     width: 300px;
+}
+
+.item_hold{
+    min-height: 10%;
+    max-height: 45%;
+    overflow-y: scroll;
+}
+
+#builds_hold{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
 }
 
 p, a, h1, h2, h3, h4, h5{

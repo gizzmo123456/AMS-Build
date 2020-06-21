@@ -13,21 +13,21 @@
         <p id="message">{message}</p>
         <div id="content-hold">
             <div id="queue_hold">
-                <div id="active_task_hold">
+                <div id="active_task_hold" class="item_hold">
                     <h4>Active Tasks</h4>
                     {active_tasks}
                 </div>
-                <div id="queued_tasks_hold">
+                <div id="queued_tasks_hold" class="item_hold">
                     <h4>Queued Tasks</h4>
                     {queued_tasks}
                 </div>
             </div>
             <div id="main_hold">
-                <div id="projects_hold">
+                <div id="projects_hold" class="item_hold">
                     <h4>Projects</h4>
                     {projects}
                 </div>
-                <div id="builds_hold">
+                <div id="builds_hold" class="item_hold">
                     <h4>Builds for {selected_project}</h4>
                     {builds}
                 </div>
