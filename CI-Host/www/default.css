@@ -38,7 +38,7 @@ input{
     width: 300px;
 }
 
-p, h1, h2, h3, h4, h5{
+p, a, h1, h2, h3, h4, h5{
     padding: 4px;
     margin-left: 8px;
     margin-top: 4px;
@@ -56,7 +56,7 @@ h4{
 /* build template   */
 /* Template items shared among all templates*/
 #template-item-hold{
-    border-bottom: black dashed 1px;   
+    border-bottom: black groove 1px;   
 }
 
 p.template-item-name{
