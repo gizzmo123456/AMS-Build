@@ -30,7 +30,7 @@ body{
 
 #main_hold{
     position: absolute;
-    margin-left: 1%;
+    margin-left: 6px;
     display: inline-block;
     border: black solid 3px;
     width: 73%;
