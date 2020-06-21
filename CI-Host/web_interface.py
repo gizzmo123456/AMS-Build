@@ -28,6 +28,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             ams-ci / auth                                               [Authorizes user]
     """
     DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
+    API_ROOT_PATH_LENGTH = 2
 
     UAC_NO_AUTH = 0
     UAC_USER    = 1
@@ -108,7 +109,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if type( requested_path ) is list and path_len > 0:
 
             if requested_path[0].lower() == "ams-ci":
-                if path_len > 1:              # content request (html or json)
+                if path_len >= self.API_ROOT_PATH_LENGTH:              # content request (html or json)
                     if requested_path[1] == "style.css":
                         return common.read_file( "./www/default.css" ), 200, "text/css"
                     elif requested_path[1] == "logout":
@@ -174,16 +175,21 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """ Use to get the API content locally
             `Request path` is the json filtering, see path in api_content for more info
         """
+
         if template not in self.pages["api"]:
             print("Error: template not found")
             return default_message
 
+        # we must add elements to make up the pre API path, as they are removed, in api_content
+        # if not we have a invalid request.
+        pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
+
         content, status = self.pages["api"][ template ].load_page(user, request_path, [], [])
 
-        if status != HTTPStatus.OK and status != HTTPStatus.NOT_FOUND:
-            return default_message
-        elif status == HTTPStatus.NOT_FOUND:
+        if status == HTTPStatus.NOT_FOUND:
             return "Error: Content Not Found"
+        elif status != HTTPStatus.OK:
+            return default_message
 
         return content
 
@@ -207,7 +213,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         """
         # remove the root from the request path, make it all lower
-        request = [ r.lower() for r in request_path[2:] ]
+        request = [ r.lower() for r in request_path[self.API_ROOT_PATH_LENGTH:] ]
         request_length = len( request )
         data = {}
         print("API REQUEST: ", request)
