@@ -49,3 +49,28 @@ h4{
     margin: 8px;
 }
 
+
+
+/* Task template    */
+/* project template */
+/* build template   */
+/* Template items shared among all templates*/
+#template-item-hold{
+    border-bottom: black dashed 1px;   
+}
+
+p.template-item-name{
+    font-weight: bold;
+}
+
+p.template-item-info{
+
+}
+
+a.template-item, a.template-item-inline{
+
+}
+
+a.template-item-inline{
+    display: inline;
+}
