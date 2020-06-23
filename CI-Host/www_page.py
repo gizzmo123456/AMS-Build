@@ -109,7 +109,7 @@ class WWWPage:
 
         page_output = "Error: No Content :("
 
-        print( "------CONTENT LEN ", len( content ), " CONTENT: ", content )
+        print( "------CONTENT FOR ", self.page_name, " LEN ", len( content ), " CONTENT: ", content )
 
         if self.file_name is None:          # return the raw json data
             page_output = json.dumps( content )
