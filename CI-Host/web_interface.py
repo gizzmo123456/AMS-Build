@@ -194,7 +194,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         elif status != HTTPStatus.OK:
             return default_message
 
-        return json.loads(content)
+        return content
 
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
