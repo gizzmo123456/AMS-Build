@@ -38,4 +38,4 @@ var updateBuilds = function( selected ){
 }
 
 setInterval( updateActiveTask, refreshRate );
-setInterval( updateActiveTask, refreshRate );
+setInterval( updateQueuedTask, refreshRate );
