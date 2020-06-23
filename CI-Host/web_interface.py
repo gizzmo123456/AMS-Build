@@ -193,7 +193,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             return "Error: Content Not Found"
         elif status != HTTPStatus.OK:
             return default_message
-
+        print("\n***\nContent\n\n", content, "\n\n=============================\n\n")
         return content
 
     def api_content( self, user, request_path, get_data, post_data):
