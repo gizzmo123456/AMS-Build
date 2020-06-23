@@ -37,5 +37,5 @@ var updateBuilds = function( selected ){
     loadContent( `/ams-ci/api/projects/${selected}/builds?template=builds`, "items-queued-tasks" )
 }
 
-setInterval( updateActiveTask, refreshRate );
-setInterval( updateQueuedTask, refreshRate );
+setInterval( updateActiveTask, refreshRate * 1000 );
+setInterval( updateQueuedTask, refreshRate * 1000 );
