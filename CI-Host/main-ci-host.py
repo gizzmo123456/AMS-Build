@@ -45,20 +45,27 @@ def update_queue_info( a_tasks, p_tasks ):
     tasks = { "active": [], "pending": [] }
 
     for t in a_tasks:
-        at = t[1]
-        tasks["active"].append ( '"task_name": "{build_name}", '
-                                 '"task_hash": "{build_hash}", '
-                                 '"project": "{project}", '
-                                 '"created_by": "{actor}", '
-                                 '"created_at": "{created}", '
-                                 '"start_at": "{started_build}" '.format( **at.format_values ) )
+        format_values = t[1].format_values
+        values = {
+            "task_name":  format_values["build_name"],
+            "task_hash":  format_values["build_hash"],
+            "project":    format_values["project"],
+            "created_by": format_values["created"],
+            "crated_at":  format_values["crated_at"],
+            "started_at": format_values["started_at"]
+        }
+        tasks["active"].append ( values )
 
     for t in p_tasks:
-        tasks["pending"].append ( '"task_name": "{build_name}", '
-                                  '"task_hash": "{build_hash}", '
-                                  '"project": "{project}", '
-                                  '"created_by": "{actor}", '
-                                  '"created_at": "{created}" '.format( **t.format_values ) )
+        format_values = t.format_values
+        values = {
+            "task_name": format_values[ "build_name" ],
+            "task_hash": format_values[ "build_hash" ],
+            "project": format_values[ "project" ],
+            "created_by": format_values[ "created" ],
+            "crated_at": format_values[ "crated_at" ]
+        }
+        tasks[ "pending" ].append( values )
 
     threading.Thread( target=common.create_json_file, args=( "./data/tasks.json", tasks ) ).start()
     _print( "Building Queue File Compleat" )
