@@ -51,7 +51,7 @@ def update_queue_info( a_tasks, p_tasks ):
             "task_hash":  format_values["build_hash"],
             "project":    format_values["project"],
             "created_by": format_values["created"],
-            "crated_at":  format_values["created_at"],
+            "created_at":  format_values["created_at"],
             "started_at": format_values["started_at"]
         }
         tasks["active"].append ( values )
@@ -63,7 +63,7 @@ def update_queue_info( a_tasks, p_tasks ):
             "task_hash": format_values[ "build_hash" ],
             "project": format_values[ "project" ],
             "created_by": format_values[ "created" ],
-            "crated_at": format_values[ "created_at" ]
+            "created_at": format_values[ "created_at" ]
         }
         tasks[ "pending" ].append( values )
 
