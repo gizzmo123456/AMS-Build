@@ -34,11 +34,13 @@ var updateQueuedTask = function(){
 }
 
 var updateProjects = function(){
-    loadContent( "/ams-ci/api/projects?template=project", "items-queued-tasks" )
+    loadContent( "/ams-ci/api/projects?template=project", "items-projects" )
 }
 
 var updateBuilds = function( selected ){
-    loadContent( `/ams-ci/api/projects/${selected}/builds?template=builds`, "items-queued-tasks" )
+    loadContent( `/ams-ci/api/projects/${selected}/builds?template=builds`, "items-builds" )
+    // update the sites url
+    window.location.search = `?project=${selected}`
 }
 
 setInterval( updateActiveTask, refreshRate * 1000 );
