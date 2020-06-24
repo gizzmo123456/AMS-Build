@@ -37,7 +37,7 @@ class BaseServer(BaseHTTPRequestHandler):
             for c in cookies:
                 header = c.split(":")
                 if len( header ) > 1:
-                    self.send_header( *c )
+                    self.send_header( *header )
 
         self.end_headers()
 
