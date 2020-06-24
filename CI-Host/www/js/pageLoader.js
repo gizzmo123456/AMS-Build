@@ -41,6 +41,7 @@ var updateBuilds = function( selected ){
     loadContent( `/ams-ci/api/projects/${selected}/builds?template=builds`, "items-builds" )
     // update the sites url
     window.location.hash = `#project=${selected}`
+    document.getElementById("heading-builds").innerHTML = `Builds For ${selected}`
 }
 
 setInterval( updateActiveTask, refreshRate * 1000 );
