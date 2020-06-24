@@ -41,7 +41,7 @@ class WWWUser:
 
 class WWWPage:
 
-    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_www_page=None ):
+    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_www_page=None, no_content_message="" ):
 
         self.page_name = page_name
         self.file_name = file_name
@@ -51,6 +51,7 @@ class WWWPage:
         self.minimal_user_access_level = minimal_user_access_level
         self.no_access_www_page = no_access_www_page
         self.content_dict = self._build_content_dict()  # all values in dict are required on the page.
+        self.no_content_message = no_content_message
 
     def _build_content_dict( self ):
 
@@ -120,7 +121,9 @@ class WWWPage:
         elif len(content) > 0 and isinstance( content, dict):    # if content is dict, we only have to format it into the template
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
-        if page_output == "":
+        if page_output == "" and self.no_content_message != "":
+            page_output = self.no_conent_message
+        else:
             status = HTTPStatus.NO_CONTENT
 
         return page_output, status

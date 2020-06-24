@@ -51,10 +51,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # if template is 'none' or not supplied, the raw json is returned
         self.pages["api"] = {}
         self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                         200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html", 200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",   200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"], "No Active Tasks" )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"], "No Queued Tasks" )
+        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html", 200, self.api_content, 1, self.pages["auth"], "No Projects" )
+        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",   200, self.api_content, 1, self.pages["auth"], "No Builds Found" )
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
@@ -189,10 +189,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
 
-        if status == HTTPStatus.NOT_FOUND:
-            return "Error: Content Not Found"
-        elif status != HTTPStatus.OK:
-            return default_message
+        # TODO: Remove once confirmed
+        #if status == HTTPStatus.NOT_FOUND:
+        #    return "Error: Content Not Found"
+        #elif status != HTTPStatus.OK:
+        #    return default_message
 
         return content
 
