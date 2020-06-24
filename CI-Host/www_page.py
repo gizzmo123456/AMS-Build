@@ -117,7 +117,7 @@ class WWWPage:
             page_output = ""
             for c in content:
                 page_output += www_page.load_template().format( **www_page.build_content( c ) )
-        elif isinstance( content, dict):    # if content is dict, we only have to format it into the template
+        elif len(content) > 0 and isinstance( content, dict):    # if content is dict, we only have to format it into the template
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
         if page_output == "":
