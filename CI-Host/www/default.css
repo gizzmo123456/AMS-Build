@@ -126,3 +126,7 @@ a.template-item-inline:active{
     color: #202020;
     border: 1px solid black;
 }
+
+#link-no-href:hover{
+    cursor: pointer;
+}
