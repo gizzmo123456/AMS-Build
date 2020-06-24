@@ -29,8 +29,9 @@ class WWWUser:
     def set_access_level( self, level ):
         self.__access_level = level
 
-    def set_cookie( self, key, value ):
+    def set_cookie( self, key, value, path="/" ):
         self.cookies[key] = value
+        self.cookies[key]["path"] = path
 
     def get_cookie( self, key ):
 
