@@ -121,9 +121,10 @@ class WWWPage:
         elif len(content) > 0 and isinstance( content, dict):    # if content is dict, we only have to format it into the template
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
-        if page_output == "" and self.no_content_message != "":
-            page_output = self.no_content_message
-        else:
-            status = HTTPStatus.NO_CONTENT
+        if page_output == "":
+            if self.no_content_message != "":
+                page_output = self.no_content_message
+            else:
+                status = HTTPStatus.NO_CONTENT
 
         return page_output, status
