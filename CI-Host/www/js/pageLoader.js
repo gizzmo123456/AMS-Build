@@ -6,15 +6,17 @@ var loadContent = function(url, responceElemId){
     var request = new XMLHttpRequest();
         request.onreadystatechange = function()
         {
+            console.log( `URL ${url} ||| Ready State ${this.readyState} ||| Status ${this.status}` )
+
             if (this.readyState == 4 && this.status == 200)
             {
                 responceElemId.innerHTML = this.responseText;
+                console.log( 'Received Response: '+this.responseText );
             }
             else if ( this.status >= 300)
             {
                 responceElemId.innerHTML = ` Error: ${this.status}`
             }
-            console.log( `URL ${url} ||| Ready State ${this.readyState} ||| Status ${this.status}` )
         };
 
         request.open("GET", url, true);
