@@ -38,9 +38,9 @@ var updateProjects = function(){
 }
 
 var updateBuilds = function( selected ){
-    loadContent( `/ams-ci/api/projects/${selected}/builds?template=builds`, "items-builds" )
+    loadContent( `/ams-ci/api/projects/name/${selected}/builds?template=builds`, "items-builds" )
     // update the sites url
-    window.location.hash = `#project=${selected}`
+    window.location.hash = `#project=${selected}`   // change to history.pushState ??
     document.getElementById("heading-builds").innerHTML = `Builds For ${selected}`
 }
 
