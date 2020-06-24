@@ -48,8 +48,9 @@ var redirectLogin = function(){
     // if the user navs to the login page send them back to index.
     // also this will prevents the resubmit POST data issue
     root = "/ams-ci"
-    if ( window.location.pathname == `${root}/login` )
-        window.location.path = root;
+    if ( window.location.pathname == root )
+        window.location.reload()
+
 }
 
 redirectLogin()
