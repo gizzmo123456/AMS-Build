@@ -141,7 +141,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
     def auth_user_content( self, user, request_path, get_data, post_data ):
         """ returns redirect page, content """
 
-        print( "Auth User..." )
         if not user.authorized() and "user" in post_data and "password" in post_data:
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
