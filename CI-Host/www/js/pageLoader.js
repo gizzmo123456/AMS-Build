@@ -44,5 +44,16 @@ var updateBuilds = function( selected ){
     document.getElementById("heading-builds").innerHTML = `Builds For ${selected}`
 }
 
+var redirectLogin = function(){
+    // if the user navs to the login page send them back to index.
+    // also this will prevents the resubmit POST data issue
+    root = "/ams-ci"
+    if ( window.location.pathname == `${root}/login` )
+        window.location.path = root;
+}
+
+redirectLogin()
+
 setInterval( updateActiveTask, refreshRate * 1000 );
 setInterval( updateQueuedTask, refreshRate * 1000 );
+
