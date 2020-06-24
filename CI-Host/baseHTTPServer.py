@@ -30,12 +30,12 @@ class BaseServer(BaseHTTPRequestHandler):
 
         if cookies is not None:
             cookies["test"] = "helloo"
-            cookies["test"]["path"] = "/"
+            cookies["test"]["path"] = "/HellooWorld"
 
             cookies = cookies.output( header='Set-Cookie:', sep=";" )
-            print( "Setting cookies...", cookies )
             for c in cookies:
                 header = c.split(":")
+                print( "Setting cookies...", header )
                 if len( header ) > 1:
                     self.send_header( *header )
 
