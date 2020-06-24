@@ -188,12 +188,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
 
-        # TODO: Remove once confirmed
-        #if status == HTTPStatus.NOT_FOUND:
-        #    return "Error: Content Not Found"
-        #elif status != HTTPStatus.OK:
-        #    return default_message
-
         return content
 
     def api_content( self, user, request_path, get_data, post_data):
