@@ -29,10 +29,6 @@ class BaseServer(BaseHTTPRequestHandler):
         self.send_header( 'Access-Control-Allow-origin', '*' )
 
         if cookies is not None:
-            cookies["test"] = "helloo"
-            cookies["test"]["path"] = "/HellooWorld"
-
-            #cookies = cookies.output( header='Set-Cookie:', sep=";" )
             for c in cookies:
                 header = str(cookies[c]).split(":")
                 print( "Setting cookies...", header )
