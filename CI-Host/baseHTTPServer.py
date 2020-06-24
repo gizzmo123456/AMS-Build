@@ -32,7 +32,7 @@ class BaseServer(BaseHTTPRequestHandler):
             cookies["test"] = "helloo"
             cookies["test"]["path"] = "/HellooWorld"
 
-            cookies = cookies.output( header='Set-Cookie:', sep=";" )
+            #cookies = cookies.output( header='Set-Cookie:', sep=";" )
             for c in cookies:
                 header = c.split(":")
                 print( "Setting cookies...", header )
