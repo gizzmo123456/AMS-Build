@@ -1,7 +1,7 @@
 
 var refreshRate = 20;   //seconds
 
-var loadContent = function(url, responceElemId){
+var loadContent = function(url, responseElemId){
 
     var request = new XMLHttpRequest();
         request.onreadystatechange = function()
@@ -10,12 +10,12 @@ var loadContent = function(url, responceElemId){
 
             if (this.readyState == 4 && this.status == 200)
             {
-                responceElemId.innerHTML = this.responseText;
-                console.log( 'Received Response: '+this.responseText );
+                document.getElementById(responseElemId).innerHTML = this.responseText;
+                console.log( url + 'Received Response: ' + this.responseText );
             }
-            else if ( this.status >= 300)
+            else if ( this.status >= 300)   // should this be a thing ??
             {
-                responceElemId.innerHTML = ` Error: ${this.status}`
+                document.getElementById(responseElemId).innerHTML = ` Error: ${this.status}`
             }
         };
 
