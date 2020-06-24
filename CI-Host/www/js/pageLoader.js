@@ -30,7 +30,7 @@ var updateActiveTask = function(){
 }
 
 var updateQueuedTask = function(){
-    loadContent( "/ams-ci/api/tasks/queued?template=queued_task", "items-queued-tasks" )
+    loadContent( "/ams-ci/api/tasks/pending?template=queued_task", "items-queued-tasks" )
 }
 
 var updateProjects = function(){
