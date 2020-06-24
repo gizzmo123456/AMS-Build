@@ -122,7 +122,7 @@ class WWWPage:
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
         if page_output == "" and self.no_content_message != "":
-            page_output = self.no_conent_message
+            page_output = self.no_content_message
         else:
             status = HTTPStatus.NO_CONTENT
 
