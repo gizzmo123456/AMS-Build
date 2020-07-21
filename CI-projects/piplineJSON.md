@@ -21,7 +21,7 @@
 
 ### - build
 - build_name                # build full name
-- build_hash                # the md5(?) of the build
+- build_hash                # commit hash 
 - build_index               # the build index
 
 #### - Utills
