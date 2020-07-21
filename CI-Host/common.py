@@ -47,9 +47,12 @@ def read_file( file_name, lock=False ):
 
 
 def get_dict_from_json( file_name, lock_file=False ):
-
-    return json.loads( read_file( file_name, lock_file ) )
-
+    """returns json string as dict, empty if not valid"""
+    try:
+        return json.loads( read_file( file_name, lock_file ) )
+    except Exception as e:
+        _print(e, 3)
+        return {}
 
 def write_file( filepath, string, append=False, lock=True ):
 
