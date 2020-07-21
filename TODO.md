@@ -37,10 +37,18 @@
 it would be better to store queue and project info in redis?
 see https://pypi.org/project/redis/ for py lib
 
-============
-Note 23/06/2020
-So when i get back to this, we need to find out the the ajax is not working,
-from the server perspective, we are receiving the request. from the client tho
-there is an error, where we are trying to set the innerHTML of a string (the element id )
-and no error is being thrown :( 
- 
+========================================================================
+Ignore all of Above :)
+========================================================================
+
+[ ] Add build to project.json file  ??
+[ ] Build index
+[ ] build cool down
+[ ] Only build latest
+[ ] Add Build Now to 'Web_Interface'
+[ ] Add Download to 'Web_interface'
+[ ] Add Build naming convention to the pipeline file
+[ ] 
+
+== Im a lil stuck atm, with this i have very limited interwebs (26-06-2020)
+
