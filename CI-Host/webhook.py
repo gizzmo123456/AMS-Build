@@ -16,6 +16,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
     def do_POST( self ):
 
+        _print("Processing Webhook :)")
         request = urlparse( self.path )
         path = request.path
         query = dict(parse_qsl( request.query ))
