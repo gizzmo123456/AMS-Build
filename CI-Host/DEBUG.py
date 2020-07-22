@@ -90,10 +90,10 @@ class LOGS:
             if len(log) == 5:
                 log_time, log_type, message, output_file, console = log
             elif len(log) == 1 and log[0] == QUEUE_UNBLOCK_MESSAGE:
-                print("Error: DEAD!")
+                print("Killing Debug thread")
                 break
             else:
-                print("Error: Invalid Log Message (", log, ") ")
+                print("Error: Invalid Debug Log Message (", log, ") ")
                 continue
 
             if console:
@@ -103,7 +103,7 @@ class LOGS:
                 LOGS.add_to_logs(output_file, " | {0} | {1} ".format( log_time, message ))
 
         LOGS.active = False
-        print("dead debug thread")
+        print("Dead debug thread")
 
     @staticmethod
     def add_to_logs( file_path, message ):
@@ -117,7 +117,7 @@ class LOGS:
                 LOGS.file_queue[file_path].append(message)
             else:
                 LOGS.file_queue[file_path] = [ message ]
-            print("message Queued for writing")
+            print("Debug message queued for writing to file")
             return
         else:
             if file_path in LOGS.file_queue:
