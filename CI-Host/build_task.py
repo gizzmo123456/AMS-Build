@@ -1,5 +1,6 @@
 from const import *
 import common
+import commonProject
 from datetime import datetime
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -12,6 +13,13 @@ class BuildTask:
             otherwise the task will be ignored on execution.
             TBH this serves as a workaround until the webhook is able to do it own look up :)
         """
+
+        self.project_info = commonProject.get_project_info( project_name )
+
+        if self.project_info == None:
+            _print("Bad Task: Project does not exist", message_type=3)
+            return
+
         self.format_values = {      # values are public to the pipeline file    # it might be worth passing this into the contatiner.
             # directorys
             "project_dir":          PROJECT_DIRECTORY,
@@ -44,6 +52,7 @@ class BuildTask:
         self.config = "{relv_proj_dir}/{project}/master/config/pipeline.json".format( **self.format_values )
         self.config = common.get_dict_from_json( self.config )
 
+        # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
 
         # just to save the headack
