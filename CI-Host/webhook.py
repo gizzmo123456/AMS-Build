@@ -2,7 +2,7 @@ import baseHTTPServer
 from urllib.parse import urlparse, parse_qsl
 import build_task
 import json
-import common
+import commonProject
 import DEBUG
 _print = DEBUG.LOGS.print
 
@@ -24,11 +24,14 @@ class Webhook( baseHTTPServer.BaseServer ):
         post_data = json.loads( self.rfile.read( content_len ) )
 
         if path != "/request" and "name" not in query or "project" not in query:
-            self.process_request( "Error: ...", 404, False )
-            _print( "Bad request, maybe name or project not set?" )
+            self.process_request( "Error", 404, False )
+            _print( "Bad weebhoock request, maybe name or project not set?" )
+        elif not commonProject.project_exist( query["project"] ):
+            self.process_request( "Error", 404, False )
+            _print( "Bad webhook request, Project does not exist" )
         else:
             actor = post_data["actor"]["display_name"]
-            project_request_name = post_data["repository"]
+            repo_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
             task = build_task.BuildTask( actor, query["project"], build_hash,

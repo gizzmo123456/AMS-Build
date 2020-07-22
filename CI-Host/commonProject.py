@@ -4,6 +4,13 @@ from const import *
 import common
 import os.path
 
+def project_exist( project_name ):
+
+    project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                 project_name=project_name )
+
+    return os.path.exists( project_path );
+
 def get_project_info( project_name ):
     """Returns None if project doest not exist otherwise project info"""
 
