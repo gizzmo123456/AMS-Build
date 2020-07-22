@@ -10,10 +10,10 @@
  
 ### Available Variables
 #### - Directories
-- {project_dir}             # CI-Project root.
-- {build_dir}               # Build output
-- {master_source_dir}       # Project master root
-- {build_source_dir}        # Project build root
+- project_dir               # CI-Project root.
+- build_dir                 # Build output
+- master_source_dir         # Project master root
+- build_source_dir          # Project build root
 
 #### - Project
 - project                   # name of project that the pipeline belogs to

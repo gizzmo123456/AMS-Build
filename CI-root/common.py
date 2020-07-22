@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Common function between CI-host and root.
+
 
 import subprocess
 import json
