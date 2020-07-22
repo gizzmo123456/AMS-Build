@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Common function between CI-host and root.
+# Common functions between host, web interface. webhook
 
 import subprocess
 import json
@@ -28,7 +28,6 @@ def run_process( command, shell="python3" ):
             yield line_out
 
     process.kill()
-
 
 def read_file( file_name, lock=False ):
 
