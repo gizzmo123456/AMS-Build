@@ -2,6 +2,7 @@ import baseHTTPServer
 from urllib.parse import urlparse, parse_qsl
 import build_task
 import json
+import common
 import commonProject
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -26,26 +27,42 @@ class Webhook( baseHTTPServer.BaseServer ):
 
         if path != "/request" and "name" not in query or "project" not in query:
             self.process_request( "Error", 404, False )
-            _print( "Bad weebhoock request, maybe name or project not set?" )
+            _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         elif not commonProject.project_exist( query["project"] ):
             self.process_request( "Error", 404, False )
-            _print( "Bad webhook request, Project does not exist" )
+            _print( "Bad webhook request, Project does not exist", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
             actor = post_data["actor"]["display_name"]
             repo_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
-            task = build_task.BuildTask( actor, query["project"], build_hash,
-                                         webhook=True, webhook_name=query["name"] )
+            # check the request is defined within the projects webhook config in pipeline
+            pipeline = commonProject.get_project_pipeline( query[ "project" ] )
 
-            if task.valid:
-                Webhook.task_queue.put( task )
-                _print( "Processing POST request" )
-            else:
-                _print( "Invalid task")
+            if pipeline is None:
+                _print( "Error: Invalid project, No pipeline found for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                return
+
+            webhook_name = common.get_value_at_key( pipeline, "webhook", "name" )
+            authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actor" )
+
+            if webhook_name != query[ "name" ]:
+                _print("Error, Webhook not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                return
+
+            if authorized_actor is None:
+                _print( "Error: No actors defined, for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                return
+            elif actor not in authorized_actor:
+                _print( "Error: Invalid actor, for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR  )
+                return
+
+            task = build_task.BuildTask( actor, query["project"], build_hash, webhook=True )
+
+            Webhook.task_queue.put( task )
+            _print( "Valid task. Tasked queued" )
 
             self.process_request( "Ok", 200, False )
-
 
     def do_GET( self ):
 

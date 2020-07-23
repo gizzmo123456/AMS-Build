@@ -8,11 +8,7 @@ _print = DEBUG.LOGS.print
 class BuildTask:
     "Build tasks..."
 
-    def __init__( self, trigger_actor, project_name, build_hash, webhook=False, webhook_name="" ):
-        """ if webhook is is True, webhook_name must be set in the project pipeline
-            otherwise the task will be ignored on execution.
-            TBH this serves as a workaround until the webhook is able to do it own look up :)
-        """
+    def __init__( self, trigger_actor, project_name, build_hash, webhook=False ):
 
         self.project_info = commonProject.get_project_info( project_name )
 
@@ -58,14 +54,7 @@ class BuildTask:
         # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
 
-        # valid if not a webhook or
-        # is webhook and webhook name is defined in project pipeline and the request actor is defined in the webhook auth users
-        self.valid = not webhook or ( webhook and "webhook" in self.config and "name" in self.config["webhook"] and
-                                      self.config["webhook"]["name"] == webhook_name and "authorized-actors" in self.config["webhook"] and
-                                      trigger_actor in self.config["webhook"]["authorized-actors"] )
-
-        if not self.valid:
-            return
+        self.valid = True
 
         _print("Starting master/pre-build commands for project '{project}': OUTPUT FILE PATH: ".format( **self.format_values), self.stdout_filepath)
         # prepare the build.
