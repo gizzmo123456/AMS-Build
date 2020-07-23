@@ -23,7 +23,7 @@ class LOGS:
     print_que = q.Queue()    # Queue of tuples (type, message)
     debug_thread = None
 
-    file_queue = {}
+    __file_queue = {}       # This must only be used by the debug thread ( debug_print_thread )
 
     @staticmethod
     def init():
@@ -60,7 +60,6 @@ class LOGS:
 
         # make sure all the values in argv are strings
         argv = [ str( a ) for a in argv ]
-
 
         if message_type == LOGS.MSG_TYPE_WARNING:
             message_type_name = "WARNING"
@@ -100,29 +99,33 @@ class LOGS:
                 print( " | {0} | {1} | {2} ".format( log_time, log_type, message ) )
 
             if output_file:
-                LOGS.add_to_logs(output_file, " | {0} | {1} ".format( log_time, message ))
+                LOGS.__log_to_file(output_file, " | {0} | {1} ".format( log_time, message ))
 
         LOGS.active = False
         print("Dead debug thread")
 
     @staticmethod
-    def add_to_logs( file_path, message ):
+    def __log_to_file( file_path, message ):
+        """ Logs debug message to file.
+            If the file does not exist the message is queued, until print is called and the file exist.
+        """
 
-        # queue any messages that are outputed to files that do not exist.
-        # The master commands are triggered before the master directory has been copied
-        # with the builds stdout log :)
-        # should proberly add some form of expire time to it.
+        # Todo: Add option for queueing message
+        # Todo: Add function to dump the queue to the file if it exist
+        # Todo: Add option to create file if it does not exist.
+
         if not os.path.exists( file_path ):
-            if file_path in LOGS.file_queue:
-                LOGS.file_queue[file_path].append(message)
+            # queue the message if the file does not exist
+            if file_path in LOGS.__file_queue:
+                LOGS.__file_queue[file_path].append(message)
             else:
-                LOGS.file_queue[file_path] = [ message ]
+                LOGS.__file_queue[file_path] = [ message ]
             print("Debug message queued for writing to file")
             return
         else:
-            if file_path in LOGS.file_queue:
-                message = '\n'.join( LOGS.file_queue[file_path] ) + "\n" + message
-                del LOGS.file_queue[file_path]
+            if file_path in LOGS.__file_queue:  # compile any queued messages.
+                message = '\n'.join( LOGS.__file_queue[file_path] ) + "\n" + message
+                del LOGS.__file_queue[file_path]
 
         with open(file_path, "a") as log:
             log.write( message+"\n" )

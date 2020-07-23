@@ -13,7 +13,7 @@ class BuildTask:
         self.project_info = commonProject.get_project_info( project_name )
 
         if self.project_info == None:
-            _print("Bad Task: Project does not exist", message_type=3)
+            _print( "Bad Task: Project does not exist", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
 
         self.format_values = {      # values are public to the pipeline file    # it might be worth passing this into the contatiner.
@@ -56,7 +56,10 @@ class BuildTask:
 
         self.valid = True
 
-        _print("Starting master/pre-build commands for project '{project}': OUTPUT FILE PATH: ".format( **self.format_values), self.stdout_filepath)
+        # Note: until the master directory is copied, the output does not exist,
+        #       So _print calls with output_filename defined are queued, until the file does exist
+        _print("Starting master/pre-build commands for project '{project}' @ {created}: LOG OUTPUT FILE PATH: {stdout}".format( stdout=self.stdout_filepath, **self.format_values), self.stdout_filepath)
+
         # prepare the build.
         # - run master commands in project source
         # - copy master directory to build directory
@@ -65,14 +68,13 @@ class BuildTask:
         if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master-commands"]) > 0:
             master_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["master-commands"] ]     # add format values to commands
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
-                # _print(line, output_filename=self.stdout_filepath, console=False) # hmm what to do about this. the file does not exist uptill the next set of commands
-                _print(line, output_filename=self.stdout_filepath, console=False)  # the output does not exist as of yet...
+                _print(line, output_filename=self.stdout_filepath, console=False)
 
         _print( "Copying Master To Build Directory", output_filename=self.stdout_filepath, console=False )
         _print( "{master_dir} -> {build_dir}".format( **self.format_values ), output_filename=self.stdout_filepath, console=False )
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
                                         "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
-            _print(line, output_filename=self.stdout_filepath, console=False)
+            _print(line, output_filename=self.stdout_filepath, console=False)   # Note: Queued _print message are now dumped to file.
 
         _print( "..::Executing Pre-Build Commands::..", output_filename=self.stdout_filepath, console=False )
         if webhook and "pre-build-commands" in self.config["webhook"] and len(self.config["webhook"]["pre-build-commands"]) > 0:
