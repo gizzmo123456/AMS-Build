@@ -82,3 +82,20 @@ def create_json_file(filepath, data):
     write_file( filepath, fwrite)
 
     _print( "Dumped json data to file: ", filepath, "Complete" )
+
+def get_value_at_key( dict, *keys, noValue=None ):
+    """Safely retrieves value from list of dict.
+        :param dict:        the dict to retrieve the value from
+        :param keys:        the keys to search for
+        :param noValue:     the value to return if the key does not exist
+        :return:            value at key or noValue if key does not exist
+    """
+    value = dict
+
+    for key in keys:
+        try:
+            value = dict[key]
+        except:
+            return noValue
+
+    return value

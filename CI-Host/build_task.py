@@ -54,7 +54,6 @@ class BuildTask:
         # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
 
-        # just to save the headack
         # valid if not a webhook or
         # is webhook and webhook name is defined in project pipeline and the request actor is defined in the webhook auth users
         self.valid = not webhook or ( webhook and "webhook" in self.config and "name" in self.config["webhook"] and
@@ -111,7 +110,7 @@ class BuildTask:
         _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
-    def get_config_value( self, *keys ):
+    def get_config_value( self, *keys ):    ## Todo this needs to be replaced with common.get_value_at_key
         """Gets the config value at keys
         :param keys: each key of the config value ie.
                     keys "webhook", "name" would return config[webhook][name]
