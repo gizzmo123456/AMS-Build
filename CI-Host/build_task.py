@@ -13,6 +13,7 @@ class BuildTask:
     def __init__( self, trigger_actor, project_name, build_hash, webhook=False ):
 
         self.project_info = None
+        # TODO: lock project info during update
         self._update_project_info()
 
         if self.project_info == None:
@@ -120,6 +121,10 @@ class BuildTask:
 
     def _save_project_info( self ):
 
+        if self.project_info is None:
+            _print( "Unable to update project info for project {project}".format( **self.format_values ) )
+            return
+
         project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
         common.write_file( project_info_path, json.dumps( self.project_info ), lock=True )
 
@@ -182,11 +187,24 @@ class BuildTask:
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
             _print(line, output_filename=self.stdout_filepath, console=False)
 
+        # TODO: this should be locked from when we update till the end of save.
+        self._update_project_info()  # make sure that we have the current version loaded.
+        self.project_info[ "last_complete_time" ] = time.time()
+        self._save_project_info()
+
+
+
     def execute( self ):
 
         if not self.valid:
             _print("Invalid task, ignoring...", output_filename=self.stdout_filepath)
             return
+
+        # update the project info last execute time
+        # TODO: this should be locked from when we update till the end of save.
+        self._update_project_info()     # make sure that we have the current version loaded.
+        self.project_info[ "last_execute_time" ] = time.time()
+        self._save_project_info()
 
         _print( "Local Config:", self.local_cof, output_filename=self.stdout_filepath, console=False )
         _print( "Docker Config:", self.docker_cof, output_filename=self.stdout_filepath, console=False )
