@@ -38,3 +38,15 @@ def get_project_info( project_name ):
         return project_info
     else:
         return common.get_dict_from_json( project_info_path )
+
+
+def get_project_pipeline( project_name ):
+    """Gets the project pipeline. None if project or file does not exist does not exist. """
+
+    pipeline_path = "{relevent_proj_path}/{project_name}/master/config/pipeline.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                       project_name=project_name )
+
+    if not os.path.exists( pipeline_path ):
+        return None
+
+    return common.get_dict_from_json( pipeline_path )

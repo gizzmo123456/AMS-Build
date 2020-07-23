@@ -49,14 +49,14 @@ class BuildTask:
         self.format_values["build_source_dir"] = self.format_values["build_dir"] + "/project_source"
 
         # load config file
-        self.config = "{relv_proj_dir}/{project}/master/config/pipeline.json".format( **self.format_values )
-        self.config = common.get_dict_from_json( self.config )
+        self.config = commonProject.get_project_pipeline( project_name ) # "{relv_proj_dir}/{project}/master/config/pipeline.json".format( **self.format_values )
 
         # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
 
         # just to save the headack
-        # valid if not a webhook or is webhook and webhook name is defined in project name and request actor is defined in the webhook auth users
+        # valid if not a webhook or
+        # is webhook and webhook name is defined in project pipeline and the request actor is defined in the webhook auth users
         self.valid = not webhook or ( webhook and "webhook" in self.config and "name" in self.config["webhook"] and
                                       self.config["webhook"]["name"] == webhook_name and "authorized-actors" in self.config["webhook"] and
                                       trigger_actor in self.config["webhook"]["authorized-actors"] )
