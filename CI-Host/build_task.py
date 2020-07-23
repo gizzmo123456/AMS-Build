@@ -51,6 +51,10 @@ class BuildTask:
         # load config file
         self.config = commonProject.get_project_pipeline( project_name ) # "{relv_proj_dir}/{project}/master/config/pipeline.json".format( **self.format_values )
 
+        if self.config is None:
+            _print( "Error: No Valid Pipeline file found for project ", project_name, message_type=3 )
+            return
+
         # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
 
