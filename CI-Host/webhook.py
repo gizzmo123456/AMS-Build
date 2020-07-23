@@ -46,6 +46,8 @@ class Webhook( baseHTTPServer.BaseServer ):
             webhook_name = common.get_value_at_key( pipeline, "webhook", "name" )
             authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actors" )
 
+
+
             if webhook_name != query[ "name" ]:
                 _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 return
@@ -54,7 +56,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 _print( "Error: No actors defined, for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 return
             elif actor not in authorized_actor:
-                _print( "Error: Invalid actor, for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR  )
+                _print( "Error: Invalid actor (", actor, "), for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR  )
                 return
 
             task = build_task.BuildTask( actor, query["project"], build_hash, webhook=True )
