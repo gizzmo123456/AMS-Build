@@ -31,16 +31,14 @@ def run_process( command, shell="python3" ):
 
 def read_file( file_name, lock=False ):
 
-    lock_file = FileLock( file_name+".lock" )
-
     if lock:
-        lock_file.acquire()
+        with LockFile( file_name ) as file:
+            data = ''.join( file.readlines() )
+    else:
+        with open(file_name) as file:
+            data = ''.join( file.readlines() )
 
-    with open(file_name) as file:
-        data = ''.join( file.readlines() )
 
-    if lock:
-        lock_file.release()
 
     return data
 
@@ -55,19 +53,17 @@ def get_dict_from_json( file_name, lock_file=False ):
 
 def write_file( filepath, string, append=False, lock=True ):
 
-    lock_file = FileLock( filepath+".lock" )
     mode = 'w'
     if append:
         mode = 'a'
 
     if lock:
-        lock_file.acquire()
+        with LockFile( filepath, mode ) as file:
+            file.write( string )
+    else:
+        with open( filepath, mode ) as file:
+            file.write( string )
 
-    with open( filepath, mode ) as file:
-        file.write( string )
-
-    if lock:
-        lock_file.release()
 
 def create_json_file(filepath, data):
 
@@ -100,3 +96,21 @@ def get_value_at_key( dict, *keys, noValue=None ):
             return noValue
 
     return value
+
+class LockFile:
+
+    def __init__( self, file_name, mode='w' ):
+
+        self.file_name = file_name
+        self.lock_file = FileLock( self.file_name + ".lock" )
+        self.mode = mode
+
+    def __enter__(self):
+        self.lock_file.acquire()
+        self.file = open( self.file_name, self.mode )
+
+        return self.file
+
+    def __exit__(self):
+        self.file.close()
+        self.lock_file.release()

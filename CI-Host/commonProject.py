@@ -3,6 +3,13 @@
 from const import *
 import common
 import os.path
+import json
+
+PATHS = {
+    "PROJECT":  RELEVENT_PROJECT_PATH+"/{project_name}",
+    "INFO":     RELEVENT_PROJECT_PATH+"/{project_name}/projectInfo.json",
+    "PIPELINE": RELEVENT_PROJECT_PATH+"/{project_name}/master/config/pipeline.json"
+}
 
 def project_exist( project_name ):
 
