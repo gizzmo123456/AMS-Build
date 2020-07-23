@@ -44,7 +44,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 return
 
             webhook_name = common.get_value_at_key( pipeline, "webhook", "name" )
-            authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actor" )
+            authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actors" )
 
             if webhook_name != query[ "name" ]:
                 _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
