@@ -1,7 +1,9 @@
 from const import *
 import common
 import commonProject
+import json
 from datetime import datetime
+import time
 import DEBUG
 _print = DEBUG.LOGS.print
 
@@ -10,11 +12,19 @@ class BuildTask:
 
     def __init__( self, trigger_actor, project_name, build_hash, webhook=False ):
 
-        self.project_info = commonProject.get_project_info( project_name )
+        self.project_info = None
+        self._update_project_info()
 
         if self.project_info == None:
             _print( "Bad Task: Project does not exist", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
+
+        # Update Project info.
+        self.project_info[ "latest_build_index" ] += 1
+        self.project_info[ "latest_build_key" ] = build_hash
+        self.project_info[ "last_created_time" ] = time.time()
+
+        self._save_project_info()
 
         self.format_values = {      # values are public to the pipeline file    # it might be worth passing this into the contatiner.
             # directorys
@@ -30,7 +40,7 @@ class BuildTask:
             # build
             "build_name":           "",
             "build_hash":           build_hash,
-            "build_index":          0,
+            "build_index":          self.project_info[ "latest_build_index" ],
             # util
             "actor":                trigger_actor,
             "created":              datetime.now().strftime("%d/%m/%Y @ %H:%M:%S"),
@@ -104,6 +114,14 @@ class BuildTask:
         _print( "SUCCESSFULLY INITIALIZED BUILD TASK", output_filename=self.stdout_filepath, console=False )
         _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
+
+    def _update_project_info( self ):
+        self.project_info = commonProject.get_project_info( self.format_values["project"] )
+
+    def _save_project_info( self ):
+
+        project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
+        common.write_file( project_info_path, json.dumps( self.project_info ), lock=True )
 
     def get_config_value( self, *keys ):    ## Todo this needs to be replaced with common.get_value_at_key
         """Gets the config value at keys
