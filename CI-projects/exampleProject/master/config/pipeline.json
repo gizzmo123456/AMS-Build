@@ -6,8 +6,7 @@
     "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows"
   },
   "webhook": {
-    "name": "push",
-    "project_request_name": "exampleProject",
+    "name": "master",
     "authorized-actors": [
       "ashley sands"
     ],
