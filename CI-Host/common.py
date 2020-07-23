@@ -95,7 +95,7 @@ def get_value_at_key( dict, *keys, noValue=None ):
 
     for key in keys:
         try:
-            value = dict[key]
+            value = value[key]
         except:
             return noValue
 
