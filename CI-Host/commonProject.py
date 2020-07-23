@@ -12,8 +12,8 @@ def project_exist( project_name ):
     return os.path.exists( project_path );
 
 def get_project_info( project_name ):
-    """Returns None if project doest not exist otherwise project info"""
-
+    """ Returns None if project doest not exist otherwise project info """
+    # Project info can be accessed from anywhere, but it should only be updated/saved from build_task.
 
     project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                  project_name=project_name )
@@ -37,8 +37,7 @@ def get_project_info( project_name ):
 
         return project_info
     else:
-        return common.get_dict_from_json( project_info_path )
-
+        return common.get_dict_from_json( project_info_path, lock_file=True )
 
 def get_project_pipeline( project_name ):
     """Gets the project pipeline. None if project or file does not exist does not exist. """
