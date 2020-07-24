@@ -41,14 +41,14 @@ see https://pypi.org/project/redis/ for py lib
 Ignore all of Above :)
 ========================================================================
 
-[ ] Add build to project.json file  ??
-[ ] Build index
+[c] Add build to project.json file  ??
+[c] Build index
 [ ] build cool down
 [ ] Only build latest
 [ ] Add Build Now to 'Web_Interface'
 [ ] Add Download to 'Web_interface'
 [ ] Add Build naming convention to the pipeline file
-[ ] 
+[ ] Add Last complete build index to projectInfo 
 
 == Im a lil stuck atm, with this i have very limited interwebs (26-06-2020)
 
