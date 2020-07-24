@@ -99,7 +99,7 @@ def get_value_at_key( dict, *keys, noValue=None ):
 
 class LockFile:
 
-    def __init__( self, file_name, mode='w' ):
+    def __init__( self, file_name, mode='r' ):
 
         self.file_name = file_name
         self.lock_file = FileLock( self.file_name + ".lock" )
