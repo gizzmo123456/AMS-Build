@@ -12,8 +12,29 @@ class BuildTask:
 
     def __init__( self, trigger_actor, project_name, build_hash, webhook=False ):
 
+        self.format_values = {  # values are public to the pipeline file    # it might be worth passing this into the contatiner.
+            # directorys
+            "project_dir": PROJECT_DIRECTORY,
+            "relv_proj_dir": RELEVENT_PROJECT_PATH,
+            "master_dir": "",
+            "build_dir": "",
+            "master_source_dir": "",
+            "build_source_dir": "",
+            # project
+            "project": project_name,
+            "master_build_name": "master",
+            # build
+            "build_name": "",
+            "build_hash": build_hash,
+            "build_index": 0,
+            # util
+            "actor": trigger_actor,
+            "created": datetime.now().strftime( "%d/%m/%Y @ %H:%M:%S" ),
+            "started_build": -1
+        }
+
         self.project_info = None
-        # TODO: lock project info during update
+        # TODO: lock project info during update (on all 3)
         self._update_project_info()
 
         if self.project_info == None:
@@ -21,32 +42,13 @@ class BuildTask:
             return
 
         # Update Project info.
-        self.project_info[ "latest_build_index" ] += 1
+        self.format_values[ "build_index" ] = self.project_info[ "latest_build_index" ] + 1
+
+        self.project_info[ "latest_build_index" ] = self.format_values[ "build_index" ]
         self.project_info[ "latest_build_key" ] = build_hash
         self.project_info[ "last_created_time" ] = time.time()
 
         self._save_project_info()
-
-        self.format_values = {      # values are public to the pipeline file    # it might be worth passing this into the contatiner.
-            # directorys
-            "project_dir":          PROJECT_DIRECTORY,
-            "relv_proj_dir":        RELEVENT_PROJECT_PATH,
-            "master_dir":           "",
-            "build_dir":            "",
-            "master_source_dir":    "",
-            "build_source_dir":     "",
-            # project
-            "project":              project_name,
-            "master_build_name":    "master",
-            # build
-            "build_name":           "",
-            "build_hash":           build_hash,
-            "build_index":          self.project_info[ "latest_build_index" ],
-            # util
-            "actor":                trigger_actor,
-            "created":              datetime.now().strftime("%d/%m/%Y @ %H:%M:%S"),
-            "started_build":        -1
-        }
 
         # create build name, and define corresponding directories
         self.format_values["build_name"] = "{project}_{build_hash}_build_{build_index}".format( **self.format_values )
@@ -56,7 +58,7 @@ class BuildTask:
         self.format_values["build_source_dir"] = self.format_values["build_dir"] + "/project_source"
 
         # load config file
-        self.config = commonProject.get_project_pipeline( project_name ) # "{relv_proj_dir}/{project}/master/config/pipeline.json".format( **self.format_values )
+        self.config = commonProject.get_project_pipeline( project_name )
 
         if self.config is None:
             _print( "Error: No Valid Pipeline file found for project ", project_name, message_type=3 )
@@ -117,7 +119,7 @@ class BuildTask:
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
     def _update_project_info( self ):
-        self.project_info = commonProject.get_project_info( self.format_values["project"] )
+        self.project_info = commonProject.get_project_info( self.format_values[ "project" ] )
 
     def _save_project_info( self ):
 

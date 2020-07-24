@@ -51,9 +51,11 @@ def get_dict_from_json( file_name, lock_file=False ):
         _print(e, 3)
         return {}
 
+
 def write_file( filepath, string, append=False, lock=True ):
 
     mode = 'w'
+    
     if append:
         mode = 'a'
 
