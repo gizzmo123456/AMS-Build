@@ -41,7 +41,7 @@ body{
     margin-left: 6px;
     display: inline-block;
     min-height: 250px;
-    max-height: 70%;
+    /*max-height: 70%;*/
     border: black solid 3px;
     width: 73%;
     box-sizing: border-box;
@@ -54,7 +54,6 @@ body{
 
 .items_hold{
     overflow-y: auto;
-    max-height: 200px;
 }
 
 p, a, h1, h2, h3, h4, h5{
