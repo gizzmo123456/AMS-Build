@@ -38,8 +38,6 @@ def read_file( file_name, lock=False ):
         with open(file_name) as file:
             data = ''.join( file.readlines() )
 
-
-
     return data
 
 
@@ -55,7 +53,7 @@ def get_dict_from_json( file_name, lock_file=False ):
 def write_file( filepath, string, append=False, lock=True ):
 
     mode = 'w'
-    
+
     if append:
         mode = 'a'
 
@@ -113,6 +111,6 @@ class LockFile:
 
         return self.file
 
-    def __exit__(self):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         self.file.close()
         self.lock_file.release()
