@@ -13,7 +13,7 @@ from www_page import WWWPage, WWWUser
 import math
 
 class WebInterface( baseHTTPServer.BaseServer ):
-    """
+    """ TODO: doc string needs updating
         Request types: GET | POST
         Pages:                                                          (GET only)
             ams-ci /                                                    [Root]
@@ -140,6 +140,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
         content, status = page.load_page(user, requested_path, get_data, post_data)
         return content, status, content_type
 
+# www_page callbacks
+
     def auth_user_content( self, user, request_path, get_data, post_data ):
         """ returns redirect page, content """
 
@@ -175,23 +177,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         return None, page_content
 
-    def get_api_content( self, user, request_path, template, default_message ):
-        """ Use to get the API content locally
-            `Request path` is the json filtering, see path in api_content for more info
-        """
-
-        if template not in self.pages["api"]:
-            print("Error: template not found")
-            return "Error: Template not found"
-
-        # we must add elements to make up the pre API path, as they are removed, in api_content
-        # if not we have a invalid request.
-        pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
-
-        content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
-
-        return content
-
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
             Path format. /ams-ci/api/{api-path}
@@ -225,7 +210,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
             else:
                 data = { "status": 404, "message": "Data not found in api (Request: {request}) :(".format( request='/'.join( request ) ) }
                 request_length = 0  # set the request length to zero to avoid filtering
-
         else:
             data = {"status": 404, "message": "Data not found in api (No Data Requested) :("}
             request_length = 0  # set the request length to zero to avoid filtering
@@ -260,6 +244,28 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         filter_key = None
 
         return None, data
+
+# end of www_page callbacks
+
+    def get_api_content( self, user, request_path, template, default_message ):
+        """ Use to get the API content locally
+            `Request path` is the json filtering, see path in api_content for more info
+        """
+
+        if template not in self.pages["api"]:
+            print("Error: template not found")
+            return "Error: Template not found"
+
+        # we must add elements to make up the pre API path, as they are removed, in api_content
+        # if not we have a invalid request.
+        pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
+
+        content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
+
+        return content
+
+# Is any of this used
+# i think this was all replaced by the use of projects.json
 
     def list_projects( self ):
         """ returns list of projects dict { "name": pname }
@@ -304,7 +310,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.queued_tasks = queued_tasks_str
         self.thr_lock_update_tasks.release()
 
-    def expire_session( self, session_id, ttl ):
+# End of is used?
+
+    def expire_session( self, session_id, ttl ):    # Note the use has been commented out
 
         while session_id in self.sessions:
             time.sleep( ttl )

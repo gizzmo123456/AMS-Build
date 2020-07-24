@@ -49,6 +49,8 @@ Ignore all of Above :)
 [ ] Add Download to 'Web_interface'
 [ ] Add Build naming convention to the pipeline file
 [ ] Add Last complete build index to projectInfo 
-
-== Im a lil stuck atm, with this i have very limited interwebs (26-06-2020)
+[ ] make tasks.json untracked by git 
+[ ] intergrate projects into to the project info file.
+    This will affect the web interface API  
+    
 
