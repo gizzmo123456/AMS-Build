@@ -5,12 +5,16 @@ from http import HTTPStatus
 from urllib.parse import urlparse, parse_qsl, unquote
 import json
 import common
+import commonProject
 import os
 from const import *
 import hashlib
 import time
 from www_page import WWWPage, WWWUser
 import math
+
+import DEBUG
+_print = DEBUG.LOGS.print
 
 class WebInterface( baseHTTPServer.BaseServer ):
     """ TODO: doc string needs updating
@@ -84,13 +88,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
         session_id = None
         user = WWWUser()
 
-        print("mmmmmmmmmmmmm cookies: ", cookie_data)
-
         if "session_id" in cookie_data:
             session_id = cookie_data["session_id"].value
             if session_id in self.sessions:
                 user = self.sessions[session_id]
-                print("user authorized via session cookie")
+                _print("user authorized via session cookie")
 
         if not GET:
             content_len = int( self.headers[ 'Content-Length' ] )
@@ -181,7 +183,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """ Gets the json data for api path.
             Path format. /ams-ci/api/{api-path}
             api-paths:
-            /projects                        returns all projects  (from projects.json)
+            /projects                        returns all projects in CI-project
             /tasks                           returns all queue and active tasks (from tasks.json)
             ===========================
             The path following '/project' or '/task' filters the data in a linear fashion. starting at root
@@ -197,14 +199,22 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         """
         # remove the root from the request path, make it all lower
-        request = [ r.lower() for r in request_path[self.API_ROOT_PATH_LENGTH:] ]
+        request = [ r for r in request_path[self.API_ROOT_PATH_LENGTH:] ]
         request_length = len( request )
         data = {}
         print("API REQUEST: ", request)
 
         if request_length > 0:
             if request[0] == "projects" or request[0] == "project":
-                data = common.get_dict_from_json("./data/projects.json")
+                # if a project name is supplied, get ALL project info
+                # otherwise just display all basic project info
+                if len(request) > 2 and request[1] == "name":
+                    data = [ commonProject.get_all_project_info( request[2] ) ] # this must be wrapped in a list to prevent filtering
+                    if data is None:
+                        _print("www_interface: Project (", request[2], ") not found")
+                        data = {}
+                else:
+                    data = commonProject.get_project_list()
             elif request[0] == "tasks":
                 data = common.get_dict_from_json("./data/tasks.json")
             else:
