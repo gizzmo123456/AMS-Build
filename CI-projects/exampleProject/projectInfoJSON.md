@@ -1,6 +1,6 @@
 # Project Info Jason File
 
-The file is automatically generated.
+The file is automatically generated.  
 The file should only be modified by build_task object 
 
 ```

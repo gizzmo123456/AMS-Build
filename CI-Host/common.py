@@ -3,6 +3,7 @@
 
 import subprocess
 import json
+import os
 from filelock import FileLock
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -79,6 +80,22 @@ def create_json_file(filepath, data):
 
     _print( "Dumped json data to file: ", filepath, "Complete" )
 
+
+def get_or_create_json_file( path, file_name, default_dict ):
+    """ Gets or creates project info files (info and build info)
+        :return: json dict or None if path does not exist.
+    """
+
+    if not os.path.exists( path ):
+        return None
+
+    file_path = "{path}/{file}".format( path=path, file=file_name )
+
+    if not os.path.exists( file_path ):
+        create_json_file( file_path, default_dict )
+        return default_dict
+    else:
+        return get_dict_from_json( file_path, lock_file=True )
 
 def get_value_at_key( dict, *keys, noValue=None ):
     """Safely retrieves value from list of dict.
