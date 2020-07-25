@@ -1,4 +1,6 @@
 .idea/*
 
+# Generated files.
 CI-projects/*/projectBuildInfo.json
 CI-projects/*/projectInfo.json
+CI-Host/data/*.json
