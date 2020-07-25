@@ -4,3 +4,6 @@
 CI-projects/*/projectBuildInfo.json
 CI-projects/*/projectInfo.json
 CI-Host/data/*.json
+
+# testing (just to make sure i dont push um)
+CI-projects/TEST_*/*
