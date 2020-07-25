@@ -51,8 +51,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # if template is 'none' or not supplied, the raw json is returned
         self.pages["api"] = {}
         self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                         200, self.api_content, 1, self.pages["auth"] )
-        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"], "No Active Tasks" )
-        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/task.html",    200, self.api_content, 1, self.pages["auth"], "No Queued Tasks" )
+        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/active_task.html",    200, self.api_content, 1, self.pages["auth"], "No Active Tasks" )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    200, self.api_content, 1, self.pages["auth"], "No Queued Tasks" )
         self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html", 200, self.api_content, 1, self.pages["auth"], "No Projects" )
         self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",   200, self.api_content, 1, self.pages["auth"], "No Builds Found" )
 

@@ -1,6 +1,7 @@
 
 body{
     width: 99%;
+    background-color: #d0d0d0;
 }
 
 #site-title{
@@ -12,18 +13,19 @@ body{
 
 #content-hold{
     width: 100%;
+    min-width: 600px;
 }
 
 #queue_hold{
     position: relative;
     display: inline-block;
-    width: 25%;
-    min-height: 250px;
-    max-height: 70%;
-    border: black solid 3px;
+    min-width: 210px;
+    width: 33%;
+    height: 85%;
+    border: #303030 solid 3px;
     margin: -0px;
-    margin-left: 3px;
-    margin-right: 3px;
+    margin-left: 0px;
+    margin-right: 6px;
     box-sizing: border-box;
 
 }
@@ -37,13 +39,14 @@ body{
 }
 
 #main_hold{
-    position: absolute;
-    margin-left: 6px;
+    position: relative;
+    margin-left: 0px;
     display: inline-block;
-    min-height: 250px;
-    /*max-height: 70%;*/
-    border: black solid 3px;
-    width: 73%;
+    vertical-align: top;
+    height: 85%;
+    border: #303030 solid 3px;
+    min-width: 380px;
+    width: 63%;
     box-sizing: border-box;
 }
 
@@ -57,6 +60,7 @@ body{
 }
 
 p, a, h1, h2, h3, h4, h5{
+    font-family: Arial, Helvetica, sans-serif;
     padding: 4px;
     margin-left: 8px;
     margin-top: 4px;
@@ -67,8 +71,12 @@ a.logout{
 }
 
 h4{
-    border-bottom: black dashed 2px;
-    margin: 8px;
+    border-bottom: white solid 8px;
+    padding: 8px;
+    background-color: #303030;
+    color: #c0c0c0;
+    box-sizing: border-box;
+    margin: 0px;
 }
 
 /* login form */
@@ -91,41 +99,95 @@ p.form-label{
     margin: 6px;
 }
 
+.template-item-hold{
+    display: block;
+}
+
+.template_item{
+    margin: 4px;
+}
+
 p.template-item-name{
     font-size: 16px;
     font-weight: bold;
     display: inline-block;
     text-transform: capitalize;
+
 }
 
 p.template-item-info{
-
+    display: inline-block;
 }
 
-a.template-item, a.template-item-inline{
+p.template-info{
+    box-sizing: border-box;
+    display: table-cell;
+    width: 5%;
+    margin: 2px;
+    font-size: 14px;
+    text-align: center;
+    vertical-align: top;
+}
 
+p.template-build{
+    box-sizing: border-box;
+    width: 77.5%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+a.template-item-right{
+    float: right;
+    padding-right: 10px;
+    margin: 0px 2px 0px 2px;
+
+    text-decoration: none;
 }
 
 a.template-item-inline{
-    display: inline;
+    display: inline-block;
     font-size: 12px;
     color: #505050;
-    border: 1px solid black;
+    border-bottom: 1px solid #505050;
     padding: 1px;
     padding-left: 2px;
     padding-right: 2px;
+    margin-top: 5px;
+    vertical-align: text-bottom;
 }
 
 a.template-item-inline:hover{
-    color: #a0a0a0;
-    border: 1px solid #707070;
+    color: #303030;
+    border-bottom: 1px solid #303030;
 }
 
 a.template-item-inline:active{
-    color: #202020;
-    border: 1px solid black;
+    color: #181818;
+    border-bottom: 1px solid #181818;
 }
 
-#link-no-href:hover{
+.link-no-href:hover{
     cursor: pointer;
+}
+
+#active_task_hold, #queued_tasks_hold{
+    height: 35vh;
+    overflow: auto;
+
+}
+
+.item_projects{
+    height: 25vh
+}
+
+.item_builds{
+    height: 45vh;
+}
+
+b.status_pass{
+    color: green;
+}
+
+b.status_fail{
+    color: red;
 }

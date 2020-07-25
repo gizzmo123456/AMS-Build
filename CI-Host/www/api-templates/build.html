@@ -1,6 +1,10 @@
 <div id="template-item-hold">
-    <p class="template-item-name" >{name}</p>
-    <p class="template-item-info" >Build {build_id} Status: {status}</p>
-    <p class="template-item-info">Created at {created_at} By {created_by}</p>
-    <a href="{link}" target="_blank" class="template-item">Download</a>
+    <p class="template-item-name template_item template-build" >{name}</p>
+    <a href="{link}" target="_blank" class="template-item-inline template-item-right">Download</a>
+    <div class="template-info-hold">
+        <p class="template-info" >Build ID<br /><b>{build_id}</b></p>
+        <p class="template-info" >Status<br /><b class="status_{status}">{status}</b></p>
+        <p class="template-info">Created By<br /><b>{created_by}</b></p>
+        <p class="template-info">Created At<br /><b>{created_at}</b></p>
+    </div>
 </div>
