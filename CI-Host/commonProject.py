@@ -24,11 +24,42 @@ def get_project_list( ):
     """
 
     projects = [ { "name": directory,
-                   "base_path": "{abs_project_path}/{directory}".format( abs_project_path=PROJECT_DIRECTORY, directory=directory ) }
+                   "base_path": "{abs_project_path}/{directory}".format( abs_project_path=RELEVENT_PROJECT_PATH, directory=directory ) }
                  for directory in os.listdir( RELEVENT_PROJECT_PATH )
                  if os.path.isdir( "{relev_path}/{directory}".format( relev_path=RELEVENT_PROJECT_PATH, directory=directory ) ) ]
 
     return projects
+
+def get_all_project_info( project_name ):
+    """ get all project and build info """
+
+    if not project_exist( project_name ):
+        return None  # project not found
+
+    return { "name": project_name,
+             "base_path": "{abs_project_path}/{directory}".format( abs_project_path=RELEVENT_PROJECT_PATH, directory=project_name ),
+             "project_info": get_project_info( project_name ),
+             "builds": get_project_build_info( project_name ),
+             "tasks": get_project_tasks( project_name )
+    }
+
+def get_project_tasks( project_name ):
+    """gets a dict of active and queued tasks"""
+
+    if not project_exist( project_name ):
+        return None
+
+    tasks = common.get_dict_from_json( "./data/tasks.json" )
+    print(tasks)
+    for task in tasks[ "active" ]:
+        print( task["project"] )
+
+    project_tasks = {
+        "active":  [ task for task in tasks["active" ] if task["project"] == project_name ],
+        "pending": [ task for task in tasks["pending"] if task["project"] == project_name ]
+    }
+
+    return project_tasks
 
 def get_project_info( project_name ):
     """ Returns None if project doest not exist otherwise project info """
@@ -49,7 +80,7 @@ def get_project_info( project_name ):
     return common.get_or_create_json_file( project_path, "projectInfo.json", project_info_default )
 
 
-def get_project_build( project_name ):
+def get_project_build_info( project_name ):
     # Project Build info can be accessed from anywhere, but it should only be updated/saved from build_task.
 
     project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
