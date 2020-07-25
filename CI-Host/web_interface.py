@@ -54,7 +54,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
         self.pages["api"] = {}
-        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                200, self.api_content, 1, self.pages["auth"] )
+        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                200, self.api_content, 1, self.pages["auth"], no_content_template=None )
         self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/active_task.html",    200, self.api_content, 1, self.pages["auth"], "No Active Tasks" )
         self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    200, self.api_content, 1, self.pages["auth"], "No Queued Tasks" )
         self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html",        200, self.api_content, 1, self.pages["auth"], "No Projects" )
@@ -170,9 +170,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
     def index_content( self, user, request_path, get_data, post_data):
 
         page_content = {
-            "active_tasks": self.get_api_content(user, ["tasks", "active"], "active_task", "No Active Tasks"),
-            "queued_tasks": self.get_api_content(user, ["tasks", "pending"], "queued_task", "No Queued Tasks"),
-            "projects": self.get_api_content(user, ["projects"], "projects", "No Projects"),
+            "active_tasks": self.get_api_content(user, ["tasks", "active"], "active_task"),
+            "queued_tasks": self.get_api_content(user, ["tasks", "pending"], "queued_task"),
+            "projects": self.get_api_content(user, ["projects"], "projects"),
             "builds": "Select a project to view available builds",
             "selected_project": "[None Selected]"
         }
@@ -257,7 +257,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
 # end of www_page callbacks
 
-    def get_api_content( self, user, request_path, template, default_message ):
+    def get_api_content( self, user, request_path, template ):
         """ Use to get the API content locally
             `Request path` is the json filtering, see path in api_content for more info
         """

@@ -42,7 +42,7 @@ class WWWUser:
 
 class WWWPage:
 
-    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_www_page=None, no_content_message="" ):
+    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_www_page=None, no_content_message="", no_content_template="noContent.html" ):
 
         self.page_name = page_name
         self.file_name = file_name
@@ -53,6 +53,7 @@ class WWWPage:
         self.no_access_www_page = no_access_www_page
         self.content_dict = self._build_content_dict()  # all values in dict are required on the page.
         self.no_content_message = no_content_message
+        self.no_content_template = no_content_template
 
     def _build_content_dict( self ):
 
@@ -81,11 +82,15 @@ class WWWPage:
         else:
             return self.no_access_www_page
 
-    def load_template( self ):
+    def load_template( self, no_content_template=False ):
 
         root = "./www/"
+        file_path = root + self.file_name;
 
-        return common.read_file( root + self.file_name )
+        if no_content_template:
+            file_path = root + self.no_content_template;
+
+        return common.read_file( file_path )
 
     def load_page( self, user, requested_path, get_data, post_data ):
 
@@ -121,7 +126,10 @@ class WWWPage:
 
         if page_output == "":
             if self.no_content_message != "":
-                page_output = self.no_content_message
+                if self.no_content_template is not None:
+                    page_output = www_page.load_template( True ).format( no_content_message=www_page.no_content_message )
+                else:
+                    page_output = self.no_content_message
             else:
                 status = HTTPStatus.NO_CONTENT
 
