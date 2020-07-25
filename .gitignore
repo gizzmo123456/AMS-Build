@@ -1,2 +1,4 @@
 .idea/*
 
+CI-projects/*/projectBuildInfo.json
+CI-projects/*/projectInfo.json
