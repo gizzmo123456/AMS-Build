@@ -1,7 +1,9 @@
-# Project Build Info Jason File
+# Project Build Info JSON File
 
 The file is automatically generated.  
 The file should only be modified by build_task object   
+
+the data is used to serve the www API
 
 ```
 [

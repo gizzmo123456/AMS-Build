@@ -1,7 +1,10 @@
-# Project Info Jason File
+# Project Info JSON File
 
 The file is automatically generated.  
 The file should only be modified by build_task object 
+
+The data is used to keep track of build id, last created, execute and complete times
+as well as serve the www API
 
 ```
 {
