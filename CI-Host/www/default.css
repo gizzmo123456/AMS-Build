@@ -70,13 +70,46 @@ a.logout{
 
 }
 
-h4{
+.panel-heading-tab{
     border-bottom: white solid 8px;
-    padding: 8px;
     background-color: #303030;
-    color: #c0c0c0;
+    box-sizing: border-box;
+    height: 42px;
+}
+
+h4{
+    padding: 8px;
+    color: #d0d0d0;
     box-sizing: border-box;
     margin: 0px;
+}
+
+a.panel-tab-link{
+    float: right;
+    display: inline-block;
+    font-size: 12px;
+    color: #d0d0d0;
+    border-bottom: 1px solid #d0d0d0;
+    padding: 1px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-top: 7px;
+    margin-right: 10px;
+    vertical-align: text-bottom;
+}
+
+a.panel-tab-link:hover{
+    color: #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+a.panel-tab-link:active{
+    color: #e8e8e8;
+    border-bottom: 1px solid #c0c0c0;
+}
+
+h4.panel-heading{
+    display: inline-block;
 }
 
 /* login form */

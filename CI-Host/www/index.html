@@ -14,13 +14,19 @@
         <p id="message">{message}</p>
         <div id="content-hold">
             <div id="queue_hold">
-                <h4>Active Tasks</h4>
+                <div class="panel-heading-tab">
+                    <h4 class="panel-heading" >Active Tasks</h4>
+                    <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                </div>
                 <div id="active_task_hold" class="outer_item_hold">
                     <div id="items-active-tasks" class="items_hold">
                         {active_tasks}
                     </div>
                 </div>
-                <h4>Queued Tasks</h4>
+                <div class="panel-heading-tab">
+                    <h4 class="panel-heading" >Queued Tasks</h4>
+                    <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                </div>
                 <div id="queued_tasks_hold" class="outer_item_hold">
                     <div id="items-queued-tasks" class="items_hold">
                         {queued_tasks}
@@ -29,13 +35,19 @@
             </div>
             <div id="main_hold">
                 <div id="projects_hold" class="outer_item_hold">
-                    <h4>Projects</h4>
+                    <div class="panel-heading-tab">
+                        <h4 class="panel-heading" >Projects</h4>
+                        <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                    </div>
                     <div id="items-projects" class="items_hold item_projects">
                         {projects}
                     </div>
                 </div>
                 <div id="builds_hold" class="outer_item_hold">
-                    <h4 id="heading-builds">Builds for {selected_project}</h4>
+                    <div class="panel-heading-tab">
+                        <h4 class="panel-heading" id="heading-builds">Builds for {selected_project}</h4>
+                        <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                    </div>
                      <div id="items-builds" class="items_hold item_builds">
                         {builds}
                      </div>

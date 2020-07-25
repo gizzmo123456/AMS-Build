@@ -1,5 +1,5 @@
 
-var refreshRate = 20;   //seconds
+var refreshRate = 60;   //seconds
 
 var loadContent = function(url, responseElemId){
 
