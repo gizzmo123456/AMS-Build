@@ -173,7 +173,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             "active_tasks": self.get_api_content(user, ["tasks", "active"], "active_task"),
             "queued_tasks": self.get_api_content(user, ["tasks", "pending"], "queued_task"),
             "projects": self.get_api_content(user, ["projects"], "projects"),
-            "builds": "Select a project to view available builds",
+            "builds": "<p>Select a project to view available builds</p>",
             "selected_project": "[None Selected]"
         }
 
