@@ -20,13 +20,18 @@ class BaseServer(BaseHTTPRequestHandler):
     def do_GET( self ):
         self.process_request()
 
-    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None, content_type="text/html" ):
+    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None, content_type="text/html", filename=None ):
         _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
         # send headed
         self.send_response( status, 'OK' )
         self.send_header( 'Content-type', content_type )
         self.send_header( 'Access-Control-Allow-origin', '*' )
+
+        if filename is not None:
+            self.send_header( 'Content-Disposition',  'attachment; filename="{filename}"'.format( filename=filename ) )
+        else:
+            self.send_header( 'Content-Disposition',  'inline'.format( filename=filename ) )
 
         if cookies is not None:
             for c in cookies:
@@ -39,8 +44,12 @@ class BaseServer(BaseHTTPRequestHandler):
 
         if content == "" and status is not 200:
             content = "Error " + str( status )
+
+        if isinstance( content, str ):
+            content = content.encode()
+
         # reply
-        self.wfile.write( content.encode() )
+        self.wfile.write( content )
 
 
 class ThreadHTTPServer(socketserver.ThreadingMixIn, HTTPServer):
