@@ -135,7 +135,7 @@ class LockFile:
 
 class BinaryFileStream:
 
-    def __init__( self, file_path, chunks=1000 ):
+    def __init__( self, file_path, chunks=1024 ):
 
         self.file_path = file_path
         self.chunks = chunks

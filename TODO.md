@@ -55,8 +55,19 @@ Ignore all of Above :)
     
 ========
 [ ] add auth to output and dl files.
+[ ] change BinaryFileStream default chunkSize 1024
 
-[ ] Add content-cache no-store header 
+[ ] Add Additional headers to process_request,
+    This will mean that filename can be removed.
+[ ] remove Cross-Origin header
+[ ] Add content-cache no-store http header 
     And or max-age
+[ ] Add content length http header
+[ ] Add Location http header to redirect login
+
+
 [ ] Fix tasks title heading overflow
-[ ] Fix build no zipping :(
+[x] Fix build no zipping :(
+[ ] Sort build so newest is top
+
+[ ] Sort console output, mark sure that there are no prints, only _prints
