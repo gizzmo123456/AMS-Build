@@ -290,7 +290,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             requestPath: list -> output/{project}/{build_name}
         """
 
-        if user.authorized(WWWUser.UAC_USER):
+        if not user.authorized(WWWUser.UAC_USER):
             return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
 
         if len(request_path) >= 3:
@@ -308,7 +308,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             requestPath: list -> output/{project}/{build_name}
         """
 
-        if user.authorized(WWWUser.UAC_USER):
+        if not user.authorized(WWWUser.UAC_USER):
             return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
 
         if len(request_path) >= 3:
