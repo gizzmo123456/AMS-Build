@@ -98,9 +98,21 @@ class WebInterface( baseHTTPServer.BaseServer ):
             content_len = int( self.headers[ 'Content-Length' ] )
             post_data = dict( parse_qsl( self.rfile.read( content_len ).decode("utf-8") ) )
 
-        output_page, status, content_type = self.get_page( path, user, get_data, post_data )
+        page = self.get_page( path, user, get_data, post_data )
 
-        self.process_request( output_page, status, GET, user.cookies, content_type )
+        output_page = "404 Not Found"
+        status = HTTPStatus.NOT_FOUND
+        content_type = "text\html"
+        filename = None
+
+        if len( page ) == 3:
+            output_page, status, content_type = page
+        elif len( page ) == 4:
+            output_page, status, content_type, filename = page
+        else:
+            _print("Unknown page output...")
+
+        self.process_request( output_page, status, GET, user.cookies, content_type, filename )
 
     def get_page( self, requested_path, user, get_data, post_data ):
         """ returns tuple (name of page template, status, content callback)
@@ -136,6 +148,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
                                 page = self.pages["api"][ get_data["template"] ]
                             else:
                                 page = self.pages["not_found"]
+                    elif requested_path[1] == "dl":
+                        return self.get_7z_file( requested_path[1:] )
+                    elif requested_path[1] == "output":
+                        return self.get_output_file( requested_path[1:] )
                 else:
                     page = self.pages["index"]
 
@@ -273,6 +289,36 @@ class WebInterface( baseHTTPServer.BaseServer ):
         content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
 
         return content
+
+    def get_7z_file( self, request_path ):
+        """ Returns the 7zip file in bytes
+            requestPath: list -> output/{project}/{build_name}
+        """
+
+        if len(request_path) >= 3:
+            project = request_path[1]
+            build = request_path[2]
+            zip_file = commonProject.get_project_build_7z( project, build )
+
+            if zip_file is not None:
+                return zip_file, HTTPStatus.OK, "application/x-7z-compressed", "{0}.7z".format(build)
+
+        return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
+
+    def get_output_file( self, request_path ):
+        """ Returns the raw output log
+            requestPath: list -> output/{project}/{build_name}
+        """
+
+        if len(request_path) >= 3:
+            project = request_path[1]
+            build = request_path[2]
+            output = commonProject.get_project_output_log( project, build )
+
+            if output is not None:
+                return output, HTTPStatus.OK, "text/plain"
+
+        return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
 
 # Is any of this used
 # i think this was all replaced by the use of projects.json

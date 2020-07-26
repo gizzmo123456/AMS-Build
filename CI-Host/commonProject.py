@@ -94,9 +94,40 @@ def get_project_pipeline( project_name ):
     """Gets the project pipeline. None if project or file does not exist does not exist. """
 
     pipeline_path = "{relevent_proj_path}/{project_name}/master/config/pipeline.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
-                                                                                       project_name=project_name )
+                                                                                              project_name=project_name )
 
     if not os.path.exists( pipeline_path ):
         return None
 
     return common.get_dict_from_json( pipeline_path )
+
+def get_project_output_log( project, build_name ):
+    """Get the output log for build in project, None if not found"""
+
+    output_path = "{relevent_proj_path}/{project_name}/builds/{build_name}/output.txt".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                               project_name=project,
+                                                                                               build_name=build_name )
+
+    if os.path.exists( output_path ):
+        return common.read_file( output_path, True )
+
+    return None
+
+def get_project_build_7z( project, build_name ):
+
+    zip_path = "{relevent_proj_path}/{project_name}/builds/{build_name}/{build_name}.7z".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                               project_name=project,
+                                                                                               build_name=build_name )
+    if os.path.exists( zip_path ):
+        with open( zip_path, "rb" ) as f:
+            byte = f.read(1)
+            all_bytes = b''
+            while byte:
+                all_bytes += byte
+                byte = f.read(1)
+
+        print("len: ", len(all_bytes))
+
+        return all_bytes
+
+    return None
