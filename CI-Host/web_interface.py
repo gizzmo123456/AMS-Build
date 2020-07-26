@@ -32,7 +32,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             ams-ci / auth                                               [Authorizes user]
     """
     DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
-    API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS and DL paths...
+    API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS, DL and output log paths...
 
     sessions = { }  # { `session key`: `WWWUser` }
 

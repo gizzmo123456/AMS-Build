@@ -22,8 +22,8 @@ class WWWUser:
 
         self.__access_level = 0
 
-    def authorized(self):
-        return self.get_access_level() > 0
+    def authorized(self, min_auth_value=UAC_USER):
+        return self.get_access_level() >= min_auth_value
 
     def get_access_level( self ):
 
