@@ -149,7 +149,7 @@ p.template-item-name{
     font-weight: bold;
     display: inline-block;
     text-transform: capitalize;
-
+    margin: 4px 8px 8px 8px;
 }
 
 p.template-item-info{
@@ -169,6 +169,13 @@ p.template-info{
 p.template-build{
     box-sizing: border-box;
     width: 77.5%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+p.template-task{
+    box-sizing: border-box;
+    width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
 }

@@ -46,6 +46,7 @@ Ignore all of Above :)
 [ ] build cool down
 [ ] Only build latest
 [ ] Add Build Now to 'Web_Interface'
+[ ] Add refresh functionality
 [x] Add Download to 'Web_interface'
 [ ] Add Build naming convention to the pipeline file
 [ ] Add Last complete build index to projectInfo 
@@ -60,7 +61,7 @@ Ignore all of Above :)
 [x] Block all CORS request 
 [ ] Add Additional headers to process_request,
     This will mean that filename can be removed.
-[ ] remove Cross-Origin header
+[x] remove Cross-Origin header
 [ ] Add content-cache no-store http header 
     And or max-age
 [ ] Add content length http header
