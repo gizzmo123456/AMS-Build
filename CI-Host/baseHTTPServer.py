@@ -28,9 +28,10 @@ class BaseServer(BaseHTTPRequestHandler):
         # for now ALL CORS request are blocked
         origin_header = self.headers.get("origin")
 
-        if origin_header is not None:
+        if origin_header is not None and origin_header != "None" and origin_header != "null":
             self.send_response( 406, 'CORS Not Accepted' )
-            return;
+            self.wfile.write( "CORS Not Accepted" )
+            return
 
         # send headed
         self.send_response( status, 'OK' )
