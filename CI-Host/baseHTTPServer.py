@@ -24,10 +24,19 @@ class BaseServer(BaseHTTPRequestHandler):
     def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None, content_type="text/html", filename=None ):
         _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
+        # Treat any request with origin header set as a CORS request.
+        # for now ALL CORS request are blocked
+        origin_header = self.headers.get("origin")
+
+        if origin_header is not None:
+            self.send_response( 406, 'CORS Not Accepted' )
+            return;
+
         # send headed
         self.send_response( status, 'OK' )
         self.send_header( 'Content-type', content_type )
-        self.send_header( 'Access-Control-Allow-origin', '*' )
+        # self.send_header( 'Access-Control-Allow-origin', '*' )    # for now reject all CORS request.
+                                                                    # There may be a time where we allow CORS request to the api
 
         if filename is not None:
             self.send_header( 'Content-Disposition',  'attachment; filename="{filename}"'.format( filename=filename ) )

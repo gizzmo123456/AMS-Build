@@ -55,7 +55,7 @@ Ignore all of Above :)
     
 ========
 [ ] add auth to output and dl files.
-[ ] change BinaryFileStream default chunkSize 1024
+[x] change BinaryFileStream default chunkSize 1024
 
 [ ] Add Additional headers to process_request,
     This will mean that filename can be removed.
