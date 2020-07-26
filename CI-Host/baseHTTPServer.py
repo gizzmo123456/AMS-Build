@@ -6,11 +6,10 @@ import common
 
 _print = DEBUG.LOGS.print
 
-host = "0.0.0.0"
-port = 8081
-
-
 class BaseServer(BaseHTTPRequestHandler):
+
+    BLOCK_CORS = False
+    ACCEPTED_CORS_ORIGINS = []
 
     def version_string( self ):
         return "{app_name}/{version}".format( app_name=APP_NAME, version=APP_VERSION )
@@ -28,7 +27,8 @@ class BaseServer(BaseHTTPRequestHandler):
         # for now ALL CORS request are blocked
         origin_header = self.headers.get("origin")
 
-        if origin_header is not None and origin_header != "None" and origin_header != "null":
+        if BaseServer.BLOCK_CORS and origin_header not in BaseServer.ACCEPTED_CORS_ORIGINS and\
+           origin_header is not None and origin_header != "None" and origin_header != "null":
             self.send_response( 406, 'CORS Not Accepted' )
             self.send_header( 'Content-type', "text/html" )
             self.end_headers()
