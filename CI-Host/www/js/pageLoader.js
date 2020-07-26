@@ -34,7 +34,7 @@ var updateQueuedTask = function(){
 }
 
 var updateProjects = function(){
-    loadContent( "/ams-ci/api/projects?template=project", "items-projects" )
+    loadContent( "/ams-ci/api/projects?template=projects", "items-projects" )
 }
 
 var updateBuilds = function( selected ){
