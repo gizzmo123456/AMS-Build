@@ -30,6 +30,8 @@ class BaseServer(BaseHTTPRequestHandler):
 
         if origin_header is not None and origin_header != "None" and origin_header != "null":
             self.send_response( 406, 'CORS Not Accepted' )
+            self.send_header( 'Content-type', "text/html" )
+            self.end_headers()
             self.wfile.write( "CORS Not Accepted" )
             return
 
