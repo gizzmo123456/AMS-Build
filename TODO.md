@@ -54,7 +54,7 @@ Ignore all of Above :)
     This will affect the web interface API  
     
 ========
-[ ] add auth to output and dl files.
+[x] add auth to output and dl files.
 [x] change BinaryFileStream default chunkSize 1024
 
 [x] Block all CORS request 
@@ -72,3 +72,6 @@ Ignore all of Above :)
 [ ] Sort build so newest is top
 
 [ ] Sort console output, mark sure that there are no prints, only _prints
+[ ] And add some log files :)
+
+[ ] Add Project Users
