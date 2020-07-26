@@ -1,5 +1,9 @@
 .idea/*
 
+# Master Directory
+CI-projects/*/master/project_source
+!CI-projects/exampleProject/master/project_source/SHOWFILE
+
 # Build Directory
 CI-Projects/*/builds
 !CI-projects/exampleProject/builds/README.md
