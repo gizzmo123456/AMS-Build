@@ -33,6 +33,7 @@ class BaseServer(BaseHTTPRequestHandler):
             self.send_header( 'Content-type', "text/html" )
             self.end_headers()
             self.wfile.write( "CORS Not Accepted".encode() )
+            _print("Blocked CORS from origin: ", origin_header)
             return
 
         # send headed
