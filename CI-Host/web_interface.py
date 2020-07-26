@@ -34,11 +34,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
     DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
     API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS and DL paths...
 
-    UAC_NO_AUTH = 0
-    UAC_USER    = 1
-    UAC_MOD     = 2
-    UAC_ADMIN   = 3
-
     sessions = { }  # { `session key`: `WWWUser` }
 
     def __init__( self, request, client_address, server ):
@@ -49,16 +44,16 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages = { }
         self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                                               )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content                             )
-        self.pages["index"]     = WWWPage( "index",      "index.html",       200, self.index_content,        1, self.pages["auth"]   )
+        self.pages["index"]     = WWWPage( "index",      "index.html",       200, self.index_content,        WWWUser.UAC_USER, self.pages["auth"]   )
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
         self.pages["api"] = {}
-        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                200, self.api_content, 1, self.pages["auth"], no_content_template=None )
-        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/active_task.html",    200, self.api_content, 1, self.pages["auth"], "No Active Tasks" )
-        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    200, self.api_content, 1, self.pages["auth"], "No Queued Tasks" )
-        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html",        200, self.api_content, 1, self.pages["auth"], "No Projects" )
-        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",          200, self.api_content, 1, self.pages["auth"], "No Builds Found" )
+        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], no_content_template=None )
+        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/active_task.html",    200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Active Tasks" )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Queued Tasks" )
+        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html",        200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Projects" )
+        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",          200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Builds Found" )
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
@@ -149,9 +144,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
                             else:
                                 page = self.pages["not_found"]
                     elif requested_path[1] == "dl":
-                        return self.get_7z_file( requested_path[1:] )
+                        return self.get_7z_file( user, requested_path[1:] )
                     elif requested_path[1] == "output":
-                        return self.get_output_file( requested_path[1:] )
+                        return self.get_output_file( user, requested_path[1:] )
                 else:
                     page = self.pages["index"]
 
@@ -173,7 +168,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
                 user.set_cookie("session_id", sess_id, path="/ams-ci" )
                 user.session_id = sess_id
-                user.set_access_level( self.UAC_USER )
+                user.set_access_level( WWWUser.UAC_USER )
                 self.sessions[ sess_id ] = user
 
                 # queue the session expiry
@@ -290,7 +285,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         return content
 
-    def get_7z_file( self, request_path ):
+    def get_7z_file( self, user, request_path ):
         """ Returns the 7zip file in bytes
             requestPath: list -> output/{project}/{build_name}
         """
@@ -305,7 +300,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
 
-    def get_output_file( self, request_path ):
+    def get_output_file( self, user, request_path ):
         """ Returns the raw output log
             requestPath: list -> output/{project}/{build_name}
         """

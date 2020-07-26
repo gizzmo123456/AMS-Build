@@ -57,6 +57,7 @@ Ignore all of Above :)
 [ ] add auth to output and dl files.
 [x] change BinaryFileStream default chunkSize 1024
 
+[x] Block all CORS request 
 [ ] Add Additional headers to process_request,
     This will mean that filename can be removed.
 [ ] remove Cross-Origin header

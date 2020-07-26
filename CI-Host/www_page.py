@@ -8,6 +8,12 @@ import json
 
 class WWWUser:
 
+    # User Access Control Const
+    UAC_NO_AUTH = 0
+    UAC_USER    = 1
+    UAC_MOD     = 2
+    UAC_ADMIN   = 3
+
     def __init__( self ):
 
         self.session_id = ""
@@ -42,7 +48,7 @@ class WWWUser:
 
 class WWWPage:
 
-    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=0, no_access_www_page=None, no_content_message="", no_content_template="noContent.html" ):
+    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=WWWUser.UAC_NO_AUTH, no_access_www_page=None, no_content_message="", no_content_template="noContent.html" ):
 
         self.page_name = page_name
         self.file_name = file_name
