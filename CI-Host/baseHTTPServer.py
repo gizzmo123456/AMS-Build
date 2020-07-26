@@ -32,7 +32,7 @@ class BaseServer(BaseHTTPRequestHandler):
             self.send_response( 406, 'CORS Not Accepted' )
             self.send_header( 'Content-type', "text/html" )
             self.end_headers()
-            self.wfile.write( "CORS Not Accepted" )
+            self.wfile.write( "CORS Not Accepted".encode() )
             return
 
         # send headed
