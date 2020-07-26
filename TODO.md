@@ -56,3 +56,6 @@ Ignore all of Above :)
 ========
 [ ] add auth to output and dl files.
 
+[ ] Add content-cache no-store header 
+    And or max-age
+

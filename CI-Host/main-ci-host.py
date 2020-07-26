@@ -75,6 +75,7 @@ def task_worker(job):
     _print("Starting new task")
     if SKIP_TASK_EXECUTION:
         time.sleep( SKIP_TASK_DELAY )   # simulate build
+        job.append_build_info()         # updating build list
     else:
         job.execute()
 
