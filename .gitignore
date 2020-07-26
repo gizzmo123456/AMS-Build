@@ -1,4 +1,6 @@
+# python and pyCharm
 .idea/*
+*/__pycache__
 
 # Master Directory
 CI-projects/*/master/project_source
