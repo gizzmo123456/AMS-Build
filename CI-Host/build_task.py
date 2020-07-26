@@ -194,7 +194,31 @@ class BuildTask:
         self.project_info[ "last_complete_time" ] = time.time()
         self._save_project_info()
 
+    def cleanup( self ):
 
+        zip = self.get_config_value( "cleanup", "7z_build" )
+        cleanup = self.get_config_value( "cleanup", "remove_build_source" )
+
+        # Zip file
+        if zip is not None and zip is True:
+            _print( "Zipping build...", output_filename=self.stdout_filepath, console=False )
+            # zip the build, removing zipped files
+            for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./Build/ -sdel;".format( **self.format_values ),
+                                            "bash" ):
+                _print( line, output_filename=self.stdout_filepath, console=False )
+            _print( "Zipping Complete", output_filename=self.stdout_filepath, console=False )
+        else:
+            _print( "Skipping Zipping", output_filename=self.stdout_filepath, console=False )
+
+        # Clean up
+        if cleanup is not None and cleanup is True:
+            _print( "Cleaning Source...", output_filename=self.stdout_filepath, console=False )
+            # remove the (copied) source folder
+            for line in common.run_process( "cd {build_dir}; sudo rm -r {build_source_dir}".format( **self.format_values ), "bash" ):
+                _print( line, output_filename=self.stdout_filepath, console=False )
+            _print( "Build Source Removed", output_filename=self.stdout_filepath, console=False )
+        else:
+            _print( "Skipping Clean up", output_filename=self.stdout_filepath, console=False )
 
     def execute( self ):
 
@@ -228,5 +252,10 @@ class BuildTask:
         _print( "=" * 24, output_filename=self.stdout_filepath, console=False )
 
         _print( "Deploying docker container, please wait...", output_filename=self.stdout_filepath, console=False )
+
         self.deploy_container()
+        self.cleanup()
+
+        # append build to build list
+
 
