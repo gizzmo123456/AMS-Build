@@ -203,7 +203,7 @@ class BuildTask:
         if zip is not None and zip is True:
             _print( "Zipping build...", output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
-            for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./Build/ -sdel;".format( **self.format_values ),
+            for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values ),
                                             "bash" ):
                 _print( line, output_filename=self.stdout_filepath, console=False )
             _print( "Zipping Complete", output_filename=self.stdout_filepath, console=False )

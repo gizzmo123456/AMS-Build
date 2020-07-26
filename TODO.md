@@ -58,4 +58,5 @@ Ignore all of Above :)
 
 [ ] Add content-cache no-store header 
     And or max-age
-
+[ ] Fix tasks title heading overflow
+[ ] Fix build no zipping :(
