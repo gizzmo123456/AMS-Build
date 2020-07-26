@@ -41,16 +41,18 @@ see https://pypi.org/project/redis/ for py lib
 Ignore all of Above :)
 ========================================================================
 
-[c] Add build to project.json file  ??
-[c] Build index
+[x] Add build to project.json file  ??
+[x] Build index
 [ ] build cool down
 [ ] Only build latest
 [ ] Add Build Now to 'Web_Interface'
-[ ] Add Download to 'Web_interface'
+[x] Add Download to 'Web_interface'
 [ ] Add Build naming convention to the pipeline file
 [ ] Add Last complete build index to projectInfo 
-[ ] make tasks.json untracked by git 
-[ ] intergrate projects into to the project info file.
+[x] make tasks.json untracked by git 
+[x] intergrate projects into to the project info file.
     This will affect the web interface API  
     
+========
+[ ] add auth to output and dl files.
 
