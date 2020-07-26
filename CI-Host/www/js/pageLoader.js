@@ -1,5 +1,6 @@
 
 var refreshRate = 60;   //seconds
+var selectedProject = null;
 
 var loadContent = function(url, responseElemId){
 
@@ -37,11 +38,29 @@ var updateProjects = function(){
     loadContent( "/ams-ci/api/projects?template=projects", "items-projects" )
 }
 
-var updateBuilds = function( selected ){
-    loadContent( `/ams-ci/api/projects/name/${selected}/builds?template=builds`, "items-builds" )
+var updateBuilds = function(){
+    loadContent( `/ams-ci/api/projects/name/${selectedProject}/builds?template=builds`, "items-builds" )
     // update the sites url
-    window.location.hash = `#project=${selected}`   // change to history.pushState ??
-    document.getElementById("heading-builds").innerHTML = `Builds For ${selected}`
+    document.getElementById("heading-builds").innerHTML = `Builds For ${selectedProject}`
+}
+
+var setSelectedProject = function( selected, setHash=true ){
+    selectedProject = selected;
+    updateBuilds();
+
+    if ( setHash )
+        window.location.hash = `#project=${selectedProject}`   // change to history.pushState ??
+}
+
+window.onhashchange = function(){
+
+    hash = window.location.hash;
+    hashRegex = /([a-zA-Z0-9]+)=(\w+)/;
+    hashGroups = hashRegex.exec( hash );
+
+    if ( hashGroups != null )
+        if ( hashGroups[1] == "project" )
+            setSelectedProject( hashGroups[2] );
 }
 
 setInterval( updateActiveTask, refreshRate * 1000 );
