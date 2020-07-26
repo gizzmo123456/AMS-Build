@@ -220,6 +220,27 @@ class BuildTask:
         else:
             _print( "Skipping Clean up", output_filename=self.stdout_filepath, console=False )
 
+    def append_build_info( self ):
+
+        # TODO: It might be worth not formating the json file in the list so
+        # we can just append the build info to the end of the file
+
+        build_info = {  "name": self.format_values["build_name"],
+                        "hash": self.format_values["build_hash"],
+                        "build_id": self.format_values["build_index"],
+                        "status": "pass",
+                        "created_by": self.format_values["actor"],
+                        "created_at": self.format_values["created"],
+                        "7z_link": "dl/{project}/{build_name}".format( **self.format_values ),
+                        "output_log": "output/{project}/{build_name}".format( **self.format_values )
+                      }
+
+        project_builds = commonProject.get_project_build_info( self.format_values["project"] )
+        project_builds.append( build_info )
+
+        project_build_info_path = "{relv_proj_dir}/{project}/projectBuildInfo.json".format( **self.format_values )
+        common.write_file( project_build_info_path, json.dumps( project_builds ), lock=True )
+
     def execute( self ):
 
         if not self.valid:
@@ -255,7 +276,4 @@ class BuildTask:
 
         self.deploy_container()
         self.cleanup()
-
-        # append build to build list
-
-
+        self.append_build_info()
