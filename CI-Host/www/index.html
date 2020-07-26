@@ -16,7 +16,7 @@
             <div id="queue_hold">
                 <div class="panel-heading-tab">
                     <h4 class="panel-heading" >Active Tasks</h4>
-                    <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                    <a onclick="updateActiveTask()" class="link-no-href panel-tab-link ">Refresh</a>
                 </div>
                 <div id="active_task_hold" class="outer_item_hold">
                     <div id="items-active-tasks" class="items_hold">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="panel-heading-tab">
                     <h4 class="panel-heading" >Queued Tasks</h4>
-                    <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                    <a onclick="updateQueuedTask()" class="link-no-href panel-tab-link ">Refresh</a>
                 </div>
                 <div id="queued_tasks_hold" class="outer_item_hold">
                     <div id="items-queued-tasks" class="items_hold">
@@ -37,7 +37,7 @@
                 <div id="projects_hold" class="outer_item_hold">
                     <div class="panel-heading-tab">
                         <h4 class="panel-heading" >Projects</h4>
-                        <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                        <a onclick="updateProjects()" class="link-no-href panel-tab-link ">Refresh</a>
                     </div>
                     <div id="items-projects" class="items_hold item_projects">
                         {projects}
@@ -46,7 +46,7 @@
                 <div id="builds_hold" class="outer_item_hold">
                     <div class="panel-heading-tab">
                         <h4 class="panel-heading" id="heading-builds">Builds for {selected_project}</h4>
-                        <a onclick="" class="link-no-href panel-tab-link ">Refresh</a>
+                        <a onclick="updateBuilds()" class="link-no-href panel-tab-link ">Refresh</a>
                     </div>
                      <div id="items-builds" class="items_hold item_builds">
                         {builds}
