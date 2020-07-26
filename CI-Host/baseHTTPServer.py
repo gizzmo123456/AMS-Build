@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer      # we use this li
 import socketserver
 import DEBUG
 from const import *
+import common
 
 _print = DEBUG.LOGS.print
 
@@ -45,11 +46,13 @@ class BaseServer(BaseHTTPRequestHandler):
         if content == "" and status is not 200:
             content = "Error " + str( status )
 
-        if isinstance( content, str ):
-            content = content.encode()
-
         # reply
-        self.wfile.write( content )
+        if isinstance( content, common.BinaryFileStream ):
+            for data in content.read():
+                self.wfile.write( data )
+        else:
+            content = content.encode()
+            self.wfile.write( content )
 
 
 class ThreadHTTPServer(socketserver.ThreadingMixIn, HTTPServer):

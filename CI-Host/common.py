@@ -131,3 +131,20 @@ class LockFile:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.file.close()
         self.lock_file.release()
+
+
+class BinaryFileStream:
+
+    def __init__( self, file_path, chunks=1000 ):
+
+        self.file_path = file_path
+        self.chunks = chunks
+
+    def read( self ):
+
+        if os.path.exists( self.file_path ):
+            with open( self.file_path, "rb" ) as f:
+                byte = f.read( self.chunks )
+                while byte:
+                    yield byte
+                    byte = f.read( self.chunks )

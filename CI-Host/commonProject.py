@@ -115,19 +115,12 @@ def get_project_output_log( project, build_name ):
 
 def get_project_build_7z( project, build_name ):
 
+    """ returns the binaryFileStream """
+
     zip_path = "{relevent_proj_path}/{project_name}/builds/{build_name}/{build_name}.7z".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                                                project_name=project,
                                                                                                build_name=build_name )
     if os.path.exists( zip_path ):
-        with open( zip_path, "rb" ) as f:
-            byte = f.read(1)
-            all_bytes = b''
-            while byte:
-                all_bytes += byte
-                byte = f.read(1)
-
-        print("len: ", len(all_bytes))
-
-        return all_bytes
+        return common.BinaryFileStream( zip_path )
 
     return None
