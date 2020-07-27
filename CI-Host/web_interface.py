@@ -220,10 +220,12 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # if a project name is supplied, get ALL project info
                 # otherwise just display all basic project info
                 if len(request) > 2 and request[1] == "name":
-                    data = [ commonProject.get_all_project_info( request[2] ) ] # this must be wrapped in a list to prevent filtering
+                    data = commonProject.get_all_project_info( request[2] )
                     if data is None:
                         _print("www_interface: Project (", request[2], ") not found")
                         data = {}
+                    else:
+                        data = [ data ] # data must be wrapped in a list to prevent filtering
                 else:
                     data = commonProject.get_project_list()
             elif request[0] == "tasks":
@@ -257,6 +259,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         for i in range( len(data)-1, -1, -1 ):
                             if data[i][filter_key] != f:
                                 data.pop(i)
+
                         if len(data) == 1:      # it no longer needs to be a list :)
                             data = data[0]
                         elif len(data) == 0:    # no data left to filter :)
