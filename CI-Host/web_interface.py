@@ -48,7 +48,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
-        api_header = { "cache-control": "no-store" }
+        api_header = { "cache-control": "no-store" }    # prevent caching API
 
         self.pages["api"] = {}
         self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], no_content_template=None,  headers=api_header )
@@ -304,7 +304,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
             zip_file = commonProject.get_project_build_7z( project, build )
 
             headers = {
-                'Content-Disposition': 'attachment; filename="{filename}.7z"'.format( filename=build )
+                'Content-Disposition': 'attachment; filename="{filename}.7z"'.format( filename=build ),
+                'Content-Length': str( zip_file.file_size )
             }
 
             if zip_file is not None:
