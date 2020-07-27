@@ -48,12 +48,12 @@ class WWWUser:
 
 class WWWPage:
 
-    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=WWWUser.UAC_NO_AUTH, no_access_www_page=None, no_content_message="", no_content_template="noContent.html" ):
+    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=WWWUser.UAC_NO_AUTH, no_access_www_page=None, no_content_message="", no_content_template="noContent.html", headers=None ):
 
         self.page_name = page_name
         self.file_name = file_name
 
-        self.headers = None
+        self.headers = headers
         self.status = status
         self.content_callback = content_callback
         self.minimal_user_access_level = minimal_user_access_level

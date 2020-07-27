@@ -59,7 +59,7 @@ Ignore all of Above :)
 [x] change BinaryFileStream default chunkSize 1024
 
 [x] Block all CORS request 
-[ ] Add Additional headers to process_request,
+[x] Add Additional headers to process_request,
     This will mean that filename can be removed.
 [x] remove Cross-Origin header
 [ ] Add content-cache no-store http header 
