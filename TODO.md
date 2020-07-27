@@ -62,11 +62,18 @@ Ignore all of Above :)
 [x] Add Additional headers to process_request,
     This will mean that filename can be removed.
 [x] remove Cross-Origin header
-[ ] Add content-cache no-store http header 
+[x] Add content-cache no-store http header 
     And or max-age
-[ ] Add content length http header
+[x] Add content length http header
 [ ] Add Location http header to redirect login
-
+  - To achieve this i think it would be worth moving the page status 
+    code from WWWPage to the page callback, along with headers.
+    
+    This would be that 'None' can be no longer supplied as the callback
+    instead use an inline function.
+    
+    The when the user logs in we can send head 303 (See other) and
+    redirect the user using the 'Location' header.
 
 [x] Fix tasks title heading overflow
 [x] Fix build no zipping :(
