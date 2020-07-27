@@ -20,7 +20,13 @@ class BaseServer(BaseHTTPRequestHandler):
     def do_GET( self ):
         self.process_request()
 
-    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None, content_type="text/html", filename=None ):
+    def process_request( self, content="i'm a teapot", status=418, GET=True, cookies=None, content_type="text/html", headers=None ):
+
+        if headers is None:
+            headers = { "Content-Disposition": 'inline' }
+        elif "Content-Disposition" not in headers:
+            headers = { "Content-Disposition": 'inline', **headers }
+
         _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
         # Treat any request with origin header set as a CORS request.
@@ -42,10 +48,8 @@ class BaseServer(BaseHTTPRequestHandler):
         # self.send_header( 'Access-Control-Allow-origin', '*' )    # for now reject all CORS request.
                                                                     # There may be a time where we allow CORS request to the api
 
-        if filename is not None:
-            self.send_header( 'Content-Disposition',  'attachment; filename="{filename}"'.format( filename=filename ) )
-        else:
-            self.send_header( 'Content-Disposition',  'inline'.format( filename=filename ) )
+        for header_key in headers:
+            self.send_header( header_key, headers[header_key] )
 
         if cookies is not None:
             for c in cookies:

@@ -46,7 +46,7 @@ Ignore all of Above :)
 [ ] build cool down
 [ ] Only build latest
 [ ] Add Build Now to 'Web_Interface'
-[ ] Add refresh functionality
+[x] Add refresh functionality
 [x] Add Download to 'Web_interface'
 [ ] Add Build naming convention to the pipeline file
 [ ] Add Last complete build index to projectInfo 
@@ -68,7 +68,7 @@ Ignore all of Above :)
 [ ] Add Location http header to redirect login
 
 
-[ ] Fix tasks title heading overflow
+[x] Fix tasks title heading overflow
 [x] Fix build no zipping :(
 [ ] Sort build so newest is top
 
@@ -76,3 +76,4 @@ Ignore all of Above :)
 [ ] And add some log files :)
 
 [ ] Add Project Users
+[ ] Clean the task file on start.

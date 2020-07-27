@@ -53,6 +53,7 @@ class WWWPage:
         self.page_name = page_name
         self.file_name = file_name
 
+        self.headers = None
         self.status = status
         self.content_callback = content_callback
         self.minimal_user_access_level = minimal_user_access_level
@@ -60,6 +61,13 @@ class WWWPage:
         self.content_dict = self._build_content_dict()  # all values in dict are required on the page.
         self.no_content_message = no_content_message
         self.no_content_template = no_content_template
+
+    def set_headers( self, headers ):
+        """ sets a list of headers
+
+        :param headers: a list of dicts, where dict key is header name
+        """
+        self.headers = headers
 
     def _build_content_dict( self ):
 
@@ -121,6 +129,7 @@ class WWWPage:
                 break
 
         page_output = ""
+        page_headers = www_page.headers
 
         if self.file_name is None:          # return the raw json data
             page_output = json.dumps( content )
@@ -131,6 +140,7 @@ class WWWPage:
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
 
         if page_output == "":
+            page_headers = None
             if self.no_content_message != "":
                 if self.no_content_template is not None:
                     page_output = www_page.load_template( True ).format( no_content_message=www_page.no_content_message )
@@ -139,4 +149,4 @@ class WWWPage:
             else:
                 status = HTTPStatus.NO_CONTENT
 
-        return page_output, status
+        return page_output, status, page_headers

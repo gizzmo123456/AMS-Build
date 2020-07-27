@@ -98,16 +98,16 @@ class WebInterface( baseHTTPServer.BaseServer ):
         output_page = "404 Not Found"
         status = HTTPStatus.NOT_FOUND
         content_type = "text\html"
-        filename = None
+        headers = None
 
         if len( page ) == 3:
             output_page, status, content_type = page
         elif len( page ) == 4:
-            output_page, status, content_type, filename = page
+            output_page, status, content_type, headers = page
         else:
             _print("Unknown page output...")
 
-        self.process_request( output_page, status, GET, user.cookies, content_type, filename )
+        self.process_request( output_page, status, GET, user.cookies, content_type, headers )
 
     def get_page( self, requested_path, user, get_data, post_data ):
         """ returns tuple (name of page template, status, content callback)
@@ -150,8 +150,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 else:
                     page = self.pages["index"]
 
-        content, status = page.load_page(user, requested_path, get_data, post_data)
-        return content, status, content_type
+        content, status, headers = page.load_page(user, requested_path, get_data, post_data)
+        return content, status, content_type, headers
 
 # www_page callbacks
 
@@ -284,7 +284,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # if not we have a invalid request.
         pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
 
-        content, status = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
+        content, status, headers = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
 
         return content
 
@@ -294,17 +294,21 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """
 
         if not user.authorized(WWWUser.UAC_USER):
-            return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
+            return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
         if len(request_path) >= 3:
             project = request_path[1]
             build = request_path[2]
             zip_file = commonProject.get_project_build_7z( project, build )
 
-            if zip_file is not None:
-                return zip_file, HTTPStatus.OK, "application/x-7z-compressed", "{0}.7z".format(build)
+            headers = {
+                'Content-Disposition': 'attachment; filename="{filename}.7z"'.format( filename=build )
+            }
 
-        return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
+            if zip_file is not None:
+                return zip_file, HTTPStatus.OK, "application/x-7z-compressed", headers
+
+        return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
     def get_output_file( self, user, request_path ):
         """ Returns the raw output log
