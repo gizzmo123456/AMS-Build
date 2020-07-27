@@ -52,7 +52,7 @@ var setSelectedProject = function( selected, setHash=true ){
         window.location.hash = `#project=${selectedProject}`   // change to history.pushState ??
 }
 
-window.onhashchange = function(){
+var hashChange = function(){
 
     hash = window.location.hash;
     hashRegex = /([a-zA-Z0-9]+)=(\w+)/;
@@ -60,8 +60,12 @@ window.onhashchange = function(){
 
     if ( hashGroups != null )
         if ( hashGroups[1] == "project" )
-            setSelectedProject( hashGroups[2] );
+            setSelectedProject( hashGroups[2], false );
 }
+
+window.onhashchange = hashChange;
+
+hashChange( window.location.hash );
 
 setInterval( updateActiveTask, refreshRate * 1000 );
 setInterval( updateQueuedTask, refreshRate * 1000 );
