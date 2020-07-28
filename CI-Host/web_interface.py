@@ -303,12 +303,13 @@ class WebInterface( baseHTTPServer.BaseServer ):
             build = request_path[2]
             zip_file = commonProject.get_project_build_7z( project, build )
 
-            headers = {
-                'Content-Disposition': 'attachment; filename="{filename}.7z"'.format( filename=build ),
-                'Content-Length': str( zip_file.file_size )
-            }
-
             if zip_file is not None:
+
+                headers = {
+                    'Content-Disposition': 'attachment; filename="{filename}.7z"'.format( filename=build ),
+                    'Content-Length': str( zip_file.file_size )
+                }
+
                 return zip_file, HTTPStatus.OK, "application/x-7z-compressed", headers
 
         return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html", None
