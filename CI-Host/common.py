@@ -138,14 +138,16 @@ class BinaryFileStream:
     def __init__( self, file_path, chunks=1024 ):
 
         self.error = not os.path.exists( file_path )
+
+        self.file_path = file_path
+        self.file_size = 0
+        self.chunks = chunks
+
         if self.error:
             _print("Unable to set path for BinaryFileStream, Invalid Path (", file_path,")")
             return
 
-        self.file_path = file_path
         self.file_size = os.stat( file_path ).st_size       # in bytes
-
-        self.chunks = chunks
 
     def read( self ):
 
