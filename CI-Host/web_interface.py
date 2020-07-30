@@ -175,8 +175,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
                 return self.pages["index"], {"message": "login successful :)"}, HTTPStatus.OK, "text/html", None  # redirect content
+            else:
+                return None, { "message": "Invalid Login" }, HTTPStatus.OK, "text/html", None
 
-        return None, {"message": "Invalid Login"}, HTTPStatus.OK, "text/html", None
+        return None, {"message": "Login Required"}, HTTPStatus.OK, "text/html", None
 
     def index_content( self, user, request_path, get_data, post_data):
 
