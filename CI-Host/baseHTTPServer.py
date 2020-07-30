@@ -71,6 +71,8 @@ class BaseServer(BaseHTTPRequestHandler):
             content = content.encode()
             self.wfile.write( content )
 
+        self.wfile.flush()
+
 
 class ThreadHTTPServer(socketserver.ThreadingMixIn, HTTPServer):
     def finish_request(self, request, client_address):

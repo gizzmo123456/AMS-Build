@@ -79,7 +79,7 @@ Ignore all of Above :)
 
 [x] Fix tasks title heading overflow
 [x] Fix build no zipping :(
-[ ] Sort build so newest is top
+[x] Sort build so newest is top
 
 [ ] Sort console output, mark sure that there are no prints, only _prints
 [ ] And add some log files :)
