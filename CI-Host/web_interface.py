@@ -42,7 +42,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.thr_lock_session_id = threading.Lock()
 
         self.pages = { }
-        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html", (lambda u, r, g, p: None, "404, Not Found", HTTPStatus.NOT_FOUND, None ) )
+
+        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html", self.not_found_callback )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",     self.auth_user_content )
         self.pages["index"]     = WWWPage( "index",      "index.html",     self.index_content,      WWWUser.UAC_USER, self.pages["auth"] )
 
@@ -268,6 +269,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         api_header = { "cache-control": "no-store" }
         return None, data, HTTPStatus.OK, "application/json", api_header   # TODO: support html templates.
+
+    def not_found_callback( self, user, request_path, get_data, post_data ):
+        return None, "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
 # end of www_page callbacks
 
