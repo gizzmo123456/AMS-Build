@@ -159,6 +159,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """ returns redirect page, content """
 
         if not user.authorized() and "user" in post_data and "password" in post_data:
+
+            # redirect user when login info send received, to prevent resubmit data on refresh
+            redirect_header = { "location": './ams-ci/?li=successful' }
+
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
                 sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes(16, "big") ).hexdigest()
@@ -174,7 +178,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # queue the session expiry
                 # threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
-                return self.pages["index"], {"message": "login successful :)"}, HTTPStatus.OK, "text/html", None  # redirect content
+                return None, {"message": "login successful :)"}, HTTPStatus.SEE_OTHER, "text/html", redirect_header  # redirect content
             else:
                 return None, { "message": "Invalid Login" }, HTTPStatus.OK, "text/html", None
 
