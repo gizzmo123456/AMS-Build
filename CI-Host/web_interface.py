@@ -45,7 +45,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         self.pages["not_found"] = WWWPage( "not_found",  "error_page.html", self.not_found_callback )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",      self.auth_user_content )
-        self.pages["auth"]      = WWWPage( "logout",      None,             self.logout_callback )
+        self.pages["logout"]    = WWWPage( "logout",      None,             self.logout_callback )
         self.pages["index"]     = WWWPage( "index",      "index.html",      self.index_content,      WWWUser.UAC_USER, self.pages["auth"] )
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
@@ -131,12 +131,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
                             return common.read_file("./www/js/{page}".format( page='/'.join( requested_path[2:] ) )), HTTPStatus.OK, "text/javascript"
                         except:
                             return "Error", HTTPStatus.NOT_FOUND, "text/html"
-                    elif requested_path[1] == "logout":
-                        if user.session_id in self.sessions:
-                            del self.sessions[ user.session_id ]
-                            user.session_id = ""
-                            user.set_access_level(0)
-                        page = self.pages[ "index" ]
                     elif requested_path[1] == "api":
                         page = self.pages["api"]["raw"]
                         if "template" in get_data:
@@ -188,8 +182,15 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         return None, {"message": "Login Required"}, HTTPStatus.OK, "text/html", None
 
-    def logout_callback( self ):
-        redirect_header = { "location": '/ams-ci/?lo' }
+    def logout_callback( self, user, request_path, get_data, post_data ):
+
+        # remove the users session
+        if user.session_id in self.sessions:
+            del self.sessions[ user.session_id ]
+            user.session_id = ""
+            user.set_access_level( 0 )
+
+        redirect_header = { "location": '/ams-ci/' }
         return None, None, HTTPStatus.SEE_OTHER, "text/html", redirect_header
 
     def index_content( self, user, request_path, get_data, post_data):

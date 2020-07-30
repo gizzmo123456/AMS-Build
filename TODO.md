@@ -75,7 +75,8 @@ Ignore all of Above :)
     The when the user logs in we can send head 303 (See other) and
     redirect the user using the 'Location' header.
 
-[ ] change logout to its own callback so we can redirect back to root after logout. 
+[x] change logout to its own callback so we can redirect back to root after logout. 
+[ ] sort out the css and js paths
 
 [x] Fix tasks title heading overflow
 [x] Fix build no zipping :(
