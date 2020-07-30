@@ -65,7 +65,7 @@ Ignore all of Above :)
 [x] Add content-cache no-store http header 
     And or max-age
 [x] Add content length http header
-[ ] Add Location http header to redirect login
+[x] Add Location http header to redirect login
   - To achieve this i think it would be worth moving the page status 
     code from WWWPage to the page callback, along with headers.
     
@@ -74,6 +74,8 @@ Ignore all of Above :)
     
     The when the user logs in we can send head 303 (See other) and
     redirect the user using the 'Location' header.
+
+[ ] change logout to its own callback so we can redirect back to root after logout. 
 
 [x] Fix tasks title heading overflow
 [x] Fix build no zipping :(
