@@ -5,6 +5,8 @@ from http import HTTPStatus
 import web_interface
 import re
 import json
+import DEBUG
+_print = DEBUG.LOGS.print
 
 class WWWUser:
 
@@ -141,6 +143,8 @@ class WWWPage:
                 page_output += www_page.load_template().format( **www_page.build_content( c ) )
         elif len(content) > 0 and isinstance( content, dict):    # if content is dict, we only have to format it into the template
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
+        else:
+            _print("WWWPage: Bad content format for page:", self.page_name)
 
         if page_output == "":
             page_headers = None

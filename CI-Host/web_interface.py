@@ -43,9 +43,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         self.pages = { }
 
-        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html", self.not_found_callback )
-        self.pages["auth"]      = WWWPage( "auth",       "login.html",     self.auth_user_content )
-        self.pages["index"]     = WWWPage( "index",      "index.html",     self.index_content,      WWWUser.UAC_USER, self.pages["auth"] )
+        self.pages["not_found"] = WWWPage( "not_found",  "error_page.html", self.not_found_callback )
+        self.pages["auth"]      = WWWPage( "auth",       "login.html",      self.auth_user_content )
+        self.pages["index"]     = WWWPage( "index",      "index.html",      self.index_content,      WWWUser.UAC_USER, self.pages["auth"] )
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
@@ -56,6 +56,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Queued Tasks"        )
         self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html",        self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Projects"            )
         self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",          self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Builds Found"        )
+        self.pages["api"]["builds"].list_order = WWWPage.LO_DESC    # display newest build on top
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
@@ -147,6 +148,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         return self.get_7z_file( user, requested_path[1:] )
                     elif requested_path[1] == "output":
                         return self.get_output_file( user, requested_path[1:] )
+                    elif requested_path[1] in self.pages:
+                        page = self.pages[ requested_path[1] ]
                 else:
                     page = self.pages["index"]
 
@@ -277,7 +280,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
         return None, data, HTTPStatus.OK, "application/json", api_header   # TODO: support html templates.
 
     def not_found_callback( self, user, request_path, get_data, post_data ):
-        return None, "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
+        content = {"title:": "Not Found", "message": "404, Not Found"}
+        return None, content, HTTPStatus.NOT_FOUND, "text/html", None
 
 # end of www_page callbacks
 
