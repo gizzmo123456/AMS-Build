@@ -48,13 +48,11 @@ class WWWUser:
 
 class WWWPage:
 
-    def __init__( self, page_name, file_name, status, content_callback, minimal_user_access_level=WWWUser.UAC_NO_AUTH, no_access_www_page=None, no_content_message="", no_content_template="noContent.html", headers=None ):
+    def __init__( self, page_name, file_name, content_callback, minimal_user_access_level=WWWUser.UAC_NO_AUTH, no_access_www_page=None, no_content_message="", no_content_template="noContent.html" ):
 
         self.page_name = page_name
         self.file_name = file_name
 
-        self.headers = headers
-        self.status = status
         self.content_callback = content_callback
         self.minimal_user_access_level = minimal_user_access_level
         self.no_access_www_page = no_access_www_page
@@ -99,10 +97,10 @@ class WWWPage:
     def load_template( self, no_content_template=False ):
 
         root = "./www/"
-        file_path = root + self.file_name;
+        file_path = root + self.file_name
 
         if no_content_template:
-            file_path = root + self.no_content_template;
+            file_path = root + self.no_content_template
 
         return common.read_file( file_path )
 
@@ -115,21 +113,26 @@ class WWWPage:
         if www_page is None:
             return "Its dark down here.", 200
 
-        redirect, content, status = None, {"message": ""}, www_page.status
+        redirect = None
+
+        # default content return values
+        content =  {"message": ""}
+        status = HTTPStatus.OK
+        content_type = "text/html"
+        page_headers = None
 
         if www_page.content_callback is not None:
-            redirect, content = www_page.content_callback( user, requested_path, get_data, post_data )
+            redirect, content, status, content_type, page_headers = www_page.content_callback( user, requested_path, get_data, post_data )
 
         while redirect is not None:
             www_page = redirect
 
             if www_page.content_callback is not None:
-                redirect, content = www_page.content_callback( user, requested_path, get_data, post_data )
+                redirect, content, status, content_type, page_headers = www_page.content_callback( user, requested_path, get_data, post_data )
             else:
                 break
 
         page_output = ""
-        page_headers = www_page.headers
 
         if self.file_name is None:          # return the raw json data
             page_output = json.dumps( content )
@@ -149,4 +152,4 @@ class WWWPage:
             else:
                 status = HTTPStatus.NO_CONTENT
 
-        return page_output, status, page_headers
+        return page_output, status, content_type, page_headers

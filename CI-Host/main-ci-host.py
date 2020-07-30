@@ -80,6 +80,7 @@ def task_worker(job):
         job.execute()
 
     _print("job "+job.format_values["build_hash"]+" complete")
+
     # insert a TASK FINISHED message into the task que to unblock
     # so we can safely update the web_interface without any threading issues
     # it also makes sure that the task is removed from the active task list.

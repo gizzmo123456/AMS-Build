@@ -42,20 +42,19 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.thr_lock_session_id = threading.Lock()
 
         self.pages = { }
-        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html",   404, None                   )
-        self.pages["auth"]      = WWWPage( "auth",       "login.html",       200, self.auth_user_content )
-        self.pages["index"]     = WWWPage( "index",      "index.html",       200, self.index_content, WWWUser.UAC_USER, self.pages["auth"]   )
+        self.pages["not_found"] = WWWPage( "not_found",  "not_found.html", (lambda u, r, g, p: None, "404, Not Found", HTTPStatus.NOT_FOUND, None ) )
+        self.pages["auth"]      = WWWPage( "auth",       "login.html",     self.auth_user_content )
+        self.pages["index"]     = WWWPage( "index",      "index.html",     self.index_content,      WWWUser.UAC_USER, self.pages["auth"] )
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
         # if template is 'none' or not supplied, the raw json is returned
-        api_header = { "cache-control": "no-store" }    # prevent caching API
 
         self.pages["api"] = {}
-        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], no_content_template=None,  headers=api_header )
-        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/active_task.html",    200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Active Tasks",         headers=api_header )
-        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Queued Tasks",         headers=api_header )
-        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html",        200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Projects",             headers=api_header )
-        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",          200, self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Builds Found",         headers=api_header )
+        self.pages["api"]["raw"]            = WWWPage( "api-raw",          None,                                self.api_content, WWWUser.UAC_USER, self.pages["auth"], no_content_template=None )
+        self.pages["api"]["active_task"]    = WWWPage( "api-active-tasks", "api-templates/active_task.html",    self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Active Tasks"        )
+        self.pages["api"]["queued_task"]    = WWWPage( "api-queue-tasks",  "api-templates/queued_task.html",    self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Queued Tasks"        )
+        self.pages["api"]["projects"]       = WWWPage( "api-projects",     "api-templates/project.html",        self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Projects"            )
+        self.pages["api"]["builds"]         = WWWPage( "api-builds",       "api-templates/build.html",          self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Builds Found"        )
 
         # TODO: theses should be dicts for json
         self.active_builds = ""
@@ -117,7 +116,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """
         page = self.pages["not_found"]
         path_len = len( requested_path )
-        content_type = "text/html"
 
         if type( requested_path ) is list and path_len > 0:
 
@@ -138,9 +136,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         page = self.pages[ "index" ]
                     elif requested_path[1] == "api":
                         page = self.pages["api"]["raw"]
-                        content_type = "application/json"
                         if "template" in get_data:
-                            content_type = "text/html"
+                            content_type = "text/html"  # this need to be implermented in the json api callback.
                             if get_data["template"] in self.pages["api"]:
                                 page = self.pages["api"][ get_data["template"] ]
                             else:
@@ -152,7 +149,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 else:
                     page = self.pages["index"]
 
-        content, status, headers = page.load_page(user, requested_path, get_data, post_data)
+        content, status, content_type, headers = page.load_page(user, requested_path, get_data, post_data)
         return content, status, content_type, headers
 
 # www_page callbacks
@@ -176,9 +173,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # queue the session expiry
                 # threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
 
-                return self.pages["index"], {"message": "login successful :)"}  # redirect content
+                return self.pages["index"], {"message": "login successful :)"}, HTTPStatus.OK, "text/html", None  # redirect content
 
-        return None, {"message": "Invalid Login"}
+        return None, {"message": "Invalid Login"}, HTTPStatus.OK, "text/html", None
 
     def index_content( self, user, request_path, get_data, post_data):
 
@@ -190,7 +187,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             "selected_project": "[None Selected]"
         }
 
-        return None, page_content
+        return None, page_content, HTTPStatus.OK, "test/html", None
 
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
@@ -269,7 +266,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                             break
                         filter_key = None
 
-        return None, data
+        api_header = { "cache-control": "no-store" }
+        return None, data, HTTPStatus.OK, "application/json", api_header   # TODO: support html templates.
 
 # end of www_page callbacks
 
@@ -320,7 +318,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """
 
         if not user.authorized(WWWUser.UAC_USER):
-            return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
+            return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
         if len(request_path) >= 3:
             project = request_path[1]
@@ -328,9 +326,9 @@ class WebInterface( baseHTTPServer.BaseServer ):
             output = commonProject.get_project_output_log( project, build )
 
             if output is not None:
-                return output, HTTPStatus.OK, "text/plain"
+                return output, HTTPStatus.OK, "text/plain", None
 
-        return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html"
+        return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
 # Is any of this used
 # i think this was all replaced by the use of projects.json

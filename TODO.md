@@ -84,3 +84,22 @@ Ignore all of Above :)
 
 [ ] Add Project Users
 [ ] Clean the task file on start.
+
+[ ] move the master-commands and pre-build-commands to it own section
+    Also improving the names.
+    
+    
+== NOTES web_interface Content callback change.
+
+Remove
+status and headers 
+from wwwPage
+
+and add them to the content callback.
+
+then load_page with return the full stack
+content, status, content_type, page_headers
+
+this will then alow us to set more dynamic headers 
+and will be able to move js, css directorys into its 
+own wwwPage, to clean things up a little
