@@ -147,6 +147,12 @@ class WWWPage:
             else:
                 break
 
+        # status See Other redirects the page,
+        # so there is no point rendering the content
+        if status == HTTPStatus.SEE_OTHER:
+            return "Loading...", status, content_type, page_headers
+
+        # Render Content
         page_output = ""
 
         if self.file_name is None:          # return the raw json data
@@ -159,7 +165,7 @@ class WWWPage:
         else:
             _print("WWWPage: Bad content format for page:", self.page_name)
 
-        if page_output == "":
+        if page_output == "" :
             page_headers = None
             if self.no_content_message != "":
                 if self.no_content_template is not None:

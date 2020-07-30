@@ -45,6 +45,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         self.pages["not_found"] = WWWPage( "not_found",  "error_page.html", self.not_found_callback )
         self.pages["auth"]      = WWWPage( "auth",       "login.html",      self.auth_user_content )
+        self.pages["auth"]      = WWWPage( "logout",      None,             self.logout_callback )
         self.pages["index"]     = WWWPage( "index",      "index.html",      self.index_content,      WWWUser.UAC_USER, self.pages["auth"] )
 
         # API html templates, use GET param 'template={template name}' to format json data into a html template.
@@ -186,6 +187,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 return None, { "message": "Invalid Login" }, HTTPStatus.OK, "text/html", None
 
         return None, {"message": "Login Required"}, HTTPStatus.OK, "text/html", None
+
+    def logout_callback( self ):
+        redirect_header = { "location": '/ams-ci/?lo' }
+        return None, None, HTTPStatus.SEE_OTHER, "text/html", redirect_header
 
     def index_content( self, user, request_path, get_data, post_data):
 

@@ -90,6 +90,7 @@ Ignore all of Above :)
 [ ] move the master-commands and pre-build-commands to it own section
     Also improving the names.
     
+[ ] Allow API CORS
     
 == NOTES web_interface Content callback change.
 
