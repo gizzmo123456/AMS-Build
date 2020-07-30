@@ -284,7 +284,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # if not we have a invalid request.
         pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
 
-        content, status, headers = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
+        content, status, content_type, headers = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
 
         return content
 

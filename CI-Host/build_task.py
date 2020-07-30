@@ -7,10 +7,14 @@ import time
 import DEBUG
 _print = DEBUG.LOGS.print
 
+
 class BuildTask:
     "Build tasks..."
 
     def __init__( self, trigger_actor, project_name, build_hash, webhook=False ):
+
+        # TODO: check that the project exist and actor belongs to the project.
+        self.valid = True # commonProject.project_exist( project_name )
 
         self.format_values = {  # values are public to the pipeline file    # it might be worth passing this into the contatiner.
             # directorys
@@ -66,8 +70,6 @@ class BuildTask:
 
         # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
-
-        self.valid = True
 
         # Note: until the master directory is copied, the output does not exist,
         #       So _print calls with output_filename defined are queued, until the file does exist
