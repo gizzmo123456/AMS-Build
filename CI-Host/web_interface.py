@@ -188,7 +188,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             "selected_project": "[None Selected]"
         }
 
-        return None, page_content, HTTPStatus.OK, "test/html", None
+        return None, page_content, HTTPStatus.OK, "text/html", None
 
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
