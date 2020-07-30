@@ -50,6 +50,10 @@ class WWWUser:
 
 class WWWPage:
 
+    # List Orders
+    LO_ASC = 1
+    LO_DESC = -1
+
     def __init__( self, page_name, file_name, content_callback, minimal_user_access_level=WWWUser.UAC_NO_AUTH, no_access_www_page=None, no_content_message="", no_content_template="noContent.html" ):
 
         self.page_name = page_name
@@ -61,6 +65,8 @@ class WWWPage:
         self.content_dict = self._build_content_dict()  # all values in dict are required on the page.
         self.no_content_message = no_content_message
         self.no_content_template = no_content_template
+
+        self.list_order = WWWPage.LO_ASC    # order of list when content json is a list
 
     def set_headers( self, headers ):
         """ sets a list of headers
@@ -106,6 +112,13 @@ class WWWPage:
 
         return common.read_file( file_path )
 
+    def __get_list_order_range( self, list_len ):
+
+        if self.list_order == WWWPage.LO_DESC:
+            return range( list_len-1, -1, -1 )
+        else:
+            return range( list_len )
+
     def load_page( self, user, requested_path, get_data, post_data ):
 
         # find and display the correct content for user access level,
@@ -139,8 +152,8 @@ class WWWPage:
         if self.file_name is None:          # return the raw json data
             page_output = json.dumps( content )
         elif isinstance( content, list ):   # if content is list, we need to return the template for all elements
-            for c in content:
-                page_output += www_page.load_template().format( **www_page.build_content( c ) )
+            for i in self.__get_list_order_range( len(content) ):
+                page_output += www_page.load_template().format( **www_page.build_content( content[i] ) )
         elif len(content) > 0 and isinstance( content, dict):    # if content is dict, we only have to format it into the template
             page_output = www_page.load_template().format( **www_page.build_content( content ) )
         else:
