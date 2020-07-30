@@ -93,6 +93,16 @@ Ignore all of Above :)
     
 [ ] Allow API CORS
     
+[ ] Add check for users file on start,
+    if not present add a setup string.
+    
+========================================================================
+Web-pages Todo. No Rush, it can all be done back end :)
+========================================================================
+[ ] Add users
+[ ] Add project
+
+    
 == NOTES web_interface Content callback change.
 
 Remove

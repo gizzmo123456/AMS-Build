@@ -86,6 +86,7 @@ def task_worker(job):
     # it also makes sure that the task is removed from the active task list.
     task_queue.put(TASK_FINISHED)
 
+
 if __name__ == "__main__":
 
     thr_lock_tasks = threading.Lock()
