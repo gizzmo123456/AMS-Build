@@ -161,7 +161,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if not user.authorized() and "user" in post_data and "password" in post_data:
 
             # redirect user when login info send received, to prevent resubmit data on refresh
-            redirect_header = { "location": './ams-ci/?li=successful' }
+            redirect_header = { "location": '/ams-ci/?li=successful' }
 
             if post_data["user"] == "admin" and post_data["password"] == "password!2E":
                 # auth user
