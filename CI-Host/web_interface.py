@@ -244,7 +244,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 else:
                     data = commonProject.get_project_list()
             elif request[0] == "tasks":
-                data = common.get_or_create_json_file("./data/", "tasks.json", { "active":[], "pending": [] } ) # ensure that the file exist
+                data = common.get_or_create_json_file("./data/", "tasks.json", { "active":[], "pending": [] } )[1] # ensure that the file exist
             else:
                 data = { "status": 404, "message": "Data not found in api (Request: {request}) :(".format( request='/'.join( request ) ) }
                 request_length = 0  # set the request length to zero to avoid filtering

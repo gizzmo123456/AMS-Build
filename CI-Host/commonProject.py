@@ -77,7 +77,7 @@ def get_project_info( project_name ):
         "last_complete_time": 0
     }
 
-    return common.get_or_create_json_file( project_path, "projectInfo.json", project_info_default )
+    return common.get_or_create_json_file( project_path, "projectInfo.json", project_info_default )[1]
 
 
 def get_project_build_info( project_name ):
@@ -88,7 +88,7 @@ def get_project_build_info( project_name ):
 
     project_build_info_default = []
 
-    return common.get_or_create_json_file( project_path, "projectBuildInfo.json", project_build_info_default )
+    return common.get_or_create_json_file( project_path, "projectBuildInfo.json", project_build_info_default )[1]
 
 def get_project_pipeline( project_name ):
     """Gets the project pipeline. None if project or file does not exist does not exist. """
