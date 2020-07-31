@@ -66,7 +66,7 @@ def write_file( filepath, string, append=False, lock=True ):
             file.write( string )
 
 
-def create_json_file(filepath, data):
+def create_json_file(filepath, data, lock=True):
 
     _print( "Dumping json data to file", filepath )
 
@@ -76,7 +76,7 @@ def create_json_file(filepath, data):
         _print( "Bad Data", e, DEBUG.LOGS.MSG_TYPE_ERROR )
         return
 
-    write_file( filepath, fwrite)
+    write_file( filepath, fwrite, lock=lock)
 
     _print( "Dumped json data to file: ", filepath, "Complete" )
 
@@ -96,6 +96,7 @@ def get_or_create_json_file( path, file_name, default_dict ):
         return True, default_dict
     else:
         return False, get_dict_from_json( file_path, lock_file=True )
+
 
 def get_value_at_key( dict, *keys, noValue=None ):
     """Safely retrieves value from list of dict.
