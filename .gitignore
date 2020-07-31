@@ -15,7 +15,7 @@ CI-projects/*/projectBuildInfo.json
 CI-projects/*/projectInfo.json
 CI-Host/data/*.json
 
-CI-Host/data/secrets/*
+CI-Host/data/.secrets/*
 
 
 # lock files
