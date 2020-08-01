@@ -10,6 +10,7 @@ _print = DEBUG.LOGS.print
 class UserManager:
 
     USER_SECRET_MIN_LEN = 6
+    DEFAULT_USER_PASSWORD_LEN = 6
 
     def __init__( self ):
 
@@ -22,19 +23,26 @@ class UserManager:
     def create_user_data(self):
         """ Creates the user files, if they don't already exist """
 
-        default_accounts = [{     # the default account should be treated as a fake/honeytoken account
-            "username": "admin",
-            "secret": UserManager.create_random_user_secret(),
-            "projects": None
+        default_accounts = [{
+            "username": "admin",        # This account should be treated as a honeytoken
+            "secret": UserManager.create_random_secret(),
+            "projects": None,           # Hide all projects on honeytoken account
+            "access_level": 1           # Give lowest access level
         }]
 
         created = common.get_or_create_json_file("./data", "users.json", default_accounts)[0]
 
         if created:
-            self.__update_secret( default_accounts[0]["secret"], "password!2E" )
+            user_secret = self.create_random_secret( UserManager.DEFAULT_USER_PASSWORD_LEN )
+            self.__update_secret( default_accounts[0]["secret"], user_secret )
+            _print("User files created!")
+            _print("Test Account")
+            _print("\tUsername: ", default_accounts[0]["username"] )
+            _print("\tPassword: ", user_secret )
+            _print("To add or update a user, run user manager in standalone mode")
 
     @staticmethod
-    def create_random_user_secret( len=64 ):
+    def create_random_secret( len=64 ):
         chars = (string.ascii_letters + string.digits)*3 + string.punctuation
         return ''.join(random.choice( chars ) for _ in range(len))
 
@@ -121,7 +129,7 @@ class UserManager:
 
         account = {
             "username": username,
-            "secret": UserManager.create_random_user_secret(),
+            "secret": UserManager.create_random_secret(),
             "projects": projects
         }
 
