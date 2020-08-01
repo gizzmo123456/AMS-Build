@@ -32,6 +32,7 @@ class WWWUser:
     def set_user( self, username, session_id, access_level ):
 
         self.username = username
+        self.session_id = session_id
         self.set_cookie( "session_id", session_id, path="/ams-ci" )
         self.set_access_level( access_level )
 
