@@ -7,13 +7,12 @@ import commonProject
 import DEBUG
 _print = DEBUG.LOGS.print
 
-from http.server import BaseHTTPRequestHandler, HTTPServer  # this must be removed when local testing is complete
-
 
 class Webhook( baseHTTPServer.BaseServer ):
 
     # set to main task queue
-    task_queue = None
+    shared_task_queue = None
+
 
     def do_POST( self ):
 
@@ -59,9 +58,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 _print( "Error: Invalid actor (", actor, "), for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR  )
                 return
 
-            task = build_task.BuildTask( actor, query["project"], build_hash, webhook=True )
-
-            Webhook.task_queue.put( task )
+            Webhook.shared_task_queue.queue_task( "build_wh", actor=actor, project=query["project"], build_hash=build_hash )
             _print( "Valid task. Tasked queued" )
 
             self.process_request( "Ok", 200, False )

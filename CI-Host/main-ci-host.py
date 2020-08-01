@@ -8,6 +8,7 @@ import time
 from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
 import queue
+import sharedQueue
 import common
 from filelock import FileLock
 
@@ -97,11 +98,20 @@ if __name__ == "__main__":
     _print = DEBUG.LOGS.print
 
     task_queue = queue.Queue()
+    # Sharded queue, shares the task queue in a controlled manner
+    # Only exposing the Queue objects available to the module the
+    # queue is shared with.
+    sharded_queue = sharedQueue.SharedQueue( task_queue )
+    # add all available actions the the shared queue
+    sharded_queue.set_action( "build_now",   lambda actor, project, build_hash: build_task.BuildTask(actor, project, build_hash) )
+    sharded_queue.set_action( "build_wh",    lambda actor, project, build_hash: build_task.BuildTask(actor, project, build_hash, webhook=True) )
+    sharded_queue.set_action( "cancel_task", lambda : _print("Cancel not implemented yet"))
+    # assign the shared queue with only the required objects to the modules
+    webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build_wh"] )
+
     max_running_tasks = 1
     pending_tasks = [] # task object
     active_tasks = []  # tuple (thread, task object)
-
-    webhook.Webhook.task_queue = task_queue
 
     webhook_thread = threading.Thread( target=web_hook )
     web_interface_thread = threading.Thread( target=www_interface )

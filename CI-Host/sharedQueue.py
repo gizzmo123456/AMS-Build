@@ -16,15 +16,15 @@ class SharedQueue:
     def set_actions( self, dict_of_actions ):
         self.ACTIONS = { **self.ACTIONS, **dict_of_actions }
 
-    def clone( self, actions_name ):
+    def clone( self, action_names ):
         """ clones the shared queue with only the required actions
 
-        :param actions_name:    list of action names that should be cloned with the queue
+        :param action_names:    list of action names that should be cloned with the queue
         :return:                the cloned shared queue
         """
 
         s_queue = SharedQueue( self.__queue )
-        for a in actions_name:
+        for a in action_names:
             if a in self.ACTIONS:
                 s_queue.set_action( a, self.ACTIONS[a] )
 

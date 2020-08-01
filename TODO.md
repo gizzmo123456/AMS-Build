@@ -93,7 +93,7 @@ Ignore all of Above :)
     
 [ ] Allow API CORS
     
-[ ] Add check for users file on start,
+[x] Add check for users file on start,
     if not present add a setup string.
     
 ========================================================================
