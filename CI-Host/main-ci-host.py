@@ -10,7 +10,7 @@ from baseHTTPServer import ThreadHTTPServer
 import queue
 import sharedQueue
 import common
-from filelock import FileLock
+import user_manager
 
 SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
@@ -118,6 +118,15 @@ if __name__ == "__main__":
 
     webhook_thread.start()
     web_interface_thread.start()
+
+    # Initialize
+    _print("Initializing, Hold tight...")
+
+    # create an instance of user manager to create user files if not already setup.
+    user_manager.UserManager()  # make sure this is last. so the test account details are not berried in the log
+
+    _print("Initializing, Complete!")
+    _print("Starting...")
 
     while alive:
 
