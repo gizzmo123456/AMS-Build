@@ -19,6 +19,7 @@ class WWWUser:
 
     def __init__( self ):
 
+        self.username = None
         self.session_id = ""
         self.cookies = SimpleCookie()
         self.expires = time.time() + web_interface.WebInterface.DEFAULT_SESSION_LENGTH # Only used if authorized
@@ -28,12 +29,13 @@ class WWWUser:
     def authorized(self, min_auth_value=UAC_USER):
         return self.get_access_level() >= min_auth_value
 
-    def get_access_level( self ):
+    def set_user( self, username, session_id, access_level ):
 
-        # update the expire time
-        self.expires = time.time() + web_interface.WebInterface.DEFAULT_SESSION_LENGTH  # in 1hr
+        self.username = username
+        self.set_cookie( "session_id", session_id, path="/ams-ci" )
+        self.set_access_level( access_level )
 
-        return self.__access_level
+        return self
 
     def set_access_level( self, level ):
         self.__access_level = level
@@ -41,6 +43,13 @@ class WWWUser:
     def set_cookie( self, key, value, path="/" ):
         self.cookies[key] = value
         self.cookies[key]["path"] = path
+
+    def get_access_level( self ):
+
+        # update the expire time
+        self.expires = time.time() + web_interface.WebInterface.DEFAULT_SESSION_LENGTH  # in 1hr
+
+        return self.__access_level
 
     def get_cookie( self, key ):
 

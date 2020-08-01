@@ -170,10 +170,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 while sess_id in self.sessions: # ensure that the new session id is unique
                     sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes( 16, "big" ) ).hexdigest()
 
-                user.set_cookie("session_id", sess_id, path="/ams-ci" )
-                user.session_id = sess_id
-                user.set_access_level( WWWUser.UAC_USER )
-                self.sessions[ sess_id ] = user
+                # set the loged in user
+                self.sessions[ sess_id ] = user.set_user( post_data["user"], sess_id, WWWUser.UAC_USER )
 
                 # queue the session expiry
                 # threading.Thread( target=self.expire_session, args=( sess_id, self.DEFAULT_SESSION_LENGTH )).start()
