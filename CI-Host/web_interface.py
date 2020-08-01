@@ -11,6 +11,7 @@ from const import *
 import hashlib
 import time
 from www_page import WWWPage, WWWUser
+import user_manager
 import math
 
 import DEBUG
@@ -158,10 +159,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         if not user.authorized() and "user" in post_data and "password" in post_data:
 
+            user_man = user_manager.UserManager()
             # redirect user when login info send received, to prevent resubmit data on refresh
             redirect_header = { "location": '/ams-ci/?li=successful' }
 
-            if post_data["user"] == "admin" and post_data["password"] == "password!2E":
+            if user_man.authorize_user(post_data["user"], post_data["password"]):
                 # auth user
                 sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes(16, "big") ).hexdigest()
 
