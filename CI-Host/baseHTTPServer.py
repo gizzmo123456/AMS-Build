@@ -63,12 +63,16 @@ class BaseServer(BaseHTTPRequestHandler):
             content = "Error " + str( status )
 
         # reply
-        if isinstance( content, common.BinaryFileStream ):
-            for data in content.read():
-                self.wfile.write( data )
-        else:
-            content = content.encode()
-            self.wfile.write( content )
+        try:
+            if isinstance( content, common.BinaryFileStream ):
+                for data in content.read():
+                    self.wfile.write( data )
+            else:
+                content = content.encode()
+                self.wfile.write( content )
+        except Exception as e:
+            _print( "Connection unexpectedly closed" )
+            _print( e )
 
         self.wfile.flush()
 
