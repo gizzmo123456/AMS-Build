@@ -54,7 +54,6 @@ class BaseServer(BaseHTTPRequestHandler):
         if cookies is not None:
             for c in cookies:
                 header = str(cookies[c]).split(":")
-                print( "Setting cookies...", header )
                 if len( header ) > 1:
                     self.send_header( *header )
 

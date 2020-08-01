@@ -228,7 +228,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         request = [ r for r in request_path[self.API_ROOT_PATH_LENGTH:] ]
         request_length = len( request )
         data = {}
-        print("API REQUEST: ", request)
+        _print("API REQUEST: ", request)
 
         if request_length > 0:
             if request[0] == "projects" or request[0] == "project":
