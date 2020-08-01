@@ -11,10 +11,11 @@ _print = DEBUG.LOGS.print
 class WWWUser:
 
     # User Access Control Const
-    UAC_NO_AUTH = 0
-    UAC_USER    = 1
-    UAC_MOD     = 2
-    UAC_ADMIN   = 3
+    UAC_NO_AUTH         = 0             # No permissions
+    UAC_USER            = 1             # View/download assigned project only
+    UAC_MOD             = 2             # UAC_USER + Can trigger builds
+    UAC_PROJECT_ADMIN   = 3             # UAC_MOD + Can Add/Assigned new user to project                (TODO)
+    UAC_SERVER_ADMIN    = 4             # All permissions on all projects. # Can also add new projects  (TODO)
 
     def __init__( self ):
 
