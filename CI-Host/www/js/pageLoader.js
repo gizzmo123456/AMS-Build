@@ -2,7 +2,7 @@
 var refreshRate = 60;   //seconds
 var selectedProject = null;
 
-var loadContent = function(url, responseElemId){
+var loadContent = function(url, responseElemId, append_to_element=false){
 
     var request = new XMLHttpRequest();
 
@@ -12,8 +12,14 @@ var loadContent = function(url, responseElemId){
 
             if (this.readyState == 4 && this.status == 200)
             {
-                document.getElementById(responseElemId).innerHTML = this.responseText;
-                console.log( url + 'Received Response: ' + this.responseText );
+
+                if ( append_to_element )
+                    document.getElementById(responseElemId).innerHTML += this.responseText;
+                else
+                    document.getElementById(responseElemId).innerHTML = this.responseText;
+
+                console.log( `url: ${url} appended: ${append_to_element} Received Response: ${this.responseText}`  );
+
             }
             else if ( this.status >= 300)   // should this be a thing ??
             {
