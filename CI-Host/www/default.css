@@ -1,6 +1,8 @@
 
 body{
-    width: 99%;
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+    width: 99vw;
     background-color: #d0d0d0;
 }
 
@@ -16,16 +18,27 @@ body{
     min-width: 600px;
 }
 
+#message-hold{
+    display: none;
+    box-sizing: border-box;
+    max-height: 130px;
+    overflow-y: auto;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    border: #303030 solid 3px;
+
+}
+
 #queue_hold{
     position: relative;
     display: inline-block;
     min-width: 210px;
-    width: 33%;
+    width: 30vw;
     height: 85%;
     border: #303030 solid 3px;
     margin: -0px;
     margin-left: 0px;
-    margin-right: 6px;
+    margin-right: 0.5vw;
     box-sizing: border-box;
 
 }
@@ -46,7 +59,7 @@ body{
     height: 85%;
     border: #303030 solid 3px;
     min-width: 380px;
-    width: 63%;
+    width: 68vw;
     box-sizing: border-box;
 }
 

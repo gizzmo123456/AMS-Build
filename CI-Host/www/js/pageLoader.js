@@ -5,6 +5,7 @@ var selectedProject = null;
 var loadContent = function(url, responseElemId){
 
     var request = new XMLHttpRequest();
+
         request.onreadystatechange = function()
         {
             console.log( `URL ${url} ||| Ready State ${this.readyState} ||| Status ${this.status}` )
