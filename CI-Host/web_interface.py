@@ -36,6 +36,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS, DL and output log paths...
 
     sessions = { }  # { `session key`: `WWWUser` }
+    shared_queue = None
 
     def __init__( self, request, client_address, server ):
 

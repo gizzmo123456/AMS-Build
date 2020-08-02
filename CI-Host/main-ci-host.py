@@ -9,12 +9,12 @@ from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
 import queue
 import sharedQueue
+import queue_item
 import common
 import user_manager
 
 SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
-TASK_FINISHED = "~TASK-FINISHED~"
 
 def web_hook():
 
@@ -71,6 +71,26 @@ def update_queue_info( a_tasks, p_tasks ):
     threading.Thread( target=common.create_json_file, args=( "./data/tasks.json", tasks ) ).start()
     _print( "Building Queue File Compleat" )
 
+
+def cancel_task( q_item ):
+
+    if q_item.build_hash is None:
+        _print( "unable to cancel task. No build hash supplied" )
+        return False
+
+    # search pending tasks.
+    for i in range(len(pending_tasks)):
+        if pending_tasks[i].format_values["build_hash"] == q_item.build_hash:
+            pending_tasks.pop(i)
+            return True
+
+    # search active tasks.
+    for i in range(len(active_tasks)):
+        if active_tasks[i][0].format_values["build_hash"] == q_item.build_hash:
+            _print("Can not stop active task atm :( ")
+            return False
+
+
 def task_worker(job):
 
     _print("Starting new task")
@@ -85,7 +105,8 @@ def task_worker(job):
     # insert a TASK FINISHED message into the task que to unblock
     # so we can safely update the web_interface without any threading issues
     # it also makes sure that the task is removed from the active task list.
-    task_queue.put(TASK_FINISHED)
+    task_queue.put( queue_item.QueueItem( job.format_values["actor"], job.format_values["project"],
+                                          "Task-Finished", build_hash=job.format_values["build_index"] ) )
 
 
 if __name__ == "__main__":
@@ -98,21 +119,30 @@ if __name__ == "__main__":
     _print = DEBUG.LOGS.print
 
     task_queue = queue.Queue()
+
+    # setup queue items
+    queue_item.QueueItem.add_action("build_finished", lambda q_item: True )   # queue unblocking task
+    queue_item.QueueItem.add_action("cancel_task", cancel_task )
+
     # Sharded queue, shares the task queue in a controlled manner
     # Only exposing the Queue objects available to the module the
     # queue is shared with.
     sharded_queue = sharedQueue.SharedQueue( task_queue )
-    # add all available actions the the shared queue
+    # add all available actions in the shared queue
     sharded_queue.set_action( "build_now",   lambda actor, project, build_hash: build_task.BuildTask(actor, project, build_hash) )
     sharded_queue.set_action( "build_wh",    lambda actor, project, build_hash: build_task.BuildTask(actor, project, build_hash, webhook=True) )
-    sharded_queue.set_action( "cancel_task", lambda : _print("Cancel not implemented yet"))
+    sharded_queue.set_action( "cancel_task", lambda actor, project, build_hash: queue_item.QueueItem(actor, project, "cancel_task", build_hash=build_hash) )
+
     # assign the shared queue with only the required objects to the modules
     webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build_wh"] )
+    webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build_now", "cancel_task"] )
 
+    # build tasks
     max_running_tasks = 1
-    pending_tasks = [] # task object
-    active_tasks = []  # tuple (thread, task object)
+    pending_tasks = [] # build task object
+    active_tasks = []  # tuple (thread, build task object)
 
+    # start up the www
     webhook_thread = threading.Thread( target=web_hook )
     web_interface_thread = threading.Thread( target=www_interface )
 
@@ -141,7 +171,9 @@ if __name__ == "__main__":
                     pending_tasks.append( task )
                     update_queue_file = True
                     _print("task_pending (total: {pending}) ".format( pending=len(pending_tasks) ) )
-                elif task != TASK_FINISHED:
+                elif isinstance( task, queue_item.QueueItem ):
+                    task.execute()
+                else:
                     _print("invalid task")
                 task = None
             # find if there is any available resources to launch the task
