@@ -35,7 +35,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
     API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS, DL and output log paths...
 
-    sessions = { }  # { `session key`: `WWWUser` }
+    sessions = { }  # { `session key`: WWWUser }
     shared_queue = None
 
     def __init__( self, request, client_address, server ):
@@ -141,6 +141,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
                                 page = self.pages["api"][ get_data["template"] ]
                             else:
                                 page = self.pages["not_found"]
+                    elif requested_path[1] == "action":
+                        return self.process_action_request( user, requested_path[1:] )
                     elif requested_path[1] == "dl":
                         return self.get_7z_file( user, requested_path[1:] )
                     elif requested_path[1] == "output":
@@ -350,6 +352,27 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 return output, HTTPStatus.OK, "text/plain", None
 
         return "404 Not Found", HTTPStatus.NOT_FOUND, "text/html", None
+
+    def process_action_request( self, user, request_path ):
+
+        user_uac = user.get_access_level()
+        request_path_len = len( request_path )
+
+        if user_uac < WWWUser.UAC_USER:
+            return "Login Required", HTTPStatus.OK, "text/html", None
+        elif user_uac < WWWUser.UAC_MOD:
+            return "Insufficient privileges", HTTPStatus.OK, "text/html", None
+        elif request_path_len <= 1:
+            return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
+
+        if request_path[1].lower() == "cancel" and request_path_len >= 4:   # action/{action_type}/{project}/{build_hash}
+            WebInterface.shared_queue.queue_task( "cancel", actor=user.username, project=request_path[2], build_hash=request_path[3] )
+            return "Canceling task", HTTPStatus.ok, "text/html", None
+        else:
+            return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
+
+
+
 
 # Is any of this used
 # i think this was all replaced by the use of projects.json

@@ -78,11 +78,16 @@ Ignore all of Above :)
 [x] change logout to its own callback so we can redirect back to root after logout. 
 [ ] sort out the css and js paths
 
+[ ] Build Now
+[ ] Cancel task
+    [ ] pending
+    [ ] active
+
 [x] Fix tasks title heading overflow
 [x] Fix build no zipping :(
 [x] Sort build so newest is top
 
-[ ] Sort console output, mark sure that there are no prints, only _prints
+[x] Sort console output, mark sure that there are no prints, only _prints
 [ ] And add some log files :)
 
 [ ] Add Project Users
@@ -101,7 +106,9 @@ Web-pages Todo. No Rush, it can all be done back end :)
 ========================================================================
 [ ] Add users
 [ ] Add project
+[ ] Remove Builds
 
+[ ] Message section.
     
 == NOTES web_interface Content callback change.
 
