@@ -37,7 +37,7 @@ class SharedQueue:
             return
 
         if action_name not in self.ACTIONS:
-            _print( "Action no found for shared queue" )
+            _print( "Action no found for shared queue", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
 
         self.__queue.put( self.ACTIONS[ action_name ]( **params ) )

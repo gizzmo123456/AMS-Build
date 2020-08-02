@@ -135,7 +135,7 @@ if __name__ == "__main__":
 
     # assign the shared queue with only the required objects to the modules
     webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build_wh"] )
-    webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build_now", "cancel_task"] )
+    web_interface.WebInterface.shared_task_queue = sharded_queue.clone( ["build_now", "cancel_task"] )
 
     # build tasks
     max_running_tasks = 1

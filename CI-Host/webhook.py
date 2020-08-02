@@ -59,7 +59,6 @@ class Webhook( baseHTTPServer.BaseServer ):
                 return
 
             Webhook.shared_task_queue.queue_task( "build_wh", actor=actor, project=query["project"], build_hash=build_hash )
-            _print( "Valid task. Tasked queued" )
 
             self.process_request( "Ok", 200, False )
 
