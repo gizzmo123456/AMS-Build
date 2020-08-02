@@ -17,12 +17,19 @@ class WWWUser:
     UAC_PROJECT_ADMIN   = 3             # UAC_MOD + Can Add/Assigned new user to project                (TODO)
     UAC_SERVER_ADMIN    = 4             # All permissions on all projects. # Can also add new projects  (TODO)
 
+    # Message Status Types
+    MSG_STATUS_OK       = "message"
+    MSG_STATUS_WARN     = "warning"
+    MSG_STATUS_ERROR    = "error"
+    MSG_STATUS_FATAL    = "fatal"
+
     def __init__( self ):
 
         self.username = None
         self.session_id = ""
         self.cookies = SimpleCookie()
         self.expires = time.time() + web_interface.WebInterface.DEFAULT_SESSION_LENGTH # Only used if authorized
+        self.__messages = []
 
         self.__access_level = 0
 
@@ -44,6 +51,19 @@ class WWWUser:
     def set_cookie( self, key, value, path="/" ):
         self.cookies[key] = value
         self.cookies[key]["path"] = path
+
+    def set_message( self, message, message_status=MSG_STATUS_OK ):
+
+        msg = {
+            "status": message_status,
+            "message": message
+        }
+
+        self.__messages.append( msg )
+
+    def get_messages( self ):
+
+        return self.__messages
 
     def get_access_level( self ):
 
