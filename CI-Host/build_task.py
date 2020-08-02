@@ -32,6 +32,7 @@ class BuildTask:
             "build_hash": build_hash,
             "build_index": 0,
             # util
+            "container_name": project_name+build_hash,
             "actor": trigger_actor,
             "created": datetime.now().strftime( "%d/%m/%Y @ %H:%M:%S" ),
             "started_build": -1
@@ -178,13 +179,13 @@ class BuildTask:
                     "-v {ci_root_path}:{ci_root_dest} " \
                     "-v {ci_config_path}:{ci_config_dest} " \
                     "-v {ci_build_path}:{ci_build_dest} " \
-                    "{image} " \
+                    "{image} --name {container_name}" \
                     "{cmd}".format( args=self.docker_cof[ "args" ],
                                     project_path=self.local_cof[ "project" ], project_dest=self.docker_cof[ "project-dest" ],
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
                                     ci_config_path=self.local_cof[ "ci-config" ], ci_config_dest=self.docker_cof[ "ci-config-dest" ],
                                     ci_build_path=self.local_cof[ "build-output" ], ci_build_dest=self.docker_cof[ "build-output-dest" ],
-                                    image=self.docker_cof["image"],
+                                    image=self.docker_cof["image"], container_name=self.format_values["container_name"],
                                     cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=DOCKER_ROOT_DIRECTORY ) )
 
 
