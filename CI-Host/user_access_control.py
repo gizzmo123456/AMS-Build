@@ -27,9 +27,9 @@ class UAC:
         self.username = username
         self.access_level = access_level
 
-    def update_user_projects( self ):
+    def __update_user_projects( self ):
 
-        if time.time() > self.next_projects_update:
+        if time.time() < self.next_projects_update:
             return
 
         self.next_projects_update = time.time() + UAC.__PROJECT_CACHE_TTL
@@ -51,7 +51,7 @@ class UAC:
             return False
 
         if update_projects is True:
-            self.update_user_projects()
+            self.__update_user_projects()
 
         if self.access_level == UAC.WEBHOOK:
             # we can check if the user has webhook access by requesting the pipeline file

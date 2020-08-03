@@ -60,3 +60,10 @@ where it will setup the environment and run each pipeline, along with log the
 container output to file.
 
 
+========================
+Users / UAC note.
+
+When updating users UAC it can take upto 30 seconds to be applied
+to all logged in users. The UAC objects caches project data for
+UAC.__update_project_TTL seconds (default 30 seconds). 
+It is designed to prevent excessive file reads.
