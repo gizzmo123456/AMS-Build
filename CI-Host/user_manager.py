@@ -163,6 +163,9 @@ class UserManager:
         """ Authorizes user returning the users access
             :return: UAC
         """
+
+        #TODO: return UAC object
+
         user = self.get_user( username )
 
         if user is not None and self.__authorize_secret( user["secret"], secret ):
