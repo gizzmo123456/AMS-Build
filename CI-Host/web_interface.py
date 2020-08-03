@@ -201,7 +201,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     def index_content( self, user, request_path, get_data, post_data):
 
         page_content = {
-            "messages":     self.get_api_content(user, ["user_messages"], "message"),
+            "messages":     self.get_api_content(user, ["user_messages"], "message", post_data={"clear": "true"} ),
             "active_tasks": self.get_api_content(user, ["tasks", "active"], "active_task"),
             "queued_tasks": self.get_api_content(user, ["tasks", "pending"], "queued_task"),
             "projects": self.get_api_content(user, ["projects"], "projects"),
@@ -253,7 +253,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 data = common.get_or_create_json_file("./data/", "tasks.json", { "active":[], "pending": [] } )[1] # ensure that the file exist
             elif request[0] == "user_message" or request[0] == "user_messages": # gets a list of the all pending messages for logged in user
                 data = user.get_messages()
-                if "clear" in post_data and post_data["clear"].lower == "true":     # Only clear message with POST, so they are now cleared by api request
+                if "clear" in post_data and post_data["clear"].lower() == "true":     # Only clear message with POST, so they are now cleared by api request
                     user.clear_messages()
             else:
                 data = { "status": 404, "message": "Data not found in api (Request: {request}) :(".format( request='/'.join( request ) ) }
@@ -301,7 +301,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
 # end of www_page callbacks
 
-    def get_api_content( self, user, request_path, template ):
+    def get_api_content( self, user, request_path, template, get_data={}, post_data={} ):
         """ Use to get the API content locally
             `Request path` is the json filtering, see path in api_content for more info
         """
@@ -314,7 +314,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         # if not we have a invalid request.
         pre_path_path = [""] * self.API_ROOT_PATH_LENGTH
 
-        content, status, content_type, headers = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, [], [])
+        content, status, content_type, headers = self.pages["api"][ template ].load_page(user, pre_path_path + request_path, get_data, post_data)
 
         return content
 
