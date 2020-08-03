@@ -160,10 +160,15 @@ class UserManager:
     '''
 
     def authorize_user(self, username, secret):
-
+        """ Authorizes user returning the users access
+            :returns: tuple -> user access level, projects. or None if not authorized
+        """
         user = self.get_user( username )
 
-        return user is not None and self.__authorize_secret( user["secret"], secret )
+        if user is not None and self.__authorize_secret( user["secret"], secret ):
+            return user["access_level"], user["projects"]
+        else:
+            return None
 
 
 if __name__ == "__main__":

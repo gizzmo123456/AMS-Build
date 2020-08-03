@@ -32,6 +32,7 @@ class WWWUser:
         self.__messages = []
 
         self.__access_level = 0
+        self.__project_access = []
 
     def authorized(self, min_auth_value=UAC_USER):
         return self.get_access_level() >= min_auth_value
@@ -47,6 +48,9 @@ class WWWUser:
 
     def set_access_level( self, level ):
         self.__access_level = level
+
+    def set_projects( self, projects ):
+        self.__project_access = projects
 
     def set_cookie( self, key, value, path="/" ):
         self.cookies[key] = value
@@ -64,6 +68,9 @@ class WWWUser:
     def get_messages( self ):
 
         return self.__messages
+
+    def clear_messages( self ):
+        self.__messages = []
 
     def get_access_level( self ):
 

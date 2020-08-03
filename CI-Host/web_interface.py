@@ -166,16 +166,22 @@ class WebInterface( baseHTTPServer.BaseServer ):
             user_man = user_manager.UserManager()
             # redirect user when login info send received, to prevent resubmit data on refresh
             redirect_header = { "location": '/ams-ci/?li=successful' }
+            user_access = user_man.authorize_user(post_data["user"], post_data["password"])
 
-            if user_man.authorize_user(post_data["user"], post_data["password"]):
-                # auth user
+            if user_access is not None:
+
+                uac = user_access[0]
+                projects = user_access[1]
+
                 sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes(16, "big") ).hexdigest()
 
                 while sess_id in self.sessions: # ensure that the new session id is unique
                     sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes( 16, "big" ) ).hexdigest()
 
                 # set the loged in user
-                self.sessions[ sess_id ] = user.set_user( post_data["user"], sess_id, WWWUser.UAC_USER )
+                self.sessions[ sess_id ] = user.set_user( post_data["user"], sess_id, uac )
+                self.sessions[ sess_id ].set_projects( projects )
+
                 user.set_message( "Login Successful!" )
 
                 # queue the session expiry
