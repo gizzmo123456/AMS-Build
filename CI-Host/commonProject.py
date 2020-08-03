@@ -13,14 +13,15 @@ PATHS = {
 
 
 def project_exist( project_name ):
+    """ Check if a project exist, Does not guarantee that the user can access the project"""
 
     project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                  project_name=project_name )
 
-    return os.path.exists( project_path );
+    return os.path.exists( project_path )
 
 
-def get_project_list( ):
+def get_project_list( ):                        # TODO: add UAC
     """ Get a list of all projects
         :returns: list of dict [ {"name", "base_path"}, ... ]
     """
@@ -33,7 +34,7 @@ def get_project_list( ):
     return projects
 
 
-def get_all_project_info( project_name ):
+def get_all_project_info( project_name ):       # TODO: add UAC
     """ get all project and build info """
 
     if not project_exist( project_name ):
@@ -46,7 +47,7 @@ def get_all_project_info( project_name ):
              "tasks": get_project_tasks( project_name )
     }
 
-def get_project_tasks( project_name ):
+def get_project_tasks( project_name ):          # TODO: add UAC.    If the user do not have project acceess, the active or pending task, the name should be hidden
     """gets a dict of active and queued tasks"""
 
     if not project_exist( project_name ):
@@ -64,7 +65,7 @@ def get_project_tasks( project_name ):
 
     return project_tasks
 
-def get_project_info( project_name ):
+def get_project_info( project_name ):           # TODO: add UAC
     """ Returns None if project doest not exist otherwise project info """
     # Project info can be accessed from anywhere, but it should only be updated/saved from build_task.
 
@@ -83,7 +84,7 @@ def get_project_info( project_name ):
     return common.get_or_create_json_file( project_path, "projectInfo.json", project_info_default )[1]
 
 
-def get_project_build_info( project_name ):
+def get_project_build_info( project_name ):     # TODO: add UAC
     # Project Build info can be accessed from anywhere, but it should only be updated/saved from build_task.
 
     project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
@@ -93,7 +94,7 @@ def get_project_build_info( project_name ):
 
     return common.get_or_create_json_file( project_path, "projectBuildInfo.json", project_build_info_default )[1]
 
-def get_project_pipeline( project_name ):
+def get_project_pipeline( project_name ):       # TODO: add UAC (Also this should verifi webhook access, as its defined in the pipeline file)
     """Gets the project pipeline. None if project or file does not exist does not exist. """
 
     pipeline_path = "{relevent_proj_path}/{project_name}/master/config/pipeline.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
@@ -104,7 +105,7 @@ def get_project_pipeline( project_name ):
 
     return common.get_dict_from_json( pipeline_path )
 
-def get_project_output_log( project, build_name ):
+def get_project_output_log( project, build_name ):      # TODO: add UAC
     """Get the output log for build in project, None if not found"""
 
     output_path = "{relevent_proj_path}/{project_name}/builds/{build_name}/output.txt".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
@@ -116,7 +117,7 @@ def get_project_output_log( project, build_name ):
 
     return None
 
-def get_project_build_7z( project, build_name ):
+def get_project_build_7z( project, build_name ):        # TODO: add UAC
 
     """ returns the binaryFileStream """
 
