@@ -161,14 +161,14 @@ class UserManager:
 
     def authorize_user(self, username, secret):
         """ Authorizes user returning the users access
-            :returns: tuple -> user access level, projects. or None if not authorized
+            :return: UAC
         """
         user = self.get_user( username )
 
         if user is not None and self.__authorize_secret( user["secret"], secret ):
-            return user["access_level"], user["projects"]
+            return user["access_level"]
         else:
-            return None
+            return 0    # NO ACCESS # TODO: move UAC's in WWWUser to its own thing
 
 
 if __name__ == "__main__":

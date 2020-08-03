@@ -11,12 +11,14 @@ PATHS = {
     "PIPELINE": RELEVENT_PROJECT_PATH+"/{project_name}/master/config/pipeline.json"
 }
 
+
 def project_exist( project_name ):
 
     project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                  project_name=project_name )
 
     return os.path.exists( project_path );
+
 
 def get_project_list( ):
     """ Get a list of all projects
@@ -26,9 +28,10 @@ def get_project_list( ):
     projects = [ { "name": directory,
                    "base_path": "{abs_project_path}/{directory}".format( abs_project_path=RELEVENT_PROJECT_PATH, directory=directory ) }
                  for directory in os.listdir( RELEVENT_PROJECT_PATH )
-                 if os.path.isdir( "{relev_path}/{directory}".format( relev_path=RELEVENT_PROJECT_PATH, directory=directory ) ) ]
+                 if os.path.isdir( "{relev_path}/{directory}".format( relev_path=RELEVENT_PROJECT_PATH, directory=directory ) )]
 
     return projects
+
 
 def get_all_project_info( project_name ):
     """ get all project and build info """

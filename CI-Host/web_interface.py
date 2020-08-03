@@ -168,10 +168,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             redirect_header = { "location": '/ams-ci/' }
             user_access = user_man.authorize_user(post_data["user"], post_data["password"])
 
-            if user_access is not None:
-
-                uac = user_access[0]
-                projects = user_access[1]
+            if user_access > WWWUser.UAC_NO_AUTH:
 
                 sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes(16, "big") ).hexdigest()
 
@@ -179,8 +176,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                     sess_id = hashlib.md5( math.floor(time.time() * 1000).to_bytes( 16, "big" ) ).hexdigest()
 
                 # set the loged in user
-                self.sessions[ sess_id ] = user.set_user( post_data["user"], sess_id, uac )
-                self.sessions[ sess_id ].set_projects( projects )
+                self.sessions[ sess_id ] = user.set_user( post_data["user"], sess_id, user_access )
 
                 user.set_message( "Login Successful!" )
 

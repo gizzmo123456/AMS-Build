@@ -49,9 +49,6 @@ class WWWUser:
     def set_access_level( self, level ):
         self.__access_level = level
 
-    def set_projects( self, projects ):
-        self.__project_access = projects
-
     def set_cookie( self, key, value, path="/" ):
         self.cookies[key] = value
         self.cookies[key]["path"] = path
