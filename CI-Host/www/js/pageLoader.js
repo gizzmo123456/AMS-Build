@@ -1,8 +1,9 @@
 
 var refreshRate = 60;   //seconds
+var messageRefreshRate = 30;   //seconds    // i think we should only really do this if we are expecting a message
 var selectedProject = null;
 
-var loadContent = function(url, responseElemId, append_to_element=false){
+var loadContent = function(url, responseElemId, postString=null, append_to_element=false, successCallback=null){
 
     var request = new XMLHttpRequest();
 
@@ -18,6 +19,9 @@ var loadContent = function(url, responseElemId, append_to_element=false){
                 else
                     document.getElementById(responseElemId).innerHTML = this.responseText;
 
+                if ( success_callback != null)
+                    successCallback()
+
                 console.log( `url: ${url} appended: ${append_to_element} Received Response: ${this.responseText}`  );
 
             }
@@ -28,7 +32,15 @@ var loadContent = function(url, responseElemId, append_to_element=false){
         };
 
         request.open("GET", url, true);
-        request.send();
+        if ( postString == null )
+        {
+            request.send();
+        }
+        else
+        {
+            request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            request.send(postString);
+        }
         console.log(` url ${url} sent `)
 
 }
@@ -49,6 +61,20 @@ var updateBuilds = function(){
     loadContent( `/ams-ci/api/projects/name/${selectedProject}/builds?template=builds`, "items-builds" )
     // update the sites url
     document.getElementById("heading-builds").innerHTML = `Builds For ${selectedProject}`
+}
+
+var updateMessages = function(){
+    postString = "clear=true"
+    loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, true, showMessages )
+}
+
+var showMessages = function(){
+    document.getElementById("message-hold").style.display="block";
+}
+
+var clearMessages = function(){
+    document.getElementById("message-items").innerHTML = "";
+    document.getElementById("message-hold").style.display="none";
 }
 
 var setSelectedProject = function( selected, setHash=true ){
@@ -76,4 +102,5 @@ hashChange( window.location.hash );
 
 setInterval( updateActiveTask, refreshRate * 1000 );
 setInterval( updateQueuedTask, refreshRate * 1000 );
+setInterval( updateMessages, messageRefreshRate * 1000 );
 
