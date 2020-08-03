@@ -45,13 +45,12 @@ class UAC:
         else:
             self.projects = []
 
-    def has_project_access( self, project, update_projects=False ):
+    def has_project_access( self, project ):
 
         if self.access_level == UAC.NO_AUTH:
             return False
 
-        if update_projects is True:
-            self.__update_user_projects()
+        self.__update_user_projects()
 
         if self.access_level == UAC.WEBHOOK:
             # we can check if the user has webhook access by requesting the pipeline file
