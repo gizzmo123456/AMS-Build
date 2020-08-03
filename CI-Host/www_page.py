@@ -3,6 +3,7 @@ import time
 from http.cookies import SimpleCookie
 from http import HTTPStatus
 import web_interface
+import user_access_control as uac
 import re
 import json
 import DEBUG
@@ -10,7 +11,7 @@ _print = DEBUG.LOGS.print
 
 class WWWUser:
 
-    # User Access Control Const
+    # User Access Control Const # TODO, replace const with UAC versions
     UAC_NO_AUTH         = 0             # No permissions
     UAC_USER            = 1             # View/download assigned project only
     UAC_MOD             = 2             # UAC_USER + Can trigger builds
@@ -25,29 +26,27 @@ class WWWUser:
 
     def __init__( self ):
 
-        self.username = None
+        self.__uac = uac.UAC()
+
         self.session_id = ""
         self.cookies = SimpleCookie()
         self.expires = time.time() + web_interface.WebInterface.DEFAULT_SESSION_LENGTH # Only used if authorized
         self.__messages = []
-
-        self.__access_level = 0
-        self.__project_access = []
 
     def authorized(self, min_auth_value=UAC_USER):
         return self.get_access_level() >= min_auth_value
 
     def set_user( self, username, session_id, access_level ):
 
-        self.username = username
+        self.__uac.username.set_user( username, access_level)
+
         self.session_id = session_id
         self.set_cookie( "session_id", session_id, path="/ams-ci" )
-        self.set_access_level( access_level )
 
         return self
 
     def set_access_level( self, level ):
-        self.__access_level = level
+        self.__uac.access_level = level
 
     def set_cookie( self, key, value, path="/" ):
         self.cookies[key] = value
@@ -74,7 +73,7 @@ class WWWUser:
         # update the expire time
         self.expires = time.time() + web_interface.WebInterface.DEFAULT_SESSION_LENGTH  # in 1hr
 
-        return self.__access_level
+        return self.__uac.access_level
 
     def get_cookie( self, key ):
 

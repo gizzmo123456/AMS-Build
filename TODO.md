@@ -101,6 +101,13 @@ Ignore all of Above :)
 [x] Add check for users file on start,
     if not present add a setup string.
     
+[ ] Add UAC object to bridge the gap between Webhook and web_interface.
+    - Webhooks only have access to create new builds, if the actor is listed in the webhook config
+    - WWWUsers, have a uac access level and project list, to restrict access on the web_interface
+    
+With this, we can remove webhook from buildTask constructor and the actor
+can change to the UAC object
+
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)
 ========================================================================
