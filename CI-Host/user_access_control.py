@@ -1,5 +1,6 @@
 import user_manager
 import commonProject
+import time
 
 class UAC:
 
@@ -10,11 +11,16 @@ class UAC:
     PROJECT_ADMIN   = 4             # UAC_MOD + Can Add/Assigned new user to project                (TODO)
     SERVER_ADMIN    = 5             # All permissions on all projects. # Can also add new projects  (TODO)
 
+    __PROJECT_CACHE_TTL = 30        # seconds, update projects list, at most once every TTL
+
     def __init__(self, username=None, access_level=NO_AUTH):
 
         self.username = username            # the user the uac belogs to
         self.access_level = access_level    # the users access level
+
         self.projects = []                  # this list of projects available to the user, does not apply to webhooks
+        self.next_projects_update = 0
+
 
     def set_user( self, username, access_level ):
 
@@ -22,6 +28,11 @@ class UAC:
         self.access_level = access_level
 
     def update_user_projects( self ):
+
+        if time.time() > self.next_projects_update:
+            return
+
+        self.next_projects_update = time.time() + UAC.__PROJECT_CACHE_TTL
 
         if self.access_level == UAC.NO_AUTH or self.access_level == UAC.WEBHOOK:
             self.projects = []
