@@ -1,4 +1,5 @@
 import user_manager
+import commonProject
 
 class UAC:
 
@@ -20,21 +21,35 @@ class UAC:
         self.username = username
         self.access_level = access_level
 
-    def update_user_projects( self, username ):
+    def update_user_projects( self ):
 
         if self.access_level == UAC.NO_AUTH or self.access_level == UAC.WEBHOOK:
             self.projects = []
             return
 
-        user = user_manager.UserManager().get_user( username )
+        user = user_manager.UserManager().get_user( self.username )
 
         if user is not None:
             self.projects = user[ "projects" ]
         else:
             self.projects = []
 
-    def has_build_access( self, access_level ):
+    def has_project_access( self, project, update_projects=False ):
 
+        if self.access_level == UAC.NO_AUTH:
+            return False
+
+        if update_projects is True:
+            self.update_user_projects()
+
+        if self.access_level == UAC.WEBHOOK:
+            # we can check if the user has webhook access by requesting the pipeline file
+            # if no file is not returned, then we have no access.
+            return commonProject.get_project_pipeline( project ) is not None
+        else:
+            return project in self.projects
+
+    def has_build_access( self, access_level ):
         return access_level > UAC.USER
 
     def is_valid( self ):
