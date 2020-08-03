@@ -39,8 +39,8 @@ class UAC:
             return
 
         user = user_manager.UserManager().get_user( self.username )
-
-        if user is not None:
+        print( user )
+        if user is not None and "projects" in user and user["projects"] is not None:
             self.projects = user[ "projects" ]
         else:
             self.projects = []

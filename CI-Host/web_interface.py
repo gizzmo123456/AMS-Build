@@ -250,7 +250,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                     else:
                         data = [ data ] # data must be wrapped in a list to prevent filtering
                 else:
-                    data = commonProject.get_project_list()
+                    data = commonProject.get_project_list( user.get_uac() )
             elif request[0] == "tasks":
                 data = common.get_or_create_json_file("./data/", "tasks.json", { "active":[], "pending": [] } )[1] # ensure that the file exist
             elif request[0] == "user_message" or request[0] == "user_messages": # gets a list of the all pending messages for logged in user

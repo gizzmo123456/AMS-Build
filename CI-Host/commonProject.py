@@ -21,15 +21,15 @@ def project_exist( project_name ):
     return os.path.exists( project_path )
 
 
-def get_project_list( ):                        # TODO: add UAC
+def get_project_list( uac ):                        # TODO: add UAC
     """ Get a list of all projects
         :returns: list of dict [ {"name", "base_path"}, ... ]
     """
 
     projects = [ { "name": directory,
-                   "base_path": "{abs_project_path}/{directory}".format( abs_project_path=RELEVENT_PROJECT_PATH, directory=directory ) }
+                   "base_path": "{project_path}/{directory}".format( project_path=RELEVENT_PROJECT_PATH, directory=directory ) }
                  for directory in os.listdir( RELEVENT_PROJECT_PATH )
-                 if os.path.isdir( "{relev_path}/{directory}".format( relev_path=RELEVENT_PROJECT_PATH, directory=directory ) )]
+                 if os.path.isdir( "{relev_path}/{directory}".format( relev_path=RELEVENT_PROJECT_PATH, directory=directory ) ) and uac.has_project_access( directory ) ]
 
     return projects
 

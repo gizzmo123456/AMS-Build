@@ -68,6 +68,9 @@ class WWWUser:
     def clear_messages( self ):
         self.__messages = []
 
+    def get_uac( self ):
+        return self.__uac
+
     def get_access_level( self ):
 
         # update the expire time
