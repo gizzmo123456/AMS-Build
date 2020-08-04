@@ -111,7 +111,7 @@ def get_project_build_info( uac, project_name ):
     else:
         # wrap the contents on the json file in [] as there not included in the file,
         # so we can just quickly append new entries to the end of the file :)
-        project_info_string = common.read_file( project_build_info_default, lock=True )
+        project_info_string = common.read_file( project_build_info_path, lock=True )
         if project_info_string[-1:] == ",": # also not forgetting to remove the lazy ','
             project_info_string = project_info_string[:-1]
 
