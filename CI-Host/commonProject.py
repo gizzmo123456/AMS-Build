@@ -113,7 +113,7 @@ def get_project_build_info( uac, project_name ):
         # so we can just quickly append new entries to the end of the file :)
         project_info_string = common.read_file( project_build_info_path, lock=True )
         if project_info_string[0] == ",": # also not forgetting to remove the lazy ',' at the start.
-            project_info_string = project_info_string[:-1]
+            project_info_string = project_info_string[1:]
 
         project_info_string = '[{file}]'.format( file=project_info_string )
 
