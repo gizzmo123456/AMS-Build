@@ -243,7 +243,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 # if a project name is supplied, get ALL project info
                 # otherwise just display all basic project info
                 if len(request) > 2 and request[1] == "name":
-                    data = commonProject.get_all_project_info( request[2] )
+                    data = commonProject.get_all_project_info( user.get_uac(), request[2] )
                     if data is None:
                         _print("www_interface: Project (", request[2], ") not found")
                         data = {}
@@ -331,7 +331,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if len(request_path) >= 3:
             project = request_path[1]
             build = request_path[2]
-            zip_file = commonProject.get_project_build_7z( project, build )
+            zip_file = commonProject.get_project_build_7z( user.get_uac(), project, build )
 
             if zip_file is not None:
 
@@ -355,7 +355,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         if len(request_path) >= 3:
             project = request_path[1]
             build = request_path[2]
-            output = commonProject.get_project_output_log( project, build )
+            output = commonProject.get_project_output_log( user.get_uac(), project, build )
 
             if output is not None:
                 return output, HTTPStatus.OK, "text/plain", None

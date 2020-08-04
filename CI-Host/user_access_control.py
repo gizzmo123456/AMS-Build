@@ -1,12 +1,16 @@
 import user_manager
 import commonProject
 import time
+import common
+
+import DEBUG
+_print = DEBUG.LOGS.print
 
 class UAC:
 
     NO_AUTH         = 0             # No permissions
     USER            = 1             # View/download assigned project only
-    WEBHOOK         = 2             # Triggers builds if actor, is listed in webhook config.
+    WEBHOOK         = 2             # Triggers builds, if actor is listed in pipeline webhook config.
     MOD             = 3             # UAC_USER + Can trigger builds
     PROJECT_ADMIN   = 4             # UAC_MOD + Can Add/Assigned new user to project                (TODO)
     SERVER_ADMIN    = 5             # All permissions on all projects. # Can also add new projects  (TODO)
@@ -45,19 +49,21 @@ class UAC:
         else:
             self.projects = []
 
-    def has_project_access( self, project ):
+    def has_project_access( self, project, pipeline=None ):
+        """ the pipeline must supplied for webhook access """
 
         if self.access_level == UAC.NO_AUTH:
             return False
 
         self.__update_user_projects()
 
-        if self.access_level == UAC.WEBHOOK:
-            # we can check if the user has webhook access by requesting the pipeline file
-            # if no file is not returned, then we have no access.
-            return commonProject.get_project_pipeline( project ) is not None
-        else:
+        if pipeline is not None and self.access_level == UAC.WEBHOOK:
+            authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actors", noValue=[] )
+            return self.username in authorized_actor
+        elif self.access_level != UAC.WEBHOOK:
             return project in self.projects
+
+        return False
 
     def has_build_access( self, access_level ):
         return access_level > UAC.USER

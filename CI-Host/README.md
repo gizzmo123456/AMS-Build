@@ -67,3 +67,12 @@ When updating users UAC it can take upto 30 seconds to be applied
 to all logged in users. The UAC objects caches project data for
 UAC.__update_project_TTL seconds (default 30 seconds). 
 It is designed to prevent excessive file reads.
+
+Also. its worth noting that a project will display 'Not found'
+if the user does not have access.
+
+Also get project info and get build info 
+returns the default values if the user does not have access to the project
+meaning that get_project_info and get_project_build_info can not be used 
+to determin if a project exist or not nor if the user has access to it.
+

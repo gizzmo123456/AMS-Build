@@ -41,6 +41,7 @@ var loadContent = function(url, responseElemId, postString=null, append_to_eleme
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(postString);
         }
+
         console.log(` url ${url} sent `)
 
 }

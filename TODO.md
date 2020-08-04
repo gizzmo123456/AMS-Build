@@ -116,7 +116,17 @@ Web-pages Todo. No Rush, it can all be done back end :)
 [ ] Remove Builds
 
 [ ] Message section.
-    
+
+============== uac server TEST LIST:
+[ ] test uac for output
+[ ] test uac for dl
+
+-> Spot test for below has PASSED :)
+[ ] test uac for get_project_build_info
+[ ] test uac for get_project_info
+[ ] test uac for get project pipeline (both wh and www) (still to do.)
+
+
 == NOTES web_interface Content callback change.
 
 Remove
