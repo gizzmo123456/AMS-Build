@@ -1,4 +1,6 @@
-# general project function used in ci and www interface
+# common project function that can be access at a user level.
+# All public methods require a uac
+
 
 from const import *
 import common
@@ -12,13 +14,20 @@ PATHS = {
 }
 
 
-def project_exist( project_name ):
-    """ Check if a project exist, Does not guarantee that the user can access the project"""
+# use project_exist outside of commonProject.py
+def __project_exist( project_name ): # Private
+    """ (Private) Check if a project exist, Avoiding the UAC check """
 
     project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                  project_name=project_name )
 
     return os.path.exists( project_path )
+
+
+def project_exist( uac, project_name ):
+    """ Check if a project exist """
+
+    return uac.has_project_access( project_name ) and __project_exist( project_name )
 
 
 def get_project_list( uac ):
@@ -37,7 +46,7 @@ def get_project_list( uac ):
 def get_all_project_info( uac, project_name ):
     """ get all project and build info """
 
-    if not project_exist( project_name ) or not uac.has_project_access( project_name ):
+    if not __project_exist( project_name ) or not uac.has_project_access( project_name ):
         return None  # project not found or no access
 
     return { "name": project_name,
@@ -51,7 +60,7 @@ def get_all_project_info( uac, project_name ):
 def get_project_tasks( uac, project_name ):          # TODO: If the user do not have project acceess, the active or pending task, the name should be hidden (this needs to be applied to all tasks.)
     """gets a dict of active and queued tasks"""
 
-    if not project_exist( project_name ) or not uac.has_project_access( project_name ):
+    if not __project_exist( project_name ) or not uac.has_project_access( project_name ):
         return None
 
     tasks = common.get_dict_from_json( "./data/tasks.json" )
@@ -80,7 +89,7 @@ def get_project_info( uac, project_name ):
         "last_complete_time": 0
     }
 
-    if not project_exist( project_name ) or not uac.has_project_access( project_name ):
+    if not __project_exist( project_name ) or not uac.has_project_access( project_name ):
         return project_info_default
 
     return common.get_or_create_json_file( project_path, "projectInfo.json", project_info_default )[1]
@@ -94,7 +103,7 @@ def get_project_build_info( uac, project_name ):
 
     project_build_info_default = []
 
-    if not project_exist( project_name ) or not uac.has_project_access( project_name ):
+    if not __project_exist( project_name ) or not uac.has_project_access( project_name ):
         return project_build_info_default
 
     return common.get_or_create_json_file( project_path, "projectBuildInfo.json", project_build_info_default )[1]
@@ -120,7 +129,7 @@ def get_project_pipeline( project_name ):       # TODO: add UAC (Also this shoul
 def get_project_output_log( uac, project, build_name ):
     """Get the output log for build in project, None if not found"""
 
-    if not project_exist( project ) or not uac.has_project_access( project ):
+    if not __project_exist( project ) or not uac.has_project_access( project ):
         return None
 
     output_path = "{relevent_proj_path}/{project_name}/builds/{build_name}/output.txt".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
@@ -136,7 +145,7 @@ def get_project_build_7z( uac, project, build_name ):
 
     """ returns the binaryFileStream """
 
-    if not project_exist( project ) or not uac.has_project_access( project ):
+    if not __project_exist( project ) or not uac.has_project_access( project ):
         return None
 
     zip_path = "{relevent_proj_path}/{project_name}/builds/{build_name}/{build_name}.7z".format( relevent_proj_path=RELEVENT_PROJECT_PATH,

@@ -27,9 +27,6 @@ class Webhook( baseHTTPServer.BaseServer ):
         if path != "/request" and "name" not in query or "project" not in query:
             self.process_request( "Error", 404, False )
             _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
-        elif not commonProject.project_exist( query["project"] ):
-            self.process_request( "Error", 404, False )
-            _print( "Bad webhook request, Project does not exist", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
             actor = post_data["actor"]["display_name"]
             repo_name = post_data["repository"]
