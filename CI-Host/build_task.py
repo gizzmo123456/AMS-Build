@@ -195,7 +195,7 @@ class BuildTask:
         """deploys the docker container to run the build"""
 
         dockerRun = "sudo docker run " \
-                    "{args} --name {container_name}" \
+                    "{args} --name {container_name} " \
                     "-v {project_path}:{project_dest} " \
                     "-v {ci_root_path}:{ci_root_dest} " \
                     "-v {ci_config_path}:{ci_config_dest} " \
