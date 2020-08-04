@@ -309,7 +309,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         """
 
         if template not in self.pages["api"]:
-            print("Error: template not found")
+            _print("Error: template not found")
             return "Error: Template not found"
 
         # we must add elements to make up the pre API path, as they are removed, in api_content
