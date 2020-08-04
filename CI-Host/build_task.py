@@ -209,6 +209,7 @@ class BuildTask:
                                     image=self.docker_cof["image"],
                                     cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=DOCKER_ROOT_DIRECTORY ) )
 
+        _print( "DOCKER RUN:\n", dockerRun, output_filename=self.stdout_filepath, console=False )
 
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
             _print(line, output_filename=self.stdout_filepath, console=False)
