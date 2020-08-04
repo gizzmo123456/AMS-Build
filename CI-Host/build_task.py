@@ -148,9 +148,6 @@ class BuildTask:
         project_info_path = "{relv_proj_dir}/{project}".format( **self.format_values )
         self.project_info = common.get_or_create_json_file( project_info_path, "projectInfo.json", project_info_default )[ 1 ]
 
-        project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
-        common.write_file( project_info_path, json.dumps( self.project_info ), lock=True )
-
     def get_config_value( self, *keys ):    ## Todo this needs to be replaced with common.get_value_at_key
         """Gets the config value at keys
         :param keys: each key of the config value ie.

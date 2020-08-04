@@ -90,7 +90,7 @@ Ignore all of Above :)
 [x] Sort console output, mark sure that there are no prints, only _prints
 [ ] And add some log files :)
 
-[ ] Add Project Users
+[x] Add Project Users
 [ ] Clean the task file on start.
 
 [ ] move the master-commands and pre-build-commands to it own section
@@ -101,7 +101,7 @@ Ignore all of Above :)
 [x] Add check for users file on start,
     if not present add a setup string.
     
-[ ] Add UAC object to bridge the gap between Webhook and web_interface.
+[x] Add UAC object to bridge the gap between Webhook and web_interface.
     - Webhooks only have access to create new builds, if the actor is listed in the webhook config
     - WWWUsers, have a uac access level and project list, to restrict access on the web_interface
     
@@ -118,14 +118,15 @@ Web-pages Todo. No Rush, it can all be done back end :)
 [ ] Message section.
 
 ============== uac server TEST LIST:
-[ ] test uac for output
-[ ] test uac for dl
+[x] test uac for output
+[x] test uac for dl
 
 -> Spot test for below has PASSED :)
-[ ] test uac for get_project_build_info
-[ ] test uac for get_project_info
+[x] test uac for get_project_build_info
+[x] test uac for get_project_info
 [ ] test uac for get project pipeline (both wh and www) (still to do.)
 
+- Remember to remove the project info file. its broken :) 
 
 == NOTES web_interface Content callback change.
 
