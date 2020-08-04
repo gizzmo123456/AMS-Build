@@ -51,7 +51,7 @@ class BuildTask:
             "started_build": -1
         }
 
-        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo.json"
+        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.project_info )
         self.project_info = None
 
         self._update_project_info() # this must be called at least once
