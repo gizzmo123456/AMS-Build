@@ -69,11 +69,11 @@ class BuildTask:
             self.format_values[ "build_index" ] = self.project_info[ "latest_build_index" ] + 1
 
             # update project info
-            self.project_info[ "latest_build_index" ] = self.format_values[ "build_index" ],
-            self.project_info[ "latest_build_key"] = build_hash,
+            self.project_info[ "latest_build_index" ] = self.format_values[ "build_index" ]
+            self.project_info[ "latest_build_key"] = build_hash
             self.project_info[ "last_created_time" ] = time.time()
 
-            file.write( json.dumps( self.project_info ) )
+            self._overwrite_json_file( file, self.project_info )
 
         # create build name, and define corresponding directories
         self.format_values["build_name"] = "{project}_{build_hash}_build_{build_index}".format( **self.format_values )
@@ -148,6 +148,12 @@ class BuildTask:
         project_info_path = "{relv_proj_dir}/{project}".format( **self.format_values )
         self.project_info = common.get_or_create_json_file( project_info_path, "projectInfo.json", project_info_default )[ 1 ]
 
+    def _overwrite_json_file( self, file, json_dict ):
+        """ Overwrites file when in r+ mode """
+        file.seek( 0 )
+        file.write( json.dumps( json_dict ) )
+        file.truncate()
+
     def get_config_value( self, *keys ):    ## Todo this needs to be replaced with common.get_value_at_key
         """Gets the config value at keys
         :param keys: each key of the config value ie.
@@ -210,7 +216,7 @@ class BuildTask:
         with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
             self.project_info[ "last_complete_time" ] = time.time()
-            file.write( json.dumps( self.project_info ) )
+            self._overwrite_json_file( file, self.project_info )
 
     def cleanup( self ):
 
@@ -267,7 +273,7 @@ class BuildTask:
         with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
             self.project_info[ "last_execute_time" ] = time.time()
-            file.write( json.dumps( self.project_info ) )
+            self._overwrite_json_file( file, self.project_info )
 
         _print( "Local Config:", self.local_cof, output_filename=self.stdout_filepath, console=False )
         _print( "Docker Config:", self.docker_cof, output_filename=self.stdout_filepath, console=False )
