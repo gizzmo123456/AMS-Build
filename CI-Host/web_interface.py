@@ -375,7 +375,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
         if request_path[1].lower() == "cancel" and request_path_len >= 4:   # action/{action_type}/{project}/{build_hash}
-            WebInterface.shared_queue.queue_task( "cancel", actor=user.username, project=request_path[2], build_hash=request_path[3] )
+            WebInterface.shared_queue.queue_task( "cancel", actor=user.get_uac().username, project=request_path[2], build_hash=request_path[3] )
             return "Canceling task", HTTPStatus.ok, "text/html", None
         else:
             return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
