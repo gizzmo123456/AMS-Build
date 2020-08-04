@@ -123,6 +123,8 @@ class LockFile:
         self.lock_file = FileLock( self.file_name + ".lock" )
         self.mode = mode
 
+        self.file = None
+
     def __enter__(self):
         self.lock_file.acquire()
         self.file = open( self.file_name, self.mode )
@@ -132,6 +134,18 @@ class LockFile:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.file.close()
         self.lock_file.release()
+        self.file = None
+
+
+    def change_file_mode( self, mode ):
+        """This message should only be used in a with statement"""
+
+        self.mode = mode
+        if self.file is not None:
+            self.file.close()
+        self.file = open( self.file_name, mode )
+
+        return self.file
 
 
 class BinaryFileStream:
