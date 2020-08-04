@@ -136,18 +136,6 @@ class LockFile:
         self.lock_file.release()
         self.file = None
 
-
-    def change_file_mode( self, mode ):
-        """This message should only be used in a with statement"""
-
-        self.mode = mode
-        if self.file is not None:
-            self.file.close()
-        self.file = open( self.file_name, mode )
-
-        return self.file
-
-
 class BinaryFileStream:
 
     def __init__( self, file_path, chunks=1024 ):

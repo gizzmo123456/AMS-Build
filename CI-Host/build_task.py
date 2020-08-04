@@ -62,8 +62,7 @@ class BuildTask:
             return
 
         # Update Project info.
-        lockfile = common.LockFile( self._project_info_path, mode='r' )
-        with lockfile as file:     # lock the file during update
+        with common.LockFile( self._project_info_path, mode='r+' ) as file:     # lock the file during update
             self.project_info = json.loads( file.read() )                       # ensure that we have the latest version
 
             # update build info
@@ -74,7 +73,6 @@ class BuildTask:
             self.project_info[ "latest_build_key"] = build_hash,
             self.project_info[ "last_created_time" ] = time.time()
 
-            lockfile.change_file_mode('w')
             file.write( json.dumps( self.project_info ) )
 
         # create build name, and define corresponding directories
@@ -212,11 +210,9 @@ class BuildTask:
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
             _print(line, output_filename=self.stdout_filepath, console=False)
 
-        lockfile = common.LockFile( self._project_info_path, mode='r' )
-        with lockfile as file:  # lock the file during update
+        with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
             self.project_info[ "last_complete_time" ] = time.time()
-            lockfile.change_file_mode('w')
             file.write( json.dumps( self.project_info ) )
 
     def cleanup( self ):
@@ -271,11 +267,9 @@ class BuildTask:
             return
 
         # update the project info last execute time
-        lockFile = common.LockFile( self._project_info_path, mode='r' )
-        with lockFile as file:  # lock the file during update
+        with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
             self.project_info[ "last_execute_time" ] = time.time()
-            lockFile.change_file_mode('w')
             file.write( json.dumps( self.project_info ) )
 
         _print( "Local Config:", self.local_cof, output_filename=self.stdout_filepath, console=False )
