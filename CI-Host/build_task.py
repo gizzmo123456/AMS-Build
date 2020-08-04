@@ -255,7 +255,7 @@ class BuildTask:
             common.write_file( project_build_info_path, "" )
 
         with common.LockFile( project_build_info_path, 'a' ) as file:
-            file.write( json.dumps( build_info ) + "," )
+            file.write( "," + json.dumps( build_info ) )
 
     def execute( self ):
 

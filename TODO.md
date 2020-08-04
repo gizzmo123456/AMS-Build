@@ -108,6 +108,8 @@ Ignore all of Above :)
 With this, we can remove webhook from buildTask constructor and the actor
 can change to the UAC object
 
+[ ] find out why .secrets are by user 'me' not 'root'
+
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)
 ========================================================================
