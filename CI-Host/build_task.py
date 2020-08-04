@@ -201,7 +201,7 @@ class BuildTask:
                     "-v {ci_config_path}:{ci_config_dest} " \
                     "-v {ci_build_path}:{ci_build_dest} " \
                     "{image}" \
-                    "{cmd}".format( args=self.docker_cof[ "args" ], container_name=self.format_values["container_name"],
+                    "{cmd}".format( args=self.docker_cof[ "args" ], container_name=self.format_values["container_name"].lower(),
                                     project_path=self.local_cof[ "project" ], project_dest=self.docker_cof[ "project-dest" ],
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
                                     ci_config_path=self.local_cof[ "ci-config" ], ci_config_dest=self.docker_cof[ "ci-config-dest" ],
