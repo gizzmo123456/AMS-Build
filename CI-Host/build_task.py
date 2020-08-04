@@ -2,6 +2,7 @@ from const import *
 import common
 import commonProject
 import json
+import os.path
 from datetime import datetime
 import time
 import DEBUG
@@ -50,22 +51,29 @@ class BuildTask:
             "started_build": -1
         }
 
+        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo.json"
         self.project_info = None
-        # TODO: lock project info during update (on all 3)
-        self._update_project_info()
+
+        self._update_project_info() # this must be called at least once
 
         if self.project_info == None:
+            self.valid = False
             _print( "Bad Task: Project does not exist", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
 
         # Update Project info.
-        self.format_values[ "build_index" ] = self.project_info[ "latest_build_index" ] + 1
+        with common.LockFile( self._project_info_path, mode='rw' ) as file:     # lock the file during update
+            self.project_info = json.loads( file.read() )                       # ensure that we have the latest version
 
-        self.project_info[ "latest_build_index" ] = self.format_values[ "build_index" ]
-        self.project_info[ "latest_build_key" ] = build_hash
-        self.project_info[ "last_created_time" ] = time.time()
+            # update build info
+            self.format_values[ "build_index" ] = self.project_info[ "latest_build_index" ] + 1
 
-        self._save_project_info()
+            # update project info
+            self.project_info[ "latest_build_index" ] = self.format_values[ "build_index" ],
+            self.project_info[ "latest_build_key"] = build_hash,
+            self.project_info[ "last_created_time" ] = time.time()
+
+            file.write( json.dumps( self.project_info ) )
 
         # create build name, and define corresponding directories
         self.format_values["build_name"] = "{project}_{build_hash}_build_{build_index}".format( **self.format_values )
@@ -127,13 +135,18 @@ class BuildTask:
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
     def _update_project_info( self ):
-        self.project_info = commonProject.get_project_info( self.format_values[ "project" ] )
 
-    def _save_project_info( self ):
+        project_info_default = {
+            "ProjectName": self.format_values[ "project" ],
+            "latest_build_index": 0,
+            "latest_build_key": "",
+            "last_created_time": 0,
+            "last_execute_time": 0,
+            "last_complete_time": 0
+        }
 
-        if self.project_info is None:
-            _print( "Unable to update project info for project {project}".format( **self.format_values ) )
-            return
+        project_info_path = "{relv_proj_dir}/{project}".format( **self.format_values )
+        self.project_info = common.get_or_create_json_file( project_info_path, "projectInfo.json", project_info_default )[ 1 ]
 
         project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
         common.write_file( project_info_path, json.dumps( self.project_info ), lock=True )
@@ -197,10 +210,10 @@ class BuildTask:
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
             _print(line, output_filename=self.stdout_filepath, console=False)
 
-        # TODO: this should be locked from when we update till the end of save.
-        self._update_project_info()  # make sure that we have the current version loaded.
-        self.project_info[ "last_complete_time" ] = time.time()
-        self._save_project_info()
+        with common.LockFile( self._project_info_path, mode='rw' ) as file:  # lock the file during update
+            self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
+            self.project_info[ "last_complete_time" ] = time.time()
+            file.write( json.dumps( self.project_info ) )
 
     def cleanup( self ):
 
@@ -230,9 +243,7 @@ class BuildTask:
 
     def append_build_info( self ):
 
-        # TODO: It might be worth not formating the json file in the list so
-        # we can just append the build info to the end of the file
-
+        project_build_info_path = "{relv_proj_dir}/{project}/projectBuildInfo.json".format( **self.format_values )
         build_info = {  "name": self.format_values["build_name"],
                         "hash": self.format_values["build_hash"],
                         "build_id": self.format_values["build_index"],
@@ -243,11 +254,11 @@ class BuildTask:
                         "output_log": "output/{project}/{build_name}".format( **self.format_values )
                       }
 
-        project_builds = commonProject.get_project_build_info( self.format_values["project"] )
-        project_builds.append( build_info )
+        if not os.path.exists( project_build_info_path ):
+            common.write_file( project_build_info_path, "" )
 
-        project_build_info_path = "{relv_proj_dir}/{project}/projectBuildInfo.json".format( **self.format_values )
-        common.write_file( project_build_info_path, json.dumps( project_builds ), lock=True )
+        with common.LockFile( project_build_info_path, 'a' ) as file:
+            file.write( json.dumps( build_info ) + "," )
 
     def execute( self ):
 
@@ -256,10 +267,10 @@ class BuildTask:
             return
 
         # update the project info last execute time
-        # TODO: this should be locked from when we update till the end of save.
-        self._update_project_info()     # make sure that we have the current version loaded.
-        self.project_info[ "last_execute_time" ] = time.time()
-        self._save_project_info()
+        with common.LockFile( self._project_info_path, mode='rw' ) as file:  # lock the file during update
+            self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
+            self.project_info[ "last_execute_time" ] = time.time()
+            file.write( json.dumps( self.project_info ) )
 
         _print( "Local Config:", self.local_cof, output_filename=self.stdout_filepath, console=False )
         _print( "Docker Config:", self.docker_cof, output_filename=self.stdout_filepath, console=False )

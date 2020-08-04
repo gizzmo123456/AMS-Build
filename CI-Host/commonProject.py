@@ -98,15 +98,26 @@ def get_project_info( uac, project_name ):
 def get_project_build_info( uac, project_name ):
     # Project Build info can be accessed from anywhere, but it should only be updated/saved from build_task.
 
-    project_path = "{relevent_proj_path}/{project_name}".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
-                                                                 project_name=project_name )
+    project_build_info_path = "{relevent_proj_path}/{project_name}/projectBuildInfo.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                                  project_name=project_name )
 
     project_build_info_default = []
 
     if not __project_exist( project_name ) or not uac.has_project_access( project_name ):
         return project_build_info_default
 
-    return common.get_or_create_json_file( project_path, "projectBuildInfo.json", project_build_info_default )[1]
+    if not os.path.exists( project_build_info_path ):
+        return project_build_info_default
+    else:
+        # wrap the contents on the json file in [] as there not included in the file,
+        # so we can just quickly append new entries to the end of the file :)
+        project_info_string = common.read_file( project_build_info_default, lock=True )
+        if project_info_string[-1:] == ",": # also not forgetting to remove the lazy ','
+            project_info_string = project_info_string[:-1]
+
+        project_info_string = '[{file}]'.format( file=project_info_string )
+
+        return json.loads( project_info_string )
 
 
 def get_project_pipeline( uac, project_name ):       # TODO: add UAC (Also this should verifi webhook access, as its defined in the pipeline file)
