@@ -129,13 +129,12 @@ if __name__ == "__main__":
     # queue is shared with.
     sharded_queue = sharedQueue.SharedQueue( task_queue )
     # add all available actions in the shared queue
-    sharded_queue.set_action( "build_now",   lambda actor, project, build_hash: build_task.BuildTask(actor, project, build_hash) )
-    sharded_queue.set_action( "build_wh",    lambda actor, project, build_hash: build_task.BuildTask(actor, project, build_hash, webhook=True) )
-    sharded_queue.set_action( "cancel_task", lambda actor, project, build_hash: queue_item.QueueItem(actor, project, "cancel_task", build_hash=build_hash) )
+    sharded_queue.set_action( "build",       lambda uac, project, build_hash: build_task.BuildTask(uac, project, build_hash) )
+    sharded_queue.set_action( "cancel_task", lambda actor, project, build_hash: queue_item.QueueItem(actor, project, "cancel_task", build_hash=build_hash) ) # TODO change actor to uac
 
     # assign the shared queue with only the required objects to the modules
-    webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build_wh"] )
-    web_interface.WebInterface.shared_task_queue = sharded_queue.clone( ["build_now", "cancel_task"] )
+    webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build"] )
+    web_interface.WebInterface.shared_task_queue = sharded_queue.clone( ["build", "cancel_task"] )
 
     # build tasks
     max_running_tasks = 1

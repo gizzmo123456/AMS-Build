@@ -1,6 +1,6 @@
 import baseHTTPServer
 from urllib.parse import urlparse, parse_qsl
-import build_task
+import user_access_control
 import json
 import common
 import commonProject
@@ -32,30 +32,25 @@ class Webhook( baseHTTPServer.BaseServer ):
             repo_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
+            uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK )
+
             # check the request is defined within the projects webhook config in pipeline
-            pipeline = commonProject.get_project_pipeline( query[ "project" ] )
+            # and the actor has access
+            pipeline = commonProject.get_project_pipeline( uac, query[ "project" ] )
 
             if pipeline is None:
-                _print( "Error: Invalid project, No pipeline found for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( "Error: Invalid project or Access, For project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                self.process_request( "Error", 404, False )
                 return
 
             webhook_name = common.get_value_at_key( pipeline, "webhook", "name" )
-            authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actors" )
-
-
 
             if webhook_name != query[ "name" ]:
                 _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                self.process_request( "Error", 404, False )
                 return
 
-            if authorized_actor is None:
-                _print( "Error: No actors defined, for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
-                return
-            elif actor not in authorized_actor:
-                _print( "Error: Invalid actor (", actor, "), for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR  )
-                return
-
-            Webhook.shared_task_queue.queue_task( "build_wh", actor=actor, project=query["project"], build_hash=build_hash )
+            Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], build_hash=build_hash )
 
             self.process_request( "Ok", 200, False )
 

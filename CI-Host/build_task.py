@@ -11,10 +11,22 @@ _print = DEBUG.LOGS.print
 class BuildTask:
     "Build tasks..."
 
-    def __init__( self, trigger_actor, project_name, build_hash, webhook=False ):
+    def __init__( self, uac, project_name, build_hash ):
+        """
+        :param uac:             The UAC of the user that triggered the build
+        :param project_name:    name of project
+        :param build_hash:      build hash
+        """
 
-        # TODO: check that the project exist and actor belongs to the project.
-        self.valid = True # commonProject.project_exist( project_name )
+        # load config file,
+        self.config = commonProject.get_project_pipeline( uac, project_name )
+        self.valid = self.config is not None
+
+        if not self.valid:
+            _print( "Task not valid, ignoring. Either no pipeline or no access ", project_name, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            return
+
+        webhook = uac.access_level == uac.WEBHOOK   # TODO: move webhook commands to its own section
 
         self.format_values = {  # values are public to the pipeline file    # it might be worth passing this into the contatiner.
             # directorys
@@ -33,7 +45,7 @@ class BuildTask:
             "build_index": 0,
             # util
             "container_name": project_name+build_hash,
-            "actor": trigger_actor,
+            "actor": uac.username,
             "created": datetime.now().strftime( "%d/%m/%Y @ %H:%M:%S" ),
             "started_build": -1
         }
@@ -61,13 +73,6 @@ class BuildTask:
         self.format_values["build_dir"]  = "{project_dir}/{project}/builds/{build_name}".format( **self.format_values )
         self.format_values["master_source_dir"] = self.format_values["master_dir"] + "/project_source"
         self.format_values["build_source_dir"] = self.format_values["build_dir"] + "/project_source"
-
-        # load config file
-        self.config = commonProject.get_project_pipeline( project_name )
-
-        if self.config is None:
-            _print( "Error: No Valid Pipeline file found for project ", project_name, message_type=3 )
-            return
 
         # output
         self.stdout_filepath = "{relv_proj_dir}/{project}/builds/{build_name}/output.txt".format( **self.format_values )
