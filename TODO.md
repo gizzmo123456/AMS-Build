@@ -126,7 +126,7 @@ Web-pages Todo. No Rush, it can all be done back end :)
 -> Spot test for below has PASSED :)
 [x] test uac for get_project_build_info
 [x] test uac for get_project_info
-[ ] test uac for get project pipeline (both wh and www) (still to do.)
+[x] test uac for get project pipeline (both wh and www)
 
 - Remember to remove the project info file. its broken :) 
 

@@ -6,9 +6,9 @@ class QueueItem:
 
     __ACTIONS = {}
 
-    def __init__(self, trigger_actor, project_name, action, build_hash=None, complete_callback=None, complete_message=None):
+    def __init__(self, uac, project_name, action, build_hash=None, complete_callback=None, complete_message=None):
 
-        self.trigger_actor = trigger_actor
+        self.uac = uac
         self.project_name = project_name
         self.build_hash = build_hash
 
