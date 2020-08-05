@@ -15,7 +15,7 @@ var loadContent = function(url, responseElemId, postString=null, append_to_eleme
             {
 
                 if ( append_to_element )
-                    document.getElementById(responseElemId).innerHTML = this.responseText;
+                    document.getElementById(responseElemId).innerHTML += this.responseText;
                 else
                     document.getElementById(responseElemId).innerHTML = this.responseText;
 
