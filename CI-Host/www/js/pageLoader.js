@@ -74,10 +74,10 @@ var showMessages = function(){
 
     elem = document.getElementById("message-hold");
 
-    if ( elem.innerHTML == "" )
+    if ( document.getElementById("message-items").innerHTML.trim().length == 0 )
         elem.style.display = "none";
     else
-        document.getElementById("message-hold").style.display="block";
+        elem.style.display="block";
 
 }
 
@@ -108,6 +108,7 @@ var hashChange = function(){
 window.onhashchange = hashChange;
 
 hashChange( window.location.hash );
+showMessages()
 
 setInterval( updateActiveTask, refreshRate * 1000 );
 setInterval( updateQueuedTask, refreshRate * 1000 );
