@@ -9,7 +9,7 @@ var APPEND_MODE = {
     "DESC": -1      // Append is reverse -> bottom to top. (newest at top)
 }
 
-var loadContent = function(url, responseElemId, postString=null, appendMode=APPEND_MODE.NONE, successCallback=null){
+var loadContent = function(url, responseElemId=null, postString=null, appendMode=APPEND_MODE.NONE, successCallback=null){
 
     var request = new XMLHttpRequest();
 
@@ -20,12 +20,14 @@ var loadContent = function(url, responseElemId, postString=null, appendMode=APPE
             if (this.readyState == 4 && this.status == 200)
             {
 
-                if ( appendMode == APPEND_MODE.ASC )
-                    document.getElementById(responseElemId).innerHTML += this.responseText;
-                else if ( appendMode == APPEND_MODE.DESC )
-                     document.getElementById(responseElemId).innerHTML = this.responseText + document.getElementById(responseElemId).innerHTML;
-                else
-                    document.getElementById(responseElemId).innerHTML = this.responseText;
+                if ( responseElemId != null){
+                    if ( appendMode == APPEND_MODE.ASC )
+                        document.getElementById(responseElemId).innerHTML += this.responseText;
+                    else if ( appendMode == APPEND_MODE.DESC )
+                         document.getElementById(responseElemId).innerHTML = this.responseText + document.getElementById(responseElemId).innerHTML;
+                    else
+                        document.getElementById(responseElemId).innerHTML = this.responseText;
+                }
 
                 if ( successCallback != null)
                     successCallback()
@@ -33,7 +35,7 @@ var loadContent = function(url, responseElemId, postString=null, appendMode=APPE
                 console.log( `url: ${url} appended: ${appendMode} Received Response: ${this.responseText}`  );
 
             }
-            else if ( this.status >= 300)   // should this be a thing ??
+            else if ( responseElemId != null && this.status >= 300)   // should this be a thing ??
             {
                 document.getElementById(responseElemId).innerHTML = ` Error: ${this.status}`
             }
