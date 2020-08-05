@@ -1,6 +1,6 @@
 
-var refreshRate = 60;   //seconds
-var messageRefreshRate = 30;   //seconds    // i think we should only really do this if we are expecting a message
+var refreshRate = 60;           //seconds
+var messageRefreshRate = 30;    //seconds    // i think we should only really do this if we are expecting a message
 var selectedProject = null;
 
 var APPEND_MODE = {
