@@ -105,7 +105,7 @@ def task_worker(job):
     # insert a TASK FINISHED message into the task que to unblock
     # so we can safely update the web_interface without any threading issues
     # it also makes sure that the task is removed from the active task list.
-    task_queue.put( queue_item.QueueItem( job.format_values["actor"], job.format_values["project"],
+    task_queue.put( queue_item.QueueItem( job.uac, job.format_values["project"],
                                           "Task-Finished", build_hash=job.format_values["build_index"] ) )
 
 

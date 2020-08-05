@@ -19,6 +19,7 @@ class BuildTask:
         :param build_hash:      build hash
         """
 
+        self.uac = uac
         # load config file,
         self.config = commonProject.get_project_pipeline( uac, project_name )
         self.valid = self.config is not None
