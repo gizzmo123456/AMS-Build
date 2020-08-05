@@ -37,7 +37,7 @@ class BuildTask:
         build_name_str = "{project}_{build_hash}_build_{build_index}"
 
         if "build-name-format" in self.config:
-            build_name_str = self.config
+            build_name_str = self.config[ "build-name-format" ]
 
         trigger_method = "webhook"
 
