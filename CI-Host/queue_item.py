@@ -32,14 +32,14 @@ class QueueItem:
 
         if self.__executed:
             _print("Queue item already executed")
-            return
+            return False
 
         self.__executed = True
 
         if not self.uac.has_project_access( self.project_name ):
             self.trigger_callback( False )
             _print("Insufficient privileges to cancel task for project ", self.project_name)
-            return
+            return False
 
         if self.item_action is not None:
             successful = self.item_action( self )
@@ -49,6 +49,8 @@ class QueueItem:
 
         self.trigger_callback( successful )
         _print( "Queue Task", self.action, "Completed successful? ", successful )
+
+        return successful
 
     def trigger_callback( self, successful ):
         if self.complete_callback is not None:
