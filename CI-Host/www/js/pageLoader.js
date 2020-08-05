@@ -72,9 +72,9 @@ var updateMessages = function(){
 
 var showMessages = function(){
 
-    var elem = document.getElementById("message-hold");
+    elem = document.getElementById("message-hold");
 
-    if elem.innerHTML == "":
+    if ( elem.innerHTML == "" )
         elem.style.display = "none";
     else
         document.getElementById("message-hold").style.display="block";
