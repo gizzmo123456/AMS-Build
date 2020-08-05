@@ -22,13 +22,17 @@ class BuildTask:
         self.uac = uac
         # load config file,
         self.config = commonProject.get_project_pipeline( uac, project_name )
-        self.valid = self.config is not None
+
+        # make sure that the config file contains the bare minimal
+        self.valid = self.config is not None and \
+                     "docker"        in self.config and \
+                     "prepare-build" in self.config and \
+                     "pipeline"      in self.config
+
 
         if not self.valid:
-            _print( "Task not valid, ignoring. Either no pipeline or no access ", project_name, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            _print( "Task not valid, ignoring. Either no pipeline, Invalid pipeline or no access ", project_name, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
-
-        webhook = uac.access_level == uac.WEBHOOK   # TODO: move webhook commands to its own section
 
         self.format_values = {  # values are public to the pipeline file    # it might be worth passing this into the contatiner.
             # directorys
@@ -91,14 +95,18 @@ class BuildTask:
         _print("Starting master/pre-build commands for project '{project}' @ {created}: LOG OUTPUT FILE PATH: {stdout}".format( stdout=self.stdout_filepath, **self.format_values), self.stdout_filepath)
 
         # prepare the build.
-        # - run master commands in project source
+        # - run master dir commands in the master project source
         # - copy master directory to build directory
-        # - run pre build commands
-        _print( "..::Executing master commands::..", output_filename=self.stdout_filepath, console=False )
-        if webhook and "master-commands" in self.config["webhook"] and len(self.config["webhook"]["master-commands"]) > 0:
-            master_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["master-commands"] ]     # add format values to commands
+        # - run build dir commands in copied project source
+
+        _print( "..::Executing Master Dir Prepare Commands::..", output_filename=self.stdout_filepath, console=False )
+        if "master-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "master-dir-commands" ] ) > 0:
+
+            master_commands = [ mc.format( **self.format_values ) for mc in self.config[ "prepare-build" ][ "master-dir-commands" ] ]
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
                 _print(line, output_filename=self.stdout_filepath, console=False)
+
+        # -
 
         _print( "Copying Master To Build Directory", output_filename=self.stdout_filepath, console=False )
         _print( "{master_dir} -> {build_dir}".format( **self.format_values ), output_filename=self.stdout_filepath, console=False )
@@ -106,10 +114,13 @@ class BuildTask:
                                         "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
             _print(line, output_filename=self.stdout_filepath, console=False)   # Note: Queued _print message are now dumped to file.
 
-        _print( "..::Executing Pre-Build Commands::..", output_filename=self.stdout_filepath, console=False )
-        if webhook and "pre-build-commands" in self.config["webhook"] and len(self.config["webhook"]["pre-build-commands"]) > 0:
-            pre_build_commands = [ mc.format( **self.format_values ) for mc in self.config["webhook"]["pre-build-commands"] ]   # add format values to commands
-            for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( pre_build_commands ) ).format( **self.format_values ), shell="bash"):
+        # -
+
+        _print( "..::Executing Build Dir Prepare Commands::..", output_filename=self.stdout_filepath, console=False )
+        if "build-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "build-dir-commands" ] ) > 0:
+
+            build_commands = [ bc.format( **self.format_values ) for bc in self.config[ "prepare-build" ][ "build-dir-commands" ] ]
+            for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( build_commands ) ).format( **self.format_values ), shell="bash"):
                 _print(line, output_filename=self.stdout_filepath, console=False)
 
         # create the local and docker configs

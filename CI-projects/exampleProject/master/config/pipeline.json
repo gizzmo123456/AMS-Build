@@ -9,12 +9,14 @@
     "name": "master",
     "authorized-actors": [
       "ashley sands"
-    ],
-    "master-commands": [
+    ]
+  },
+  "prepare-build": {
+    "master-dir-commands": [
       "cd testCIGame/",
       "sudo git pull origin master "
     ],
-    "pre-build-commands": [
+    "build-dir-commands": [
       "cd testCIGame/",
       "sudo git checkout --detach {build_hash}"
     ]
