@@ -30,7 +30,7 @@ class QueueItem:
 
     def execute( self ):
 
-        if not self.__executed:
+        if self.__executed:
             _print("Queue item already executed")
             return
 
