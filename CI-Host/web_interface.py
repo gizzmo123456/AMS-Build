@@ -57,6 +57,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages["api"] = {}
         self.pages["api"]["raw"]           = WWWPage( "api-raw",           None,                                self.api_content, WWWUser.UAC_USER, self.pages["auth"], no_content_template=None )
         self.pages["api"]["message"]       = WWWPage( "api-user-messages", "api-templates/message.html",        self.api_content, WWWUser.UAC_USER, self.pages["auth"], no_content_template=None )
+        self.pages["api"]["message"].list_orfer = WWWPage.LO_DESC
         self.pages["api"]["active_task"]   = WWWPage( "api-active-tasks",  "api-templates/active_task.html",    self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Active Tasks"        )
         self.pages["api"]["queued_task"]   = WWWPage( "api-queue-tasks",   "api-templates/queued_task.html",    self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Queued Tasks"        )
         self.pages["api"]["projects"]      = WWWPage( "api-projects",      "api-templates/project.html",        self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Projects"            )

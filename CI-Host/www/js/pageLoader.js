@@ -3,7 +3,13 @@ var refreshRate = 60;   //seconds
 var messageRefreshRate = 30;   //seconds    // i think we should only really do this if we are expecting a message
 var selectedProject = null;
 
-var loadContent = function(url, responseElemId, postString=null, append_to_element=false, successCallback=null){
+var APPEND_MODE = {
+    "NONE": 0,      // Do not append
+    "ASC": 1,       // Append in order   -> top to bottom  (newest at bottom)
+    "DESC": -1      // Append is reverse -> bottom to top. (newest at top)
+}
+
+var loadContent = function(url, responseElemId, postString=null, appendMode=APPEND_MODE.NONE, successCallback=null){
 
     var request = new XMLHttpRequest();
 
@@ -14,8 +20,10 @@ var loadContent = function(url, responseElemId, postString=null, append_to_eleme
             if (this.readyState == 4 && this.status == 200)
             {
 
-                if ( append_to_element )
+                if ( appendMode == APPEND_MODE.ASC )
                     document.getElementById(responseElemId).innerHTML += this.responseText;
+                else if ( appendMode == APPEND_MODE.DESC )
+                     document.getElementById(responseElemId).innerHTML = this.responseText + document.getElementById(responseElemId).innerHTML;
                 else
                     document.getElementById(responseElemId).innerHTML = this.responseText;
 
@@ -67,7 +75,7 @@ var updateBuilds = function(){
 
 var updateMessages = function(){
     postString = "clear=true"
-    loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, true, showMessages )
+    loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, APPEND_MODE.DESC, showMessages )
 }
 
 var actionRequest = function( action, project, id, activeTask=false ){
