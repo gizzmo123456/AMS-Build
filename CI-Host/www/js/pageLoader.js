@@ -70,6 +70,14 @@ var updateMessages = function(){
     loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, true, showMessages )
 }
 
+var actionRequest = function( action, project, id ){
+
+    loadContent( `ams-ci/action/${action}/${project}/${id}` )
+
+    setTimeout( updateMessages, "2000" )    // request a message update in 2 seconds
+
+}
+
 var showMessages = function(){
 
     elem = document.getElementById("message-hold");
@@ -82,8 +90,10 @@ var showMessages = function(){
 }
 
 var clearMessages = function(){
+
     document.getElementById("message-items").innerHTML = "";
     document.getElementById("message-hold").style.display="none";
+
 }
 
 var setSelectedProject = function( selected, setHash=true ){
