@@ -15,7 +15,6 @@ class QueueItem:
         self.action = action
         self.item_action = None
         self.complete_callback = complete_callback  # callback must contain params for QueueItem, Successful
-        self.complete_message = "Action {0} Complete".format( action )
 
         self.__executed = False
 
@@ -38,6 +37,7 @@ class QueueItem:
         self.__executed = True
 
         if not self.uac.has_project_access( self.project_name ):
+            self.trigger_callback( False )
             _print("Insufficient privileges to cancel task for project ", self.project_name)
             return
 
@@ -47,7 +47,9 @@ class QueueItem:
             _print("No Action assigned")
             successful = False
 
+        self.trigger_callback( successful )
+        _print( "Queue Task", self.action, "Completed successful? ", successful )
+
+    def trigger_callback( self, successful ):
         if self.complete_callback is not None:
             self.complete_callback( self, successful )
-        else:
-            _print( "Queue Task", self.action, "Completed successful? ", successful )

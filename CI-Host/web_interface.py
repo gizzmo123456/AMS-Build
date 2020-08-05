@@ -382,8 +382,8 @@ class WebInterface( baseHTTPServer.BaseServer ):
             http_message = "404, Not Found"
 
             if user.get_uac().has_project_access( project ):
-                WebInterface.shared_task_queue.queue_task( "cancel", actor=user.get_uac(), project=project,
-                                                      build_hash=build_hash, compleat_callback=user.queue_action_callback )
+                WebInterface.shared_task_queue.queue_task( "cancel_task", actor=user.get_uac(), project=project,
+                                                           build_hash=build_hash, compleat_callback=user.queue_action_callback )
                 user.set_message( "Canceling Task for {project} with hash {build_hash}".format( build_hash=build_hash, project=project), WWWUser.MSG_STATUS_OK )
                 http_message = "202, Cancel Task Accepted!"
                 http_status = HTTPStatus.ACCEPTED
