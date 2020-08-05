@@ -11,6 +11,7 @@ from const import *
 import hashlib
 import time
 from www_page import WWWPage, WWWUser
+import user_access_control
 import user_manager
 import math
 
@@ -36,7 +37,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS, DL and output log paths...
 
     sessions = { }  # { `session key`: WWWUser }
-    shared_queue = None
+    shared_task_queue = None
 
     def __init__( self, request, client_address, server ):
 
@@ -368,20 +369,32 @@ class WebInterface( baseHTTPServer.BaseServer ):
         request_path_len = len( request_path )
 
         if user_uac < WWWUser.UAC_USER:
-            return "Login Required", HTTPStatus.OK, "text/html", None
-        elif user_uac < WWWUser.UAC_MOD:
-            return "Insufficient privileges", HTTPStatus.OK, "text/html", None
+            return "Login Required", HTTPStatus.UNAUTHORIZED, "text/html", None
+        elif user_uac < WWWUser.UAC_MOD and user_uac is not user_access_control.UAC.WEBHOOK:
+            return "Insufficient privileges", HTTPStatus.UNAUTHORIZED, "text/html", None
         elif request_path_len <= 1:
             return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
         if request_path[1].lower() == "cancel" and request_path_len >= 4:   # action/{action_type}/{project}/{build_hash}
-            WebInterface.shared_queue.queue_task( "cancel", actor=user.get_uac().username, project=request_path[2], build_hash=request_path[3] )
-            return "Canceling task", HTTPStatus.ok, "text/html", None
+            project = request_path[2]
+            build_hash = request_path[3]
+            http_status = HTTPStatus.NOT_FOUND
+            http_message = "404, Not Found"
+
+            if user.get_uac().has_project_access( project ):
+                WebInterface.shared_task_queue.queue_task( "cancel", actor=user.get_uac(), project=project,
+                                                      build_hash=build_hash, compleat_callback=user.queue_action_callback )
+                user.set_message( "Canceling Task for {project} with hash {build_hash}".format( build_hash=build_hash, project=project), WWWUser.MSG_STATUS_OK )
+                http_message = "202, Cancel Task Accepted!"
+                http_status = HTTPStatus.ACCEPTED
+            else:
+                user.set_message( "Unable to cancel Task  for {project} with hash {build_hash}, Project does not exist or insufficient privileges".format( build_hash=build_hash, project=project), WWWUser.MSG_STATUS_ERROR )
+                http_status = HTTPStatus.NOT_ACCEPTABLE
+                http_message = "406, Task Not Acceptable"
+
+            return http_message, http_status, "text/html", None
         else:
             return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
-
-
-
 
 # Is any of this used
 # i think this was all replaced by the use of projects.json

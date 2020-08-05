@@ -85,6 +85,21 @@ class WWWUser:
         else:
             return ""
 
+    def queue_action_callback( self, queue_item, successful ):
+
+        action_status = WWWUser.MSG_STATUS_OK
+        message = "{task} task for {project} with hash {build_hash}, has completed successful".format( task=queue_item.action,
+                                                                                                       build_hash=queue_item.build_hash,
+                                                                                                       project=queue_item.project_name )
+
+        if not successful:
+            action_status = WWWUser.MSG_STATUS_ERROR
+            message = "{task} task for {project} with hash {build_hash}, has completed unsuccessfully".format( task=queue_item.action,
+                                                                                                               build_hash=queue_item.build_hash,
+                                                                                                               project=queue_item.project_name )
+
+        self.set_message( message, action_status )
+
 class WWWPage:
 
     # List Orders

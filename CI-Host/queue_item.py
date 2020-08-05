@@ -6,7 +6,7 @@ class QueueItem:
 
     __ACTIONS = {}
 
-    def __init__(self, uac, project_name, action, build_hash=None, complete_callback=None, complete_message=None):
+    def __init__(self, uac, project_name, action, build_hash=None, complete_callback=None):
 
         self.uac = uac
         self.project_name = project_name
@@ -18,9 +18,6 @@ class QueueItem:
         self.complete_message = "Action {0} Complete".format( action )
 
         self.__executed = False
-
-        if complete_message is not None:
-            self.complete_message = complete_message
 
         if action in QueueItem.__ACTIONS:
             self.item_action = QueueItem.__ACTIONS[ action ]
@@ -39,6 +36,10 @@ class QueueItem:
             return
 
         self.__executed = True
+
+        if not self.uac.has_project_access( self.project_name ):
+            _print("Insufficient privileges to cancel task for project ", self.project_name)
+            return
 
         if self.item_action is not None:
             successful = self.item_action( self )
