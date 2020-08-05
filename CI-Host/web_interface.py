@@ -19,19 +19,35 @@ import DEBUG
 _print = DEBUG.LOGS.print
 
 class WebInterface( baseHTTPServer.BaseServer ):
-    """ TODO: doc string needs updating
+    """
         Request types: GET | POST
-        Pages:                                                          (GET only)
+        Pages:
             ams-ci /                                                    [Root]
-            ams-ci / project /                                          [retrieves list of projects available to user]
-            ams-ci / project / {project_name}                           [retrieves list of builds for project name]
-            ams-ci / project / {project_name} / {build_hash}            [retrieves list of data for build]
-            ams-ci / project / {project_name} / {build_hash} / log      [retrieves log for build]
-            ams-ci / project / {project_name} / {build_hash} / dl       [downloads build]
-        Get params:
-            data_type:  (default) HTML | Json
-        Pages:                                                          (POST only)
-            ams-ci / auth                                               [Authorizes user]
+            ams-ci / api / project /                                    retrieves list of projects available to user
+            ams-ci / api / project / name / {project_name}              retrieves all project info
+                                                                        See API-content for more info on api/project
+
+            ams-ci / api / user_message                                 View a list of pending messages for the logged in user
+                                                                        To clear messages send POST data 'clear=true'
+
+            ams-ci / api / tasks                                        retrieves a list of all active and queued tasks
+            ams-ci / api / tasks / active                               retrieves a list of all active tasks
+            ams-ci / api / tasks / queued                               tetrieves a list of all queued tasks
+
+            ams-ci / dl / {project_name) / {build_hash}                 Downloads the output 7z for project build
+            ams-ci / output / {project_name) / {build_hash}             view the output log for project build
+
+
+        API GET params:
+            template                                                    Formats json into html template
+                - projects
+                - queue_task
+                - active_task
+                - build
+                - message
+        Other Pages
+            ams-ci / auth                                               Authorizes user -> redirects back to [root]
+            ams-ci / logout                                             logs out user   -> redirects back to [root]
     """
     DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
     API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS, DL and output log paths...
@@ -64,7 +80,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
         self.pages["api"]["builds"]        = WWWPage( "api-builds",        "api-templates/build.html",          self.api_content, WWWUser.UAC_USER, self.pages["auth"], "No Builds Found"        )
         self.pages["api"]["builds"].list_order = WWWPage.LO_DESC    # display newest build on top
 
-        # TODO: theses should be dicts for json
         self.active_builds = ""
         self.queued_tasks = ""
 
@@ -297,7 +312,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         filter_key = None
 
         api_header = { "cache-control": "no-store" }
-        return None, data, HTTPStatus.OK, "application/json", api_header   # TODO: support html templates.
+        return None, data, HTTPStatus.OK, "application/json", api_header
 
     def not_found_callback( self, user, request_path, get_data, post_data ):
         content = {"title:": "Not Found", "message": "404, Not Found"}

@@ -120,7 +120,7 @@ def get_project_build_info( uac, project_name ):
         return json.loads( project_info_string )
 
 
-def get_project_pipeline( uac, project_name ):       # TODO: add UAC (Also this should verifi webhook access, as its defined in the pipeline file)
+def get_project_pipeline( uac, project_name ):
     """ Gets the project pipeline. None if project or file does not exist does not exist or the user does not have access. """
 
     pipeline_path = "{relevent_proj_path}/{project_name}/master/config/pipeline.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,

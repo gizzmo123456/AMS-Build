@@ -48,7 +48,7 @@ Ignore all of Above :)
 [ ] Add Build Now to 'Web_Interface'  
 [x] Add refresh functionality  
 [x] Add Download to 'Web_interface'  
-[ ] Add Build naming convention to the pipeline file  
+[x] Add Build naming convention to the pipeline file  
 [ ] Add Last complete build index to projectInfo   
 [x] make tasks.json untracked by git   
 [x] intergrate projects into to the project info file.  
@@ -88,7 +88,7 @@ builds/eProj_hash_build_N/Stage_1/
 
 [ ] Build Now  
 [ ] Cancel task  
-    [ ] pending    
+    [x] pending    
     [ ] active  
 
 [x] Fix tasks title heading overflow  
@@ -101,7 +101,7 @@ builds/eProj_hash_build_N/Stage_1/
 [x] Add Project Users  
 [ ] Clean the task file on start.  
 
-[ ] move the master-commands and pre-build-commands to it own section  
+[x] move the master-commands and pre-build-commands to it own section  
     Also improving the names.  
     
 [ ] Allow API CORS  

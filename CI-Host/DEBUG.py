@@ -110,9 +110,9 @@ class LOGS:
             If the file does not exist the message is queued, until print is called and the file exist.
         """
 
-        # Todo: Add option for queueing message
         # Todo: Add function to dump the queue to the file if it exist
         # Todo: Add option to create file if it does not exist.
+        # Todo: write stout to file
 
         if not os.path.exists( file_path ):
             # queue the message if the file does not exist
