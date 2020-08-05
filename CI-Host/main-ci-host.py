@@ -86,7 +86,7 @@ def cancel_task( q_item ):
 
     # search active tasks.
     for i in range(len(active_tasks)):
-        if active_tasks[i][0].format_values["build_hash"] == q_item.build_hash:
+        if active_tasks[i][1].format_values["build_hash"] == q_item.build_hash:
             _print("Can not stop active task atm :( ")
             return False
 
