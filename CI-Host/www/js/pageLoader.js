@@ -70,11 +70,18 @@ var updateMessages = function(){
     loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, true, showMessages )
 }
 
-var actionRequest = function( action, project, id ){
+var actionRequest = function( action, project, id, activeTask=false ){
 
     loadContent( `/ams-ci/action/${action}/${project}/${id}` )
 
     setTimeout( updateMessages, "2000" )    // request a message update in 2 seconds
+
+    // this is not efficient but for now at least
+    if ( activeTask )
+        setTimeout( updateActiveTask, "3000" )    // request a message update in 3 seconds
+
+
+    setTimeout( updateQueuedTask, "3000" )    // request a message update in 3 seconds
 
 }
 
