@@ -171,7 +171,8 @@ if __name__ == "__main__":
                     update_queue_file = True
                     _print("task_pending (total: {pending}) ".format( pending=len(pending_tasks) ) )
                 elif isinstance( task, queue_item.QueueItem ):
-                    update_queue_file = task.execute()
+                    task.execute()
+                    update_queue_file = True
                 else:
                     _print("invalid task")
                 task = None
