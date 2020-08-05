@@ -78,9 +78,12 @@ var updateMessages = function(){
     loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, APPEND_MODE.DESC, showMessages )
 }
 
-var actionRequest = function( action, project, id, activeTask=false ){
+var actionRequest = function( action, project, id=null, activeTask=false ){
 
-    loadContent( `/ams-ci/action/${action}/${project}/${id}` )
+    if ( id == null || id == "" )
+        loadContent( `/ams-ci/action/${action}/${project}` )
+    else
+        loadContent( `/ams-ci/action/${action}/${project}/${id}` )
 
     setTimeout( updateMessages, "2000" )    // request a message update in 2 seconds
 
