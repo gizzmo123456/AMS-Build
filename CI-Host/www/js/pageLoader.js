@@ -15,11 +15,11 @@ var loadContent = function(url, responseElemId, postString=null, append_to_eleme
             {
 
                 if ( append_to_element )
-                    document.getElementById(responseElemId).innerHTML += this.responseText;
+                    document.getElementById(responseElemId).innerHTML = this.responseText;
                 else
                     document.getElementById(responseElemId).innerHTML = this.responseText;
 
-                if ( success_callback != null)
+                if ( successCallback != null)
                     successCallback()
 
                 console.log( `url: ${url} appended: ${append_to_element} Received Response: ${this.responseText}`  );
@@ -71,7 +71,14 @@ var updateMessages = function(){
 }
 
 var showMessages = function(){
-    document.getElementById("message-hold").style.display="block";
+
+    var elem = document.getElementById("message-hold");
+
+    if elem.innerHTML == "":
+        elem.style.display = "none";
+    else
+        document.getElementById("message-hold").style.display="block";
+
 }
 
 var clearMessages = function(){
@@ -105,4 +112,3 @@ hashChange( window.location.hash );
 setInterval( updateActiveTask, refreshRate * 1000 );
 setInterval( updateQueuedTask, refreshRate * 1000 );
 setInterval( updateMessages, messageRefreshRate * 1000 );
-
