@@ -30,7 +30,7 @@ var loadContent = function(url, responseElemId, postString=null, appendMode=APPE
                 if ( successCallback != null)
                     successCallback()
 
-                console.log( `url: ${url} appended: ${append_to_element} Received Response: ${this.responseText}`  );
+                console.log( `url: ${url} appended: ${appendMode} Received Response: ${this.responseText}`  );
 
             }
             else if ( this.status >= 300)   // should this be a thing ??
