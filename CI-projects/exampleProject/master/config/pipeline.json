@@ -1,4 +1,5 @@
 {
+  "build-name-format": "{project}_{build_hash}_build_{build_index}",
   "docker": {
     "image": "gableroux/unity3d:2018.4.2f1-windows",
     "args": "-it --rm",

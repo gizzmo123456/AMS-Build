@@ -34,7 +34,20 @@ class BuildTask:
             _print( "Task not valid, ignoring. Either no pipeline, Invalid pipeline or no access ", project_name, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
 
-        self.format_values = {  # values are public to the pipeline file    # it might be worth passing this into the contatiner.
+        build_name_str = "{project}_{build_hash}_build_{build_index}"
+
+        if "build-name-format" in self.config:
+            build_name_str = self.config
+
+        trigger_method = "webhook"
+
+        if uac.access_level != uac.WEBHOOK:
+            trigger_method = "www_interface"
+
+        # values are public to the pipeline file
+        # it might be worth passing this into the contatiner.
+        # also might be worth moving directories into its own dict.
+        self.format_values = {
             # directorys
             "project_dir": PROJECT_DIRECTORY,
             "relv_proj_dir": RELEVENT_PROJECT_PATH,
@@ -50,6 +63,7 @@ class BuildTask:
             "build_hash": build_hash,
             "build_index": 0,
             # util
+            "trigger_method": trigger_method,
             "container_name": project_name+build_hash,
             "actor": uac.username,
             "created": datetime.now().strftime( "%d/%m/%Y @ %H:%M:%S" ),
@@ -81,7 +95,7 @@ class BuildTask:
             self._overwrite_json_file( file, self.project_info )
 
         # create build name, and define corresponding directories
-        self.format_values["build_name"] = "{project}_{build_hash}_build_{build_index}".format( **self.format_values )
+        self.format_values["build_name"] = build_name_str.format( **self.format_values )
         self.format_values["master_dir"] = "{project_dir}/{project}/{master_build_name}".format( **self.format_values )
         self.format_values["build_dir"]  = "{project_dir}/{project}/builds/{build_name}".format( **self.format_values )
         self.format_values["master_source_dir"] = self.format_values["master_dir"] + "/project_source"
@@ -264,6 +278,7 @@ class BuildTask:
                         "hash": self.format_values["build_hash"],
                         "build_id": self.format_values["build_index"],
                         "status": "pass",
+                        "trigger_method": self.format_values["trigger_method"],
                         "created_by": self.format_values["actor"],
                         "created_at": self.format_values["created"],
                         "7z_link": "dl/{project}/{build_name}".format( **self.format_values ),

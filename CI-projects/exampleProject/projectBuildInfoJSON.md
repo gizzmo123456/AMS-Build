@@ -5,9 +5,6 @@ The file should only be modified by build_task object
 
 the data is used to serve the www API
 
-TODO: it might be worth formatting it without the list so we can just append 
-to the end of the file, then add the list at read time.
-
 ```
 [
     {
