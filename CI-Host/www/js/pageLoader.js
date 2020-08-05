@@ -31,13 +31,14 @@ var loadContent = function(url, responseElemId, postString=null, append_to_eleme
             }
         };
 
-        request.open("GET", url, true);
         if ( postString == null )
         {
+            request.open("GET", url, true);
             request.send();
         }
         else
         {
+            request.open("POST", url, true);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(postString);
         }
