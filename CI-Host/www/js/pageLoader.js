@@ -72,7 +72,7 @@ var updateMessages = function(){
 
 var actionRequest = function( action, project, id ){
 
-    loadContent( `ams-ci/action/${action}/${project}/${id}` )
+    loadContent( `/ams-ci/action/${action}/${project}/${id}` )
 
     setTimeout( updateMessages, "2000" )    // request a message update in 2 seconds
 
