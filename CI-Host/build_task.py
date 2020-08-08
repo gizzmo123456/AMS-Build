@@ -306,9 +306,9 @@ class BuildTask:
 
     def cleanup( self ):
 
-        zip = self.get_config_value( "cleanup", "7z_build", False )
+        zip = self.get_config_value( "cleanup", "7z_build", default_value=False )
         zip_hash = self.get_config_value( "cleanup", "7z_hash" )
-        cleanup = self.get_config_value( "cleanup", "remove_build_source", False )
+        cleanup = self.get_config_value( "cleanup", "remove_build_source", default_value=False )
 
         accepted_7z_hashes = [ "crc32", "crc64", "sha1", "sha256", "blake2sp" ]
 
