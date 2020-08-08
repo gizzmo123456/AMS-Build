@@ -38,7 +38,7 @@ class QueueItem:
 
         if not self.uac.has_project_access( self.project_name ):
             self.trigger_callback( False )
-            _print("Insufficient privileges to cancel task for project ", self.project_name)
+            _print("Insufficient privileges to", self.action, "on task for project ", self.project_name)
             return
 
         if self.item_action is not None:

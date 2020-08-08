@@ -109,7 +109,7 @@ def task_worker(job):
     # so we can safely update the web_interface without any threading issues
     # it also makes sure that the task is removed from the active task list.
     task_queue.put( queue_item.QueueItem( job.uac, job.format_values["project"],
-                                          "Task-Finished", build_hash=job.format_values["build_index"] ) )
+                                          "build_finished", build_hash=job.format_values["build_index"] ) )
 
 
 if __name__ == "__main__":

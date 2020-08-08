@@ -107,10 +107,10 @@ builds/eProj_hash_build_N/Stage_1/
     
 [ ] Allow API CORS  
     
-[x] Add check for users file on start,  
+[c] Add check for users file on start,  
     if not present add a setup string.  
     
-[x] Add UAC object to bridge the gap between Webhook and web_interface.  
+[c] Add UAC object to bridge the gap between Webhook and web_interface.  
     - Webhooks only have access to create new builds, if the actor is listed in the webhook config  
     - WWWUsers, have a uac access level and project list, to restrict access on the web_interface  
     
@@ -123,16 +123,16 @@ can change to the UAC object
 
 [ ] add values to projectBuildInfo.json
     - [c] git hash
-    - [ ] 7z hash
+    - [c] 7z hash
     - [ ] canceled by 
 
 [ ] Change build hashing system
     - currently we just the git hash for our build hash, and thats a little harder for build now so.
     [c] Change build hash to a simple md5/sha-1 hash based on the build name.
     [c] Add git hash to formatValues
-    [ ] Add 7z hash to build json.
+    [c] Add 7z hash to build json.
 
-[ ] Find out why we get Can not cancel build, inefficient priv's when a task completes
+[ ] Find out why we get Can not cancel build, insfficient priv's when a task completes
 
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)
