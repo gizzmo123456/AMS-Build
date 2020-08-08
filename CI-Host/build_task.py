@@ -172,10 +172,11 @@ class BuildTask:
 
         self.docker_cof = {
             "container_name": project_name + self.format_values["build_hash"],
-            "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                  # ci-tool mouth point as read only
-            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",              # config mouth point as read only
-            "project-dest": self.config[ "docker" ][ "project-dest" ],              # project source mount point
-            "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],    # build output mount point
+            "stop_timeout": self.get_config_value( "docker", "stop-timeout", default_value=10 ),    # the amount of time to wait until SIGKILL is sent after SIGTERM is sent (can be None)
+            "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                                  # ci-tool mouth point as read only
+            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",                              # config mouth point as read only
+            "project-dest": self.config[ "docker" ][ "project-dest" ],                              # project source mount point
+            "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],                    # build output mount point
             "image": self.config[ "docker" ][ "image" ],
             "args": self.config[ "docker" ][ "args" ]
         }
@@ -277,7 +278,23 @@ class BuildTask:
             self.project_info[ "last_complete_time" ] = time.time()
             self._overwrite_json_file( file, self.project_info )
 
-    def cleanup( self ):
+    def stop_container( self ):
+        """ Stops the tasks container using the docker stop command.
+            The main process inside the container will initially receive a 'SIGTERM' signal,
+            Once the grace period (or stop timeout) [default 10sec] is reached a SIGKILL is sent,
+            to kill the container once and for all :D.
+            The stop_timeout can be added as an optional attribute in the docker section of the
+            pipeline json file
+        """
+
+        docker_stop = "sudo docker stop -t {timeout} {container_name}".format( **self.docker_cof )
+
+        _print("="*25, output_filename=self.stdout_filepath, console=False)
+        _print("--- Stopping Container ---", output_filename=self.stdout_filepath, console=True)    # TODO: set console to False
+        for line in common.run_process( docker_stop, shell=DEFAULT_SHELL ):
+            _print( line, output_filename=self.stdout_filepath, console=True )                      # TODO: set console to False
+
+        _print("--- Container Stopped ---", output_filename=self.stdout_filepath, console=True)     # TODO: set console to False
 
     def cleanup( self, canceled=False ):
 

@@ -4,7 +4,8 @@
     "image": "gableroux/unity3d:2018.4.2f1-windows",
     "args": "-it --rm",
     "project-dest": "/root/project",
-    "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows"
+    "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows",
+    "stop-timeout": 10
   },
   "webhook": {
     "name": "master",

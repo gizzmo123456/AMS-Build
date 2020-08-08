@@ -87,7 +87,8 @@ builds/eProj_hash_build_N/Stage_1/
 [ ] sort out the css and js paths  
 
 [ ] Build Now  
-[ ] Cancel task  
+[ ] Cancel task ->   
+    [ ] this should be added to BuildTask obj so it can preform clean ups and input the data
     [x] pending    
     [ ] active  
 
