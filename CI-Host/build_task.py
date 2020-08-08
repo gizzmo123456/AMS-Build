@@ -119,8 +119,8 @@ class BuildTask:
         # - update git hash if required.
         # - copy master directory to build directory
         # - run build dir commands in copied project source
-
-        _print( "..::Executing Master Dir Prepare Commands::..", output_filename=self.stdout_filepath, console=False )
+        _print("="*25, output_filename=self.stdout_filepath, console=False )
+        _print( "--- Executing Master Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "master-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "master-dir-commands" ] ) > 0:
 
             master_commands = [ mc.format( **self.format_values ) for mc in self.config[ "prepare-build" ][ "master-dir-commands" ] ]
@@ -129,7 +129,7 @@ class BuildTask:
 
         # -
 
-        _print( "..::Updating Git-hash::..", output_filename=self.stdout_filepath, console=False )
+        _print( "--- Updating Git-hash ---", output_filename=self.stdout_filepath, console=False )
         if git_hash == "" and "get-git-hash" in self.config[ "prepare-build" ] and self.config[ "prepare-build" ]["get-git-hash"] == True:
             git_cmd = "git rev-parse HEAD"        # use HEAD to get the repos current hash, after the prepare-build (master)
             temp_git_hash = ""
@@ -141,7 +141,7 @@ class BuildTask:
 
         # -
 
-        _print( "Copying Master To Build Directory", output_filename=self.stdout_filepath, console=False )
+        _print( "--- Copying Master To Build Directory ---", output_filename=self.stdout_filepath, console=False )
         _print( "{master_dir} -> {build_dir}".format( **self.format_values ), output_filename=self.stdout_filepath, console=False )
         for line in common.run_process( "sudo cp -r {master_dir} {build_dir}; "
                                         "cd {build_dir}; ".format( **self.format_values ), shell="bash" ):
@@ -149,7 +149,7 @@ class BuildTask:
 
         # -
 
-        _print( "..::Executing Build Dir Prepare Commands::..", output_filename=self.stdout_filepath, console=False )
+        _print( "--- Executing Build Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "build-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "build-dir-commands" ] ) > 0:
 
             build_commands = [ bc.format( **self.format_values ) for bc in self.config[ "prepare-build" ][ "build-dir-commands" ] ]
