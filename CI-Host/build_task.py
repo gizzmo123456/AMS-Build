@@ -14,12 +14,20 @@ _print = DEBUG.LOGS.print
 class BuildTask:
     "Build tasks..."
 
+    BUILD_STATUS_FAIL =     "fail"
+    BUILD_STATUS_PASS =     "pass"
+    BUILD_STATUS_CANCEL =   "cancel"
+    BUILD_STATUS_SKIP =     "skip"
+    BUILD_STATUS_DUMMY =    "DEBUG-DUMMY-BUILD"
+
     def __init__( self, uac, project_name, git_hash="" ):
         """
         :param uac:             The UAC of the user that triggered the build
         :param project_name:    name of project
         :param build_hash:      build hash
         """
+
+        self.task_canceled = False
 
         self.uac = uac
         # load config file,
@@ -296,7 +304,7 @@ class BuildTask:
 
         _print("--- Container Stopped ---", output_filename=self.stdout_filepath, console=True)     # TODO: set console to False
 
-    def cleanup( self, canceled=False ):
+    def cleanup( self ):
 
         zip = self.get_config_value( "cleanup", "7z_build", False )
         zip_hash = self.get_config_value( "cleanup", "7z_hash" )
@@ -307,7 +315,7 @@ class BuildTask:
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
         # Zip file
-        if not canceled and zip is True:
+        if not self.task_canceled and zip is True:
             _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
             for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values ),
@@ -342,13 +350,13 @@ class BuildTask:
         else:
             _print( "--- Skipping Clean up ---", output_filename=self.stdout_filepath, console=False )
 
-    def append_build_info( self ):
+    def append_build_info( self, status ):
 
         project_build_info_path = "{relv_proj_dir}/{project}/projectBuildInfo.json".format( **self.format_values )
         build_info = {  "name": self.format_values["build_name"],
                         "hash": self.format_values["build_hash"],
                         "build_id": self.format_values["build_index"],
-                        "status": "pass",
+                        "status": status,
                         "trigger_method": self.format_values["trigger_method"],
                         "git_hash": self.format_values[ "git_hash" ],
                         "created_by": self.format_values["actor"],
@@ -400,4 +408,4 @@ class BuildTask:
 
         self.deploy_container()
         self.cleanup()
-        self.append_build_info()
+        self.append_build_info( BuildTask.BUILD_STATUS_PASS )
