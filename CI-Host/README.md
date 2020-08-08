@@ -76,3 +76,13 @@ returns the default values if the user does not have access to the project
 meaning that get_project_info and get_project_build_info can not be used 
 to determin if a project exist or not nor if the user has access to it.
 
+
+===================
+7z hash pipeline Notes.
+values can be 
+- null              (no hash)
+- 'CRC32'
+- 'CRC64'
+- 'SHA1'
+- 'SHA256'
+- 'BLAKE2sp'

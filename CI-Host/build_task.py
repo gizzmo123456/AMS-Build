@@ -6,6 +6,7 @@ import json
 import os.path
 from datetime import datetime
 import time
+import re
 import DEBUG
 _print = DEBUG.LOGS.print
 
@@ -61,10 +62,11 @@ class BuildTask:
             "master_build_name": "master",
             # build
             "build_name": "",
-            "build_hash": BuildTask.__create_build_hash( project_name ),
             "build_index": 0,
-            # git
+            # hashes
+            "build_hash": BuildTask.__create_build_hash( project_name ),
             "git_hash": git_hash,
+            "7z_hash": None,
             # util
             "trigger_method": trigger_method,
             "actor": uac.username,
@@ -277,28 +279,48 @@ class BuildTask:
     def cleanup( self ):
 
         zip = self.get_config_value( "cleanup", "7z_build" )
+        zip_hash = self.get_config_value( "cleanup", "7z_hash" )
         cleanup = self.get_config_value( "cleanup", "remove_build_source" )
+
+        accepted_7z_hashes = [ "crc32", "crc64", "sha1", "sha256", "blake2sp" ]
+
+        _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
         # Zip file
         if zip is not None and zip is True:
-            _print( "Zipping build...", output_filename=self.stdout_filepath, console=False )
+            _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
             for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values ),
                                             "bash" ):
                 _print( line, output_filename=self.stdout_filepath, console=False )
-            _print( "Zipping Complete", output_filename=self.stdout_filepath, console=False )
+            _print( "--- Zipping Complete ---", output_filename=self.stdout_filepath, console=False )
+
+            if zip_hash.lower() in accepted_7z_hashes:
+                _print("--- Generating 7z hash ---", output_filename=self.stdout_filepath, console=False)
+                hash_cmd = "7z h -scrc{hash_type} {build_name}.7z | grep -oP '(?<=for data:).*"
+                temp_7z_hash = ""
+                for line in common.run_process( hash_cmd, shell="bash" ):
+                    temp_7z_hash += line
+
+                temp_7z_hash = re.sub( r'\s', "", temp_7z_hash )    # remove the white space
+                self.format_values["7z_hash"] = temp_7z_hash
+                _print("7z hash:", temp_7z_hash, output_filename=self.stdout_filepath, console=False)
+                _print("--- 7z hash Complete ---", output_filename=self.stdout_filepath, console=False)
+
+
         else:
-            _print( "Skipping Zipping", output_filename=self.stdout_filepath, console=False )
+            _print( "--- Skipping Zipping ---", output_filename=self.stdout_filepath, console=False )
 
         # Clean up
         if cleanup is not None and cleanup is True:
-            _print( "Cleaning Source...", output_filename=self.stdout_filepath, console=False )
+            _print( "--- Cleaning Source ---", output_filename=self.stdout_filepath, console=False )
             # remove the (copied) source folder
             for line in common.run_process( "cd {build_dir}; sudo rm -r {build_source_dir}".format( **self.format_values ), "bash" ):
                 _print( line, output_filename=self.stdout_filepath, console=False )
             _print( "Build Source Removed", output_filename=self.stdout_filepath, console=False )
+            _print( "--- clean source complete ---", output_filename=self.stdout_filepath, console=False )
         else:
-            _print( "Skipping Clean up", output_filename=self.stdout_filepath, console=False )
+            _print( "--- Skipping Clean up ---", output_filename=self.stdout_filepath, console=False )
 
     def append_build_info( self ):
 
@@ -313,7 +335,7 @@ class BuildTask:
                         "canceled_by": None,
                         "created_at": self.format_values["created"],
                         "7z_link": "dl/{project}/{build_name}".format( **self.format_values ),
-                        "7z_hash": "",
+                        "7z_hash": self.format_values["7z_hash"],
                         "output_log": "output/{project}/{build_name}".format( **self.format_values )
                       }
 

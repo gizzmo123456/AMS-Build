@@ -121,15 +121,17 @@ can change to the UAC object
 [ ] Add write stdout to file, in DEBUG.  
 
 [ ] add values to projectBuildInfo.json
-    - [ ] git hash
+    - [c] git hash
     - [ ] 7z hash
     - [ ] canceled by 
 
 [ ] Change build hashing system
     - currently we just the git hash for our build hash, and thats a little harder for build now so.
-    [ ] Change build hash to a simple md5/sha-1 hash based on the build name.
-    [ ] Add git hash to formatValues
+    [c] Change build hash to a simple md5/sha-1 hash based on the build name.
+    [c] Add git hash to formatValues
     [ ] Add 7z hash to build json.
+
+[ ] Find out why we get Can not cancel build, inefficient priv's when a task completes
 
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)
