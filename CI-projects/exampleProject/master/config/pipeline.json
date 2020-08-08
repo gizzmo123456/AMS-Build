@@ -17,6 +17,7 @@
       "cd testCIGame/",
       "sudo git pull origin master "
     ],
+    "get-git-hash": true,
     "build-dir-commands": [
       "cd testCIGame/",
       "sudo git checkout --detach {build_hash}"

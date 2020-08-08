@@ -118,7 +118,18 @@ can change to the UAC object
 
 [ ] find out why .secrets are by user 'me' not 'root'  
 
-[ ] Add wirte stdout to file, in DEBUG.  
+[ ] Add write stdout to file, in DEBUG.  
+
+[ ] add values to projectBuildInfo.json
+    - [ ] git hash
+    - [ ] 7z hash
+    - [ ] canceled by 
+
+[ ] Change build hashing system
+    - currently we just the git hash for our build hash, and thats a little harder for build now so.
+    [ ] Change build hash to a simple md5/sha-1 hash based on the build name.
+    [ ] Add git hash to formatValues
+    [ ] Add 7z hash to build json.
 
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)

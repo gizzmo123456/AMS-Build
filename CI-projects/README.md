@@ -18,11 +18,12 @@ CI-projects                     # All project root
 
 
 ```
-Pipeline files contain 4 sections.
-1. docker       (required)
-2. webhook      (optional)
-3. environment  (optional)
-4. pipeline     (required)
+Pipeline files contain 5 sections.
+1. docker           (required)
+2. webhook          (optional)
+3. prepare-build    (required)  (docs to do)
+4. environment      (optional)
+5. pipeline         (required)
 
 More info to follow....
 
@@ -46,5 +47,11 @@ More info to follow....
 # When a build is triggered it first runs the master-commands, followed by
 # copying the master into builds folder and renaming accordingly, then
 # executing the pre-build-commands, ready to execute the build.
+
+
+IMPORTANT NOTE: Prepare-build. If get_git_hash == true. master-dir-commands must be left in the 
+git directory that we want to get the git hash from. 
+Also Get git hash is skipped if supplied with the constructor. Otherwise it is executed directly
+after the master folder is updated.
 
 ```

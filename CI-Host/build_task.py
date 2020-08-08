@@ -1,4 +1,5 @@
 from const import *
+import hashlib
 import common
 import commonProject
 import json
@@ -12,7 +13,7 @@ _print = DEBUG.LOGS.print
 class BuildTask:
     "Build tasks..."
 
-    def __init__( self, uac, project_name, build_hash ):
+    def __init__( self, uac, project_name, git_hash="" ):
         """
         :param uac:             The UAC of the user that triggered the build
         :param project_name:    name of project
@@ -60,14 +61,19 @@ class BuildTask:
             "master_build_name": "master",
             # build
             "build_name": "",
-            "build_hash": build_hash,
+            "build_hash": BuildTask.__create_build_hash( project_name ),
             "build_index": 0,
+            # git
+            "git_hash": git_hash,
             # util
             "trigger_method": trigger_method,
-            "container_name": project_name+build_hash,
             "actor": uac.username,
             "created": datetime.now().strftime( "%d/%m/%Y @ %H:%M:%S" ),
             "started_build": -1
+        }
+
+        self.__format_values = {
+
         }
 
         self._project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
@@ -89,7 +95,7 @@ class BuildTask:
 
             # update project info
             self.project_info[ "latest_build_index" ] = self.format_values[ "build_index" ]
-            self.project_info[ "latest_build_key"] = build_hash
+            self.project_info[ "latest_build_key"] = self.format_values[ "build_hash" ]
             self.project_info[ "last_created_time" ] = time.time()
 
             self._overwrite_json_file( file, self.project_info )
@@ -106,10 +112,11 @@ class BuildTask:
 
         # Note: until the master directory is copied, the output does not exist,
         #       So _print calls with output_filename defined are queued, until the file does exist
-        _print("Starting master/pre-build commands for project '{project}' @ {created}: LOG OUTPUT FILE PATH: {stdout}".format( stdout=self.stdout_filepath, **self.format_values), self.stdout_filepath)
+        _print("\nStarting master/pre-build commands for project '{project}' @ {created}: LOG OUTPUT FILE PATH: {stdout}".format( stdout=self.stdout_filepath, **self.format_values), self.stdout_filepath)
 
         # prepare the build.
         # - run master dir commands in the master project source
+        # - update git hash if required.
         # - copy master directory to build directory
         # - run build dir commands in copied project source
 
@@ -119,6 +126,18 @@ class BuildTask:
             master_commands = [ mc.format( **self.format_values ) for mc in self.config[ "prepare-build" ][ "master-dir-commands" ] ]
             for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
                 _print(line, output_filename=self.stdout_filepath, console=False)
+
+        # -
+
+        _print( "..::Updating Git-hash::..", output_filename=self.stdout_filepath, console=False )
+        if git_hash == "" and "get-git-hash" in self.config[ "prepare-build" ] and self.config[ "prepare-build" ]["get-git-hash"] == True:
+            git_cmd = "git rev-parse HEAD"        # use HEAD to get the repos current hash, after the prepare-build (master)
+            temp_git_hash = ""
+            for line in common.run_process( git_cmd, shell="bash" ):
+                temp_git_hash += line
+
+            _print( "GitHash: {0}".format(temp_git_hash), output_filename=self.stdout_filepath, console=False )
+            self.format_values["git_hash"] = temp_git_hash
 
         # -
 
@@ -147,6 +166,7 @@ class BuildTask:
         }
 
         self.docker_cof = {
+            "container_name": project_name + self.format_values["build_hash"],
             "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                  # ci-tool mouth point as read only
             "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",              # config mouth point as read only
             "project-dest": self.config[ "docker" ][ "project-dest" ],              # project source mount point
@@ -159,6 +179,12 @@ class BuildTask:
         _print( "SUCCESSFULLY INITIALIZED BUILD TASK", output_filename=self.stdout_filepath, console=False )
         _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
+
+    @staticmethod
+    def __create_build_hash( project_name ):
+        s = hashlib.sha1()
+        s.update( "{name}-{time}".format( name=project_name, time=time.time() ).encode() )
+        return s.hexdigest()
 
     def _update_project_info( self ):
 
@@ -227,7 +253,7 @@ class BuildTask:
                     "-v {ci_config_path}:{ci_config_dest} " \
                     "-v {ci_build_path}:{ci_build_dest} " \
                     "{image} " \
-                    "{cmd}".format( container_name=self.format_values["container_name"].lower(), args=self.docker_cof[ "args" ],
+                    "{cmd}".format( container_name=self.docker_cof["container_name"].lower(), args=self.docker_cof[ "args" ],
                                     project_path=self.local_cof[ "project" ], project_dest=self.docker_cof[ "project-dest" ],
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
                                     ci_config_path=self.local_cof[ "ci-config" ], ci_config_dest=self.docker_cof[ "ci-config-dest" ],
