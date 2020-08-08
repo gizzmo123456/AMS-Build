@@ -211,18 +211,19 @@ class BuildTask:
         file.write( json.dumps( json_dict ) )
         file.truncate()
 
-    def get_config_value( self, *keys ):    ## Todo this needs to be replaced with common.get_value_at_key
-        """Gets the config value at keys
-        :param keys: each key of the config value ie.
-                    keys "webhook", "name" would return config[webhook][name]
-                    or "pipeline", "commands", 0 would return config[pipeline][commands][0]
-                    Returns None if no set.
+    def get_config_value( self, *keys, default_value=None ):    ## Todo this needs to be replaced with common.get_value_at_key
+        """Safely gets the config value at keys
+        :param keys:            each key of the config value ie.
+                                keys "webhook", "name" would return config[webhook][name]
+                                or "pipeline", "commands", 0 would return config[pipeline][commands][0]
+                                Returns None if no set.
+        :param default_value:   The default value to be returned if the key is not found
         """
         value = self.config
         for key in keys:
             # key is not valid if not a dict or list or if the key is an int and the value is not a list
             if (type(value) is not list and type(value) is not dict) or (type(value) is list and type(key) is not int):
-                return None
+                return default_value
             # if value is a list, this key is an int and in range
             elif type(value) is list and type(key) is int and key >= 0 and key < len(key):
                 value = value[key]
@@ -230,7 +231,7 @@ class BuildTask:
             elif key in value:
                 value = value[key]
             else: # not defined.
-                return None
+                return default_value
 
         return value
 
@@ -278,16 +279,18 @@ class BuildTask:
 
     def cleanup( self ):
 
-        zip = self.get_config_value( "cleanup", "7z_build" )
+    def cleanup( self, canceled=False ):
+
+        zip = self.get_config_value( "cleanup", "7z_build", False )
         zip_hash = self.get_config_value( "cleanup", "7z_hash" )
-        cleanup = self.get_config_value( "cleanup", "remove_build_source" )
+        cleanup = self.get_config_value( "cleanup", "remove_build_source", False )
 
         accepted_7z_hashes = [ "crc32", "crc64", "sha1", "sha256", "blake2sp" ]
 
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
         # Zip file
-        if zip is not None and zip is True:
+        if not canceled and zip is True:
             _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
             for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values ),
@@ -312,7 +315,7 @@ class BuildTask:
             _print( "--- Skipping Zipping ---", output_filename=self.stdout_filepath, console=False )
 
         # Clean up
-        if cleanup is not None and cleanup is True:
+        if cleanup is True:
             _print( "--- Cleaning Source ---", output_filename=self.stdout_filepath, console=False )
             # remove the (copied) source folder
             for line in common.run_process( "cd {build_dir}; sudo rm -r {build_source_dir}".format( **self.format_values ), "bash" ):
