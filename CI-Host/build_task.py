@@ -305,9 +305,12 @@ class BuildTask:
                         "build_id": self.format_values["build_index"],
                         "status": "pass",
                         "trigger_method": self.format_values["trigger_method"],
+                        "git_hash": self.format_values[ "git_hash" ],
                         "created_by": self.format_values["actor"],
+                        "canceled_by": None,
                         "created_at": self.format_values["created"],
                         "7z_link": "dl/{project}/{build_name}".format( **self.format_values ),
+                        "7z_hash": "",
                         "output_log": "output/{project}/{build_name}".format( **self.format_values )
                       }
 
