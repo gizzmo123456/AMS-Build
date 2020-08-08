@@ -119,7 +119,6 @@ class BuildTask:
         # - update git hash if required.
         # - copy master directory to build directory
         # - run build dir commands in copied project source
-        _print("\n="*25, output_filename=self.stdout_filepath, console=False )
         _print( "--- Executing Master Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "master-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "master-dir-commands" ] ) > 0:
 
