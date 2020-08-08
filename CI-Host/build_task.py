@@ -325,7 +325,8 @@ class BuildTask:
 
             if zip_hash.lower() in accepted_7z_hashes:
                 _print("--- Generating 7z hash ---", output_filename=self.stdout_filepath, console=False)
-                hash_cmd = "7z h -scrc{hash_type} {build_name}.7z | grep -oP '(?<=for data:).*'"
+                hash_cmd = "7z h -scrc{hash_type} {build_name}.7z | grep -oP '(?<=for data:).*'".format(hash_type=zip_hash.lower(),
+                                                                                                        build_name=self.format_values[ "build_name" ])
                 temp_7z_hash = ""
                 for line in common.run_process( hash_cmd, shell=DEFAULT_SHELL ):
                     temp_7z_hash += line
