@@ -1,1 +1,1 @@
-{time} waiting to start job.
+Project STDOUT.

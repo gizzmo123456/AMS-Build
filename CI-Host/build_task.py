@@ -119,7 +119,7 @@ class BuildTask:
         # - update git hash if required.
         # - copy master directory to build directory
         # - run build dir commands in copied project source
-        _print("="*25, output_filename=self.stdout_filepath, console=False )
+        _print("\n="*25, output_filename=self.stdout_filepath, console=False )
         _print( "--- Executing Master Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "master-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "master-dir-commands" ] ) > 0:
 
@@ -130,14 +130,18 @@ class BuildTask:
         # -
 
         _print( "--- Updating Git-hash ---", output_filename=self.stdout_filepath, console=False )
-        if git_hash == "" and "get-git-hash" in self.config[ "prepare-build" ] and self.config[ "prepare-build" ]["get-git-hash"] == True:
+        update_git_hash = "get-git-hash" in self.config[ "prepare-build" ] and self.config[ "prepare-build" ]["get-git-hash"] is True
+        if git_hash == "" and update_git_hash:
             git_cmd = "git rev-parse HEAD"        # use HEAD to get the repos current hash, after the prepare-build (master)
             temp_git_hash = ""
             for line in common.run_process( git_cmd, shell="bash" ):
                 temp_git_hash += line
 
-            _print( "GitHash: {0}".format(temp_git_hash), output_filename=self.stdout_filepath, console=False )
-            self.format_values["git_hash"] = temp_git_hash
+            _print( "GitHash: {0}".format( temp_git_hash ), output_filename=self.stdout_filepath, console=False )
+            self.format_values[ "git_hash" ] = temp_git_hash
+
+        else:
+            _print( "Skipped. Pipeline update: {0} git_hash: {1}".format(update_git_hash, self.format_values["git_hash"]), output_filename=self.stdout_filepath, console=False )
 
         # -
 
