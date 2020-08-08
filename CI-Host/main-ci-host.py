@@ -15,6 +15,7 @@ import user_manager
 
 SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
+SKIP_TASK_CLEAN_UP = True
 
 def web_hook():
 
@@ -95,8 +96,10 @@ def task_worker(job):
 
     _print("Starting new task")
     if SKIP_TASK_EXECUTION:
-        time.sleep( SKIP_TASK_DELAY )   # simulate build
-        job.append_build_info()         # updating build list
+        time.sleep( SKIP_TASK_DELAY )                           # simulate build
+        if SKIP_TASK_CLEAN_UP:
+            job.cleanup()                                       # Clean up the job
+        job.append_build_info( job.BUILD_STATUS_DUMMY )         # updating build list
     else:
         job.execute()
 
