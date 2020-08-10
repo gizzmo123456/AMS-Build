@@ -14,33 +14,46 @@ _print = DEBUG.LOGS.print
 class BuildTask:
     "Build tasks..."
 
-    BUILD_STATUS_FAIL =     "fail"
-    BUILD_STATUS_PASS =     "pass"
-    BUILD_STATUS_CANCEL =   "cancel"
-    BUILD_STATUS_SKIP =     "skip"
-    BUILD_STATUS_DUMMY =    "DEBUG-DUMMY-BUILD"
+    BUILD_STATUS_FAIL   = "fail"
+    BUILD_STATUS_PASS   = "pass"
+    BUILD_STATUS_CANCEL = "cancel"
+    BUILD_STATUS_SKIP   = "skip"
+    BUILD_STATUS_DUMMY  = "DEBUG-DUMMY-BUILD"
+
+    TASK_STATE_CANCELED      = -1
+    TASK_STATE_INIT          = 0
+    TASK_STATE_CREATED       = 1
+    TASK_STATE_EXECUTING     = 2
+    TASK_STATE_CLEANING      = 3
+    TASK_STATE_COMPLETE      = 4
+
+    CONTAINER_STATE_PENDING      = 0
+    CONTAINER_STATE_PULL         = 1
+    CONTAINER_STATE_RUNNING      = 2
+    CONTAINER_STATE_EXITED       = 3
 
     def __init__( self, uac, project_name, git_hash="" ):
         """
         :param uac:             The UAC of the user that triggered the build
         :param project_name:    name of project
-        :param build_hash:      build hash
+        :param git_hash:      build hash
         """
 
-        self.task_canceled = False
+        self.task_state = BuildTask.TASK_STATE_INIT
+        self.container_state = BuildTask.CONTAINER_STATE_PENDING
 
         self.uac = uac
         # load config file,
         self.config = commonProject.get_project_pipeline( uac, project_name )
 
         # make sure that the config file contains the bare minimal
-        self.valid = self.config is not None and \
-                     "docker"        in self.config and \
-                     "prepare-build" in self.config and \
-                     "pipeline"      in self.config
+        # Use the IsValid Method to check if the task is in a valid state
+        self.__valid = self.config is not None and \
+                       "docker"        in self.config and \
+                       "prepare-build" in self.config and \
+                       "pipeline"      in self.config
 
-
-        if not self.valid:
+        if not self.__valid:
             _print( "Task not valid, ignoring. Either no pipeline, Invalid pipeline or no access ", project_name, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
 
@@ -193,6 +206,17 @@ class BuildTask:
         _print( "SUCCESSFULLY INITIALIZED BUILD TASK", output_filename=self.stdout_filepath, console=False )
         _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
+
+    def is_valid( self ):
+        """ A task is considered valid if the pipeline contains all required field
+            and the task has not been canceled, and the container has not exited
+        """
+        return self.__valid and \
+               self.task_state != BuildTask.TASK_STATE_CANCELED and \
+               self.container_state != BuildTask.CONTAINER_STATE_EXITED
+
+    def can_execute( self ):
+        return self.is_valid() and self.task_state < BuildTask.TASK_STATE_EXECUTING
 
     @staticmethod
     def __create_build_hash( project_name ):
@@ -376,8 +400,8 @@ class BuildTask:
 
     def execute( self ):
 
-        if not self.valid:
-            _print("Invalid task, ignoring...", output_filename=self.stdout_filepath)
+        if not self.can_execute():
+            _print("Unable to execute task. Config valid:", self.__valid, "Current State:", self.task_state, output_filename=self.stdout_filepath)
             return
 
         # update the project info last execute time
@@ -410,3 +434,6 @@ class BuildTask:
         self.deploy_container()
         self.cleanup()
         self.append_build_info( BuildTask.BUILD_STATUS_PASS )
+
+    def cancel( self ):
+        pass

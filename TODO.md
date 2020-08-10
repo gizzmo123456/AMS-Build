@@ -89,7 +89,7 @@ builds/eProj_hash_build_N/Stage_1/
 [ ] Build Now  
 [ ] Cancel task ->   
     [ ] this should be added to BuildTask obj so it can preform clean ups and input the data
-    [x] pending    
+    [x] pending  
     [ ] active  
 
 [x] Fix tasks title heading overflow  
