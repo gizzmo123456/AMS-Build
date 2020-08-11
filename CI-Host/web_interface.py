@@ -431,11 +431,17 @@ class WebInterface( baseHTTPServer.BaseServer ):
                                                            build_hash=build_hash, complete_callback=user.queue_action_callback )
             else:
                 user_message_status = WWWUser.MSG_STATUS_ERROR
-                user_message = "Unable to cancel Task  for {project} with hash {build_hash}," \
+                user_message = "Unable to cancel Task for {project} with hash {build_hash}," \
                                " Project does not exist or insufficient privileges".format( build_hash=build_hash, project=project)
 
         elif request_path[1].lower() == "build" and request_path_len >= 3:   # action/build/{project}
-            pass
+            if user_has_access:
+                user_message = "Queue Build Task for {project}".format( project=project )
+                WebInterface.shared_task_queue.queue_task( "build", uac=user.get_uac(), project=project, build_hash=None )  # TODO: rename buld hash to git_hash
+            else:
+                user_message_status = WWWUser.MSG_STATUS_ERROR
+                user_message = "Unable to create Build Task for {project}," \
+                               " Project does not exist or insufficient privileges".format( project=project )
         else:
             return "404, Not Found", HTTPStatus.NOT_FOUND, "text/html", None
 
