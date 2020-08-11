@@ -41,6 +41,7 @@ class BuildTask:
 
         self.task_state = BuildTask.TASK_STATE_INIT
         self.container_state = BuildTask.CONTAINER_STATE_PENDING
+        self.build_status = BuildTask.BUILD_STATUS_PASS
 
         self.uac = uac
         # load config file,
@@ -202,6 +203,8 @@ class BuildTask:
             "args": self.config[ "docker" ][ "args" ]
         }
 
+        self.task_state = BuildTask.TASK_STATE_CREATED
+
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
         _print( "SUCCESSFULLY INITIALIZED BUILD TASK", output_filename=self.stdout_filepath, console=False )
         _print( "Waiting to start task...", output_filename=self.stdout_filepath, console=False )
@@ -323,12 +326,19 @@ class BuildTask:
 
         _print("="*25, output_filename=self.stdout_filepath, console=False)
         _print("--- Stopping Container ---", output_filename=self.stdout_filepath, console=True)    # TODO: set console to False
+
+        self.container_state = BuildTask.CONTAINER_STATE_RUNNING
+
         for line in common.run_process( docker_stop, shell=DEFAULT_SHELL ):
             _print( line, output_filename=self.stdout_filepath, console=True )                      # TODO: set console to False
+
+        self.container_state = BuildTask.CONTAINER_STATE_EXITED
 
         _print("--- Container Stopped ---", output_filename=self.stdout_filepath, console=True)     # TODO: set console to False
 
     def cleanup( self ):
+
+        self.task_state = BuildTask.TASK_STATE_CLEANING
 
         zip = self.get_config_value( "cleanup", "7z_build", default_value=False )
         zip_hash = self.get_config_value( "cleanup", "7z_hash" )
@@ -339,7 +349,7 @@ class BuildTask:
         _print( "="*25, output_filename=self.stdout_filepath, console=False )
 
         # Zip file
-        if not self.task_canceled and zip is True:
+        if self.task_state != BuildTask.TASK_STATE_CANCELED and zip is True:
             _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
             for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values ),
@@ -375,13 +385,13 @@ class BuildTask:
         else:
             _print( "--- Skipping Clean up ---", output_filename=self.stdout_filepath, console=False )
 
-    def append_build_info( self, status ):
+    def append_build_info( self ):
 
         project_build_info_path = "{relv_proj_dir}/{project}/projectBuildInfo.json".format( **self.format_values )
         build_info = {  "name": self.format_values["build_name"],
                         "hash": self.format_values["build_hash"],
                         "build_id": self.format_values["build_index"],
-                        "status": status,
+                        "status": self.build_status,
                         "trigger_method": self.format_values["trigger_method"],
                         "git_hash": self.format_values[ "git_hash" ],
                         "created_by": self.format_values["actor"],
@@ -404,6 +414,8 @@ class BuildTask:
             _print("Unable to execute task. Config valid:", self.__valid, "Current State:", self.task_state, output_filename=self.stdout_filepath)
             return
 
+        self.task_state = BuildTask.TASK_STATE_EXECUTING
+
         # update the project info last execute time
         with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
@@ -413,6 +425,8 @@ class BuildTask:
         _print( "Local Config:", self.local_cof, output_filename=self.stdout_filepath, console=False )
         _print( "Docker Config:", self.docker_cof, output_filename=self.stdout_filepath, console=False )
         _print( "=" * 24, output_filename=self.stdout_filepath, console=False )
+
+        self.container_state = BuildTask.CONTAINER_STATE_PULL
 
         _print( "Verifying image exist...", output_filename=self.stdout_filepath, console=False )
         image_exist = self.local_image_exist()
@@ -429,11 +443,34 @@ class BuildTask:
 
         _print( "=" * 24, output_filename=self.stdout_filepath, console=False )
 
-        _print( "Deploying docker container, please wait...", output_filename=self.stdout_filepath, console=False )
+        # make sure that the task has not ben canceled while we where pulling the image.
+        if self.task_state != BuildTask.TASK_STATE_CANCELED:
+            _print( "Deploying docker container, please wait...", output_filename=self.stdout_filepath, console=False )
+            self.deploy_container()
+        else:
+            _print( "Skipping container deploy, Task Canceled", output_filename=self.stdout_filepath, console=False )
 
-        self.deploy_container()
         self.cleanup()
-        self.append_build_info( BuildTask.BUILD_STATUS_PASS )
+        self.append_build_info()
+
+        self.task_state = BuildTask.TASK_STATE_COMPLETE
 
     def cancel( self ):
-        pass
+
+        _print( "--- Canceling Task ---", output_filename=self.stdout_filepath, console=False )
+
+        self.task_state = BuildTask.TASK_STATE_CANCELED
+        self.build_status = BuildTask.BUILD_STATUS_CANCEL
+
+        if self.task_state < BuildTask.TASK_STATE_EXECUTING:
+            self.cleanup()
+            self.append_build_info()
+
+        elif self.container_state == BuildTask.CONTAINER_STATE_RUNNING:
+            # TODO: NOTE: possible BUG: If the container is launching im not 100% the stop container method will work
+            # if the container is running we need to kill it.
+            _print( "Attempting to stop container...", output_filename=self.stdout_filepath, console=False )
+            self.stop_container()
+
+        _print( "--- Task Canceled ---", output_filename=self.stdout_filepath, console=False )
+

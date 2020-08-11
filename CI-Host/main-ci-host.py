@@ -82,24 +82,38 @@ def cancel_task( q_item ):
     # search pending tasks.
     for i in range(len(pending_tasks)):
         if pending_tasks[i].format_values["build_hash"] == q_item.build_hash:
-            pending_tasks.pop(i)
+            # remove job from pending tasks list to prevent it progressing onto active
+            canceled_job = pending_tasks.pop(i)
+            threading.Thread( target=cancel_worker, args=(canceled_job,) ).start()
             return True
 
     # search active tasks.
     for i in range(len(active_tasks)):
         if active_tasks[i][1].format_values["build_hash"] == q_item.build_hash:
-            _print("Can not stop active task atm :( ")
+            # leave the task in the active task list,
+            # as it will be remove once the container closes and the job worker exits
+            # making sure that no other task is launched while its still running.
+            canceled_job = active_tasks[ i ]
+            threading.Thread( target=cancel_worker, args=(canceled_job,) ).start()
             return False
 
+    return False
+
+def cancel_worker(job):
+    _print("Canceling task for ", job.format_values["project"] )
+    job.cancel()
+    _print("Task Canceled")
 
 def task_worker(job):
 
     _print("Starting new task")
     if SKIP_TASK_EXECUTION:
+        job.build_status = job.BUILD_STATUS_DUMMY
         time.sleep( SKIP_TASK_DELAY )                           # simulate build
-        if SKIP_TASK_CLEAN_UP:
-            job.cleanup()                                       # Clean up the job
-        job.append_build_info( job.BUILD_STATUS_DUMMY )         # updating build list
+        if job.task_state != job.TASK_STATE_CANCELED:           # if its canceled the cancel method will clean up for us.
+            if SKIP_TASK_CLEAN_UP:
+                job.cleanup()                                   # Clean up the job
+            job.append_build_info()                            # updating build list
     else:
         job.execute()
 
