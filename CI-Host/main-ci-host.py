@@ -144,6 +144,7 @@ if __name__ == "__main__":
     task_queue = queue.Queue()
 
     # setup queue items
+    # All Queue items action (execution) callback functions must container exactly one param, q_item.
     queue_item.QueueItem.add_action("build_finished", lambda q_item: True )   # queue unblocking task
     queue_item.QueueItem.add_action("cancel_task", cancel_task )
 
@@ -151,7 +152,9 @@ if __name__ == "__main__":
     # Only exposing the Queue objects available to the module the
     # queue is shared with.
     sharded_queue = sharedQueue.SharedQueue( task_queue )
+
     # add all available actions in the shared queue
+    # Sharded queue actions, must return a constructed instance of either a BuildTask or QueueItem.
     sharded_queue.set_action( "build",       lambda uac, project, build_hash: build_task.BuildTask(uac, project, build_hash) )
     sharded_queue.set_action( "cancel_task", lambda uac, project, build_hash, complete_callback=None: queue_item.QueueItem(uac, project, "cancel_task", build_hash=build_hash, complete_callback=complete_callback) )
 
