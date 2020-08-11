@@ -96,10 +96,10 @@ class LOGS:
                 continue
 
             if console:
-                print( " | {0} | {1} | {2} ".format( log_time, log_type, message ) )
+                print( "| {0} | {1} | {2} ".format( log_time, log_type, message ) )
 
             if output_file:
-                LOGS.__log_to_file(output_file, " | {0} | {1} ".format( log_time, message ))
+                LOGS.__log_to_file(output_file, "| {0} | {1} ".format( log_time, message ))
 
         LOGS.active = False
         print("Dead debug thread")
@@ -120,7 +120,6 @@ class LOGS:
                 LOGS.__file_queue[file_path].append(message)
             else:
                 LOGS.__file_queue[file_path] = [ message ]
-            print("Debug message queued for writing to file")
             return
         else:
             if file_path in LOGS.__file_queue:  # compile any queued messages.
