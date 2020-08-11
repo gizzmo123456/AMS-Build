@@ -463,6 +463,8 @@ class BuildTask:
 
         if self.build_status == BuildTask.BUILD_STATUS_DUMMY:
             self.build_status += "-"+BuildTask.BUILD_STATUS_CANCEL
+        else:
+            self.build_status = BuildTask.BUILD_STATUS_CANCEL
 
         if self.task_state < BuildTask.TASK_STATE_EXECUTING:
             self.cleanup()
