@@ -406,10 +406,10 @@ class WebInterface( baseHTTPServer.BaseServer ):
         build_hash = None
 
         if request_path_len > 2:
-            project = request_path[2].lower()
+            project = request_path[2]
 
         if request_path_len > 3:
-            build_hash = request_path[3].lower()
+            build_hash = request_path[3]
 
         # user messages and permissions.
         user_message = ""
