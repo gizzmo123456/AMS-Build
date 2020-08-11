@@ -193,7 +193,7 @@ class BuildTask:
         }
 
         self.docker_cof = {
-            "container_name": project_name + self.format_values["build_hash"],
+            "container_name": project_name.lower() + self.format_values["build_hash"].lower(),
             "stop_timeout": self.get_config_value( "docker", "stop-timeout", default_value=10 ),    # the amount of time to wait until SIGKILL is sent after SIGTERM is sent (can be None)
             "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                                  # ci-tool mouth point as read only
             "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",                              # config mouth point as read only
