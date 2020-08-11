@@ -305,8 +305,12 @@ class BuildTask:
 
         _print( "DOCKER RUN:\n", dockerRun, output_filename=self.stdout_filepath, console=False )
 
+        self.container_state = BuildTask.CONTAINER_STATE_RUNNING
+
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
             _print(line, output_filename=self.stdout_filepath, console=False)
+
+        self.container_state = BuildTask.CONTAINER_STATE_EXITED
 
         with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
@@ -326,8 +330,6 @@ class BuildTask:
 
         _print("="*25, output_filename=self.stdout_filepath, console=False)
         _print("--- Stopping Container ---", output_filename=self.stdout_filepath, console=True)    # TODO: set console to False
-
-        self.container_state = BuildTask.CONTAINER_STATE_RUNNING
 
         for line in common.run_process( docker_stop, shell=DEFAULT_SHELL ):
             _print( line, output_filename=self.stdout_filepath, console=True )                      # TODO: set console to False
