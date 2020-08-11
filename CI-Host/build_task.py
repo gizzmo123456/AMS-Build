@@ -326,7 +326,7 @@ class BuildTask:
             pipeline json file
         """
 
-        docker_stop = "sudo docker stop -t {timeout} {container_name}".format( **self.docker_cof )
+        docker_stop = "sudo docker stop -t {stop_timeout} {container_name}".format( **self.docker_cof )
 
         _print("="*25, output_filename=self.stdout_filepath, console=False)
         _print("--- Stopping Container ---", output_filename=self.stdout_filepath, console=True)    # TODO: set console to False
@@ -458,6 +458,9 @@ class BuildTask:
         self.task_state = BuildTask.TASK_STATE_COMPLETE
 
     def cancel( self ):
+
+        if self.task_state == BuildTask.TASK_STATE_CANCELED:
+            _print( "Unable to cancel task - Already marked as canceled" )
 
         _print( "--- Canceling Task ---", output_filename=self.stdout_filepath, console=False )
 
