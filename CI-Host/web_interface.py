@@ -416,23 +416,23 @@ class WebInterface( baseHTTPServer.BaseServer ):
         user_message_status = WWWUser.MSG_STATUS_OK
         user_has_access = user.get_uac().has_project_access( project )
 
+        # update status bases on users access
+        if user_has_access:
+            http_message = "202, Cancel Task Accepted!"
+            http_status = HTTPStatus.ACCEPTED
+        else:
+            http_status = HTTPStatus.NOT_ACCEPTABLE
+            http_message = "406, Task Not Acceptable"
+
         if action_type == "cancel" and request_path_len >= 4:   # action/cancel/{project}/{build_hash}
-
             if user_has_access:
-                http_message = "202, Cancel Task Accepted!"
-                http_status = HTTPStatus.ACCEPTED
-
                 user_message = "Canceling Task for {project} with hash {build_hash}".format( build_hash=build_hash, project=project)
-
                 WebInterface.shared_task_queue.queue_task( "cancel_task", uac=user.get_uac(), project=project,
                                                            build_hash=build_hash, complete_callback=user.queue_action_callback )
             else:
-                http_status = HTTPStatus.NOT_ACCEPTABLE
-                http_message = "406, Task Not Acceptable"
-
+                user_message_status = WWWUser.MSG_STATUS_ERROR
                 user_message = "Unable to cancel Task  for {project} with hash {build_hash}," \
                                " Project does not exist or insufficient privileges".format( build_hash=build_hash, project=project)
-                user_message_status = WWWUser.MSG_STATUS_ERROR
 
         elif request_path[1].lower() == "build" and request_path_len >= 3:   # action/build/{project}
             pass
