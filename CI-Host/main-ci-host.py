@@ -94,7 +94,7 @@ def cancel_task( q_item ):
             # as it will be remove once the container closes and the job worker exits
             # making sure that no other task is launched while its still running.
             canceled_job = active_tasks[ i ]
-            threading.Thread( target=cancel_worker, args=(canceled_job,) ).start()
+            threading.Thread( target=cancel_worker, args=(canceled_job[1],) ).start()
             return False
 
     return False
