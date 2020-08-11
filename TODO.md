@@ -3,11 +3,11 @@
 - [x] Finishing mapping file path
 - [x] Add copy master, to build folder
 - [x] Add build log
-- [wip] redesign the json file.
+- [x] redesign the json file.
 
 - [x] Add Basic webhook
 - - [x] test 
-- [wip] add simple webpage
+- [x] add simple webpage
 
 ============================================
 
@@ -87,10 +87,10 @@ builds/eProj_hash_build_N/Stage_1/
 [ ] sort out the css and js paths  
 
 [ ] Build Now  
-[ ] Cancel task ->   
-    [ ] this should be added to BuildTask obj so it can preform clean ups and input the data
+[x] Cancel task ->   
+    [x] this should be added to BuildTask obj so it can preform clean ups and input the data
     [x] pending  
-    [ ] active  
+    [x] active  
 
 [x] Fix tasks title heading overflow  
 [x] Fix build no zipping :(  
@@ -134,11 +134,40 @@ can change to the UAC object
 
 [ ] Find out why we get Can not cancel build, insfficient priv's when a task completes
 
+[ ] Improve WWWUser message feedback when trigger tasks via the web_userInterface.
+    - iv notices that it returns completed successful when a request has only been excepted
+      So i think it would be good, if there was a message to say the request has been made,
+      Accepted and complete
+      
+
+========================================================================
+Release v1.0.0 TODO.
+========================================================================
+[ ] Update Documents
+    - Readme
+    - Json description docs
+    - Todo Refresh
+[ ] Clean install
+[ ] SSL
+[ ] Push to GitHub
+
+========================================================================
+v1.0.0 Missed Features TODO. 
+========================================================================
+TODO... 
+
+========================================================================
+Post v1.0.0 Release TODO.
+========================================================================
+[ ] Auto Build Deletion (for builds older than X amount of time)  
+    With the option to keep the first/last build of each month   
+
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)
 ========================================================================
 [ ] Add users  
 [ ] Add project  
+[ ] Pipeline Editor
 [ ] Remove Builds  
 
 [ ] Add method to get empty templates, useful for message output  
@@ -171,3 +200,9 @@ this will then alow us to set more dynamic headers
 and will be able to move js, css directorys into its   
 own wwwPage, to clean things up a little  
  
+========================================================================
+Known Issues
+========================================================================
+- When running a container print messages have a load of white space added 
+  for some unknown reason.
+
