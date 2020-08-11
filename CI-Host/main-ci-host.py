@@ -96,7 +96,7 @@ def cancel_task( q_item ):
             # making sure that no other task is launched while its still running.
             canceled_job = active_tasks[ i ]
             threading.Thread( target=cancel_worker, args=(canceled_job[1],) ).start()
-            return False
+            return True
 
     return False
 
