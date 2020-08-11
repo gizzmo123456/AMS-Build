@@ -459,6 +459,7 @@ class BuildTask:
 
         _print( "--- Canceling Task ---", output_filename=self.stdout_filepath, console=False )
 
+        state_when_canceled = self.task_state
         self.task_state = BuildTask.TASK_STATE_CANCELED
 
         if self.build_status == BuildTask.BUILD_STATUS_DUMMY:
@@ -466,7 +467,7 @@ class BuildTask:
         else:
             self.build_status = BuildTask.BUILD_STATUS_CANCEL
 
-        if self.task_state < BuildTask.TASK_STATE_EXECUTING:
+        if state_when_canceled < BuildTask.TASK_STATE_EXECUTING:
             self.cleanup()
             self.append_build_info()
 
