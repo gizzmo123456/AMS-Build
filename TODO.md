@@ -138,7 +138,8 @@ can change to the UAC object
     - iv notices that it returns completed successful when a request has only been excepted
       So i think it would be good, if there was a message to say the request has been made,
       Accepted and complete
-      
+ 
+[ ] Fix user manager not adding access level to user    
 
 ========================================================================
 Release v1.0.0 TODO.
@@ -162,6 +163,65 @@ Post v1.0.0 Release TODO.
 [ ] Auto Build Deletion (for builds older than X amount of time)  
     With the option to keep the first/last build of each month   
 
+[ ] Improve the way that content is loaded into the webpage.
+    - At the moment each messages, active and queue sections all auto-
+    refresh every X amount of time (i think its set to 60sec for active 
+    and queued, and 30sec for messages) The problem is 9 times out 10 
+    there's no change in data and when there are changes its laggy, and
+    the project and builds dont auto refresh.
+    - To make the solution more efficient there two approaches that could 
+    be taken.
+    
+        1. We could turn the request into a single http request, that
+        only returns data for each panel (in a single json dict) if its
+        changed since the last update.
+        This would require a lot of JS and server work tho, but would be 
+        the most efficient approach, as there would be a maximum amount of 
+        request per min and it would also decrees the overrule payload, 
+        since the payload would only return data if there's been a change.
+```
+    Example JSON response (no change)
+    {
+        active: [],
+        queue: [],
+        message: [],
+        projects: [],
+        builds: []
+    }
+    Example JSON (message change)
+    {
+        active: [],
+        queue: [],
+        message: [{"message", "Queueing Build"}, {"error", "Unable to queue build..."}],
+        projects: [],
+        builds: []
+    }
+```
+
+        2. The other would be to add a new request, to check if any of the
+        panels have changed sine the last time panel had a content change,
+        Then load in the content using the current methods (but only if needed)
+        This would require that we make a minimal amount of request, per min
+        but would reduce the payload overall, as the main (payload) request
+        are only made if needed. This would require minimal JS and server work.
+```
+    Example JSON response (no change)
+    {
+        active: false,
+        queue: false,
+        message: false,
+        projects: false,
+        builds: false
+    }
+    Example JSON (message change)
+    {
+        active: false,
+        queue: false,
+        message: true,
+        projects: false,
+        builds: false
+    }
+```
 ========================================================================
 Web-pages Todo. No Rush, it can all be done back end :)
 ========================================================================
@@ -173,6 +233,10 @@ Web-pages Todo. No Rush, it can all be done back end :)
 [ ] Add method to get empty templates, useful for message output  
 
 [x] Message section.  
+
+[ ] Fixed view overflowing on the X axis
+[ ] Add AMS-Labs Logo 
+[ ] Add Zip hash to builds pannel
 
 ============== uac server TEST LIST:  
 [x] test uac for output  
