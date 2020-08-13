@@ -19,8 +19,6 @@ zipped into a 7z and updates the web-interface (queue and projects).
 
 For details about pipeline.json see CI-Projects/pipelineJSON.md
 
-
-
 #### 2. webhook
 Triggers Build via webhook from GitHub or BitBucket
 
@@ -50,7 +48,7 @@ temp pass       password!2E
 ## CI-Project
 Ci-Project is the root for all projects.
 All projects are in there own folder, which contains the project master folder,
-the builds folder and the project build status (still to do)
+the builds folder and the project build status
 
 See the CI-Project/README.md for further info on folder structure
 
@@ -77,7 +75,7 @@ meaning that get_project_info and get_project_build_info can not be used
 to determin if a project exist or not nor if the user has access to it.
 
 
-===================
+===================  
 7z hash pipeline Notes.
 values can be 
 - null              (no hash)
