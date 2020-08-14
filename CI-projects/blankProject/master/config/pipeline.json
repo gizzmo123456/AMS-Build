@@ -1,0 +1,39 @@
+{
+  "build-name-format": "{project}_{build_hash}_build_{build_index}",
+  "docker": {
+    "image": "",
+    "args": "",
+    "project-dest": "/root/project/source",
+    "build-output-dest": "/root/project/build",
+    "stop-timeout": 10
+  },
+  "webhook": {
+    "name": "master",
+    "authorized-actors": [
+    ]
+  },
+  "prepare-build": {
+    "master-dir-commands": [
+      "sudo git pull origin master "
+    ],
+    "get-git-hash": true,
+    "build-dir-commands": [
+      "sudo git checkout --detach {git_hash}"
+    ]
+  },
+  "environment": {
+
+  },
+  "pipeline": [
+    {
+      "name": "build",
+      "commands": [
+      ]
+    }
+  ],
+  "cleanup": {
+    "remove_build_source": true,
+    "7z_build": true,
+    "7z_hash": "sha1"
+  }
+}

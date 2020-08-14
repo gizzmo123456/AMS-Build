@@ -269,8 +269,98 @@ shared queue, to ensure it is unblocked and able to update the task list
 
 ## 4. Getting Started
 
+When the application is run for the first time you will be presented with a
+username (admin) and password (???) in the console logs. This is the default 
+account used for the web user interface and has restricted access for testing.
+
+see 'Adding a user' for more info on creating accounts for projects.
+
+As it stands, there is no way to setup a project via the ```Web User Interface```
+and must all be done backend via the OS.
+
 ### Setting up a project 
-TODO.
+1. start by making a copy of the ```blankProject``` directory
+in ```CI-project```, renaming the directory to your projectName.
+```(ie. `.../CI-project/blankProject` -> .../CI-project/MyNewProjectExample)```
+
+2. Navigate to ```.../MyNewProjectExample/master/project_source``` and add your
+project source. (if git is used to update the project directors make sure there
+all setup correctly)
+
+3. Now we need to update the pipeline. Navigate to 
+```.../MyNewProjectExample/master/config``` and open ```pipeline.json```
+in your favorite IDE and update the file to your projects automation config.
+
+The pipeline contains 3 main sections that are required
+```
+1. docker            # The docker container config
+2. prepare-build     # The commands that are required to prepare the source for building
+3. pipeline          # The commands required for each stage in the pipeline
+```
+While the reset are optional
+```
+1. webhook           # webhook config
+2. environment       # variables to be set in the environment
+3. cleanup           # how the project should be cleaned up
+```
+See ```../Ci-project/exampleProject/PipelineJSON.md``` for a full description 
+of each field in the file.
+
+Once the pipeline is complete, the project is all set up.
+See the next section (Accepting Weebhooks), for information on setting the webhook,
+to automate the build trigger.  
+All see 'Adding A User' section for information on setting up users for 
+```Web User Interface``` and allowing access to projects.
+
+
+### Accepting Webhooks
+Webhooks are used to trigger a build when an event happens on a git server.  
+(At the current time AMS-Build only supports a single webhook.)
+
+To setup a webhook for a project goto the  ```pipeline.json``` file, 
+under the webhook section, enter a name for your projects webhook, a list 
+the accepted actors names.
+
+```
+example:
+
+...
+"webhook": {
+  "name": "MyWebhookName",
+  "authorized-actors": [
+      "actor_one",
+      "actor_two",
+      "actor_three"
+    ]
+}
+... 
+
+
+```
+
+now its just a case of setting the webhook address on the git server
+
+```
+Webhook Config,
+
+Port            8081
+root path       /request
+
+Query String (GET)
+    name        {webhook name}
+    project     {project name}
+    
+POST data:
+    data from github or BitBucket webhook
+    
+eg. mydomain.com:8081/request?name=example&project=example_project
+
+```
+
+#### Adding a user
+##### New user
+
+##### Assign to project
 
 ### Using The Web User Interface
 #### Setup
@@ -290,23 +380,8 @@ eg. mydomain.com:8080/ams-ci/
 
 #### API
 
-### Accepting Webhooks
-```
-Webhook Config,
 
-Port            8081
-root path       /request
 
-Query String (GET)
-    name        {webhook name}
-    project     {project name}
-    
-POST data:
-    data from github or BitBucket webhook
-    
-eg. mydomain.com:8081/request?name=example&project=example_project
-
-```
 
 ### A Bit About Security
 As with any private task or automation server, its recommended to host it on 
