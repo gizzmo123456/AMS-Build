@@ -1,4 +1,5 @@
 import common
+import commonProject
 import cipher
 import os
 import string
@@ -120,7 +121,7 @@ class UserManager:
     def user_exist(self, username):
         return self.get_user( username ) is not None
 
-    def add_user(self, username, secret, projects=None):
+    def add_user(self, username, secret, projects=None, access_level=1):
 
         if len(secret) < UserManager.USER_SECRET_MIN_LEN:
             return False
@@ -130,7 +131,8 @@ class UserManager:
         account = {
             "username": username,
             "secret": UserManager.create_random_secret(),
-            "projects": projects
+            "projects": projects,
+            "access_level": access_level
         }
 
         users.append( account )
@@ -182,12 +184,42 @@ if __name__ == "__main__":
         # Add user.
         print("Enter Username")
         add_username = input()
+        add_projects = []
+        add_access_level = 0
+
         user_exist = user_man.user_exist( add_username )
         successful = False
 
         if user_exist:
             print( "User already exist" )
             print( "To update the users password supply the old password on line 1 and new new on line 2" )
+
+        print("Enter Project Names that the user has access to (case sensitive)")
+        print("leave input empty to continue")
+        proj = " "
+        while proj != "":
+            proj = input()
+            exist = commonProject.__project_exist( proj )
+            if proj != "" and exist:
+                add_projects.append( proj )
+                print("Project Added! Enter another project or hit return to continue.")
+            elif not exist:
+                print("Project does not exist!")
+
+
+        print("Enter the users access level ID (INT)")
+        print("1 - User (project api, download, output file) (min access)")
+        print("3 - Moderator")
+        print("4 - Admin")
+        print("5 - Server Admin (All Access) (max access)")
+        ac_levels = [1, 3, 4, 5]
+        while add_access_level not in ac_levels: # <1=noAccess, 2=webhook, 5=serverAdmin, >5 not defined
+            try:
+                add_access_level = int(input())
+            except:
+                pass
+            if add_access_level not in ac_levels:
+                print("Invalid input, please enter 1, 3, 4 or 5")
 
         print("Enter path to password file (leave empty to use ./data/new_user), or N to exit, C to start again")
         print("password must have a min length of", UserManager.USER_SECRET_MIN_LEN )
@@ -209,13 +241,11 @@ if __name__ == "__main__":
             print("Failed to open file,", e)
             continue
 
-        print( len(lines), user_exist )
-
         if not user_exist and len(lines) > 0 and len(lines[0]) >= UserManager.USER_SECRET_MIN_LEN:
             # remove new line chars
             lines[0] = lines[0].replace('\n', "").replace('\r', "")
 
-            successful = user_man.add_user( add_username, lines[0] )
+            successful = user_man.add_user( add_username, lines[0], add_projects, add_access_level )
             print( "User Added? ", successful )
         elif user_exist and len( lines ) > 1 and len( lines[1] ) >= UserManager.USER_SECRET_MIN_LEN:
             # remove new line chars
