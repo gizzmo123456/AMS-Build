@@ -47,7 +47,7 @@ def get_dict_from_json( file_name, lock_file=False ):
     try:
         return json.loads( read_file( file_name, lock_file ) )
     except Exception as e:
-        _print(e, 3)
+        _print(e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
         return {}
 
 
