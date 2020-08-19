@@ -12,6 +12,7 @@ import sharedQueue
 import queue_item
 import common
 import user_manager
+import config_manager
 
 SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
@@ -134,12 +135,16 @@ def task_worker(job):
 
 if __name__ == "__main__":
 
+    # Load Config files.
+    config_manager.ConfigManager.set_from_json( "./data/configs/web_conf.json" )
+
+    # Set up Debug
+    DEBUG.LOGS.init()
+    _print = DEBUG.LOGS.print
+
     thr_lock_tasks = threading.Lock()
     alive = True
     update_queue_file = False
-
-    DEBUG.LOGS.init()
-    _print = DEBUG.LOGS.print
 
     task_queue = queue.Queue()
 
