@@ -1,28 +1,24 @@
 # AMS-Build 
 ###### AMS - *Automation Made Simple* 
 
-
 ## Overview
-AMS-Build is a simple lightweight automation tool designed run,
-build and automate tasks in docker containers and deliver the results to 
-a clean and simple to use web user interface.
+AMS-Build is a simple lightweight automation tool writen in python.
+It has been designed to run and automate tasks in docker containers and
+deliver the results to a clean and simple to use, web user interface.
 
 AMS-Build has capabilities to accept webhooks from BitBucket and GitHub,
 along with manual triggers via the web user interface.
 
-AMS-Build is writen in Python, and uses Git to update projects and 
-Docker for containerizing tasks.  
-AMS-Build is designed to run on Ubuntu 18+ and has NO support for any other 
-OS (as it stands, tho the web interface will work on windows, for testing).
+AMS-Build runs on Ubuntu 18+ (with very limited support for windows)
 
 ## Contents
-  1. System Requirements and Dependencies 
-     1. Requirements
-     2. Dependencies
-  2. Modules and Components
-  3. Getting Started
-  4. Further Reading  
-  5. ...
+  1. [System Requirements and Dependencies](#1-System-Requirements-and-Dependencies)
+  2. [Modules and Components](#2-Modules-and-Components)
+  3. [How The Automation/Build Task work](#3-How-The-AutomationBuild-Task-work)
+  4. [Getting Started](#4-Getting-Started)
+  5. [Adding and Updating users](#5-Adding-and-Updating-Users)
+  6. [Using The Web User Interface](#6.-Using-The-Web-User-Interface)
+  7. [More Documents](#7-More-Documents)
     
 ## 1. System Requirements and Dependencies 
 
@@ -39,13 +35,13 @@ OS (as it stands, tho the web interface will work on windows, for testing).
 | Product        | Version |
 | :------------: | :-----: |
 | Ubuntu (64bit) | 18+     |
-| Python         | 3.6     |
+| Python         | 3.7     |
 | PyCryptodome   | 3.9.8   |
 | Git            | [version here] |
 | Docker         | [version here] |
 
 ## 2. Modules and Components
-AMS-Build is made up of several components, across 3 key modules.
+AMS-Build is made up of several components, across 3 key areas.
 1. CI-Host
 2. CI-Project
 3. CI-Container (or CI-root)
@@ -307,7 +303,7 @@ See ```../Ci-project/exampleProject/PipelineJSON.md``` for a full description
 of each field in the file.
 
 Once the pipeline is complete, the project is all set up.
-See the next section (Accepting Weebhooks), for information on setting the webhook,
+See the next section (Accepting Webhooks), for information on setting the webhook,
 to automate the build trigger.  
 All see 'Adding A User' section for information on setting up users for 
 ```Web User Interface``` and allowing access to projects.
@@ -357,13 +353,40 @@ eg. mydomain.com:8081/request?name=example&project=example_project
 
 ```
 
-#### Adding a user
+## 5. Adding and Updating Users
 ##### New user
+To add a new user run 'python3 user_manager.py' to enter the user manager 
+standalone mode, where you will prompted to enter the users username, permission,
+projects and define a file containing the users password. By default the password
+file is ```CI-Host/data/new_user``` (but in the .gitignore to prevent accidental 
+password commits)
 
-##### Assign to project
+Once the password has been entered, it is over writen with '.' (dot)
 
-### Using The Web User Interface
-#### Setup
+##### Updating a users account
+To Update a users password, run 'python3 user_manager.py' and enter an existing
+username, where you be promoted for the file containing the users password 
+(Default ```CI-Host/data/new_user```) The file must have the users current 
+password on line 1 and the new password on line 2.
+
+To update the users, username, permissions, or projects you must update the json 
+file directly.
+
+Example Json
+```JSON
+{
+  "username": "User_0",
+  "secret": "DO NOT CHANGE",
+  "projects": ["project_1", "project_2", "project_n..."],
+  "access_level": 3
+}
+```
+
+**(Do NOT add new user directly to this file, use the user manager instead)**
+
+## 6. Using The Web User Interface
+The Web User Interface can be accessed by going to mydomain.com:8080/ams-ci/
+
 ```
 Web User Interface Config,
 
@@ -371,17 +394,173 @@ Port            8080
 root path       /ams-ci/
 
 Default user    admin
+Password        [On first run, AMS-build will present a password for testing, in the console]
 
-eg. mydomain.com:8080/ams-ci/
+path example. mydomain.com:8080/ams-ci/
+
+```
+#### Interface
+Before being able to access the web interface you must log in using user credentials
+Once logged in you will the you will be presented with the tasks and project areas.
+```
+|------------------------------|
+| Message Panel                |
+|------------------------------|
+| Active | Projects            |
+| Tasks  |---------------------|
+|--------| Builds              |
+| Queued |                     |
+| Tasks  |                     |
+|------------------------------|
+```
+
+All active and queued tasks can be seen by all users, but the user may only
+be able to preform an action on a tasks that they have access to.
+
+Projects - lists all projects that the users has access too
+
+Builds - List all builds + output & download links along with statues.
+
+User may only be able to preform tasks up to there user access level.
+(its worth noting that the links are still displayed even without access
+but the server will reject the request.)
+
+For more info on user access levels see  
+User Types and Access Levels ( For Web User Interface and Webhooks )
+
+#### API
+Before being able to access the web interface API you must log in using user credentials
+
+```
+Note.
+At the movement CORS is disabled across the Web User Interface, with plans to allow
+approved sites later on the API only.
+```
+
+At APIs root directory is ```ams-ci/api/```
+
+The api can be used to gain 'Active' and 'Queued' tasks, project and build info
+as well as user info for the currently logged in user
+##### API Examples.
+
+###### Tasks
+
+ **View all tasks**  
+ ```ams-ci/api/tasks```
+ 
+Example Output
+```JSON
+{
+  "active": [
+              {
+                "task_name": "exampleProject_c9bffcd6309225d86d2ff455f454d8ab9ec538cb_build_1", 
+                "task_hash": "c9bffcd6309225d86d2ff455f454d8ab9ec538cb", 
+                "project": "exampleProject", 
+                "created_by": "example_user", 
+                "created_at": "19/08/2020 @ 01:50:05", 
+                "started_at": -1
+              }
+             ],
+  "pending": []
+}
+```
+**View Active Tasks Only**  
+```ams-ci/api/tasks/active```
+
+**And Queued Tasks**  
+```ams-ci/api/tasks/queued```
+
+**To Show Only Active or Queued Task For A Single Project**  
+```ams-ci/api/tasks/{action}/project/{project-name}```
+
+**Show Only Active or Queued Tasks Created By Actor**  
+```ams-ci/api/tasks/{action}/created_by/{actor}```
+
+```
+Note.
+You can filter by any field defined in the json '{}', but only within a
+single list (ie. '[]')
+and it also possible to filter by more than one field
+
+# Example Format
+ams-ci/api/{api-group}/{list-name}/{json-field-1}/{json-field-1-value}/{json-field-2}/{json-field-2-value}
+ 
+```
+
+###### Projects
+
+**List All Projects** (that the logged in user has access to)  
+```ams-ci/api/projects```  
+
+Example Output
+```JSON
+[
+  {
+    "name": "exampleProject",
+     "base_path": ".../exampleProject"
+  },
+  {
+    "name": "exampleProject-1",
+     "base_path": ".../exampleProject-1"
+  }
+]
+```
+
+**List All Project Info**
+```ams-ci/api/projects/name/{project-name}```
+
+Example Output (for ```ams-ci/api/projects/name/exampleProject```)
+```JSON
+{
+    "name": "exampleProject",
+    "base_path": ".../exampleProject", 
+    "project_info": {
+          "ProjectName": "exampleProject", 
+          "latest_build_index": 24, 
+          "latest_build_key": "exampleProject_26d1805d4f069feda85067b6315c3106e7d2de59_build_1", 
+          "last_created_time": 1597801805.508211, 
+          "last_execute_time": 1597186667.3346303, 
+          "last_complete_time": 1597186635.6530728
+      },
+    "builds": [
+          {
+              "name": "exampleProject_26d1805d4f069feda85067b6315c3106e7d2de59_build_1",
+               "hash": "26d1805d4f069feda85067b6315c3106e7d2de59", 
+               "git_hash": "c965346a7e4eeae786f58e4a79dd298e61762825", 
+               "build_id": 1, 
+               "status": "pass", 
+               "created_by": "example user",
+               "created_at": "12/08/2020 @ 03:32:00", 
+               "canceled_by": null, 
+               "canceled_at": null, 
+               "7z_link": "dl/exampleProject/exampleProject_26d1805d4f069feda85067b6315c3106e7d2de59_build_1", 
+               "7z_hash": "88E73A4983B8BC1CDFF3079411F2607B1CE87592", 
+               "output_log": "output/exampleProject/exampleProject_26d1805d4f069feda85067b6315c3106e7d2de59_build_1"
+           }
+        ], 
+    "tasks": {
+              "active": [],
+              "pending": []
+          }
+}
 
 ```
 
-#### Interface
+**Project Info Only**  
+```ams-ci/api/projects/name/{project-name}/project_info```
 
-#### API
+**Project Build**  
+```ams-ci/api/projects/name/{project-name}/builds```
 
+**Project Active and Queued Tasks**  
+```ams-ci/api/projects/name/{project-name}/tasks```
 
+The same filtering as 'Tasks' applies here too. so   
+**To to display all passed tasks**  
+```ams-ci/api/projects/name/{project-name}/builds/status/pass```
 
+Or **Display all failed tasks by an actor**  
+```ams-ci/api/projects/name/{project-name}/build/created_by/example user/status/fail```
 
 ### A Bit About Security
 As with any private task or automation server, its recommended to host it on 
@@ -397,4 +576,16 @@ BitBucket IPs   : (link)
 ```
 And to only allow connects via vpn to the web interface (default port 8080).
 
-## 5. Further Reading 
+## 7. More Documents
+[CI-Project Directory Structure](./CI-projects/README.md)  
+[Build Pipeline Config](./CI-projects/pipelineJson.md)  
+[Build Dir (Note)](./CI-projects/exampleProject/builds/README.md)
+
+###### Generated Files  
+[Tasks (Active and Queue) Json Information](./CI-Host/data/tasksJson.md)  
+[Project Info](./CI-projects/projectInfoJSON.md)
+[Project Build Info](./CI-projects/projectBuildInfoJSON.md)
+
+###### Other
+[TODO](./TODO.md)
+[Change Log](./changeLog.md)

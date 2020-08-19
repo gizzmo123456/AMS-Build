@@ -18,13 +18,17 @@ Release v1.0.0 TODO.
 v1.0.0 Missed tasks TODO. 
 ========================================================================
 
+[ ] Pass/Fail Status
+[ ] 
+
 [ ] build cool down  
 [ ] Only build latest  
 [ ] Build output needs to be moved or build into a folder relating to the pipeline task
 
+
 [x] Sort console output, mark sure that there are no prints, only _prints  
     [ ] And add some log files :)  
-[ ] Allow API CORS  
+[ ] Allow API CORS (See Web interface API for more info)  
 [ ] find out why .secrets are by user 'me' not 'root'  
 [ ] Add write stdout to file, in DEBUG.  
 [ ] add values to projectBuildInfo.json
@@ -33,24 +37,20 @@ v1.0.0 Missed tasks TODO.
     - [ ] canceled by   
 
 [ ] Find out why we get Can not cancel build, insfficient priv's when a task completes.
+    (this is hampering because no user is added for 'task complete' object. Its fine tho as its only a queue un-blocking task )
 [ ] Improve WWWUser message feedback when trigger tasks via the web_userInterface.
     - iv notices that it returns completed successful when a request has only been excepted
       So i think it would be good, if there was a message to say the request has been made,
       Accepted and complete
-[ ] Fix user manager not adding access level to user    
-
-```
-eg.
-builds/eProj_hash_build_N/Stage_0/
-builds/eProj_hash_build_N/Stage_1/
-... 
-```
+    - messages should be write to file, so message can be queued for when the user next logs in
 
 ========================================================================
 Post v1.0.0 Release TODO.
 ========================================================================
 [ ] Auto Build Deletion (for builds older than X amount of time)  
     With the option to keep the first/last build of each month   
+
+[ ] Add Project Storage limits.
 
 [ ] Improve the way that content is loaded into the webpage.
     - At the moment each messages, active and queue sections all auto-
@@ -126,22 +126,14 @@ Web-pages Todo. No Rush, it can all be done back end :)
 
 [ ] Fixed view overflowing on the X axis
 [ ] Add AMS-Labs Logo 
-[ ] Add Zip hash to builds pannel
-
-============== uac server TEST LIST:  
-[x] test uac for output  
-[x] test uac for dl  
-
--> Spot test for below has PASSED :)  
-[x] test uac for get_project_build_info  
-[x] test uac for get_project_info  
-[x] test uac for get project pipeline (both wh and www)  
-
-- Remember to remove the project info file. its broken :)   
+[ ] Add Zip hash to builds panel
 
 ========================================================================
-Known Issues
+API and CORS plans
 ========================================================================
-- When running a container print messages have a load of white space added 
-  for some unknown reason.
-
+[ ] Allow CORS for API/Output Log/Build Download
+    - [ ] Add API-keys to allow CORS
+        - Add API User Type?
+        - Logs and Builds will require additional checks  
+        
+========================================================================

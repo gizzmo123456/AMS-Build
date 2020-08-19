@@ -35,33 +35,34 @@
 ```
 
 {
+  "build-name-format": "{project}_{build_hash}_build_{build_index}",            # build name format (optional, this is the default format, see above for available variables)
   "docker": {                                                                   # Specifies the docker image config
-    "image": "gableroux/unity3d:2018.4.2f1-windows",                            # The docker repo to pull the image from (This must be in a public repo as it stands)
+    "image": "dockerUser/mydockerimage:latest",                                 # The docker repo to pull the image from (This must be in a public repo as it stands)
     "args": "-it --rm",                                                         # Any args that should be specifies when running the image
     "project-dest": "/root/project",                                            # The destination within the docker image that the project should be mounted
-    "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows"    # The destination within the docker image that build directory will be mounted
+    "build-output-dest": "/root/project/Builds"                                 # The destination within the docker image that build directory will be mounted
   },
   "webhook": {                                                                  # Specifies the web hook config, All web hook data must be supplied as POST and in json.
                                                                                 # ie. from a GitHub or BitBucket web hook. (As it stands AMS-CI Only support BitBucket)
-                                                                                # This is still in BETA and may change to triggers
     "name": "push",                                                             # The name of the web hook, this must be supplied as a GET param when triggering the web hook
-    "project_request_name": "exampleProject",                                   # The project request name and supplied as a param when triggering the web hook (DOES NOT HAVE MATCH PROJECT NAME BUT MUST BE UNIQUE)
+    "project_request_name": "exampleProject",                                   # The project request name and supplied as a param when triggering the web hook (DOES NOT HAVE TO MATCH PROJECT NAME BUT MUST BE UNIQUE)
                                                                                 # ie. ?name=push&project=exampleProject
     "authorized-actors": [                                                      # A list of authorized actors, actors must be supplied in the POST data.
-                                                                                # as it stands is must be the json under JSON[actors][display_name]
+                                                                                # as it stands is must be in the json under JSON[actors][display_name]
       "ashley sands"
-    ],
-    "master-commands": [                                                        # Any commands that should be run in the master project when the web hook is trigger
-      "cd testCIGame/",
-      "sudo git pull origin master "
-    ],
-    "pre-build-commands": [                                                     # Once the master commands has run, the project is copied into a unique build directory
-                                                                                # where any further commands can be run, with out affecting the master copy.
-                                                                                # ie. its useful to make sure that its the correct version that is built.
-      "cd testCIGame/",
-      "sudo git checkout --detach {build_hash}"
     ]
   },
+  "prepare-build": {                                                            # Commands to be run to prepare the build ready for task automation
+      "master-dir-commands": [                                                  # A list of command that should be run to prepare the build before the directory is copied to the build directory
+          "cd testCIGame/",
+          "sudo git pull origin master "
+        ],
+        "get-git-hash": true,                                                   # Should the tool get the current git hash after the master has updated
+        "build-dir-commands": [                                                 # List of commands to be run inside the of the build directory after copying
+          "cd testCIGame/",
+          "sudo git checkout --detach {git_hash}"
+        ]
+  }
   "environment": {                                                              # Any environment vars that need setting within the docker container.
                                                                                 #
   },
@@ -80,6 +81,26 @@
   "cleanup": {                                                                  # How should the build directory be cleaned up once the build is complete
     "remove_build_source": true,                                                # Should the build source be removed?
     "7z_build": true                                                            # Should the build directory be wraped up into a 7zip file. (if true the original build output is remove)
+    "7z_hash" : "sha1"                                                          # Should we create the hash for the 7z, (using 7z itself), set to 'null' for no hash otherwise you can use
+                                                                                # crc32, crc64, sha1, sha256 or blake2ep 
   }
 }
+```
+
+```
+IMPORTANT NOTE: Prepare-build. If get_git_hash == true. master-dir-commands must be left in the 
+git directory that we want to get the git hash from. 
+Also Get git hash is skipped if supplied with the constructor. Otherwise it is executed directly
+after the master folder is updated.
+```
+
+```
+IMPORTANT NOTE.
+As it stands, is not suitable to have multiple pipelines defined, as there is only a single output directory.
+But its fine if you create your own sub directories for each pipeline
+```
+
+```
+Note.
+Beware that there are plans to remove the webhook section to its own file and the pipeline file will be supplied within the projects root.
 ```
