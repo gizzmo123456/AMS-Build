@@ -238,9 +238,17 @@ if __name__ == "__main__":
 
     # set up ssl (if used)
     if config.get("use_ssl", False):
-        ssl = config.get("ssl")
-        webhook_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl["cert_file"], ssl["private_file"], ssl["ca_bundle_file"] ), False       # Never redirect webhooks.
-        web_interface_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl["cert_file"], ssl["private_file"], ssl["ca_bundle_file"] ), ssl["redirect_http_request"]
+        ssl_conf = config.get("ssl")
+        try:
+            webhook_ssl_socket_wrapper = create_ssl_socket_wrapper(       ssl_conf["cert_file"], ssl_conf["private_file"], ssl_conf["ca_bundle_file"] ), False  # Never redirect webhooks.
+            web_interface_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl_conf["cert_file"], ssl_conf["private_file"], ssl_conf["ca_bundle_file"] ), ssl_conf["redirect_http_request"]
+        except Exception as e:
+            _print("Failed to Create SSL Sockets", message_type=DEBUG.LOGS.MSG_TYPE_FATAL)
+            _print(e, message_type=DEBUG.LOGS.MSG_TYPE_FATAL)
+            _print("Please Fix web config file.", "Failed to Start.", "Exiting", message_type=DEBUG.LOGS.MSG_TYPE_FATAL, sept="\n")
+            time.sleep(1)   # prevent debug from stopping before all message have been printed.
+            DEBUG.LOGS.close()
+            exit()
 
     webhook_thread = threading.Thread(       target=web_hook,      args=( config.get( "webhook_ip"      , "0.0.0.0" ),
                                                                           config.get( "webhook_port",       8081 ),
