@@ -1,26 +1,24 @@
 {
   "build-name-format": "{project}_{build_hash}_build_{build_index}",
   "docker": {
-    "image": "gableroux/unity3d:2018.4.2f1-windows",
+    "image": "dockeruser/dockerimage:latest",
     "args": "-it --rm",
     "project-dest": "/root/project",
-    "build-output-dest": "/root/project/unityBuild/Builds/StandaloneWindows",
+    "build-output-dest": "/root/project/Builds/",
     "stop-timeout": 10
   },
   "webhook": {
     "name": "master",
     "authorized-actors": [
-      "ashley sands"
+      "git actor"
     ]
   },
   "prepare-build": {
     "master-dir-commands": [
-      "cd testCIGame/",
       "sudo git pull origin master "
     ],
     "get-git-hash": true,
     "build-dir-commands": [
-      "cd testCIGame/",
       "sudo git checkout --detach {git_hash}"
     ]
   },
@@ -31,10 +29,8 @@
     {
       "name": "build",
       "commands": [
-        "cd /root/project/unityBuild",
-        "source ./preBuild.sh",
         "./before_script.sh",
-        "./build.default2.sh"
+        "./build.default.sh"
       ]
     }
   ],
