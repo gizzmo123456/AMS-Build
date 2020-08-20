@@ -48,6 +48,12 @@ v1.0.0 Missed tasks TODO.
 Post v1.0.0 Release TODO.
 ========================================================================
 [ ] Automatically detect install path
+[ ] Update Directory names from CI-XXX to AMS-XXX.
+    (this is going to be a bit of a pain)
+    CI-Host     -> AMS-Build
+    CI-Projects -> AMS-Projects
+    CI-Root     -> AMS-Container
+    
 [ ] Auto Build Deletion (for builds older than X amount of time)  
     With the option to keep the first/last build of each month   
 
