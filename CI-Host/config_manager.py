@@ -1,5 +1,6 @@
 import common
-
+import DEBUG
+_print = DEBUG.LOGS.print
 
 class ConfigManager:
 
@@ -27,6 +28,8 @@ class ConfigManager:
     def set_from_json( file_path ):
 
         config = common.get_dict_from_json(file_path, lock_file=True)
+
+        _print("Loaded config '", file_path, "'", len(config), "values Added")
 
         for conf in config:
             ConfigManager.set( conf, config[conf] )
