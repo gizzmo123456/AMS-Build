@@ -448,55 +448,6 @@ class WebInterface( baseHTTPServer.BaseServer ):
         user.set_message( user_message, user_message_status )
         return http_message, http_status, "text/html", None
 
-
-# Is any of this used
-# i think this was all replaced by the use of projects.json
-
-    def list_projects( self ):
-        """ returns list of projects dict { "name": pname }
-            Json Friendly
-        """
-        return [ {"name": directory}
-                 for directory in os.listdir( PROJECT_DIRECTORY )
-                 if os.path.isdir( os.path.join( PROJECT_DIRECTORY, directory ) ) ]
-
-    def list_builds( self, project ):
-        """ dict { "project": { "name": pname, builds: list [ {"name": bname, "status" : status, "created_by": user, "link": url} ] } }
-            Json Friendly
-        """
-        return { "project":
-                     { "name": project,
-                       "builds": [
-                           {"name": build_name}
-                           for build_name in os.listdir( PROJECT_DIRECTORY+"/builds" )
-                           if os.path.isdir( os.path.join( PROJECT_DIRECTORY+"/builds", build_name ) ) ] } }
-
-    def update_tasks( self, active_tasks, queued_tasks ):
-        """ Updates the tasks string,
-            This should be called from the same thread that is using the list
-
-        :param active_tasks:    list of active tasks
-        :param queued_tasks:    list of queued tasks
-        :return:
-        """
-
-        if len(active_tasks) == 0:
-            active_tasks_str = "None"
-        else:
-            active_tasks_str = '<br />'.join( [ "{project} - {build_hash} - created @ {created} - By {actor}".format( **task[1].format_values ) for task in active_tasks ] )
-
-        if len(queued_tasks) == 0:
-            queued_tasks_str = "None"
-        else:
-            queued_tasks_str = '<br />'.join( [ "{project} - {build_hash} - created @ {created} - By {actor}".format( **task.format_values ) for task in queued_tasks ] )
-
-        self.thr_lock_update_tasks.acquire()
-        self.active_builds = active_tasks_str
-        self.queued_tasks = queued_tasks_str
-        self.thr_lock_update_tasks.release()
-
-# End of is used?
-
     def expire_session( self, session_id, ttl ):    # Note the use has been commented out
 
         while session_id in self.sessions:
