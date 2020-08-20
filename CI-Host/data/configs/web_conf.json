@@ -3,12 +3,15 @@
   "webhook_port": 8081,
 
   "web_interface_ip": "0.0.0.0",
-  "web_interface": 8080,
+  "web_interface_port": 8080,
+
+  "web_address": "mydomain.com",
 
   "use_ssl": false,
-  "ssl_redirect_http_request": true,
-  "ssl_cert_file": null,
-  "ssl_ca_bundle_file": null,
-  "ssl_private_file": null
-
+  "ssl": {
+    "redirect_http_request": true,
+    "cert_file": null,
+    "ca_bundle_file": null,
+    "private_file": null
+  }
 }

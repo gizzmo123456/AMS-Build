@@ -3,10 +3,12 @@ import DEBUG
 import build_task
 import webhook
 import web_interface
+import redirectToHTTPS
 import threading
 import time
 from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
+import ssl
 import queue
 import sharedQueue
 import queue_item
@@ -19,29 +21,86 @@ SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt 
 SKIP_TASK_INTERVALS = 15        # how many times should we check if the tasks state has changed, ie been cnaceled.
 SKIP_TASK_CLEAN_UP = True
 
-def web_hook():
+def web_hook( ip, port, ssl_socket ):
+    """
+    :param ip:              host ip (string)
+    :param port:            host port (int)
+    :param ssl_socket:      ssl socket wrap socket callback to use, tuple (ssl_socket (SSLContext), redirect_non_https (bool) ) or None if not using ssl
+    """
 
     # Use the single thread HTTPServer for the web hook,
     # we only want to handle a single connection at a time
     # to ensure that the request are executed in order :)
-    wh_server = HTTPServer( ("0.0.0.0", 8081), webhook.Webhook )
+    wh_server = HTTPServer( (ip, port), webhook.Webhook )
+    redirect_thread = None
+
+    if ssl_socket is not None:
+        wh_server.socket = ssl_socket[0]( wh_server.socket, server_side=True )
+        if ssl_socket[1]:   # should redirect
+            redirect_thread = threading.Thread( target=web_redirect_to_https, args=(ip, port) )
+            redirect_thread.start()
 
     while alive:
         wh_server.serve_forever()
 
+    if redirect_thread is not None and redirect_thread.is_alive():
+        redirect_thread.join()
+
     wh_server.server_close()
 
-def www_interface():
+def www_interface( ip, port, ssl_socket ):
+    """
+    :param ip:              host ip (string)
+    :param port:            host port (int)
+    :param ssl_socket:      ssl socket wrap socket callback to use, tuple (ssl_socket (SSLContext), redirect_non_https (bool) ) or None if not using ssl
+    """
 
     # Use the threaded HTTPServer for the web interface,
     # so we're not handing around while files are downloaded
     # and pre-sockets are opened
-    wi_server = ThreadHTTPServer( ("0.0.0.0", 8080), web_interface.WebInterface )
+    wi_server = ThreadHTTPServer( (ip, port), web_interface.WebInterface )
+    redirect_thread = None
+
+    if ssl_socket is not None:
+        wi_server.socket = ssl_socket[0]( wi_server.socket, server_side=True )
+        if ssl_socket[1]:   # should redirect
+            redirect_thread = threading.Thread( target=web_redirect_to_https, args=(ip, port) )
+            redirect_thread.start()
 
     while alive:
         wi_server.serve_forever()
 
+    if redirect_thread is not None and redirect_thread.is_alive():
+        redirect_thread.join()
+
     wi_server.server_close()
+
+def web_redirect_to_https(ip, port):
+    """ When a ssl socket is used all http request are ignored
+
+    """
+    redirect_host = HTTPServer( (ip, port), redirectToHTTPS.RedirectToHTTPS )
+
+    while alive:
+        redirect_host.serve_forever()
+
+    redirect_host.server_close()
+
+def create_ssl_socket_wrapper(cert_filepath, key_filepath, ca_bundle_filepath):
+    """ creates an ssl socket
+
+    :param cert_filepath:           file path to certificate
+    :param key_filepath:            file path to private key
+    :param ca_bundle_filepath:      file path to ca bundle
+    :return: warp_socket function to be applied to the HTTP Server.
+    """
+
+    ssl_socket = ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
+    ssl_socket.load_cert_chain( certfile=cert_filepath, keyfile=key_filepath )
+    ssl_socket.load_verify_locations( ca_bundle_filepath )
+
+    return ssl_socket.wrap_socket
+
 
 def update_queue_info( a_tasks, p_tasks ):
 
@@ -135,12 +194,13 @@ def task_worker(job):
 
 if __name__ == "__main__":
 
-    # Load Config files.
-    config_manager.ConfigManager.set_from_json( "./data/configs/web_conf.json" )
-
     # Set up Debug
     DEBUG.LOGS.init()
     _print = DEBUG.LOGS.print
+
+    # Load Config files.
+    config = config_manager.ConfigManager
+    config.set_from_json( "./data/configs/web_conf.json" )
 
     thr_lock_tasks = threading.Lock()
     alive = True
@@ -173,8 +233,21 @@ if __name__ == "__main__":
     active_tasks = []  # tuple (thread, build task object)
 
     # start up the www
-    webhook_thread = threading.Thread( target=web_hook )
-    web_interface_thread = threading.Thread( target=www_interface )
+    webhook_ssl_socket_wrapper = None
+    web_interface_ssl_socket_wrapper = None
+
+    # set up ssl (if used)
+    if config.get("use_ssl", False):
+        ssl = config.get("ssl")
+        webhook_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl["cert_file"], ssl["private_file"], ssl["ca_bundle_file"] ), False       # Never redirect webhooks.
+        web_interface_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl["cert_file"], ssl["private_file"], ssl["ca_bundle_file"] ), ssl["redirect_http_request"]
+
+    webhook_thread = threading.Thread(       target=web_hook,      args=( config.get( "webhook_ip"      , "0.0.0.0" ),
+                                                                          config.get( "webhook_port",       8081 ),
+                                                                          webhook_ssl_socket_wrapper ) )
+    web_interface_thread = threading.Thread( target=www_interface, args=( config.get( "web_interface_ip", "0.0.0.0" ),
+                                                                          config.get( "web_interface_port", 8080 ),
+                                                                          web_interface_ssl_socket_wrapper ) )
 
     webhook_thread.start()
     web_interface_thread.start()
