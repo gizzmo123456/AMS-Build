@@ -9,7 +9,6 @@
 
   "use_ssl": false,
   "ssl": {
-    "redirect_http_request": true,
     "cert_file": null,
     "ca_bundle_file": null,
     "private_file": null

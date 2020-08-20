@@ -25,7 +25,7 @@ def web_hook( ip, port, ssl_socket ):
     """
     :param ip:              host ip (string)
     :param port:            host port (int)
-    :param ssl_socket:      ssl socket wrap socket callback to use, tuple (ssl_socket (SSLContext), redirect_non_https (bool) ) or None if not using ssl
+    :param ssl_socket:      ssl_socket (SSLContext)
     """
 
     # Use the single thread HTTPServer for the web hook,
@@ -35,10 +35,7 @@ def web_hook( ip, port, ssl_socket ):
     redirect_thread = None
 
     if ssl_socket is not None:
-        wh_server.socket = ssl_socket[0]( wh_server.socket, server_side=True )
-        if ssl_socket[1]:   # should redirect
-            redirect_thread = threading.Thread( target=web_redirect_to_https, args=(ip, port) )
-            redirect_thread.start()
+        wh_server.socket = ssl_socket( wh_server.socket, server_side=True )
 
     while alive:
         wh_server.serve_forever()
@@ -52,7 +49,7 @@ def www_interface( ip, port, ssl_socket ):
     """
     :param ip:              host ip (string)
     :param port:            host port (int)
-    :param ssl_socket:      ssl socket wrap socket callback to use, tuple (ssl_socket (SSLContext), redirect_non_https (bool) ) or None if not using ssl
+    :param ssl_socket:      ssl_socket (SSLContext) or None if not using ssl
     """
 
     # Use the threaded HTTPServer for the web interface,
@@ -62,10 +59,7 @@ def www_interface( ip, port, ssl_socket ):
     redirect_thread = None
 
     if ssl_socket is not None:
-        wi_server.socket = ssl_socket[0]( wi_server.socket, server_side=True )
-        if ssl_socket[1]:   # should redirect
-            redirect_thread = threading.Thread( target=web_redirect_to_https, args=(ip, port) )
-            redirect_thread.start()
+        wi_server.socket = ssl_socket( wi_server.socket, server_side=True )
 
     while alive:
         wi_server.serve_forever()
@@ -74,17 +68,6 @@ def www_interface( ip, port, ssl_socket ):
         redirect_thread.join()
 
     wi_server.server_close()
-
-def web_redirect_to_https(ip, port):
-    """ When a ssl socket is used all http request are ignored
-
-    """
-    redirect_host = HTTPServer( (ip, port), redirectToHTTPS.RedirectToHTTPS )
-
-    while alive:
-        redirect_host.serve_forever()
-
-    redirect_host.server_close()
 
 def create_ssl_socket_wrapper(cert_filepath, key_filepath, ca_bundle_filepath):
     """ creates an ssl socket
