@@ -308,7 +308,6 @@ to automate the build trigger.
 All see 'Adding A User' section for information on setting up users for 
 ```Web User Interface``` and allowing access to projects.
 
-
 ### Accepting Webhooks
 Webhooks are used to trigger a build when an event happens on a git server.  
 (At the current time AMS-Build only supports a single webhook.)
@@ -337,7 +336,7 @@ example:
 now its just a case of setting the webhook address on the git server
 
 ```
-Webhook Config,
+Webhook Default Config,
 
 Port            8081
 root path       /request
@@ -352,6 +351,11 @@ POST data:
 eg. mydomain.com:8081/request?name=example&project=example_project
 
 ```
+
+You can update the webhooks default IP (0.0.0.0) and port (8081) by editing the
+```webhook_ip``` and ```webhook_port``` in ```./CI-Host/data/configs/web_conf.json```.
+
+Also see **Setting up SSL** for setting up SSL for webhooks and web-interface 
 
 ## 5. Adding and Updating Users
 ##### New user
@@ -388,7 +392,7 @@ Example Json
 The Web User Interface can be accessed by going to mydomain.com:8080/ams-ci/
 
 ```
-Web User Interface Config,
+Web User Interface Default Config,
 
 Port            8080
 root path       /ams-ci/
@@ -399,6 +403,12 @@ Password        [On first run, AMS-build will present a password for testing, in
 path example. mydomain.com:8080/ams-ci/
 
 ```
+
+You can update the webhooks default IP (0.0.0.0) and port (8081) by editing the
+```web_interface_ip``` and ```web_interface_port``` in ```./CI-Host/data/configs/web_conf.json```.
+
+Also see **Setting up SSL** for setting up SSL for web-interface and webhooks
+
 #### Interface
 Before being able to access the web interface you must log in using user credentials
 Once logged in you will the you will be presented with the tasks and project areas.
@@ -575,6 +585,28 @@ GitHub IPs      : (link)
 BitBucket IPs   : (link)
 ```
 And to only allow connects via vpn to the web interface (default port 8080).
+
+##### Setting up SSL for the ```Web User Interface``` and ```Webhooks```. (its real simple)
+Its also recommended to setup SSL, you can gain a free 90 day SSL certificate, from a
+number of providers such as [Lets Encrypt](https://letsencrypt.org/) or [Zero SSL](https://zerossl.com/)
+(among others). There's also scripts to automatically renew the certificate every 60-90 days 
+(acme.sh)[https://github.com/acmesh-official/acme.sh].
+
+Once you have gained your certificates set ```use_ssl``` to ```true``` and update the SSL file paths  
+Example
+```JSON
+"user_ssl": true,
+"ssl":{
+    "cert_file": "path/to/my/certificate.crt",
+    "ca_bundle_file": "path/to/my/ca_bundle.crt",
+    "private_file": "path/to/root/access/only/private.key"
+}
+```
+The ```cert_file``` and ```ca_bundle_file``` are both considered public, 
+while the ```private_file``` is considered (you guessed it) private and therefore
+should be stored somewhere with only root access 
+
+Reset AMS-Build and you good to go :D
 
 ## 7. More Documents
 [CI-Project Directory Structure](./CI-projects/README.md)  
