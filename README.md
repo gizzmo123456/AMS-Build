@@ -265,6 +265,19 @@ shared queue, to ensure it is unblocked and able to update the task list
 
 ## 4. Getting Started
 
+Before running AMS-Build for the first time, you must update the default path 
+in ```ams_path_config.json``` file located in ```CI-Host/data/config/``` to the 
+root path of AMS-Build (that is the folder that contains 'CI-Host/', 'CI-Projects/'
+and 'CI-Root/')
+
+Example
+```
+{
+  "default_shell": "sh",                          // leave as 'sh' for now at least. if changed, it may be fine it may not 
+  "base_directory": "Example/Path/To/ams-build",  // it is accepted to use things like ${HOME} // DEFAULT ${HOME}/ams-build
+}
+```
+
 When the application is run for the first time you will be presented with a
 username (admin) and password (???) in the console logs. This is the default 
 account used for the web user interface and has restricted access for testing.
