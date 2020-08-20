@@ -6,12 +6,12 @@ see https://pypi.org/project/redis/ for py lib
 ========================================================================
 Release v1.0.0 TODO.
 ========================================================================
-[ ] Update Documents
+[x] Update Documents
     - Readme
     - Json description docs
     - Todo Refresh
 [ ] Clean install
-[ ] SSL
+[x] SSL
 [ ] Push to GitHub
 
 ========================================================================

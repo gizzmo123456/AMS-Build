@@ -14,6 +14,7 @@
     - View build status, actors ect.
     - View and cancel Active and Queued Tasks
     - All Info is available via the Web Interface API (ams-ci/api) (See TODO. for API plans)
+- SSL for webhooks and web user interface
     
 ### Know Issues
 - Pipelines Only have a single output directory.
