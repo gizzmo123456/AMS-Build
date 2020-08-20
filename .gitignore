@@ -2,13 +2,17 @@
 .idea/*
 */__pycache__
 
-# Master Directory
-CI-projects/*/master/project_source
-!CI-projects/exampleProject/master/project_source/SHOWFILE
+# ignore all projects except for the blank and example project
+CI-projects/*
 
-# Build Directory
-CI-Projects/*/builds
-!CI-projects/exampleProject/builds/README.md
+# Alow the blank projecy and all .md files
+!CI-projects/blankProject
+!CI-projects/*/*.md
+!CI-projects/*.md
+
+# Make sure the SHOW files are synced for the example and blank projects
+!CI-projects/exampleProject/master/project_source/SHOWFILE
+!CI-projects/blankProject/*/.SHOWFILE
 
 # Generated files.
 CI-projects/*/projectBuildInfo.json
@@ -21,6 +25,3 @@ CI-Host/data/.secrets/*
 
 # lock files
 *.lock
-
-# testing (just to make sure i dont push um)
-CI-projects/TEST_*/*
