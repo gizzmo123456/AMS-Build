@@ -47,6 +47,7 @@ v1.0.0 Missed tasks TODO.
 ========================================================================
 Post v1.0.0 Release TODO.
 ========================================================================
+[ ] Automatically detect install path
 [ ] Auto Build Deletion (for builds older than X amount of time)  
     With the option to keep the first/last build of each month   
 

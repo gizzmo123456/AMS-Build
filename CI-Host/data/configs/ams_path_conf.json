@@ -1,0 +1,4 @@
+{
+  "default_shell": "sh",
+  "base_directory": "${HOME}/unity-ci",
+}
