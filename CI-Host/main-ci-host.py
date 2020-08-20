@@ -223,8 +223,8 @@ if __name__ == "__main__":
     if config.get("use_ssl", False):
         ssl_conf = config.get("ssl")
         try:
-            webhook_ssl_socket_wrapper = create_ssl_socket_wrapper(       ssl_conf["cert_file"], ssl_conf["private_file"], ssl_conf["ca_bundle_file"] ), False  # Never redirect webhooks.
-            web_interface_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl_conf["cert_file"], ssl_conf["private_file"], ssl_conf["ca_bundle_file"] ), ssl_conf["redirect_http_request"]
+            webhook_ssl_socket_wrapper = create_ssl_socket_wrapper(       ssl_conf["cert_file"], ssl_conf["private_file"], ssl_conf["ca_bundle_file"] )  # Never redirect webhooks.
+            web_interface_ssl_socket_wrapper = create_ssl_socket_wrapper( ssl_conf["cert_file"], ssl_conf["private_file"], ssl_conf["ca_bundle_file"] )
         except Exception as e:
             _print("Failed to Create SSL Sockets", message_type=DEBUG.LOGS.MSG_TYPE_FATAL)
             _print(e, message_type=DEBUG.LOGS.MSG_TYPE_FATAL)
