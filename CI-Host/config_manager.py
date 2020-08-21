@@ -29,7 +29,7 @@ class ConfigManager:
 
         config = common.get_dict_from_json(file_path, lock_file=True)
 
-        _print("Loaded config '", file_path, "'", len(config), "values Added")
+        _print("Loaded config '", file_path, "'", len(config), "keys Added")
 
         for conf in config:
             ConfigManager.set( conf, config[conf] )
