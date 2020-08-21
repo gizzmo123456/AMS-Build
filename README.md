@@ -265,18 +265,17 @@ shared queue, to ensure it is unblocked and able to update the task list
 
 ## 4. Getting Started
 
-Before running AMS-Build for the first time, you must update the default path 
-in ```ams_path_config.json``` file located in ```CI-Host/data/config/``` to the 
-root path of AMS-Build (that is the folder that contains 'CI-Host/', 'CI-Projects/'
-and 'CI-Root/')
+Before running AMS-Build for the first time, you need to run ```./ams-build-setup.sh```
+to install python requirements, set the AMS-Build root directory and add an alias
+to to run AMS-Build.
 
-Example
-```
-{
-  "default_shell": "sh",                          // leave as 'sh' for now at least. if changed, it may be fine it may not 
-  "base_directory": "Example/Path/To/ams-build",  // it is accepted to use things like ${HOME} // DEFAULT ${HOME}/ams-build
-}
-```
+To run './ams-build-setup.sh' on Ubuntu 
+``` 
+sudo chmod u=rwx ams-build-setup.sh
+./ams-build-setup.sh
+``` 
+
+Now we can run AMS-Build by typing command ```amsbuild```
 
 When the application is run for the first time you will be presented with a
 username (admin) and password (???) in the console logs. This is the default 
@@ -318,16 +317,16 @@ of each field in the file.
 Once the pipeline is complete, the project is all set up.
 See the next section (Accepting Webhooks), for information on setting the webhook,
 to automate the build trigger.  
-All see 'Adding A User' section for information on setting up users for 
+Also see 'Adding A User' section for information on setting up users for 
 ```Web User Interface``` and allowing access to projects.
 
 ### Accepting Webhooks
 Webhooks are used to trigger a build when an event happens on a git server.  
-(At the current time AMS-Build only supports a single webhook.)
+(At the current time AMS-Build only supports a single webhook per project.)
 
 To setup a webhook for a project goto the  ```pipeline.json``` file, 
-under the webhook section, enter a name for your projects webhook, a list 
-the accepted actors names.
+under the webhook section, enter a name for your projects webhook and a list 
+of the accepted git actor names.
 
 ```
 example:
@@ -336,9 +335,9 @@ example:
 "webhook": {
   "name": "MyWebhookName",
   "authorized-actors": [
-      "actor_one",
-      "actor_two",
-      "actor_three"
+      "git_actor_one",
+      "git_actor_two",
+      "git_actor_three"
     ]
 }
 ... 
@@ -368,7 +367,7 @@ eg. mydomain.com:8081/request?name=example&project=example_project
 You can update the webhooks default IP (0.0.0.0) and port (8081) by editing the
 ```webhook_ip``` and ```webhook_port``` in ```./CI-Host/data/configs/web_conf.json```.
 
-Also see **Setting up SSL** for setting up SSL for webhooks and web-interface 
+Also see **Setting up SSL** for setting up SSL for webhooks and the web-interface 
 
 ## 5. Adding and Updating Users
 ##### New user
@@ -420,11 +419,11 @@ path example. mydomain.com:8080/ams-ci/
 You can update the webhooks default IP (0.0.0.0) and port (8081) by editing the
 ```web_interface_ip``` and ```web_interface_port``` in ```./CI-Host/data/configs/web_conf.json```.
 
-Also see **Setting up SSL** for setting up SSL for web-interface and webhooks
+Also see **Setting up SSL** for setting up SSL for the web-interface and webhooks
 
 #### Interface
 Before being able to access the web interface you must log in using user credentials
-Once logged in you will the you will be presented with the tasks and project areas.
+Once logged in you will then be presented with the tasks and project areas.
 ```
 |------------------------------|
 | Message Panel                |
@@ -460,7 +459,7 @@ At the movement CORS is disabled across the Web User Interface, with plans to al
 approved sites later on the API only.
 ```
 
-At APIs root directory is ```ams-ci/api/```
+APIs root directory is ```ams-ci/api/```
 
 The api can be used to gain 'Active' and 'Queued' tasks, project and build info
 as well as user info for the currently logged in user
@@ -490,7 +489,7 @@ Example Output
 **View Active Tasks Only**  
 ```ams-ci/api/tasks/active```
 
-**And Queued Tasks**  
+**And Queued Tasks Only**  
 ```ams-ci/api/tasks/queued```
 
 **To Show Only Active or Queued Task For A Single Project**  
@@ -529,7 +528,7 @@ Example Output
 ]
 ```
 
-**List All Project Info**
+**List All Project Data**
 ```ams-ci/api/projects/name/{project-name}```
 
 Example Output (for ```ams-ci/api/projects/name/exampleProject```)
@@ -605,7 +604,8 @@ number of providers such as [Lets Encrypt](https://letsencrypt.org/) or [Zero SS
 (among others). There's also scripts to automatically renew the certificate every 60-90 days 
 (acme.sh)[https://github.com/acmesh-official/acme.sh].
 
-Once you have gained your certificates set ```use_ssl``` to ```true``` and update the SSL file paths  
+Once you have gained your certificates set ```use_ssl``` to ```true``` and update 
+the SSL file paths in ```./CI-Host/data/configs/web_conf.json```  
 Example
 ```JSON
 "user_ssl": true,
@@ -615,9 +615,10 @@ Example
     "private_file": "path/to/root/access/only/private.key"
 }
 ```
-The ```cert_file``` and ```ca_bundle_file``` are both considered public, 
-while the ```private_file``` is considered (you guessed it) private and therefore
-should be stored somewhere with only root access 
+The ```cert_file``` and ```ca_bundle_file``` are both considered public so you
+can just kinda plonk them anywhere, while the ```private_file``` is considered 
+(you guessed it) private and therefore should be stored somewhere with only root
+access 
 
 Reset AMS-Build and you good to go :D
 

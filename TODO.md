@@ -47,7 +47,10 @@ v1.0.0 Missed tasks TODO.
 ========================================================================
 Post v1.0.0 Release TODO.
 ========================================================================
-[ ] Automatically detect install path
+[x] Automatically detect install path
+[ ] In init we need to detect if the cd/git commands fail.
+    And if a input is required for what ever reason.
+
 [ ] Update Directory names from CI-XXX to AMS-XXX.
     (this is going to be a bit of a pain)
     CI-Host     -> AMS-Build
