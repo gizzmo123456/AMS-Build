@@ -17,7 +17,7 @@ echo "\n" >> ~/.bashrc
 echo "# Alias to launch AMS-Build" >> ~/.bashrc
 echo 'alias amsbuild="cd '$ROOT_DIRECTORY'/CI-Host; sudo python3 main-ci-host.py;"' >> ~/.bashrc
 
-source ~/.bashrc
+. ~/.bashrc
 
 echo "Setup Complete"
 echo "Use Command 'amsbuild' to launch AMS-Build Application, (sudo rights required)"
