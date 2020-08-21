@@ -145,7 +145,7 @@ Each stage runs in a new environment.
 
 ## 3. How The Automation/Build Task work
 
-![image](./.assets-for-git/AMS-Build.jpg)  
+![image](./.assets-for-git/ams-build.jpg)  
 [fig 1. System overview]  
 
 When a build task is first triggered and accepted, the ```"prepare-build"```
