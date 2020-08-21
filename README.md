@@ -207,8 +207,8 @@ Are defined in the 'docker' section of the pipeline file.
 # Mounted Directories
 '.../{build_name}/project_source' -> 'docker.project-dest' defined in pipeline
 '.../{build_name}/build'          -> 'docker.build-output-dest' defined in pipeline
-'.../{build_name}config'          -> root directory of the container as a READ-ONLY directory
-'CI-Root'                         -> root directory of docker as a READ-ONLY directory
+'.../{build_name}/config'         -> root directory of the container as a READ-ONLY directory
+'/CI-Root'                        -> root directory of the container as a READ-ONLY directory
 
 # Image
 Defined in the 'docker' sections of the pipeline file.
@@ -218,6 +218,7 @@ python3 {path_to_ci_root}/main-ci-root.py
 
 Note.
 Root needs to be added to the 'docker' section of pipeline.
+Currently its located in ```const.py``` and it applies to all projects (my bad)
 ```
 Once all pipeline task has completed, the status is determined and the project 
 clean up begins 
@@ -231,7 +232,7 @@ followed by generating the 7z hash, if configured to do so in the 'clean-up'
 section of the pipeline file.
 
 ```
-Note. Builds can only be downloaded from the Web User Interface if they are zipped.
+Note. Builds can only be downloaded from the Web User Interface if they are 7z-ed.
 ```
 
 7z hash types available
@@ -328,9 +329,8 @@ To setup a webhook for a project goto the  ```pipeline.json``` file,
 under the webhook section, enter a name for your projects webhook and a list 
 of the accepted git actor names.
 
+Example 
 ```
-example:
-
 ...
 "webhook": {
   "name": "MyWebhookName",
@@ -340,9 +340,7 @@ example:
       "git_actor_three"
     ]
 }
-... 
-
-
+...
 ```
 
 now its just a case of setting the webhook address on the git server
@@ -377,7 +375,7 @@ projects and define a file containing the users password. By default the passwor
 file is ```CI-Host/data/new_user``` (but in the .gitignore to prevent accidental 
 password commits)
 
-Once the password has been entered, it is over writen with '.' (dot)
+Once the password has been successfully entered, it is over writen with '.' (dot)
 
 ##### Updating a users account
 To Update a users password, run 'python3 user_manager.py' and enter an existing
@@ -416,13 +414,13 @@ path example. mydomain.com:8080/ams-ci/
 
 ```
 
-You can update the webhooks default IP (0.0.0.0) and port (8081) by editing the
+You can update the webhooks default IP (0.0.0.0) and port (8080) by editing the
 ```web_interface_ip``` and ```web_interface_port``` in ```./CI-Host/data/configs/web_conf.json```.
 
 Also see **Setting up SSL** for setting up SSL for the web-interface and webhooks
 
 #### Interface
-Before being able to access the web interface you must log in using user credentials
+Before being able to access the web interface you must log in using user credentials.
 Once logged in you will then be presented with the tasks and project areas.
 ```
 |------------------------------|
@@ -437,13 +435,13 @@ Once logged in you will then be presented with the tasks and project areas.
 ```
 
 All active and queued tasks can be seen by all users, but the user may only
-be able to preform an action on a tasks that they have access to.
+preform an action on tasks that they have permission to access.
 
-Projects - lists all projects that the users has access too
+Projects - Lists all projects that the users has access too
 
-Builds - List all builds + output & download links along with statues.
+Builds - List of all builds + output & download links along with statues.
 
-User may only be able to preform tasks up to there user access level.
+User may only preform actions on tasks, up to there user access level.  
 (its worth noting that the links are still displayed even without access
 but the server will reject the request.)
 
@@ -571,7 +569,7 @@ Example Output (for ```ams-ci/api/projects/name/exampleProject```)
 **Project Info Only**  
 ```ams-ci/api/projects/name/{project-name}/project_info```
 
-**Project Build**  
+**Project Builds**  
 ```ams-ci/api/projects/name/{project-name}/builds```
 
 **Project Active and Queued Tasks**  
@@ -602,7 +600,7 @@ And to only allow connects via vpn to the web interface (default port 8080).
 Its also recommended to setup SSL, you can gain a free 90 day SSL certificate, from a
 number of providers such as [Lets Encrypt](https://letsencrypt.org/) or [Zero SSL](https://zerossl.com/)
 (among others). There's also scripts to automatically renew the certificate every 60-90 days 
-(acme.sh)[https://github.com/acmesh-official/acme.sh].
+[acme.sh](https://github.com/acmesh-official/acme.sh).
 
 Once you have gained your certificates set ```use_ssl``` to ```true``` and update 
 the SSL file paths in ```./CI-Host/data/configs/web_conf.json```  
@@ -624,14 +622,14 @@ Reset AMS-Build and you good to go :D
 
 ## 7. More Documents
 [CI-Project Directory Structure](./CI-projects/README.md)  
-[Build Pipeline Config](./CI-projects/pipelineJson.md)  
+[Build Pipeline Config](./CI-projects/pipelineJSON.md)  
 [Build Dir (Note)](./CI-projects/exampleProject/builds/README.md)
 
 ###### Generated Files  
-[Tasks (Active and Queue) Json Information](./CI-Host/data/tasksJson.md)  
-[Project Info](./CI-projects/projectInfoJSON.md)
-[Project Build Info](./CI-projects/projectBuildInfoJSON.md)
+[Tasks (Active and Queue) Json Information](./CI-Host/data/tasksJSON.md)  
+[Project Info](./CI-projects/exampleProject/projectInfoJSON.md)  
+[Project Build Info](./CI-projects/exampleProject/projectBuildInfoJSON.md)
 
 ###### Other
-[TODO](./TODO.md)
+[TODO](./TODO.md)  
 [Change Log](./changeLog.md)
