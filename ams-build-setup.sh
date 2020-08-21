@@ -13,7 +13,7 @@ echo "Setting AMS-Build Root Directory..."
 echo '{ "default_shell": "sh", "base_directory": "'$ROOT_DIRECTORY'"}' > $ROOT_DIRECTORY'/CI-Host/data/configs/ams_path_conf.json'
 
 echo "Adding Alias..."
-echo "\n\n" >> ~/.bashrc
+echo "\n" >> ~/.bashrc
 echo "# Alias to launch AMS-Build" >> ~/.bashrc
 echo 'alias amsbuild="cd '$ROOT_DIRECTORY'/CI-Host; sudo python3 main-ci-host.py;"' >> ~/.bashrc
 

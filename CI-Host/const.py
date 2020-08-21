@@ -1,6 +1,6 @@
 import config_manager
 
-config_manager.ConfigManager.set_from_json("./data/config/ams_path_conf.json")
+config_manager.ConfigManager.set_from_json("./data/configs/ams_path_conf.json")
 
 APP_NAME = "ams-ci"
 APP_VERSION             = 0.1
