@@ -1,0 +1,17 @@
+{
+  "in-webhooks":[
+    {
+      "name": "master",
+      "authorized-actors": [
+        "git user"
+      ]
+    }
+  ],
+  "out-webhooks": [
+    {
+      "hook-name": "AMS-Build Discord Bot",
+      "type": "discord",
+      "url": ""
+    }
+  ]
+}

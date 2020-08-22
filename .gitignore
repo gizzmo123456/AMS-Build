@@ -2,17 +2,25 @@
 .idea/*
 */__pycache__
 
+
 # ignore all projects except for the blank and example project
 CI-projects/*
+
+# alow Example project configs
+!CI-projects/exampleProject
+CI-projects/exampleProject/builds
 
 # Alow the blank projecy and all .md files
 !CI-projects/blankProject
 !CI-projects/*/*.md
 !CI-projects/*.md
 
+
 # Make sure the SHOW files are synced for the example and blank projects
-!CI-projects/exampleProject/master/project_source/SHOWFILE
+!CI-projects/exampleProject/*/SHOWFILE
 !CI-projects/blankProject/*/.SHOWFILE
+
+
 
 # Generated files.
 CI-projects/*/projectBuildInfo.json
@@ -21,6 +29,7 @@ CI-Host/data/*.json
 CI-Host/data/new_user
 
 CI-Host/data/.secrets/*
+
 
 
 # lock files
