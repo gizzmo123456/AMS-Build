@@ -1,6 +1,10 @@
 import urllib.parse
 import urllib.request
 import json
+import DEBUG
+
+_print = DEBUG.LOGS.print
+
 
 class BaseOutWebhook:
 
@@ -10,24 +14,68 @@ class BaseOutWebhook:
         self.default_data_fields = {}         # set default data so it cant be missed when making a request # Also this needs overriding
         self.headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64)"}
 
-    def send_request( self, **data ):
+    def get_main_data( self, **data ):
+        return { **self.default_data_fields, **data }
 
-        out_data = json.dumps( {**self.default_data_fields, **data} )  # override the default data with the new data
+    def _send_request( self, **data ):
+
+        out_data = json.dumps( data )  # override the default data with the new data
 
         post_data = urllib.parse.urlparse( out_data )
         post_data = post_data.encode( 'ascii' )
 
         # set the length of the post data
         self.headers["Content-length"] = str( len(out_data) )
-        print(out_data)
 
         request = urllib.request.Request( self.webhook_url, post_data, self.headers )
 
         with urllib.request.urlopen( request ) as response:
             page = response.read()
 
-        print(page)
+    @staticmethod
+    def format_webhook_data(data, format_data):
+        """Formats every string value in a nested list/dict combo :)"""
+        if type( data ) is list:
+            keys = range( len(data) )
+        elif type(data) is dict:
+            keys = data
+        elif type( data ) is str:
+            return BaseOutWebhook.format_string( data, format_data )
+        else:
+            return data
 
+        for k in keys:
+            if type( data[k] ) is list or type( data[k] ) is dict:
+                data[k] = BaseOutWebhook.format_webhook_data( data[k], format_data)
+            elif type( data[k] ) is str:
+                data[k] = BaseOutWebhook.format_string( data[k], format_data )
+            # we dont need to worry about over values
+
+        return data
+
+    @staticmethod
+    def format_string( string, format_values ):
+        """Make sure that no keys error are thrown when formatting"""
+        formatted = False
+
+        while not formatted:
+            try:
+                return string.format( **format_values )
+                formatted = True
+            except KeyError as e: # add the key and try again :)
+                _print("KeyError:", str(e), "-> Adding key with value of key", print_now=True)
+                format_values[str(e)[1:-1]] = str(e)[1:-1]
+            except Exception as e: # We can only handle key errors, so we must exit
+                raise e
+
+    def execute_json( self, webhook_def_data_dict, format_data ):
+        """ Executes a out webhook definition defined in project/master/config/wenhook.json
+            Requires overriding
+        :param webhook_def_cont_dict:   The data dict defined in the webhook definition
+        :param format_data:             the format string data available to the hook
+        :return:                        None
+        """
+        pass
 
 class DiscordsWebhook( BaseOutWebhook ):
 
@@ -37,47 +85,77 @@ class DiscordsWebhook( BaseOutWebhook ):
 
         self.default_data_fields = {
             "content": "Im A Webhook For Discords",
-            "username": "AMS-CI Webhook Bot",
+            "username": "AMS-Build Webhook Bot",
             "avatar_url": "https://i.imgur.com/4M34hi2.png"
         }
 
-        self.embed = {
-            "title": "",
-            "description": "",
+        self.embed = []
+
+    def add_embed( self, title="\u200B", description="\u200B", **kargs ):   # we must use kargs as we use unpacking to input the param data
+
+        self.embed.append({
+            "title": title,
+            "description": description,
             "color": 15258703
-        }
+        })
 
-    def set_embed( self, title, description ):
+    def add_embed_field( self, name="\u200B", value="\u200B", inline=True, **kargs ): # we must use kargs as we using unpacking
+        """Adds field data to the last embed"""
 
-        self.embed["title"] = title
-        self.embed["description"] = description
-        self.embed["description"] = description
+        if len(self.embed) == 0:
+            self.add_embed("", "")
 
-    def add_embed_field( self, name, value, inline=True ):
+        embed_id = len(self.embed) - 1
+        if "fields" not in self.embed[embed_id]:
+            self.embed[embed_id]["fields"] = []
 
-        if "fields" not in self.embed:
-            self.embed["fields"] = []
-
-        self.embed["fields"].append( {
+        self.embed[embed_id]["fields"].append( {
             "name": name,
             "value": value,
             "inline": inline
         } )
 
-    def send_request( self, **data ):
+    def execute_json( self, webhook_def_data_dict, format_data ):
 
-        data["embeds"] = [self.embed]
+        data_dict = BaseOutWebhook.format_webhook_data( webhook_def_data_dict, format_data )
+        main_data = self.get_main_data( **data_dict["default"] )
 
-        super().send_request( **data )
+        if "embeds" in data_dict:
+            for e in data_dict["embeds"]:
+                self.add_embed( **e )
 
-        self.set_embed( "", "" )
+                if "fields" in e:
+                    for ef in e["fields"]:
+                        self.add_embed_field( **ef )
 
-        if "fields" in self.embed:
-            del self.embed["fields"]
+        _print("EXE OUT:", data_dict, print_now=True)
+        self._send_request( **main_data, embeds=self.embed )
+
+        # reset the embeds and fields, in case of re-use.
+        self.embed = [ ]
 
 
 if "__main__" == __name__:
-    b = DiscordsWebhook("https://discord.com/api/webhooks/746203039496667207/Ybu1oAQeKCIrDPfp0pwZ-5b4nR9sun7PiAUsJ_9YbEdr6SWRKhxjRfAgi16cBjjaqI2U")
+
+    b = DiscordsWebhook("https://discordapp.com/api/webhooks/746744020998553660/htjCP-fmm2NbdzUNtXa7WchFtfH9vtE1AAKe8RAu2s3U_t7dz6sidTJeb2GFEuNJQwES")
+
+    with open("../CI-projects/exampleProject/master/config/webhooks.json") as f:
+        file = ''.join(f.readlines())
+
+    data = json.loads( file )
+
+    test_format = {
+        "buildName": "example name",
+        "status": "Build Status",
+        "actor": "Trigger Actor",
+        "output": "out/put/path",
+        "7z": "7z/dl/path"
+    }
+
+    b.execute_json( data["out-webhooks"][0]["data"], test_format )
+
+    exit()
+
     b.set_embed("Helloo", "World :)")
     b.add_embed_field("f 1", "yep")
     b.add_embed_field("f 2", "yep")

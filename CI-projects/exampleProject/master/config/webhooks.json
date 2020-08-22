@@ -15,39 +15,46 @@
       "url": "",
       "data": {
         "default": {
-          "content": ""
+          "content": "Helloo World Im A bot"
         },
-        "embed": {
-          "title": "{project} - Build Complete",
-          "description": "Build {buildId} has completed!",
-          "fields": [
-            {
-              "name": "Build Name",
-              "value": "{buildName}",
-              "inline": false
-            },
-            {
-              "name": "Status",
-              "value": "{status}",
-              "inline": true
-            },
-            {
-              "name": "Triggered Actor",
-              "value": "{actor}",
-              "inline": true
-            },
-            {
-              "name": "Output log",
-              "value": "{output}",
-              "inline": true
-            },
-            {
-              "name": "7z",
-              "value": "{7z}",
-              "inline": true
-            }
-          ]
-        }
+        "embeds":[
+          {
+            "title": "{project} - Build Complete",
+            "description": "Build {buildId} has completed!",
+            "fields": [
+              {
+                "name": "Build Name",
+                "value": "{buildName}",
+                "inline": false
+              },
+              {
+                "name": "ID",
+                "value": "{buildId}",
+                "inline": true
+              },
+              {
+                "name": "Status",
+                "value": "{status}",
+                "inline": true
+              },
+              {
+                "name": "Triggered By",
+                "value": "{actor}",
+                "inline": true
+              },
+              {
+                "name": "Output log",
+                "value": "[View](https://{output})",
+                "inline": true
+              },
+              {
+                "name": "7z",
+                "value": "[Download](https://{7z})",
+                "inline": true
+              }
+            ]
+          }
+        ]
       }
     }
   ]
