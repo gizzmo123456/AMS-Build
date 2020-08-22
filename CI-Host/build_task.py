@@ -250,7 +250,7 @@ class BuildTask:
     def get_config_value( self, *keys, default_value=None ):    ## Todo this needs to be replaced with common.get_value_at_key
         """Safely gets the config value at keys
         :param keys:            each key of the config value ie.
-                                keys "webhook", "name" would return config[webhook][name]
+                                keys "docker", "image" would return config[docker][image]
                                 or "pipeline", "commands", 0 would return config[pipeline][commands][0]
                                 Returns None if no set.
         :param default_value:   The default value to be returned if the key is not found

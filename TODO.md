@@ -2,6 +2,7 @@
 [ ] - Webhooks still work
         - check bad actors are rejected
         - check bad wh names are rejected
+        - check no cross hook actors
         - Check that multiple WHs works
         
 # TODO.

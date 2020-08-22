@@ -17,9 +17,10 @@ class UAC:
 
     __PROJECT_CACHE_TTL = 30        # seconds, update projects list, at most once every TTL
 
-    def __init__(self, username=None, access_level=NO_AUTH):
+    def __init__(self, username=None, access_level=NO_AUTH, subname=None):
 
         self.username = username            # the user the uac belogs to
+        self.subname = subname              # the subname is used to store any secondary names. ie the webhook name.
         self.access_level = access_level    # the users access level
 
         self.projects = []                  # this list of projects available to the user, does not apply to webhooks
@@ -49,17 +50,24 @@ class UAC:
         else:
             self.projects = []
 
-    def has_project_access( self, project, pipeline=None ):
-        """ the pipeline must supplied for webhook access """
+    def has_project_access( self, project, webhooks=None ):
+        """ the in_webhooks must be supplied for webhook access """
 
         if self.access_level == UAC.NO_AUTH:
             return False
 
         self.__update_user_projects()
 
-        if pipeline is not None and self.access_level == UAC.WEBHOOK:
-            authorized_actor = common.get_value_at_key( pipeline, "webhook", "authorized-actors", noValue=[] )
-            return self.username in authorized_actor
+        if webhooks is not None and "in-webhooks" in webhooks and self.access_level == UAC.WEBHOOK:
+            all_in_hooks = common.get_value_at_key( webhooks, "in-webhooks", noValue=[] )
+            for wh in all_in_hooks:
+                if common.get_value_at_key(wh, "name", noValue="") == self.subname:
+                    authorized_actors = common.get_value_at_key( wh, "authorized-actors", noValue=[] )
+                    if self.username in authorized_actors:
+                        return True
+                    else:
+                        return False    # actor not in webhook actor list
+            return False    # webhook not found
         elif self.access_level != UAC.WEBHOOK:
             return project in self.projects
 

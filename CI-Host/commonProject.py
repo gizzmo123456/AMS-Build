@@ -131,7 +131,7 @@ def get_project_pipeline( uac, project_name ):
 
     pipeline = common.get_dict_from_json( pipeline_path )
 
-    if not uac.has_project_access( project_name, pipeline ):
+    if not uac.has_project_access( project_name, get_project_config( uac, project_name, "webhooks") ):
         return None
 
     return pipeline
@@ -151,7 +151,12 @@ def get_project_config( uac, project_name, config_name):
 
     config = common.get_dict_from_json( config_path )
 
-    if not uac.has_project_access( project_name, config ):
+    if config_name != "webhooks":   # prevent a recursive nightmare
+        webhook_access = get_project_config( uac, project_name, "webhooks")
+    else:
+        webhook_access = config
+
+    if not uac.has_project_access( project_name, webhook_access ):
         return None
 
     return config

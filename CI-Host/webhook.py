@@ -32,7 +32,8 @@ class Webhook( baseHTTPServer.BaseServer ):
             repo_name = post_data["repository"]
             build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
-            uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK )
+            # we must set the subname, so we can check that the actor belongs to webhook of name for project
+            uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK, query["name"] )
 
             # check the request is defined within the projects webhooks config
             # and the git actor has access
@@ -46,6 +47,7 @@ class Webhook( baseHTTPServer.BaseServer ):
             webhooks = common.get_value_at_key( webhook_config, "in-webhooks", noValue=[] )
             webhook_actors = None
 
+            # find if the webhook is defined for project and that the git actor has access
             for whi in range( len(webhooks) ):
                 webhook_name = common.get_value_at_key( webhook_config, "in-webhooks", whi,  "name" )
 
