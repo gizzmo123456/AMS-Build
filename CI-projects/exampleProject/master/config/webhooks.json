@@ -9,9 +9,46 @@
   ],
   "out-webhooks": [
     {
-      "hook-name": "AMS-Build Discord Bot",
+      "hook-name": "Build Complete Discord",
       "type": "discord",
-      "url": ""
+      "trigger": "build-complete",
+      "url": "",
+      "data": {
+        "default": {
+          "content": ""
+        },
+        "embed": {
+          "title": "{project} - Build Complete",
+          "description": "Build {buildId} has completed!",
+          "fields": [
+            {
+              "name": "Build Name",
+              "value": "{buildName}",
+              "inline": false
+            },
+            {
+              "name": "Status",
+              "value": "{status}",
+              "inline": true
+            },
+            {
+              "name": "Triggered Actor",
+              "value": "{actor}",
+              "inline": true
+            },
+            {
+              "name": "Output log",
+              "value": "{output}",
+              "inline": true
+            },
+            {
+              "name": "7z",
+              "value": "{7z}",
+              "inline": true
+            }
+          ]
+        }
+      }
     }
   ]
 }
