@@ -133,31 +133,3 @@ class DiscordsWebhook( BaseOutWebhook ):
 
         # reset the embeds and fields, in case of re-use.
         self.embed = [ ]
-
-
-if "__main__" == __name__:
-
-    b = DiscordsWebhook("https://discordapp.com/api/webhooks/746744020998553660/htjCP-fmm2NbdzUNtXa7WchFtfH9vtE1AAKe8RAu2s3U_t7dz6sidTJeb2GFEuNJQwES")
-
-    with open("../CI-projects/exampleProject/master/config/webhooks.json") as f:
-        file = ''.join(f.readlines())
-
-    data = json.loads( file )
-
-    test_format = {
-        "buildName": "example name",
-        "status": "Build Status",
-        "actor": "Trigger Actor",
-        "output": "out/put/path",
-        "7z": "7z/dl/path"
-    }
-
-    b.execute_json( data["out-webhooks"][0]["data"], test_format )
-
-    exit()
-
-    b.set_embed("Helloo", "World :)")
-    b.add_embed_field("f 1", "yep")
-    b.add_embed_field("f 2", "yep")
-    b.add_embed_field("f 3", "nop nop nop nop", False)
-    b.send_request(content="hellooWorld")
