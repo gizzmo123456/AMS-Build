@@ -40,7 +40,7 @@ class LOGS:
         LOGS.debug_thread.start()
 
     @staticmethod
-    def print( *argv, message_type=1, sept=' ', output_filename="", console=True ):
+    def print( *argv, message_type=1, sept=' ', output_filename="", console=True, print_now=False ):
         """
 
         :param argv:
@@ -48,18 +48,22 @@ class LOGS:
         :param sept:
         :param output_filename:
         :param console:
+        :param print_now:       If True, If pre init, the message is printed streate away via the standard print function
+                                If True and inited or False, normal behaviour is expected
         :return:
         """
+
+        # make sure all the values in argv are strings
+        argv = [ str( a ) for a in argv ]
 
         if not LOGS.debug_mode or (not LOGS.que_pre_init_msg and not LOGS.inited):
             print("Warning, Debug Log not initilized")
             return
+        elif not LOGS.inited and print_now:
+            print(sept.join( argv ))
 
         now = datetime.datetime.utcnow()
         time_str = now.strftime("%m/%d/%Y @ %H:%M:%S.%f")
-
-        # make sure all the values in argv are strings
-        argv = [ str( a ) for a in argv ]
 
         if message_type == LOGS.MSG_TYPE_WARNING:
             message_type_name = "WARNING"
