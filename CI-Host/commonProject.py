@@ -137,6 +137,26 @@ def get_project_pipeline( uac, project_name ):
     return pipeline
 
 
+def get_project_config( uac, project_name, config_name):
+
+    if config_name == "pipeline":   # TODO: NOTE: we'll leave get pipeline, as we intend to move the file to the project source directory
+        return get_project_pipeline( uac, project_name)
+
+    config_path = "{relevent_proj_path}/{project_name}/master/config/{config_name}.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                                 project_name=project_name,
+                                                                                                 config_name=config_name )
+
+    if not os.path.exists( config_path ):
+        return None
+
+    config = common.get_dict_from_json( config_path )
+
+    if not uac.has_project_access( project_name, config ):
+        return None
+
+    return config
+
+
 def get_project_output_log( uac, project, build_name ):
     """Get the output log for build in project, None if not found"""
 

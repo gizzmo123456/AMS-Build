@@ -34,19 +34,31 @@ class Webhook( baseHTTPServer.BaseServer ):
 
             uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK )
 
-            # check the request is defined within the projects webhook config in pipeline
-            # and the actor has access
-            pipeline = commonProject.get_project_pipeline( uac, query[ "project" ] )
+            # check the request is defined within the projects webhooks config
+            # and the git actor has access
+            webhook_config = commonProject.get_project_config( uac, query[ "project" ], "webhooks" )
 
-            if pipeline is None:
+            if webhook_config is None:
                 _print( "Error: Invalid project or Access, For project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 self.process_request( "Error", 404, False )
                 return
 
-            webhook_name = common.get_value_at_key( pipeline, "webhook", "name" )
+            webhooks = common.get_value_at_key( webhook_config, "in-webhooks", noValue=[] )
+            webhook_actors = None
 
-            if webhook_name != query[ "name" ]:
+            for whi in range( len(webhooks) ):
+                webhook_name = common.get_value_at_key( webhook_config, "in-webhooks", whi,  "name" )
+
+                if webhook_name == query[ "name" ]:
+                    webhook_actors = common.get_value_at_key( webhook_config, "in-webhooks", whi,  "authorized-actors" )
+                    break
+
+            if webhook_actors is None:
                 _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                self.process_request( "Error", 404, False )
+                return
+            elif actor not in webhook_actors:
+                _print( "Error: Invalid actor (", actor, "), for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 self.process_request( "Error", 404, False )
                 return
 

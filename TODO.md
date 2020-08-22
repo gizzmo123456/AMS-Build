@@ -1,3 +1,9 @@
+# Test list
+[ ] - Webhooks still work
+        - check bad actors are rejected
+        - check bad wh names are rejected
+        - Check that multiple WHs works
+        
 # TODO.
 
 would it be better to store queue and project info in redis?
