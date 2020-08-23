@@ -1,9 +1,22 @@
 import urllib.parse
 import urllib.request
 import json
+import commonProject
 import DEBUG
 
+# Classes webhooks.
+# ALL webhook def's should be handled, by the 'handle_outbound_webhook' at the bottom.
+#
+# Current webhooks
+# - Discords
+#
+# See CI-Projects/webhooksJSON.md for further information
+#
+
+
 _print = DEBUG.LOGS.print
+
+WH_TRIGGER = "build-complete"       # lets keep the const human readable as they need setting in the json
 
 
 class BaseOutWebhook:
@@ -133,3 +146,50 @@ class DiscordsWebhook( BaseOutWebhook ):
 
         # reset the embeds and fields, in case of re-use.
         self.embed = [ ]
+
+
+def handle_outbound_webhook( uac, project_name, webhook_name, webhook_trigger, format_data ):
+    """ Method to handle all webhooks
+
+    :param webhook_def_dict:
+    :param format_data:
+    :return:
+    """
+    webhooks = commonProject.get_project_config( uac, project_name, "webhooks" )
+
+    if webhooks is None:  # does not exist or no access
+        _print( f"Either project or webhooks do not exist or actor does not have access to {project_name}" )
+        return
+    elif "out-webhooks" not in webhooks:  # out webhooks not defined for project
+        _print( f"No outbound webhooks defined for {project_name}" )
+        return
+
+    webhooks = webhooks["out-webhooks"]
+
+    webhook_constructors = { "discord": DiscordsWebhook }   # key is webhook type
+    # required_params does not include 'hook-name' as this needs to match the webhook name,
+    # before we can check if the other required params are set
+    webhook_required_params = [ "type", "trigger", "url", "data" ]
+
+    # find the target webhook
+    for owh in webhooks:
+        if "hook-name" in owh and owh["hook-name"] == webhook_name:
+            # check all required params are available
+            for rp in webhook_required_params:
+                if rp not in owh:
+                    _print( f"Unable to process webhook. Missing param {rp}. (All webhooks are required to have {', '.join( webhook_required_params )})")
+                    return
+
+            # make sure that it was trigger by the correct action.
+            # this is more of a format string thing, as some data may only be available
+            # in certain places. IE. if a build was deleted, there wont be any format values
+            # to get the 7z link/hash or output log ect... (nor would it be logical)
+            if owh["trigger"] != webhook_trigger:
+                _print(f"Incorrect Trigger Type ({webhook_trigger} != {owh['trigger']})")
+                return
+
+            # create and execute the outbound webhook
+            outbound_webhook = webhook_constructors[ owh["type"] ]( owh["url"] )
+            outbound_webhook.execute_json( owh["data"], format_data )
+
+            return
