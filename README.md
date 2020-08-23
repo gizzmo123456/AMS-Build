@@ -97,19 +97,9 @@ event such as PUSH is trigger on the GIT server. When the event is received
 by AMS-Build, a build task is created and queued if the git trigger actor is 
 an approved actor in the target project webhook config.
 
-For further info on Webhook Actors see,
+For further info on Webhook Actors and access level see,
+- **User Types and Access Levels** 
 - **Approving webhook actors**
-
-###### User Types and Access Levels ( For Web User Interface and Webhooks )
-
-| User Type    | Access Level | Permissions                                                  | Other Info                 |
-| :----------- | :----------: | :----------------------------------------------------------- | :------------------------- |
-| NO AUTH      | 0            | None. No Access                                              |                            |
-| USER         | 1            | View/Download assigned projects                              |                            |
-| WEBHOOK      | 2            | Only Triggers Build Tasks                                    | Available to Webhooks only |
-| MODERATOR    | 3            | Same as USER + Trigger Tasks for assigned projects           |                            |
-| ADMIN        | 4            | Same as MODERATOR + Add/Assigne users to assigned project    | TODO (Not implemented)     |
-| SERVER ADMIN | 5            | All Permissions on All Projects                              | TODO (Not implemented)     |
 
 #### CI-Project
 Ci-Project directory contains all projects available to AMS-Build.
@@ -247,11 +237,14 @@ Note. that 7z is used to generate the hash.
 ```
 
 And the project source is remove, if also configured to do so in the 'clean-up'
-section of the pipeline file 
+section of the pipeline file.
 
-Once the clean up has finished a ```TASK-COMPLETE``` message is put onto the 
+Once the clean up has finished the outbound webhooks are triggered if defined in
+the ```webhooks.json``` config file and a ```TASK-COMPLETE``` message is put onto the 
 shared queue, to ensure it is unblocked and able to update the task list 
 (queue and active)
+
+- See **Webhooks** for more info on outbound webhooks.
 
 ###### Project Build Statuses
 
@@ -321,11 +314,13 @@ to automate the build trigger.
 Also see 'Adding A User' section for information on setting up users for 
 ```Web User Interface``` and allowing access to projects.
 
-### Accepting Webhooks
-Webhooks are used to trigger a build when an event happens on a git server.  
-(At the current time AMS-Build only supports a single webhook per project.)
+### Webhooks
 
-To setup a webhook for a project goto the  ```pipeline.json``` file, 
+#### Accepting inbound webhooks
+Webhooks are used to trigger a build when an event happens on a git server.  
+AMS-Builds supports multiple webhooks per project.
+
+To setup a webhook for a project goto the  ```webhooks.json``` file, 
 under the webhook section, enter a name for your projects webhook and a list 
 of the accepted git actor names.
 
@@ -366,6 +361,36 @@ You can update the webhooks default IP (0.0.0.0) and port (8081) by editing the
 ```webhook_ip``` and ```webhook_port``` in ```./CI-Host/data/configs/web_conf.json```.
 
 Also see **Setting up SSL** for setting up SSL for webhooks and the web-interface 
+And see ```CI-Project/webhookJSON.md``` for more info on the structure of inbound webhooks
+
+#### Sending Outbound webhooks
+Outbound webhooks are usful for automatically posting message to team messages 
+services such as Slack or Discord when an event has occurred on the server.
+Such as a build task has complete.
+
+At the current time AMS-Build only has support Discord.  
+and only support 
+- standard content 
+- username overrides
+- embeds
+  - with Fields
+of the discord webhook API
+
+See. [Discord Webhooks API](https://discord.com/developers/docs/resources/webhook#execute-webhook) for more info
+
+AMS-Build has support for multiple outbound webhooks def that are all defined in the 
+```webhooks.json``` project config file.
+
+Each definition must contain 5 fields.
+1. **hook-name** name of inbound webhook
+2. **type** The type of webhook ie discord
+3. **trigger** the trigger type of the hook. ie build-complete
+4. **url** The address the webhook is targeting
+5. **data** The webhooks payload.
+
+The data field closely resembles the Discord webhook structure (but not quite exact)
+
+See ```CI-Projects\webhookJSON.md``` for more info on outbound webhooks
 
 ## 5. Adding and Updating Users
 ##### New user
@@ -397,6 +422,18 @@ Example Json
 ```
 
 **(Do NOT add new user directly to this file, use the user manager instead)**
+
+##### User Types and Access Levels ( For Web User Interface and Webhooks )
+
+| User Type    | Access Level | Permissions                                                  | Other Info                 |
+| :----------- | :----------: | :----------------------------------------------------------- | :------------------------- |
+| NO AUTH      | 0            | None. No Access                                              |                            |
+| USER         | 1            | View/Download assigned projects                              |                            |
+| WEBHOOK      | 2            | Only Triggers Build Tasks                                    | Available to Webhooks only |
+| MODERATOR    | 3            | Same as USER + Trigger Tasks for assigned projects           |                            |
+| ADMIN        | 4            | Same as MODERATOR + Add/Assigne users to assigned project    | TODO (Not implemented)     |
+| SERVER ADMIN | 5            | All Permissions on All Projects                              | TODO (Not implemented)     |
+
 
 ## 6. Using The Web User Interface
 The Web User Interface can be accessed by going to mydomain.com:8080/ams-ci/
@@ -623,6 +660,7 @@ Reset AMS-Build and you good to go :D
 ## 7. More Documents
 [CI-Project Directory Structure](./CI-projects/README.md)  
 [Build Pipeline Config](./CI-projects/pipelineJSON.md)  
+[Webhooks Config](./CI-projects/webhooksJSON.md)
 [Build Dir (Note)](./CI-projects/exampleProject/builds/README.md)
 
 ###### Generated Files  

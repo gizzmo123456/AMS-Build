@@ -1,9 +1,11 @@
-# Test list
-[ ] - Webhooks still work
-        - check bad actors are rejected
-        - check bad wh names are rejected
-        - check no cross hook actors
-        - Check that multiple WHs works
+# Test/task list
+[x] - Webhooks still work
+        - [pass] Triggers Work 
+        - [pass] check bad actors are rejected
+        - [pass] check bad wh names are rejected
+        - [pass] check no cross hook actors
+        - [pass] Check that multiple WHs works
+[ ] - Update Docs
         
 # TODO.
 
