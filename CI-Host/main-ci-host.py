@@ -15,6 +15,7 @@ import queue_item
 import common
 import user_manager
 import config_manager
+import out_webhook
 
 SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
@@ -152,6 +153,7 @@ def task_worker(job):
 
     _print("Starting new task")
     if SKIP_TASK_EXECUTION:
+        _print( "Simulating task task" )
         job.build_status = job.BUILD_STATUS_DUMMY
         slept_time = 0
         interval = SKIP_TASK_DELAY / SKIP_TASK_INTERVALS
@@ -162,7 +164,9 @@ def task_worker(job):
         if job.build_status != job.BUILD_STATUS_CANCEL:         # if its canceled the cancel method will clean up for us.
             if SKIP_TASK_CLEAN_UP:
                 job.cleanup()                                   # Clean up the job
-            job.append_build_info()                            # updating build list
+            job.append_build_info()                             # updating build list
+            out_webhook.handle_outbound_webhook( job.uac, job.format_values[ "project" ], out_webhook.OWHT_BUILD_COMPLETE, job.format_values )  # The task complete does not have the build info when in simulate mode
+
     else:
         job.execute()
 
