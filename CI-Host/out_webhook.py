@@ -16,7 +16,8 @@ import DEBUG
 
 _print = DEBUG.LOGS.print
 
-WH_TRIGGER = "build-complete"       # lets keep the const human readable as they need setting in the json
+# Webhook out triggers.
+WHOT_BUILD_COMPLETE = "build-complete"       # lets keep the const human readable as they need setting in the json
 
 
 class BaseOutWebhook:
@@ -69,12 +70,10 @@ class BaseOutWebhook:
     @staticmethod
     def format_string( string, format_values ):
         """Make sure that no keys error are thrown when formatting"""
-        formatted = False
 
-        while not formatted:
+        while True:
             try:
                 return string.format( **format_values )
-                formatted = True
             except KeyError as e: # add the key and try again :)
                 _print("KeyError:", str(e), "-> Adding key with value of key", print_now=True)
                 format_values[str(e)[1:-1]] = str(e)[1:-1]
@@ -84,7 +83,7 @@ class BaseOutWebhook:
     def execute_json( self, webhook_def_data_dict, format_data ):
         """ Executes a out webhook definition defined in project/master/config/wenhook.json
             Requires overriding
-        :param webhook_def_cont_dict:   The data dict defined in the webhook definition
+        :param webhook_def_data_dict:   The data dict defined in the webhook definition
         :param format_data:             the format string data available to the hook
         :return:                        None
         """
@@ -148,10 +147,12 @@ class DiscordsWebhook( BaseOutWebhook ):
         self.embed = [ ]
 
 
-def handle_outbound_webhook( uac, project_name, webhook_name, webhook_trigger, format_data ):
-    """ Method to handle all webhooks
+def handle_outbound_webhook( uac, project_name, webhook_trigger, format_data ):
+    """ Method to handle all webhook types
 
-    :param webhook_def_dict:
+    :param uac:
+    :param project_name:
+    :param webhook_trigger:
     :param format_data:
     :return:
     """
@@ -167,29 +168,25 @@ def handle_outbound_webhook( uac, project_name, webhook_name, webhook_trigger, f
     webhooks = webhooks["out-webhooks"]
 
     webhook_constructors = { "discord": DiscordsWebhook }   # key is webhook type
-    # required_params does not include 'hook-name' as this needs to match the webhook name,
-    # before we can check if the other required params are set
-    webhook_required_params = [ "type", "trigger", "url", "data" ]
+    webhook_required_params = [ "hook-name", "type", "trigger", "url", "data" ]
 
-    # find the target webhook
+    # find and trigger all webhooks that are triggered by 'webhook_trigger' (WHOT_)
     for owh in webhooks:
-        if "hook-name" in owh and owh["hook-name"] == webhook_name:
-            # check all required params are available
-            for rp in webhook_required_params:
-                if rp not in owh:
-                    _print( f"Unable to process webhook. Missing param {rp}. (All webhooks are required to have {', '.join( webhook_required_params )})")
-                    return
+        skip_webhook = False
+        # check all required params are available
+        for rp in webhook_required_params:
+            if rp not in owh:
+                _print( f"Unable to process webhook. Missing param {rp}. (All webhooks are required to have {', '.join( webhook_required_params )})" )
+                skip_webhook = True
+                break
 
-            # make sure that it was trigger by the correct action.
-            # this is more of a format string thing, as some data may only be available
-            # in certain places. IE. if a build was deleted, there wont be any format values
-            # to get the 7z link/hash or output log ect... (nor would it be logical)
-            if owh["trigger"] != webhook_trigger:
-                _print(f"Incorrect Trigger Type ({webhook_trigger} != {owh['trigger']})")
-                return
+        # skip any hooks that are missing params or
+        # that are not triggered by 'webhook_trigger'
+        if skip_webhook or owh["trigger"] != webhook_trigger:
+            continue
 
-            # create and execute the outbound webhook
-            outbound_webhook = webhook_constructors[ owh["type"] ]( owh["url"] )
-            outbound_webhook.execute_json( owh["data"], format_data )
+        # create and execute the outbound webhook
+        outbound_webhook = webhook_constructors[ owh["type"] ]( owh["url"] )
+        outbound_webhook.execute_json( owh["data"], format_data )
 
-            return
+        _print( f"Out webhook triggered for project {project_name}. Name: {owh['hook-name']} | Trigger Type: {webhook_trigger} | Type: {owh['type'] }" )
