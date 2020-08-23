@@ -7,12 +7,6 @@
     "build-output-dest": "/root/project/Builds/",
     "stop-timeout": 10
   },
-  "webhook": {
-    "name": "master",
-    "authorized-actors": [
-      "git actor"
-    ]
-  },
   "prepare-build": {
     "master-dir-commands": [
       "sudo git pull origin master "
