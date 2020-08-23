@@ -2,6 +2,7 @@ from const import *
 import hashlib
 import common
 import commonProject
+import out_webhook
 import json
 import os.path
 from datetime import datetime
@@ -411,6 +412,8 @@ class BuildTask:
         with common.LockFile( project_build_info_path, 'a' ) as file:
             file.write( "," + json.dumps( build_info ) )
 
+        return build_info
+
     def execute( self ):
 
         if not self.can_execute():
@@ -454,7 +457,9 @@ class BuildTask:
             _print( "Skipping container deploy, Task Canceled", output_filename=self.stdout_filepath, console=False )
 
         self.cleanup()
-        self.append_build_info()
+        build_info = self.append_build_info()
+        # trigger outbound webhooks
+        out_webhook.handle_outbound_webhook( self.uac, self.format_values["project"], out_webhook.OWHT_BUILD_COMPLETE, {**self.format_values, **build_info})
 
         self.task_state = BuildTask.TASK_STATE_COMPLETE
 

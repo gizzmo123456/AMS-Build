@@ -179,3 +179,9 @@ depending on the trigger type. define format variables using curly braces ie.
 - **canceled_by**
 - **7z_link**
 - **output_log**
+
+```
+Basically is the 'format_values' and 'build_info' available in build tasks.
+Its worth noting that the build_info is defined and returned by append_build_info.
+
+```

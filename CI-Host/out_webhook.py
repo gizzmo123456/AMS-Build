@@ -16,8 +16,8 @@ import DEBUG
 
 _print = DEBUG.LOGS.print
 
-# Webhook out triggers.
-WHOT_BUILD_COMPLETE = "build-complete"       # lets keep the const human readable as they need setting in the json
+# out webhook trigger.
+OWHT_BUILD_COMPLETE = "build-complete"       # lets keep the const human readable as they need setting in the json
 
 
 class BaseOutWebhook:
