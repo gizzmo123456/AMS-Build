@@ -273,9 +273,12 @@ if __name__ == "__main__":
         while task is not None or len(pending_tasks) > 0 and task_queue.empty():
             if task is not None:
                 if isinstance( task, build_task.BuildTask ):
-                    pending_tasks.append( task )
-                    update_queue_file = True
-                    _print("task_pending (total: {pending}) ".format( pending=len(pending_tasks) ) )
+                    if task.is_valid():  # discard invalid tasks.
+                        pending_tasks.append( task )
+                        update_queue_file = True
+                        _print("task_pending (total: {pending}) ".format( pending=len(pending_tasks) ) )
+                    else:
+                        _print( "Discarding task. Invalid", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
                 elif isinstance( task, queue_item.QueueItem ):
                     task.execute()
                     update_queue_file = True
