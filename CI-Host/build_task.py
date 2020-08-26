@@ -190,7 +190,6 @@ class BuildTask:
         # to map local to docker
         self.local_cof = {
             "ci-root": "{root_dir}/CI-root/".format( root_dir=BASE_DIRECTORY ),
-            "ci-config": self.format_values["build_dir"] + "/config",
             "project": self.format_values["build_source_dir"],
             "build-output": self.format_values["build_dir"] + "/build"
         }
@@ -199,7 +198,6 @@ class BuildTask:
             "container_name": project_name.lower() + self.format_values["build_hash"].lower(),
             "stop_timeout": self.get_config_value( "docker", "stop-timeout", default_value=10 ),    # the amount of time to wait until SIGKILL is sent after SIGTERM is sent (can be None)
             "ci-root-dest": DOCKER_ROOT_DIRECTORY + "/CI-root:ro",                                  # ci-tool mouth point as read only
-            "ci-config-dest": DOCKER_ROOT_DIRECTORY + "/CI-config:ro",                              # config mouth point as read only
             "project-dest": self.config[ "docker" ][ "project-dest" ],                              # project source mount point
             "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],                    # build output mount point
             "image": self.config[ "docker" ][ "image" ],
@@ -295,13 +293,11 @@ class BuildTask:
                     "--name {container_name} {args} " \
                     "-v {project_path}:{project_dest} " \
                     "-v {ci_root_path}:{ci_root_dest} " \
-                    "-v {ci_config_path}:{ci_config_dest} " \
                     "-v {ci_build_path}:{ci_build_dest} " \
                     "{image} " \
                     "{cmd}".format( container_name=self.docker_cof["container_name"].lower(), args=self.docker_cof[ "args" ],
                                     project_path=self.local_cof[ "project" ], project_dest=self.docker_cof[ "project-dest" ],
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
-                                    ci_config_path=self.local_cof[ "ci-config" ], ci_config_dest=self.docker_cof[ "ci-config-dest" ],
                                     ci_build_path=self.local_cof[ "build-output" ], ci_build_dest=self.docker_cof[ "build-output-dest" ],
                                     image=self.docker_cof["image"],
                                     cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=DOCKER_ROOT_DIRECTORY ) )
