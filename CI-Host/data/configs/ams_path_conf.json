@@ -1,4 +1,0 @@
-{
-  "default_shell": "sh",
-  "base_directory": "${HOME}/ams-build"
-}
