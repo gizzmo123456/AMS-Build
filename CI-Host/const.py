@@ -1,8 +1,6 @@
 import config_manager
 import urllib
 
-config_manager.ConfigManager.set_from_json("./data/configs/ams_path_conf.json")
-
 APP_NAME    = "ams-ci"
 APP_VERSION = "1.0.0"
 
@@ -19,9 +17,9 @@ WEB_ADDRESS = config_manager.ConfigManager.get( "web_address", "localhost" )
 WEB_PATH = config_manager.ConfigManager.get( "web_path", "/ams-build" )
 
 if config_manager.ConfigManager.get( "use_ssl", False ):
-    WEB_PROTOCOL = "http"
-else:
     WEB_PROTOCOL = "https"
+else:
+    WEB_PROTOCOL = "http"
 
 
 def GET_BASE_WEB_ADDRESS(port):

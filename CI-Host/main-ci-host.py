@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import DEBUG
+import config_loader    # Loads in all config file.
 import config_manager
 import build_task
 import webhook
 import web_interface
-import redirectToHTTPS
 import threading
 import time
 from http.server import HTTPServer
@@ -187,7 +187,6 @@ if __name__ == "__main__":
 
     # Load Config files.
     config = config_manager.ConfigManager
-    config.set_from_json( "./data/configs/web_conf.json" )
 
     thr_lock_tasks = threading.Lock()
     alive = True
