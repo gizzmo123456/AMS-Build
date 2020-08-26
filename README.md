@@ -286,12 +286,16 @@ in ```CI-project```, renaming the directory to your projectName.
 ```(ie. `.../CI-project/blankProject` -> .../CI-project/MyNewProjectExample)```
 
 2. Navigate to ```.../MyNewProjectExample/master/project_source``` and add your
-project source. (if git is used to update the project directors make sure there
-all setup correctly)
+project source from git. Making sure that git is at the root of the directory.
+The easiest way to achieve this would be to remove the example
+```project_source``` folder, clone the git repo and rename the folder to
+```project_source```
 
-3. Now we need to update the pipeline. Navigate to 
-```.../MyNewProjectExample/master/config``` and open ```pipeline.json```
-in your favorite IDE and update the file to your projects automation config.
+3. Now we need to add the pipeline config to the project_source. Navigate to 
+```CI-projects/blank_project/master/project_source``` and copy ```pipeline.json```
+to your project_source folder and open it in your favorite IDE and update the file
+to your projects automation config. (its recommended to sync the pipeline file with 
+your git)
 
 The pipeline contains 3 main sections that are required
 ```
@@ -305,7 +309,7 @@ While the reset are optional
 2. environment       # variables to be set in the environment
 3. cleanup           # how the project should be cleaned up
 ```
-See ```../Ci-project/exampleProject/PipelineJSON.md``` for a full description 
+See ```../Ci-project/PipelineJSON.md``` for a full description 
 of each field in the file.
 
 Once the pipeline is complete, the project is all set up.

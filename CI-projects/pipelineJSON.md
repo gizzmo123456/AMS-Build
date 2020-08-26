@@ -1,5 +1,5 @@
 ```
-> Json Pipeline for AMS-CI
+> Json Pipeline for AMS-Build
 > Example Json file with comments
 > this is valid Json if the comments are removed.
 ```
@@ -98,9 +98,4 @@ after the master folder is updated.
 IMPORTANT NOTE.
 As it stands, is not suitable to have multiple pipelines defined, as there is only a single output directory.
 But its fine if you create your own sub directories for each pipeline
-```
-
-```
-Note.
-Beware that there are plans to remove the webhook section to its own file and the pipeline file will be supplied within the projects root.
 ```
