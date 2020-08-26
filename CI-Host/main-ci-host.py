@@ -185,6 +185,12 @@ if __name__ == "__main__":
     DEBUG.LOGS.init()
     _print = DEBUG.LOGS.print
 
+    # make sure that the install script as been run.
+    if not common.installed():
+        _print("I would appear that AMS-Build has not been setup", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
+        _print("When your ready please run '../ams-build-setup.sh', Exiting...")
+        exit()
+
     # Load Config files.
     config = config_manager.ConfigManager
 

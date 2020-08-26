@@ -8,6 +8,13 @@ from filelock import FileLock
 import DEBUG
 _print = DEBUG.LOGS.print
 
+def installed():
+
+    if not os.path.exists( "./data/configs/ams_path_conf.json" ):
+        return False
+
+    return True
+
 def run_process( command, shell="python3" ):
 
     process = subprocess.Popen( [shell, '-c', command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
