@@ -11,6 +11,7 @@ than being in the config file.
 - Added Outbound Webhooks
     - supports discords
 - Added Installed check.
+- Added Complete Task callback to build tasks 
 
 ### Changes
 - removed ams_path_config from being tracked by git as it auto generated
