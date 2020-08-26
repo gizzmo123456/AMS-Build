@@ -279,6 +279,8 @@ if __name__ == "__main__":
                         _print("task_pending (total: {pending}) ".format( pending=len(pending_tasks) ) )
                     else:
                         _print( "Discarding task. Invalid", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
+                        task.trigger_complete_callback(False)
+
                 elif isinstance( task, queue_item.QueueItem ):
                     task.execute()
                     update_queue_file = True

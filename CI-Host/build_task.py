@@ -33,12 +33,14 @@ class BuildTask:
     CONTAINER_STATE_RUNNING      = 2
     CONTAINER_STATE_EXITED       = 3
 
-    def __init__( self, uac, project_name, git_hash="" ):
+    def __init__( self, uac, project_name, git_hash="", complete_callback=None ):
         """
         :param uac:             The UAC of the user that triggered the build
         :param project_name:    name of project
         :param git_hash:      build hash
         """
+
+        self.complete_callback = complete_callback      # callback params: build_task, successful
 
         self.task_state = BuildTask.TASK_STATE_INIT
         self.container_state = BuildTask.CONTAINER_STATE_PENDING
@@ -462,6 +464,12 @@ class BuildTask:
         out_webhook.handle_outbound_webhook( self.uac, self.format_values["project"], out_webhook.OWHT_BUILD_COMPLETE, {**self.format_values, **build_info})
 
         self.task_state = BuildTask.TASK_STATE_COMPLETE
+        self.trigger_complete_callback( True )
+
+    def trigger_complete_callback( self, finished ):
+
+        if self.complete_callback is not None:
+            self.complete_callback( self, finished )
 
     def cancel( self ):
 

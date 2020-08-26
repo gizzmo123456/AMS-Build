@@ -100,6 +100,16 @@ class WWWUser:
 
         self.set_message( message, action_status )
 
+    def build_action_callback( self, build_task, successful ):
+        action_status = WWWUser.MSG_STATUS_OK
+        message = "Build task for {project} with hash {build_hash}, has completed successful with status: {status}".format( **build_task.format_values )
+
+        if not successful:
+            action_status = WWWUser.MSG_STATUS_ERROR
+            message = "{task} task for {project} with hash {build_hash}, has completed unsuccessfully (task valid? {valid})".format( **build_task.format_values, valid=build_task.is_valid() )
+
+        self.set_message( message, action_status )
+
 class WWWPage:
 
     # List Orders
