@@ -107,7 +107,7 @@ class WWWUser:
             message = "Build task for {project} with hash {build_hash}, has completed successful".format( **build_task.format_values )
         else:
             action_status = WWWUser.MSG_STATUS_ERROR
-            message = "{task} task for {project} with hash {build_hash}, has completed unsuccessfully (task valid? {valid})".format( **build_task.format_values, valid=build_task.is_valid() )
+            message = "Failed to process task (task valid? {valid})".format( valid=build_task.is_valid() )
 
         self.set_message( message, action_status )
 
