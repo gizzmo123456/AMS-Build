@@ -32,7 +32,7 @@ def build_config_sh(config):
 
 if __name__ == "__main__":
 
-    pipeline_filepath = "/root/AMS-CI/CI-config/pipeline.json"
+    pipeline_filepath = "/root/project/pipeline.json"
     pipeline = common.get_dict_from_json( pipeline_filepath )
 
     env = "".join( [ "export {var}={value}; ".format(var=e, value=pipeline["environment"][e]) for e in pipeline["environment"] ] )
