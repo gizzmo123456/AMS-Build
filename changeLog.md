@@ -1,5 +1,12 @@
 # Change Log
 
+## v1.0.1
+- Added outbound Webhooks
+    - supports discords
+- removed ams_path_config from being tracked by git as it auto generated
+- Add installed check.
+
+
 ## Initial Release (v1.0.0)
 ### Features 
 - Pull and Run docker containers to automate tasks
