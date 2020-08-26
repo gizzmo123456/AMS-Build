@@ -437,7 +437,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
         elif request_path[1].lower() == "build" and request_path_len >= 3:   # action/build/{project}
             if user_has_access:
                 user_message = "Queue Build Task for {project}".format( project=project )
-                WebInterface.shared_task_queue.queue_task( "build", uac=user.get_uac(), project=project, build_hash=None )  # TODO: rename buld hash to git_hash
+                WebInterface.shared_task_queue.queue_task( "build", uac=user.get_uac(), project=project, complete_callback=user.build_action_callback )
             else:
                 user_message_status = WWWUser.MSG_STATUS_ERROR
                 user_message = "Unable to create Build Task for {project}," \
