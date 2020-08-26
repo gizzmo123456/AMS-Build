@@ -96,7 +96,7 @@ class BaseOutWebhook:
     @staticmethod
     def get_random_quote( ):
 
-        with open( "D:/Ashley Sands/Amstrike Software/AMS-CI/CI-Host/data/out_webhook/webhook_silly_quotes" ) as f: #"./data/out_webhook/webhook_silly_quotes") as f:
+        with open( "./data/out_webhook/webhook_silly_quotes") as f:
             lines = f.readlines()
             random_quote = "##"
             while random_quote[:2] == "##":
