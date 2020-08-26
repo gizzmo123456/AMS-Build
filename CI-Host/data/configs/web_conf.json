@@ -6,6 +6,7 @@
   "web_interface_port": 8080,
 
   "web_address": "mydomain.com",
+  "web_path": "/ams-ci",
 
   "use_ssl": false,
   "ssl": {

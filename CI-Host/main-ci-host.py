@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import DEBUG
+import config_manager
 import build_task
 import webhook
 import web_interface
@@ -14,7 +15,6 @@ import sharedQueue
 import queue_item
 import common
 import user_manager
-import config_manager
 import out_webhook
 
 SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container

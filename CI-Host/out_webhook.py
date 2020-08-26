@@ -2,7 +2,10 @@ import urllib.parse
 import urllib.request
 import json
 import commonProject
+import config_manager
 import DEBUG
+import const
+import random
 
 # Classes webhooks.
 # ALL webhook def's should be handled, by the 'handle_outbound_webhook' at the bottom.
@@ -22,11 +25,21 @@ OWHT_BUILD_COMPLETE = "build-complete"       # lets keep the const human readabl
 
 class BaseOutWebhook:
 
+    # format values available to all out webhooks
+    @staticmethod
+    def __FORMAT_VALUES():  # use a func so values don't have to be static/const
+        return {
+            "app_name": const.APP_NAME,
+            "app_version": const.APP_VERSION,
+            "quote": BaseOutWebhook.get_random_quote(),
+            "base_web_address": const.GET_BASE_WEB_ADDRESS( config_manager.ConfigManager.get( "web_interface_port", 8080 ) )
+        }
+
     def __init__( self, webhook_url ):
 
         self.webhook_url = webhook_url
         self.default_data_fields = {}         # set default data so it cant be missed when making a request # Also this needs overriding
-        self.headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64)"}
+        self.headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64)"}   # lies
 
     def get_main_data( self, **data ):
         return { **self.default_data_fields, **data }
@@ -63,7 +76,7 @@ class BaseOutWebhook:
                 data[k] = BaseOutWebhook.format_webhook_data( data[k], format_data)
             elif type( data[k] ) is str:
                 data[k] = BaseOutWebhook.format_string( data[k], format_data )
-            # we dont need to worry about over values
+            # we dont need to worry about other values
 
         return data
 
@@ -73,12 +86,23 @@ class BaseOutWebhook:
 
         while True:
             try:
-                return string.format( **format_values )
+                return string.format( **format_values, **BaseOutWebhook.__FORMAT_VALUES() )
             except KeyError as e: # add the key and try again :)
                 _print("KeyError:", str(e), "-> Adding key with value of key", print_now=True)
                 format_values[str(e)[1:-1]] = str(e)[1:-1]
             except Exception as e: # We can only handle key errors, so we must exit
                 raise e
+
+    @staticmethod
+    def get_random_quote( ):
+
+        with open( "D:/Ashley Sands/Amstrike Software/AMS-CI/CI-Host/data/out_webhook/webhook_silly_quotes" ) as f: #"./data/out_webhook/webhook_silly_quotes") as f:
+            lines = f.readlines()
+            random_quote = "##"
+            while random_quote[:2] == "##":
+                random_quote = lines[random.randrange(0, len(lines))]
+
+            return random_quote
 
     def execute_json( self, webhook_def_data_dict, format_data ):
         """ Executes a out webhook definition defined in project/master/config/wenhook.json

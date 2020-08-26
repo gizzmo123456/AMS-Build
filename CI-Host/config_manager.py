@@ -5,6 +5,7 @@ _print = DEBUG.LOGS.print
 class ConfigManager:
 
     __CONFIG__ = {}
+    __loaded = []
 
     @staticmethod
     def get(config_name, default_value=None):
@@ -25,7 +26,11 @@ class ConfigManager:
         ConfigManager.__CONFIG__[config_name.lower()] = data
 
     @staticmethod
-    def set_from_json( file_path ):
+    def set_from_json( file_path, reload=False ):
+
+        if not reload and file_path in ConfigManager.__loaded:
+            _print("config already loaded, skipping...")
+            return
 
         config = common.get_dict_from_json(file_path, lock_file=True)
 
@@ -33,6 +38,8 @@ class ConfigManager:
 
         for conf in config:
             ConfigManager.set( conf, config[conf] )
+
+        ConfigManager.__loaded.append( file_path )
 
     @staticmethod
     def is_set(config_name):

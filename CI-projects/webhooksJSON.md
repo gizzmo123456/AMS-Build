@@ -161,9 +161,15 @@ Example
 ```
 
 ### Formatting.
-There is far few string format variables that can be used, but they will very
+There is a far few string format variables that can be used, but they will very
 depending on the trigger type. define format variables using curly braces ie.
 ```{format_var}```
+
+# ALL hooks
+- **app_name**
+- **app_version**
+- **quote** (Random silly quote)
+- **base_web_address**   
 
 ### Build-Complete string variables (Only the notable ones)
 - **Project**
