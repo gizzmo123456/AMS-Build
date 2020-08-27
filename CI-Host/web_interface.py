@@ -162,7 +162,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
                             # in js files using {key} to format string in is a bad idea as that could be valid code.
                             # so instead we'll use somthing unlikely {@key}
                             # At the mo there is only one format value for js witch is 'www_root'
-                            file = re.sub(r"{@www_root}/g", WebInterface.ROOT, file)
+                            file = re.sub(r"{@www_root}", WebInterface.ROOT, file)
                             return file, HTTPStatus.OK, "text/javascript"
                         except:
                             return "Error", HTTPStatus.NOT_FOUND, "text/html"
