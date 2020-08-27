@@ -4,6 +4,7 @@ import user_access_control
 import json
 import common
 import commonProject
+import config_manager
 import DEBUG
 _print = DEBUG.LOGS.print
 
@@ -13,6 +14,12 @@ class Webhook( baseHTTPServer.BaseServer ):
     # set to main task queue
     shared_task_queue = None
 
+    ROOT = config_manager.ConfigManager.get("web_root", "ams-build")
+    # Remove any outer slashes
+    if ROOT[1] == "/":
+        ROOT = ROOT[1:]
+    if ROOT[-1] == "/":
+        ROOT = ROOT[:-1]
 
     def do_POST( self ):
 
@@ -24,7 +31,7 @@ class Webhook( baseHTTPServer.BaseServer ):
         content_len = int( self.headers[ 'Content-Length' ] )
         post_data = json.loads( self.rfile.read( content_len ) )
 
-        if path != "/request" and "name" not in query or "project" not in query:
+        if path != f"/{Webhook.ROOT}/request" and "name" not in query or "project" not in query:
             self.process_request( "Error", 404, False )
             _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
