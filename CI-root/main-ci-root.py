@@ -60,7 +60,7 @@ if __name__ == "__main__":
             last_line = line
 
         # keep track of each stages status (either True (pass) or False (fail))
-        pipeline_status = last_line == exit_line
+        pipeline_status = exit_line is False or last_line == exit_line  # if exit line is False, ignore the exit code/line
         pipeline_statues[ stage["name"] ] = pipeline_status
 
         print("="*25)
