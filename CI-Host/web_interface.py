@@ -14,6 +14,7 @@ from www_page import WWWPage, WWWUser
 import user_access_control
 import user_manager
 import math
+import re
 import config_manager
 
 
@@ -157,7 +158,12 @@ class WebInterface( baseHTTPServer.BaseServer ):
                         return common.read_file( "./www/default.css" ), 200, "text/css"
                     elif len(requested_path) >= self.API_ROOT_PATH_LENGTH+1 and requested_path[1] == "js":
                         try:
-                            return common.read_file("./www/js/{page}".format( page='/'.join( requested_path[2:] ) )), HTTPStatus.OK, "text/javascript"
+                            file = common.read_file("./www/js/{page}".format( page='/'.join( requested_path[2:] ) ))
+                            # in js files using {key} to format string in is a bad idea as that could be valid code.
+                            # so instead we'll use somthing unlikely {@key}
+                            # At the mo there is only one format value for js witch is 'www_root'
+                            file = re.sub(r"{@www_root}/g", WebInterface.ROOT, file)
+                            return file, HTTPStatus.OK, "text/javascript"
                         except:
                             return "Error", HTTPStatus.NOT_FOUND, "text/html"
                     elif requested_path[1] == "api":

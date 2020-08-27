@@ -2,6 +2,7 @@
 var refreshRate = 60;           //seconds
 var messageRefreshRate = 30;    //seconds    // i think we should only really do this if we are expecting a message
 var selectedProject = null;
+var api_path = "/{@www_root}/api"
 
 var APPEND_MODE = {
     "NONE": 0,      // Do not append
