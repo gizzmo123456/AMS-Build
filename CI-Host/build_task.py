@@ -197,10 +197,10 @@ class BuildTask:
 
         self.docker_cof = {
             "container_name": project_name.lower() + self.format_values["build_hash"].lower(),
-            "stop_timeout": self.get_config_value( "docker", "stop-timeout", default_value=10 ),                      # the amount of time to wait until SIGKILL is sent after SIGTERM is sent (can be None)
-            "ci-root-dest": self.get_config_value( "docker", "ams-container-dest", default_value="/root/AMS-Build"),  # ci-tool mouth point as read only
-            "project-dest": self.config[ "docker" ][ "project-dest" ],                                                # project source mount point
-            "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],                                      # build output mount point
+            "stop_timeout": self.get_config_value( "docker", "stop-timeout", default_value=10 ),                                     # the amount of time to wait until SIGKILL is sent after SIGTERM is sent (can be None)
+            "ci-root-dest": self.get_config_value( "docker", "ams-container-dest", default_value="/root/AMS-Build"),                 # ci-tool mouth point as read only
+            "project-dest": self.config[ "docker" ][ "project-dest" ],                                                               # project source mount point
+            "build-output-dest": self.config[ "docker" ][ "build-output-dest" ],                                                     # build output mount point
             "image": self.config[ "docker" ][ "image" ],
             "args": self.config[ "docker" ][ "args" ]
         }
@@ -293,7 +293,7 @@ class BuildTask:
         dockerRun = "sudo docker run " \
                     "--name {container_name} {args} " \
                     "-v {project_path}:{project_dest} " \
-                    "-v {ci_root_path}:{ci_root_dest} " \
+                    "-v {ci_root_path}:{ci_root_dest}:ro " \
                     "-v {ci_build_path}:{ci_build_dest} " \
                     "{image} " \
                     "{cmd}".format( container_name=self.docker_cof["container_name"].lower(), args=self.docker_cof[ "args" ],
@@ -301,7 +301,7 @@ class BuildTask:
                                     ci_root_path=self.local_cof[ "ci-root" ], ci_root_dest=self.docker_cof[ "ci-root-dest" ],
                                     ci_build_path=self.local_cof[ "build-output" ], ci_build_dest=self.docker_cof[ "build-output-dest" ],
                                     image=self.docker_cof["image"],
-                                    cmd="python3 {docker_ci_root}/CI-root/main-ci-root.py".format( docker_ci_root=self.docker_cof[ "ci-root-dest" ] ) )
+                                    cmd="python3 {docker_ci_root}/main-ci-root.py".format( docker_ci_root=self.docker_cof[ "ci-root-dest" ] ) )
 
         _print( "DOCKER RUN:\n", dockerRun, output_filename=self.stdout_filepath, console=False )
 
