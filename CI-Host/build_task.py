@@ -159,11 +159,11 @@ class BuildTask:
         _print( "--- Updating Git-hash ---", output_filename=self.stdout_filepath, console=False )
         update_git_hash = "get-git-hash" in self.config[ "prepare-build" ] and self.config[ "prepare-build" ]["get-git-hash"] is True
         if (git_hash == "" or git_hash is None) and update_git_hash:
-            cmd = "cd {master_source_dir};".format( **self.format_values )
-            git_cmd = cmd + "cd git rev-parse HEAD" # use HEAD to get the repos current hash, after the prepare-build (master)
+            cmd = "cd {master_source_dir}; ".format( **self.format_values )
+            git_cmd = cmd + "git rev-parse HEAD" # use HEAD to get the repos current hash, after the prepare-build (master)
             temp_git_hash = ""
             for line in common.run_process( git_cmd, shell="bash" ):
-                temp_git_hash += line
+                temp_git_hash = line
 
             _print( "GitHash: {0}".format( temp_git_hash ), output_filename=self.stdout_filepath, console=False )
             self.format_values[ "git_hash" ] = temp_git_hash
