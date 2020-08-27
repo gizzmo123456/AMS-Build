@@ -1,12 +1,8 @@
-# Test/task list
-[x] - Webhooks still work
-        - [pass] Triggers Work 
-        - [pass] check bad actors are rejected
-        - [pass] check bad wh names are rejected
-        - [pass] check no cross hook actors
-        - [pass] Check that multiple WHs works
-[ ] - Update Docs
-        
+
+[ ] Apply const web root path thingy
+[ ] replace the DOCKER_ROOT_DIR Const with the pipeline version
+[x] Fixed test project build sh files 
+   
 # TODO.
 
 would it be better to store queue and project info in redis?
@@ -21,7 +17,7 @@ Release v1.0.0 TODO.
     - Todo Refresh
 [ ] Clean install
 [x] SSL
-[ ] Push to GitHub
+[x] Push to GitHub
 
 ------------------------------------------------------------------------
 v1.0.0 Missed tasks TODO. 
@@ -48,9 +44,10 @@ v1.0.0 Missed tasks TODO.
 [ ] Find out why we get Can not cancel build, insfficient priv's when a task completes.
     (this is hampering because no user is added for 'task complete' object. Its fine tho as its only a queue un-blocking task )
 [ ] Improve WWWUser message feedback when trigger tasks via the web_userInterface.
-    - iv notices that it returns completed successful when a request has only been excepted
-      So i think it would be good, if there was a message to say the request has been made,
-      Accepted and complete
+    - ATM users have to be logged in to receive messages and messages are very
+      static.
+      I fell that the message should be changed to have a message param rather than
+      having the task and successful params.
     - messages should be write to file, so message can be queued for when the user next logs in
 
 ------------------------------------------------------------------------
@@ -71,7 +68,7 @@ Post v1.0.0 Release TODO.
     With the option to keep the first/last build of each month   
 
 [ ] Add Project Storage limits.
-
+    
 [ ] Improve the way that content is loaded into the webpage.
     - At the moment each messages, active and queue sections all auto-
     refresh every X amount of time (i think its set to 60sec for active 

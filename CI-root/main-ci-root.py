@@ -3,6 +3,7 @@
 #
 
 import common
+import json
 
 def build_config_sh(config):
     """ builds the sh file for each stage.
@@ -37,6 +38,7 @@ if __name__ == "__main__":
 
     env = "".join( [ "export {var}={value}; ".format(var=e, value=pipeline["environment"][e]) for e in pipeline["environment"] ] )
     stages = pipeline["pipeline"]
+    pipeline_statues = {}
 
     if len(env) > 0 and env[-1] != ";":  # ensure the last car of env is `;`
         env += "; "
@@ -44,19 +46,26 @@ if __name__ == "__main__":
     for stage in stages:
         print("="*25)
         print("Starting pipeline stage ", stage["name"].upper())
+        exit_line = "0"                         # By default expect last line (exit-line/exit-code) to be 0 (successful)
+        if "exit-line" in stage:
+            exit_line = stage["exit-line"]
+
         cmd = '; '.join( stage["commands"] )
 
         print( "Executing ", env + cmd )
         print( "Start Build Process, Hold Tight..." )
-
+        last_line = ""
         for line in common.run_process( env + cmd, shell="bash" ):
             print( line )
+            last_line = line
 
+        # keep track of each stages status (either True (pass) or False (fail))
+        pipeline_status = last_line == exit_line
+        pipeline_statues[ stage["name"] ] = pipeline_status
+
+        print("="*25)
         print("Pipeline stage ", stage["name"].upper(), "Complete")
-
-    # cmd = "cd /root/project/unityBuild; " \
-    #      "source ./preBuild.sh;" \
-    #      "./before_script.sh;" \
-    #      "./build.default2.sh;"
+        print("="*25, "="*25, sep="\n")
 
     print( "All Stages Complete :D" )
+    print( "@AMS-PIPELINE-STATUS:", json.dumps( pipeline_statues ) )

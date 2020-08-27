@@ -23,7 +23,8 @@
     {
       "name": "build",
       "commands": [
-      ]
+      ],
+      "exit-line": "exit code 0"
     }
   ],
   "cleanup": {

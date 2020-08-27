@@ -17,6 +17,7 @@ class BuildTask:
 
     BUILD_STATUS_FAIL   = "fail"
     BUILD_STATUS_PASS   = "pass"
+    BUILD_STATUS_WARN   = "warning"
     BUILD_STATUS_CANCEL = "cancel"
     BUILD_STATUS_SKIP   = "skip"
     BUILD_STATUS_DUMMY  = "DEBUG-DUMMY-BUILD"
@@ -306,16 +307,61 @@ class BuildTask:
 
         self.container_state = BuildTask.CONTAINER_STATE_RUNNING
 
+        last_line = ""
         for line in common.run_process( dockerRun, shell=DEFAULT_SHELL ):
             _print(line, output_filename=self.stdout_filepath, console=False)
+            last_line = line
 
-        _print("--- Container Exited ---", output_filename=self.stdout_filepath, console=True)     # TODO: set console to False
         self.container_state = BuildTask.CONTAINER_STATE_EXITED
+        _print("--- Container Exited ---", output_filename=self.stdout_filepath, console=False)
+
+        # check the last line for the build status message.
+        STATUS_LINE_BEGIN = "@AMS-PIPELINE-STATUS:"
+        STATUS_LINE_LEN = len(STATUS_LINE_BEGIN)
+        is_status_line = last_line.find(STATUS_LINE_BEGIN) == 0
+
+        if self.build_status != BuildTask.BUILD_STATUS_CANCEL:  # cancel_task deals with status if the build is canceled.
+            if is_status_line:
+                pipeline_status = json.loads( last_line[STATUS_LINE_LEN:] )
+                final_status = None
+                for stage in pipeline_status:   # TODO: Convert the status to BuildTask status and append it to the Build info.
+                    stage_status = self.get_stage_status( pipeline_status[ stage ] )
+                    final_status = self.get_combin_stage_status( final_status, stage_status )
+
+                    # if the status becomes a Warning we can exit as there is a mixture of passes and fails
+                    if final_status == BuildTask.BUILD_STATUS_WARN:
+                        break
+
+                if final_status is None:
+                    self.build_status = BuildTask.BUILD_STATUS_FAIL
+                else:
+                    self.build_status = final_status
+
+            else:
+                # fail by default if the last line is not the status line.
+                # this would indicate that the container crashed :(
+                self.build_status = BuildTask.BUILD_STATUS_FAIL
 
         with common.LockFile( self._project_info_path, mode='r+' ) as file:  # lock the file during update
             self.project_info = json.loads( file.read() )                    # ensure that we have the latest version
             self.project_info[ "last_complete_time" ] = time.time()
             self._overwrite_json_file( file, self.project_info )
+
+    def get_stage_status( self, stage_passed ):
+
+        if stage_passed:
+            return BuildTask.BUILD_STATUS_PASS
+        else:
+            return BuildTask.BUILD_STATUS_FAIL
+
+    def get_combin_stage_status( self, current_status, stage_status ):
+
+        if current_status is None:
+            return stage_status
+        elif current_status == stage_status:        # Still passing or failing
+            return current_status
+        elif current_status != stage_status:        # Mixed statues
+            return BuildTask.BUILD_STATUS_WARN
 
     def stop_container( self ):
         """ Stops the tasks container using the docker stop command.
@@ -329,14 +375,14 @@ class BuildTask:
         docker_stop = "sudo docker stop -t {stop_timeout} {container_name}".format( **self.docker_cof )
 
         _print("="*25, output_filename=self.stdout_filepath, console=False)
-        _print("--- Stopping Container ---", output_filename=self.stdout_filepath, console=True)    # TODO: set console to False
+        _print("--- Stopping Container ---", output_filename=self.stdout_filepath, console=False)
 
         for line in common.run_process( docker_stop, shell=DEFAULT_SHELL ):
-            _print( line, output_filename=self.stdout_filepath, console=True )                      # TODO: set console to False
+            _print( line, output_filename=self.stdout_filepath, console=False )
 
         self.container_state = BuildTask.CONTAINER_STATE_EXITED
 
-        _print("--- Container Stopped ---", output_filename=self.stdout_filepath, console=True)     # TODO: set console to False
+        _print("--- Container Stopped ---", output_filename=self.stdout_filepath, console=False)
 
     def cleanup( self ):
 
