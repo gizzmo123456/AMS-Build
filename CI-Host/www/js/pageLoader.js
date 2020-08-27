@@ -71,7 +71,7 @@ var updateProjects = function(){
 }
 
 var updateBuilds = function(){
-    loadContent( `/ams-ci/api/projects/name/${selectedProject}/builds?template=builds`, "items-builds" )
+    loadContent( `${api_path}/projects/name/${selectedProject}/builds?template=builds`, "items-builds" )
     // update the sites url
     document.getElementById("heading-builds").innerHTML = `Builds For ${selectedProject}`
 }
@@ -84,9 +84,9 @@ var updateMessages = function(){
 var actionRequest = function( action, project, id=null, activeTask=false ){
 
     if ( id == null || id == "" )
-        loadContent( `/ams-ci/action/${action}/${project}` )
+        loadContent( `${api_path}/action/${action}/${project}` )
     else
-        loadContent( `/ams-ci/action/${action}/${project}/${id}` )
+        loadContent( `${api_path}/action/${action}/${project}/${id}` )
 
     setTimeout( updateMessages, "2000" )    // request a message update in 2 seconds
 
