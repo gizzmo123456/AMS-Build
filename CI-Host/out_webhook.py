@@ -6,6 +6,7 @@ import config_manager
 import DEBUG
 import const
 import random
+import time
 
 # Classes webhooks.
 # ALL webhook def's should be handled, by the 'handle_outbound_webhook' at the bottom.
@@ -39,7 +40,7 @@ class BaseOutWebhook:
 
         self.webhook_url = webhook_url
         self.default_data_fields = {}         # set default data so it cant be missed when making a request # Also this needs overriding
-        self.headers = {"Content-Type": "application/json", "User-Agent": "Mozilla/5.0 (Windows NT 6.1; Win64; x64)"}   # lies
+        self.headers = {"Content-Type": "application/json", "User-Agent": "{app_name}/{app_version}".format( **self.__FORMAT_VALUES() )}
 
     def get_main_data( self, **data ):
         return { **self.default_data_fields, **data }
@@ -53,11 +54,31 @@ class BaseOutWebhook:
 
         # set the length of the post data
         self.headers["Content-length"] = str( len(out_data) )
+        resend_attempts = 0
+        max_attempts = 3
+        sent = False
 
-        request = urllib.request.Request( self.webhook_url, post_data, self.headers )
+        while not sent and resend_attempts <= max_attempts:
+            try:
+                request = urllib.request.Request( self.webhook_url, post_data, self.headers )
 
-        with urllib.request.urlopen( request ) as response:
-            page = response.read()
+                with urllib.request.urlopen( request ) as response:
+                    page = response.read()
+                sent = True
+                break
+            except ConnectionResetError as e:
+                _print( e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            except ConnectionAbortedError as e:
+                _print( e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            except Exception as e:
+                _print( e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                break
+
+            resend_attempts += 1
+            time.sleep(1)           # reset for a sec before retry
+
+        if not sent:
+            _print( "Unable to send Webhook", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
 
     @staticmethod
     def format_webhook_data(data, format_data):
