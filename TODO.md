@@ -1,6 +1,6 @@
 
-[ ] Apply const web root path thingy
-[ ] replace the DOCKER_ROOT_DIR Const with the pipeline version
+[x] Apply const web root path thingy
+[x] replace the DOCKER_ROOT_DIR Const with the pipeline version
 [x] Fixed test project build sh files 
    
 # TODO.

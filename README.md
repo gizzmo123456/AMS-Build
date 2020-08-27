@@ -1,6 +1,15 @@
 # AMS-Build 
 ###### AMS - *Automation Made Simple* 
 
+# UPDATE README NOTES.
+- build status now has warn for mixed status.
+    - exit line in pipeline file
+        - if False ignore otherwise expects to exit with exactly "0"
+- update the defaul root name
+- host name
+
+- moved Docker const to pipeline
+
 ## Overview
 AMS-Build is a simple lightweight automation tool writen in python.
 It has been designed to run and automate tasks in docker containers and
