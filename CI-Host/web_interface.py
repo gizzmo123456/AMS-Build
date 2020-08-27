@@ -14,6 +14,8 @@ from www_page import WWWPage, WWWUser
 import user_access_control
 import user_manager
 import math
+import config_manager
+
 
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -21,21 +23,21 @@ _print = DEBUG.LOGS.print
 class WebInterface( baseHTTPServer.BaseServer ):
     """
         Request types: GET | POST
-        Pages:
-            ams-ci /                                                    [Root]
-            ams-ci / api / project /                                    retrieves list of projects available to user
-            ams-ci / api / project / name / {project_name}              retrieves all project info
+        Pages: ('ams-build' is the default root path)
+            ams-build /                                                    [Root]
+            ams-build / api / project /                                    retrieves list of projects available to user
+            ams-build / api / project / name / {project_name}              retrieves all project info
                                                                         See API-content for more info on api/project
 
-            ams-ci / api / user_message                                 View a list of pending messages for the logged in user
+            ams-build / api / user_message                                 View a list of pending messages for the logged in user
                                                                         To clear messages send POST data 'clear=true'
 
-            ams-ci / api / tasks                                        retrieves a list of all active and queued tasks
-            ams-ci / api / tasks / active                               retrieves a list of all active tasks
-            ams-ci / api / tasks / queued                               tetrieves a list of all queued tasks
+            ams-build / api / tasks                                        retrieves a list of all active and queued tasks
+            ams-build / api / tasks / active                               retrieves a list of all active tasks
+            ams-build / api / tasks / queued                               tetrieves a list of all queued tasks
 
-            ams-ci / dl / {project_name) / {build_hash}                 Downloads the output 7z for project build
-            ams-ci / output / {project_name) / {build_hash}             view the output log for project build
+            ams-build / dl / {project_name) / {build_hash}                 Downloads the output 7z for project build
+            ams-build / output / {project_name) / {build_hash}             view the output log for project build
 
 
         API GET params:
@@ -46,14 +48,21 @@ class WebInterface( baseHTTPServer.BaseServer ):
                 - build
                 - message
         Other Pages
-            ams-ci / auth                                               Authorizes user -> redirects back to [root]
-            ams-ci / logout                                             logs out user   -> redirects back to [root]
+            ams-build / auth                                               Authorizes user -> redirects back to [root]
+            ams-build / logout                                             logs out user   -> redirects back to [root]
     """
     DEFAULT_SESSION_LENGTH = 60 * 60 # 1hr
     API_ROOT_PATH_LENGTH = 2    # TODO. the could do with a new name, its used for API, login, CSS, JS, DL and output log paths...
+    ROOT = config_manager.ConfigManager.get("web_root", "ams-build")
+    # Remove any outer slashes
+    if ROOT[1] == "/":
+        ROOT = ROOT[1:]
+    if ROOT[-1] == "/":
+        ROOT_PATH = ROOT[:-1]
 
     sessions = { }  # { `session key`: WWWUser }
     shared_task_queue = None
+
 
     def __init__( self, request, client_address, server ):
 
@@ -96,7 +105,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     def do_request( self, GET=True ):
 
         request = urlparse( unquote( self.path ) )
-        path = request.path.split( "/" )  # ams-ci /
+        path = request.path.split( "/" )  # ams-build /
         path = [ p for p in path if p != "" ]                       # remove the empties
 
         cookie_data = SimpleCookie( self.headers.get('Cookie') )
@@ -142,7 +151,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
         if type( requested_path ) is list and path_len > 0:
 
-            if requested_path[0].lower() == "ams-ci":
+            if requested_path[0].lower() == WebInterface.ROOT:
                 if path_len >= self.API_ROOT_PATH_LENGTH:              # content request (html or json)
                     if requested_path[1] == "style.css":
                         return common.read_file( "./www/default.css" ), 200, "text/css"
@@ -182,7 +191,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
             user_man = user_manager.UserManager()
             # redirect user when login info send received, to prevent resubmit data on refresh
-            redirect_header = { "location": '/ams-ci/' }
+            redirect_header = { "location": f"/{WebInterface.ROOT}/" }
             user_access = user_man.authorize_user(post_data["user"], post_data["password"])
 
             if user_access > WWWUser.UAC_NO_AUTH:
@@ -214,7 +223,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
             user.session_id = ""
             user.set_access_level( 0 )
 
-        redirect_header = { "location": '/ams-ci/' }
+        redirect_header = { "location": f"/{WebInterface.ROOT}/" }
         return None, None, HTTPStatus.SEE_OTHER, "text/html", redirect_header
 
     def index_content( self, user, request_path, get_data, post_data):
@@ -232,7 +241,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
     def api_content( self, user, request_path, get_data, post_data):
         """ Gets the json data for api path.
-            Path format. /ams-ci/api/{api-path}
+            Path format. /ams-build/api/{api-path}
             api-paths:
             /projects                        returns all projects in CI-project
             /tasks                           returns all queue and active tasks (from tasks.json)
