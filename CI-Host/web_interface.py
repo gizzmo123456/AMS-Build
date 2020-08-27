@@ -58,7 +58,7 @@ class WebInterface( baseHTTPServer.BaseServer ):
     if ROOT[1] == "/":
         ROOT = ROOT[1:]
     if ROOT[-1] == "/":
-        ROOT_PATH = ROOT[:-1]
+        ROOT = ROOT[:-1]
 
     sessions = { }  # { `session key`: WWWUser }
     shared_task_queue = None

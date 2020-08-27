@@ -41,7 +41,7 @@ class WWWUser:
         self.__uac.set_user( username, access_level)
 
         self.session_id = session_id
-        self.set_cookie( "session_id", session_id, path="/ams-ci" )
+        self.set_cookie( "session_id", session_id, path="/"+web_interface.WebInterface.ROOT )
 
         return self
 
@@ -153,7 +153,7 @@ class WWWPage:
         return content
 
     def build_content( self, content ):
-        return { **self.content_dict, **content }    # overwrite the values in content dict
+        return { **self.content_dict, **content, "www_root": web_interface.WebInterface.ROOT }    # overwrite the values in content dict
 
     def access( self, user ):
         return user.get_access_level() >= self.minimal_user_access_level
