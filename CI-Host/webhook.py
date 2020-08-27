@@ -31,7 +31,7 @@ class Webhook( baseHTTPServer.BaseServer ):
         content_len = int( self.headers[ 'Content-Length' ] )
         post_data = json.loads( self.rfile.read( content_len ) )
 
-        if path != f"/{Webhook.ROOT}/request" and "name" not in query or "project" not in query:
+        if path != f"/{Webhook.ROOT}/request" or "name" not in query or "project" not in query:
             self.process_request( "Error", 404, False )
             _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
