@@ -5,6 +5,7 @@
     "args": "",
     "project-dest": "/root/project/source",
     "build-output-dest": "/root/project/build",
+    "ams-container-dest": "/root/AMS-Build",
     "stop-timeout": 10
   },
   "prepare-build": {
