@@ -59,15 +59,15 @@ var loadContent = function(url, responseElemId=null, postString=null, appendMode
 }
 
 var updateActiveTask = function(){
-    loadContent( "/ams-ci/api/tasks/active?template=active_task", "items-active-tasks" )
+    loadContent( api_path+"/tasks/active?template=active_task", "items-active-tasks" )
 }
 
 var updateQueuedTask = function(){
-    loadContent( "/ams-ci/api/tasks/pending?template=queued_task", "items-queued-tasks" )
+    loadContent( api_path+"/tasks/pending?template=queued_task", "items-queued-tasks" )
 }
 
 var updateProjects = function(){
-    loadContent( "/ams-ci/api/projects?template=projects", "items-projects" )
+    loadContent( api_path+"/projects?template=projects", "items-projects" )
 }
 
 var updateBuilds = function(){
@@ -78,7 +78,7 @@ var updateBuilds = function(){
 
 var updateMessages = function(){
     postString = "clear=true"
-    loadContent( "/ams-ci/api/user_messages?template=message", "message-items", postString, APPEND_MODE.DESC, showMessages )
+    loadContent( api_path+"/user_messages?template=message", "message-items", postString, APPEND_MODE.DESC, showMessages )
 }
 
 var actionRequest = function( action, project, id=null, activeTask=false ){
