@@ -2,7 +2,8 @@
 var refreshRate = 60;           //seconds
 var messageRefreshRate = 30;    //seconds    // i think we should only really do this if we are expecting a message
 var selectedProject = null;
-var api_path = "/{@www_root}/api"
+var path = "/{@www_root}/"
+var api_path = path+"api"
 
 var APPEND_MODE = {
     "NONE": 0,      // Do not append
@@ -84,9 +85,9 @@ var updateMessages = function(){
 var actionRequest = function( action, project, id=null, activeTask=false ){
 
     if ( id == null || id == "" )
-        loadContent( `${api_path}/action/${action}/${project}` )
+        loadContent( `${path}/action/${action}/${project}` )
     else
-        loadContent( `${api_path}/action/${action}/${project}/${id}` )
+        loadContent( `${path}/action/${action}/${project}/${id}` )
 
     setTimeout( updateMessages, "2000" )    // request a message update in 2 seconds
 
