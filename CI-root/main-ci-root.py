@@ -64,8 +64,8 @@ if __name__ == "__main__":
         pipeline_statues[ stage["name"] ] = pipeline_status
 
         print("="*25)
-        print("Pipeline stage ", stage["name"].upper(), "Complete")
-        print("="*25, "="*25, sep="\n")
+        print("Pipeline stage ", stage["name"].upper(), "Complete. Successful:", pipeline_status)
+        print("="*25)
 
     print( "All Stages Complete :D" )
     print( "@AMS-PIPELINE-STATUS:", json.dumps( pipeline_statues ) )
