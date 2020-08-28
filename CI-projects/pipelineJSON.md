@@ -35,31 +35,21 @@
 ```
 
 {
-  "build-name-format": "{project}_{build_hash}_build_{build_index}",            # build name format (optional, this is the default format, see above for available variables)
+  "build-name-format": "{project}_{build_hash}_build_{build_index}",            # [Optional] build name format
   "docker": {                                                                   # Specifies the docker image config
     "image": "dockerUser/mydockerimage:latest",                                 # The docker repo to pull the image from (This must be in a public repo as it stands)
-    "args": "-it --rm",                                                         # Any args that should be specifies when running the image
+    "args": "-it --rm",                                                         # [Optional] Any args that should be specifies when running the image
     "project-dest": "/root/project",                                            # The destination within the docker image that the project should be mounted
-    "build-output-dest": "/root/project/Builds"                                 # The destination within the docker image that build directory will be mounted
-  },
-  "webhook": {                                                                  # Specifies the web hook config, All web hook data must be supplied as POST and in json.
-                                                                                # ie. from a GitHub or BitBucket web hook. (As it stands AMS-CI Only support BitBucket)
-    "name": "push",                                                             # The name of the web hook, this must be supplied as a GET param when triggering the web hook
-    "project_request_name": "exampleProject",                                   # The project request name and supplied as a param when triggering the web hook (DOES NOT HAVE TO MATCH PROJECT NAME BUT MUST BE UNIQUE)
-                                                                                # ie. ?name=push&project=exampleProject
-    "authorized-actors": [                                                      # A list of authorized actors, actors must be supplied in the POST data.
-                                                                                # as it stands is must be in the json under JSON[actors][display_name]
-      "ashley sands"
-    ]
+    "build-output-dest": "/root/project/Builds",                                # The destination within the docker image that build directory will be mounted
+    "ams-container-dest:" "/root/AMS-Build",                                    # The destination within the docker image to mount AMS-Build
+    "stop-timeout": 10                                                          # [Optional] how long until to wait until the container is forcefully stopped.
   },
   "prepare-build": {                                                            # Commands to be run to prepare the build ready for task automation
       "master-dir-commands": [                                                  # A list of command that should be run to prepare the build before the directory is copied to the build directory
-          "cd testCIGame/",
           "sudo git pull origin master "
         ],
-        "get-git-hash": true,                                                   # Should the tool get the current git hash after the master has updated
+        "get-git-hash": true,                                                   # Should AMS-Build get the current git hash after the master has updated (non-webhook only, webhooks must always have the git hash supplied)
         "build-dir-commands": [                                                 # List of commands to be run inside the of the build directory after copying
-          "cd testCIGame/",
           "sudo git checkout --detach {git_hash}"
         ]
   }
@@ -71,11 +61,10 @@
     {
       "name": "build",                                                          # the name of the stage
       "commands": [                                                             # the list of commands that should be run within the container for to complete the stage.
-        "cd /root/project/unityBuild",
-        "source ./preBuild.sh",
-        "./before_script.sh",
-        "./build.default2.sh"
-      ]
+        "./build.sh",                                                           
+      ],
+      "exit-line": "exit code 0"                                                # The last line printed in each pipeline should be the status of the pipeline. if false, ignored. if not supplied expects "0"
+                                                                                # This line detimins the status of build. ie PASS, FAIL
     }
   ],
   "cleanup": {                                                                  # How should the build directory be cleaned up once the build is complete
@@ -88,14 +77,12 @@
 ```
 
 ```
-IMPORTANT NOTE: Prepare-build. If get_git_hash == true. master-dir-commands must be left in the 
-git directory that we want to get the git hash from. 
-Also Get git hash is skipped if supplied with the constructor. Otherwise it is executed directly
+NOTE: Get git hash is skipped if supplied with the constructor (ie from a webhook). Otherwise it is executed directly
 after the master folder is updated.
 ```
 
 ```
 IMPORTANT NOTE.
-As it stands, is not suitable to have multiple pipelines defined, as there is only a single output directory.
-But its fine if you create your own sub directories for each pipeline
+If using multiple pipelines its it very important that each pipeline outputs to a 
+different sub directory of the build directory.
 ```

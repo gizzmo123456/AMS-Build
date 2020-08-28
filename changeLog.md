@@ -12,10 +12,21 @@ than being in the config file.
     - supports discords
 - Added Installed check.
 - Added Complete Task callback to build tasks 
+- Added Build Status
+```
+    - PASS      All pipeline tasks passed
+    - FAIL      All pipeline tasks failed
+    - WARN      Some tasks passed, some failed :|
+```
 
 ### Changes
 - removed ams_path_config from being tracked by git as it auto generated
 - Move pipeline file to the root of the project source.
+- www root/index is now defined in ```web_conf.json```
+- moved docker container root path const to the docker def in the pipeline file 
+
+### Fixes
+- wrong git hash when building from the www interface
 
 
 ## Initial Release (v1.0.0)

@@ -1,15 +1,6 @@
 # AMS-Build 
 ###### AMS - *Automation Made Simple* 
 
-# UPDATE README NOTES.
-- build status now has warn for mixed status.
-    - exit line in pipeline file
-        - if False ignore otherwise expects to exit with exactly "0"
-- update the defaul root name
-- host name
-
-- moved Docker const to pipeline
-
 ## Overview
 AMS-Build is a simple lightweight automation tool writen in python.
 It has been designed to run and automate tasks in docker containers and
@@ -46,6 +37,7 @@ AMS-Build runs on Ubuntu 18+ (with very limited support for windows)
 | Ubuntu (64bit) | 18+     |
 | Python         | 3.7     |
 | PyCryptodome   | 3.9.8   |
+| (Py) FileLock  | 3.0.12  |
 | Git            | [version here] |
 | Docker         | [version here] |
 
@@ -206,25 +198,16 @@ Are defined in the 'docker' section of the pipeline file.
 # Mounted Directories
 '.../{build_name}/project_source' -> 'docker.project-dest' defined in pipeline
 '.../{build_name}/build'          -> 'docker.build-output-dest' defined in pipeline
-'.../{build_name}/config'         -> root directory of the container as a READ-ONLY directory
-'/CI-Root'                        -> root directory of the container as a READ-ONLY directory
+'{path_to_ci_root}/'              -> root directory of the container as a READ-ONLY directory
 
 # Image
 Defined in the 'docker' sections of the pipeline file.
 
 # command
 python3 {path_to_ci_root}/main-ci-root.py
-
-Note.
-Root needs to be added to the 'docker' section of pipeline.
-Currently its located in ```const.py``` and it applies to all projects (my bad)
 ```
 Once all pipeline task has completed, the status is determined and the project 
 clean up begins 
-```
-Note. ATM the system is not suitable for multiple pipeline task, due to the single build directory.
-Also Note. Build Status is yet to be implemented, I seem to of forgot about this :/
-```
 
 When the clean up begins, it first 7Zips the build folder (also removing it), 
 followed by generating the 7z hash, if configured to do so in the 'clean-up'
@@ -259,11 +242,12 @@ shared queue, to ensure it is unblocked and able to update the task list
 
 | Status | Discription          | Note              |
 | :----- |:-------------------- | :---------------- |
-| PASS   | Build was successful | |
-| FAIL   | Build failed         | Not Implemented   |
-| CANCEL | Build was canceled   | |
-| SKIP   | Build was skipped    | Not Implemented   |
-| DUMMY  | Dummy fake build     | |
+| PASS   | All Pipeline tasks where successful    | |
+| FAIL   | All Pipeline tasks failed              | |
+| WARN   | Some tasks passes, some failed         | |
+| CANCEL | Pipeline tasks where canceled   | |
+| SKIP   | Pipeline tasks where skipped    | |
+| DUMMY  | Dummy fake task     | |
 
 
 ## 4. Getting Started
@@ -340,7 +324,7 @@ of the accepted git actor names.
 Example 
 ```
 ...
-"webhook": {
+"in-webhook": {
   "name": "MyWebhookName",
   "authorized-actors": [
       "git_actor_one",
@@ -357,7 +341,7 @@ now its just a case of setting the webhook address on the git server
 Webhook Default Config,
 
 Port            8081
-root path       /request
+root path       /ams-build/request
 
 Query String (GET)
     name        {webhook name}
@@ -366,7 +350,7 @@ Query String (GET)
 POST data:
     data from github or BitBucket webhook
     
-eg. mydomain.com:8081/request?name=example&project=example_project
+eg. mydomain.com:8081/ams-build/request?name=example&project=example_project
 
 ```
 
@@ -381,7 +365,7 @@ Outbound webhooks are usful for automatically posting message to team messages
 services such as Slack or Discord when an event has occurred on the server.
 Such as a build task has complete.
 
-At the current time AMS-Build only has support Discord.  
+At the current time AMS-Build only has support for Discord.  
 and only support 
 - standard content 
 - username overrides
@@ -403,9 +387,12 @@ Each definition must contain 5 fields.
 
 The data field closely resembles the Discord webhook structure (but not quite exact)
 
-See ```CI-Projects\webhookJSON.md``` for more info on outbound webhooks
+For links to work in outbound webhooks the ```web_address``` must be set to the 
+sites domain or IP address in ```./CI-Host/data/configs/web_conf.json```
 
+See ```CI-Projects\webhookJSON.md``` for more info on outbound webhooks
 ## 5. Adding and Updating Users
+
 ##### New user
 To add a new user run 'python3 user_manager.py' to enter the user manager 
 standalone mode, where you will prompted to enter the users username, permission,
@@ -449,13 +436,13 @@ Example Json
 
 
 ## 6. Using The Web User Interface
-The Web User Interface can be accessed by going to mydomain.com:8080/ams-ci/
+The Web User Interface can be accessed by going to mydomain.com:8080/ams-build/
 
 ```
 Web User Interface Default Config,
 
 Port            8080
-root path       /ams-ci/
+root path       /ams-build/
 
 Default user    admin
 Password        [On first run, AMS-build will present a password for testing, in the console]
@@ -464,8 +451,10 @@ path example. mydomain.com:8080/ams-ci/
 
 ```
 
-You can update the webhooks default IP (0.0.0.0) and port (8080) by editing the
-```web_interface_ip``` and ```web_interface_port``` in ```./CI-Host/data/configs/web_conf.json```.
+You can update the web user interface default IP (0.0.0.0), port (8080) and root path (ams-build)
+by editing the ```web_interface_ip```, ```web_interface_port``` and ```web_root``` in 
+```./CI-Host/data/configs/web_conf.json```.
+
 
 Also see **Setting up SSL** for setting up SSL for the web-interface and webhooks
 
@@ -492,11 +481,12 @@ Projects - Lists all projects that the users has access too
 Builds - List of all builds + output & download links along with statues.
 
 User may only preform actions on tasks, up to there user access level.  
-(its worth noting that the links are still displayed even without access
+```
+Note: The links are still displayed even without access
 but the server will reject the request.)
-
+```
 For more info on user access levels see  
-User Types and Access Levels ( For Web User Interface and Webhooks )
+- **User Types and Access Levels** ( For Web User Interface and Webhooks )
 
 #### API
 Before being able to access the web interface API you must log in using user credentials

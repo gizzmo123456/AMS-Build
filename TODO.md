@@ -23,7 +23,7 @@ Release v1.0.0 TODO.
 v1.0.0 Missed tasks TODO. 
 ------------------------------------------------------------------------
 
-[ ] Pass/Fail Status
+[x] Pass/Fail Status
 [ ] 
 
 [ ] build cool down  
@@ -142,7 +142,7 @@ Web-pages Todo. No Rush, it can all be done back end :)
 [x] Message section.  
 
 [ ] Fixed view overflowing on the X axis
-[ ] Add AMS-Labs Logo 
+[x] Add AMS-Labs Logo 
 [ ] Add Zip hash to builds panel
 
 ------------------------------------------------------------------------
