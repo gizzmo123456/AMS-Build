@@ -67,6 +67,7 @@ v1.0.0 Missed tasks TODO.
 Post v1.0.0 Release TODO.
 ------------------------------------------------------------------------
 
+[ ] Add test connection for bitBucket
 [x] Automatically detect install path
 [ ] In init we need to detect if the cd/git commands fail.
     And if a input is required for what ever reason.
