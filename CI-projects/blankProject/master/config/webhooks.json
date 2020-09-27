@@ -34,7 +34,7 @@
               },
               {
                 "name": "Status",
-                "value": "{build_status}",
+                "value": "{status}",
                 "inline": true
               },
               {
@@ -44,12 +44,12 @@
               },
               {
                 "name": "Output log",
-                "value": "[View]({http_protocol}{base_url}{output_log})",
+                "value": "[View]({base_web_address}/{output_log})",
                 "inline": true
               },
               {
                 "name": "7z",
-                "value": "[Download]({http_protocol}{base_url}{7z_link})",
+                "value": "[Download]({base_web_address}/{7z_link})",
                 "inline": true
               },
               {
