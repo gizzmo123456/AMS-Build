@@ -28,7 +28,10 @@ Urgent v1.0.x
 [ ] Add config/method for loading key into ssh-agent
 [ ] 7Zip not zipping ?? (this could be a server issue)
 [ ] Add a short 1/2 sec delay befor printing status code.
-
+[ ] Fixed 7zip in ubuntu 16.x
+    - add own remove method (-sdel does not seam to work on u16)
+    - hash? (hash does not seem to work on u16)
+    
 ------------------------------------------------------------------------
 v1.0.0 Missed tasks TODO. 
 ------------------------------------------------------------------------

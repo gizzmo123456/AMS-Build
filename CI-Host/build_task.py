@@ -403,10 +403,9 @@ class BuildTask:
 
             zip_cmd = "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values )
 
-            _print( zip_cmd )
+            _print( zip_cmd, output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
-            for line in common.run_process( zip_cmd,
-                                            "bash" ):
+            for line in common.run_process( zip_cmd, "bash" ):
                 _print( line, output_filename=self.stdout_filepath, console=False )
             _print( "--- Zipping Complete ---", output_filename=self.stdout_filepath, console=False )
 
