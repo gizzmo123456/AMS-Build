@@ -401,7 +401,7 @@ class BuildTask:
         if self.task_state != BuildTask.TASK_STATE_CANCELED and zip is True:
             _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
 
-            zip_cmd = "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values )
+            zip_cmd = "cd {build_dir}; sudo 7z a {build_name}.7z ./build/".format( **self.format_values ) # TODO: fix no -sdel; ubuntu 16
 
             _print( zip_cmd )
             # zip the build, removing zipped files
@@ -410,19 +410,23 @@ class BuildTask:
                 _print( line, output_filename=self.stdout_filepath, console=False )
             _print( "--- Zipping Complete ---", output_filename=self.stdout_filepath, console=False )
 
-            if zip_hash.lower() in accepted_7z_hashes:
-                _print("--- Generating 7z hash ---", output_filename=self.stdout_filepath, console=False)
-                hash_cmd = "cd {build_dir}; 7z h -scrc{hash_type} {build_name}.7z | grep -oP '(?<=for data:).*'".format(hash_type=zip_hash.lower(),
-                                                                                                                        **self.format_values)
-                temp_7z_hash = ""
-                for line in common.run_process( hash_cmd, "bash" ):
-                    temp_7z_hash += line
+            # TODO: fix No 7z hash ubuntu 16
+            #if zip_hash.lower() in accepted_7z_hashes:
+            #    _print("--- Generating 7z hash ---", output_filename=self.stdout_filepath, console=False)
+            #    hash_cmd = "cd {build_dir}; 7z h -scrc{hash_type} {build_name}.7z | grep -oP '(?<=for data:).*'".format(hash_type=zip_hash.lower(),
+            #                                                                                                            **self.format_values)
+            #    temp_7z_hash = ""
+            #    for line in common.run_process( hash_cmd, "bash" ):
+            #        temp_7z_hash += line
 
-                temp_7z_hash = re.sub( r'\s', "", temp_7z_hash )    # remove the white space
-                self.format_values["7z_hash"] = temp_7z_hash
-                _print("7z hash:", temp_7z_hash, output_filename=self.stdout_filepath, console=False)
-                _print("--- 7z hash Complete ---", output_filename=self.stdout_filepath, console=False)
-
+            #    temp_7z_hash = re.sub( r'\s', "", temp_7z_hash )    # remove the white space
+            #    self.format_values["7z_hash"] = temp_7z_hash
+            #    _print("7z hash:", temp_7z_hash, output_filename=self.stdout_filepath, console=False)
+            #    _print("--- 7z hash Complete ---", output_filename=self.stdout_filepath, console=False)
+            temp_7z_hash = "TODO :("
+            self.format_values["7z_hash"] = temp_7z_hash
+            _print("7z hash:", temp_7z_hash, output_filename=self.stdout_filepath, console=False)
+            _print("--- 7z hash Complete ---", output_filename=self.stdout_filepath, console=False)
 
         else:
             _print( "--- Skipping Zipping ---", output_filename=self.stdout_filepath, console=False )
