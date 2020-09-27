@@ -400,8 +400,12 @@ class BuildTask:
         # Zip file
         if self.task_state != BuildTask.TASK_STATE_CANCELED and zip is True:
             _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
+
+            zip_cmd = "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values )
+
+            _print( zip_cmd )
             # zip the build, removing zipped files
-            for line in common.run_process( "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ -sdel;".format( **self.format_values ),
+            for line in common.run_process( zip_cmd,
                                             "bash" ):
                 _print( line, output_filename=self.stdout_filepath, console=False )
             _print( "--- Zipping Complete ---", output_filename=self.stdout_filepath, console=False )

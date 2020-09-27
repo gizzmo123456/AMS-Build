@@ -15,9 +15,19 @@ Release v1.0.0 TODO.
     - Readme
     - Json description docs
     - Todo Refresh
-[ ] Clean install
+[x] Clean install
 [x] SSL
 [x] Push to GitHub
+
+------------------------------------------------------------------------
+Urgent v1.0.x
+------------------------------------------------------------------------
+
+[ ] Add Branch to Webhooks 
+[ ] Accept actor name using any case (lower/upper ect...)
+[ ] Add config/method for loading key into ssh-agent
+[ ] 7Zip not zipping ?? (this could be a server issue)
+[ ] Add a short 1/2 sec delay befor printing status code.
 
 ------------------------------------------------------------------------
 v1.0.0 Missed tasks TODO. 
