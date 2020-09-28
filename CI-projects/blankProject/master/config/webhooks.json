@@ -2,6 +2,8 @@
   "in-webhooks":[
     {
       "name": "master",
+      "repository": "delve",
+      "branch": "",
       "authorized-actors": [
         "git user"
       ]

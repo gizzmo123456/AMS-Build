@@ -59,6 +59,8 @@ example
 "in-webhooks":[
     {
       "name": "Webhook-one",
+      "repository": "my-repo",
+      "branch": "my-awesome-branch",
       "authorized-actors": [
         "git actor"
       ]

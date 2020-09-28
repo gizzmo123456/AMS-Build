@@ -35,11 +35,27 @@ class Webhook( baseHTTPServer.BaseServer ):
             self.process_request( "Error", 404, False )
             _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
-            actor = post_data["actor"]["display_name"]
-            repo_name = post_data["repository"]
-            build_hash = post_data["push"]["changes"][0]["new"]["target"]["hash"]
 
-            # we must set the subname, so we can check that the actor belongs to webhook of name for project
+            fields = commonProject.get_project_webhook_fields( query["project"] )
+
+            # bit bucket give us an option to test the connection.
+            test_conn = self.get_post_field( post_data, fields["test"] )
+            if test_conn is not None and test_conn:
+                self.process_request( "Ok", 200, False )
+                return
+
+            # Get required data from post data.
+            actor = common.get_value_at_key( post_data     , *fields["actor"] )
+            repo_name = common.get_value_at_key( post_data , *fields["repository"] )
+            # branch = common.get_value_at_key( post_data  , *fields["branch"] )   # TODO: dont forget to check the data.
+            build_hash = common.get_value_at_key( post_data, *fields["hash"] )
+
+            if actor is None or repo_name is None or build_hash is None: # or branch is None:
+                _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                self.process_request( "Error", 404, False )
+                return
+
+            # we must set the sub name, so we can check that the actor belongs to webhook of name for project
             uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK, query["name"] )
 
             # check the request is defined within the projects webhooks config
@@ -52,6 +68,8 @@ class Webhook( baseHTTPServer.BaseServer ):
                 return
 
             webhooks = common.get_value_at_key( webhook_config, "in-webhooks", noValue=[] )
+            webhook_repo = None
+            webhook_branch = None
             webhook_actors = None
 
             # find if the webhook is defined for project and that the git actor has access
@@ -59,8 +77,17 @@ class Webhook( baseHTTPServer.BaseServer ):
                 webhook_name = common.get_value_at_key( webhook_config, "in-webhooks", whi,  "name" )
 
                 if webhook_name == query[ "name" ]:
-                    webhook_actors = common.get_value_at_key( webhook_config, "in-webhooks", whi,  "authorized-actors" )
+                    webhook_repo = common.get_value_at_key( webhook_config  , "in-webhooks", whi, "repository" )
+                    webhook_branch = common.get_value_at_key( webhook_config, "in-webhooks", whi, "branch" )
+                    webhook_actors = common.get_value_at_key( webhook_config, "in-webhooks", whi, "authorized-actors" )
                     break
+
+            if repo_name != webhook_repo:
+                _print("Error, Unreconzied repo has trigger webhook for project", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                self.process_request( "Error", 404, False )
+                return
+
+            # TODO. same for branch
 
             if webhook_actors is None:
                 _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )

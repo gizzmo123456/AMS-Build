@@ -296,11 +296,10 @@ The pipeline contains 3 main sections that are required
 2. prepare-build     # The commands that are required to prepare the source for building
 3. pipeline          # The commands required for each stage in the pipeline
 ```
-While the reset are optional
+While the rest are optional
 ```
-1. webhook           # webhook config
-2. environment       # variables to be set in the environment
-3. cleanup           # how the project should be cleaned up
+1. environment       # variables to be set in the environment
+2. cleanup           # how the project should be cleaned up
 ```
 See ```../Ci-project/PipelineJSON.md``` for a full description 
 of each field in the file.
@@ -326,6 +325,8 @@ Example
 ...
 "in-webhook": {
   "name": "MyWebhookName",
+  "repository": "myRepo",
+  "branch": "my-awesome-branch",
   "authorized-actors": [
       "git_actor_one",
       "git_actor_two",
