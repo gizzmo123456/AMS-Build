@@ -22,13 +22,18 @@ Release v1.0.0 TODO.
 ------------------------------------------------------------------------
 Urgent v1.0.x
 ------------------------------------------------------------------------
+[ ] SSL socket only handles a single connection at a time????
 
+[ ] Fix *crash*, Add some check for data on webhooks...
 [ ] Add Branch to Webhooks 
 [ ] Accept actor name using any case (lower/upper ect...)
 [ ] Add config/method for loading key into ssh-agent
 [ ] 7Zip not zipping ?? (this could be a server issue)
 [ ] Add a short 1/2 sec delay befor printing status code.
-
+[ ] Fixed 7zip in ubuntu 16.x
+    - add own remove method (-sdel does not seam to work on u16)
+    - hash? (hash does not seem to work on u16)
+    
 ------------------------------------------------------------------------
 v1.0.0 Missed tasks TODO. 
 ------------------------------------------------------------------------
@@ -64,6 +69,7 @@ v1.0.0 Missed tasks TODO.
 Post v1.0.0 Release TODO.
 ------------------------------------------------------------------------
 
+[ ] Add test connection for bitBucket
 [x] Automatically detect install path
 [ ] In init we need to detect if the cd/git commands fail.
     And if a input is required for what ever reason.
