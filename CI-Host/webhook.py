@@ -90,7 +90,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 return
 
             if branch != webhook_branch:
-                _print( "Webhook has been trigger by incorrect branch", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
+                _print( f"Webhook has been trigger by incorrect branch ({webhook_branch} != {branch}). Project: {query[ 'project' ]}", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
                 self.process_request( "Error", 404, False )
                 return
 
