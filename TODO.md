@@ -22,7 +22,9 @@ Release v1.0.0 TODO.
 ------------------------------------------------------------------------
 Urgent v1.0.x
 ------------------------------------------------------------------------
+[ ] SSL socket only handles a single connection at a time????
 
+[ ] Fix *crash*, Add some check for data on webhooks...
 [ ] Add Branch to Webhooks 
 [ ] Accept actor name using any case (lower/upper ect...)
 [ ] Add config/method for loading key into ssh-agent
