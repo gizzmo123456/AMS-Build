@@ -139,7 +139,7 @@ def get_project_pipeline( uac, project_name ):
 
 def get_project_config( uac, project_name, config_name):
 
-    if config_name == "pipeline":   # TODO: NOTE: we'll leave get pipeline, as we intend to move the file to the project source directory
+    if config_name == "pipeline":
         return get_project_pipeline( uac, project_name)
 
     config_path = "{relevent_proj_path}/{project_name}/master/config/{config_name}.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
@@ -161,6 +161,30 @@ def get_project_config( uac, project_name, config_name):
 
     return config
 
+
+def get_project_webhook_fields( project_name ):
+    """ Gets the inbound data fields
+        This does not require UAC, since it defines the path to data field in inbound json string.
+        And therefor give no access to the project. in-fact we use this data to verify the actors and project.
+        The default values are ALWAYS returned regardless of the project existing
+    """
+
+    default = {} # BitBucket.
+    default["test"]         = ["test"]
+    default["actor"]        = ["actor", "display_name"]
+    default["repository"]   = ["repository"]
+    default["hash"]         = [ "push", "changes", 0, "new", "target", "hash" ]
+    default["branch"]       = []    # TODO.
+
+    config_path = "{relevent_proj_path}/{project_name}/master/config/webhook_fields.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                                  project_name=project_name )
+
+    if not os.path.exists( config_path ):
+        return default
+
+    config = common.get_dict_from_json( config_path )
+
+    return { **default, **config }  # make sure that all values are supplied.
 
 def get_project_output_log( uac, project, build_name ):
     """Get the output log for build in project, None if not found"""
