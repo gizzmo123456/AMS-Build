@@ -1,4 +1,5 @@
 {
+  "dummy-build": false,
   "build-name-format": "{project}_{build_hash}_build_{build_index}",
   "docker": {
     "image": "",

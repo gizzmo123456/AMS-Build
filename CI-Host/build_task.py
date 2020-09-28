@@ -258,21 +258,7 @@ class BuildTask:
                                 Returns None if no set.
         :param default_value:   The default value to be returned if the key is not found
         """
-        value = self.config
-        for key in keys:
-            # key is not valid if not a dict or list or if the key is an int and the value is not a list
-            if (type(value) is not list and type(value) is not dict) or (type(value) is list and type(key) is not int):
-                return default_value
-            # if value is a list, this key is an int and in range
-            elif type(value) is list and type(key) is int and key >= 0 and key < len(key):
-                value = value[key]
-            # if the key is the dict
-            elif key in value:
-                value = value[key]
-            else: # not defined.
-                return default_value
-
-        return value
+        return common.get_value_at_key(self.config, *keys, noValue=default_value)
 
 
     def local_image_exist( self ):
