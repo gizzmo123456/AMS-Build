@@ -172,9 +172,9 @@ def get_project_webhook_fields( project_name ):
     default = {} # BitBucket.
     default["test"]         = ["test"]
     default["actor"]        = ["actor", "display_name"]
-    default["repository"]   = ["repository"]
+    default["repository"]   = ["repository", "name"]
     default["hash"]         = [ "push", "changes", 0, "new", "target", "hash" ]
-    default["branch"]       = []    # TODO.
+    default["branch"]       = ["push", "changes", 0, "name"]    # TODO. this might need improving. 0 refers to n amount of changes and we only check the first :|
 
     config_path = "{relevent_proj_path}/{project_name}/master/config/webhook_fields.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                                                   project_name=project_name )
