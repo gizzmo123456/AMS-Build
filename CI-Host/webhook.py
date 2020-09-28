@@ -37,7 +37,7 @@ class Webhook( baseHTTPServer.BaseServer ):
             _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
 
-            _print("WH DATA IN: ", content_str )
+            # _print("WH DATA IN: ", content_str )
             fields = commonProject.get_project_webhook_fields( query["project"] )
 
             # bit bucket give us an option to test the connection.
