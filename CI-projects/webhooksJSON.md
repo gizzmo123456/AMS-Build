@@ -4,11 +4,10 @@
 AMS-Builds uses webhooks from git servers to trigger builds when an event such as
 push occurs.   
 
-At the moment AMS-Build has support from 
-- **BitBucket** 
-- **GitHub** (I think, probably still needs doing)  
+At the moment AMS-Build has support for BitBucket built in. tho it is possible to
+define your data fields.
 
-At requires that the project and webhook name is supplied via the query string (GET data) 
+And requires that the project and webhook name is supplied via the query string (GET data) 
 and the actor, repo name and git hash is supplied via POST as JSON data
 
 ### Data Keys
@@ -26,17 +25,20 @@ Example
 Query String (GET)
 https://mydomain.com/request?name=ExampleHook&project=exampleProject
 
-JSON (POST) (minimal data structure)
+JSON (POST) (default (minimal) data structure)
 {
   ...
   "actor": {
     "display_name": "git actor"
   },
-  "repository": "MyRepo",
+  "repository": {
+    "name: "MyRepo"
+    },
   "push":{
     "changes": [
       {
         "new": {
+          "name": "myBranch",
           "target": {
             "hash": "SomeGitHash"
           }
@@ -47,6 +49,20 @@ JSON (POST) (minimal data structure)
   ...
 }
 
+```
+
+To define your own webhook data add (or copy from blank project) ```webhook_fields.json``` 
+to the projects master config directory. And add the names of fields that you wish to override
+with value of a list of keys within the POST data structure.
+
+Example (using default data)
+```
+{
+  "actor": ["actor", "display_name"],
+  "repository": ["repository", "name"],
+  "branch": ["push", "changes", 0, "new", "name"],
+  "hash": ["push", changes", 0, "new", "target", "hash"]
+}
 ```
 
 ### Adding an in-bound webhook
