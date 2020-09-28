@@ -32,9 +32,6 @@ Urgent v1.0.x
 [x] Add Branch to Webhooks
 [x] Fix *crash*, Add some check for data on webhooks... 
 
-[ ] Accept actor name using any case (lower/upper ect...)
-[ ] Add config/method for loading key into ssh-agent
-
 [ ] 7Zip not zipping ?? (this could be a server issue)
 [ ] Fix 7zip in ubuntu 16.x
     - add own remove method (-sdel does not seam to work on u16)
@@ -90,7 +87,10 @@ Post v1.0.0 Release TODO.
     With the option to keep the first/last build of each month   
 
 [ ] Add Project Storage limits.
-    
+
+[ ] Accept actor name using any case (lower/upper ect...)
+[ ] Add config/method for loading key into ssh-agent
+
 [ ] Improve the way that content is loaded into the webpage.
     - At the moment each messages, active and queue sections all auto-
     refresh every X amount of time (i think its set to 60sec for active 

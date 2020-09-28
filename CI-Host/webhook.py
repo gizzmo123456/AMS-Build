@@ -90,7 +90,10 @@ class Webhook( baseHTTPServer.BaseServer ):
                 self.process_request( "Error", 404, False )
                 return
 
-            # TODO. same for branch
+            if branch != webhook_branch:
+                _print( "Webhook has been trigger by incorrect branch", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
+                self.process_request( "Error", 404, False )
+                return
 
             if webhook_actors is None:
                 _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
