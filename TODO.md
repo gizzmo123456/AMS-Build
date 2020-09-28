@@ -32,9 +32,8 @@ Urgent v1.0.x
 [x] Add Branch to Webhooks
 [x] Fix *crash*, Add some check for data on webhooks... 
 
-[ ] 7Zip not zipping ?? (this could be a server issue)
 [ ] Fix 7zip in ubuntu 16.x
-    - add own remove method (-sdel does not seam to work on u16)
+    -[x] add own remove method (-sdel does not seam to work on u16) (for 16 only)
     - hash? (hash does not seem to work on u16)
     
 ------------------------------------------------------------------------
@@ -42,7 +41,7 @@ v1.0.0 Missed tasks TODO.
 ------------------------------------------------------------------------
 
 [x] Pass/Fail Status
-[ ] 
+[x] Move dummy-build option to pipeline.json file
 
 [ ] build cool down  
 [ ] Only build latest  

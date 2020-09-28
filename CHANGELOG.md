@@ -1,5 +1,17 @@
 # Change Log
 
+# Change log since version 1.0.0
+
+## Version 1.0.2
+
+- Added 'Repository' and 'Branch' fields to in-Webhooks as a requirement
+- Added 'webhook_fields.json' to map post data fields to the required webhook fields.
+- Moved dummyBuild property in 'main-ci-host' to project pipeline file.
+- Fixed *CRASH* when incorrect post data is received for a git webhook
+- Created Ubuntu 16 branch
+    - Fixed 7z not having '-sdel' switch
+    - Known issue: No 7z hash :(
+    
 ## version 1.0.1
 Version 1.0.1 has changes that will break the current configuration
 1) updating will remove the ```ams_path_config``` file, triggering the 
