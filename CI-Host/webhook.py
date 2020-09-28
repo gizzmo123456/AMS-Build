@@ -29,14 +29,15 @@ class Webhook( baseHTTPServer.BaseServer ):
         query = dict(parse_qsl( request.query ))
 
         content_len = int( self.headers[ 'Content-Length' ] )
-        post_data = json.loads( self.rfile.read( content_len ) )
+        content_str = self.rfile.read( content_len )
+        post_data = json.loads( content_str )
 
         if path != f"/{Webhook.ROOT}/request" or "name" not in query or "project" not in query:
             self.process_request( "Error", 404, False )
             _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
         else:
 
-            _print("WH DATA IN: ", post_data)
+            _print("WH DATA IN: ", content_str )
             fields = commonProject.get_project_webhook_fields( query["project"] )
 
             # bit bucket give us an option to test the connection.
