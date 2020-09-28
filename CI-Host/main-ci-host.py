@@ -79,7 +79,7 @@ def create_ssl_socket_wrapper(cert_filepath, key_filepath, ca_bundle_filepath):
     :return: warp_socket function to be applied to the HTTP Server.
     """
 
-    ssl_socket = ssl.create_default_context( purpose=ssl.Purpose.SERVER_AUTH, cafile=ca_bundle_filepath ) # ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
+    ssl_socket = ssl.create_default_context( purpose=ssl.Purpose.CLIENT_AUTH, cafile=ca_bundle_filepath ) # ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
     ssl_socket.load_cert_chain( certfile=cert_filepath, keyfile=key_filepath )
     ssl_socket.load_verify_locations( ca_bundle_filepath )
 
