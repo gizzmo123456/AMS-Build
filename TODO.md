@@ -22,15 +22,21 @@ Release v1.0.0 TODO.
 ------------------------------------------------------------------------
 Urgent v1.0.x
 ------------------------------------------------------------------------
-[ ] SSL socket only handles a single connection at a time????
+[x] SSL socket only handles a single connection at a time or hangs for some reason
+    - Change the way that sll sockets are initialized which seems to of improved if
+      not resolved the issue
+[x] Add a short 1 to 2 sec delay before printing status code.
+    - Solution is for users to define a short delay in the pipeline or shell script.
+    (it is more of an issue cased by the compiler or build tool printing a 
+     message just after the status code is printed)  
+[x] Add Branch to Webhooks
+[x] Fix *crash*, Add some check for data on webhooks... 
 
-[ ] Fix *crash*, Add some check for data on webhooks...
-[ ] Add Branch to Webhooks 
 [ ] Accept actor name using any case (lower/upper ect...)
 [ ] Add config/method for loading key into ssh-agent
+
 [ ] 7Zip not zipping ?? (this could be a server issue)
-[ ] Add a short 1/2 sec delay befor printing status code.
-[ ] Fixed 7zip in ubuntu 16.x
+[ ] Fix 7zip in ubuntu 16.x
     - add own remove method (-sdel does not seam to work on u16)
     - hash? (hash does not seem to work on u16)
     

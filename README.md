@@ -32,14 +32,15 @@ AMS-Build runs on Ubuntu 18+ (with very limited support for windows)
 - 4GB memory  
 
 ### Dependencies  
-| Product        | Version |
-| :------------: | :-----: |
-| Ubuntu (64bit) | 18+     |
-| Python         | 3.7     |
-| PyCryptodome   | 3.9.8   |
-| (Py) FileLock  | 3.0.12  |
-| Git            | [version here] |
-| Docker         | [version here] |
+| Product        | Version | Notes  |
+| :------------: | :-----: | :----: |
+| Ubuntu (64bit) | 18+     | use branch 'ubuntu16' for ubuntu 16 support |
+| Python         | 3.7     |        |
+| PyCryptodome   | 3.9.8   |        |
+| (Py) FileLock  | 3.0.12  |        |
+| Git            | [version here] | |
+| Docker         | [version here] | |
+| 7Zip           | [version here] | Limited support on ubuntu16 branch ( no 7z hash ) |
 
 ## 2. Modules and Components
 AMS-Build is made up of several components, across 3 key areas.
@@ -93,12 +94,15 @@ For more info on user types and accounts see,
 - **Adding A New User**
 
 ##### - Git Events/Webhooks
-The Git Events receives a webhook from either GitHub or BitBucket, when an 
+The Git Events receives a webhook from BitBucket (by default), when an 
 event such as PUSH is trigger on the GIT server. When the event is received 
 by AMS-Build, a build task is created and queued if the git trigger actor is 
 an approved actor in the target project webhook config.
 
-For further info on Webhook Actors and access level see,
+Its is also possible to define your own webhook data structures see
+[Webhooks Config](./CI-projects/webhooksJSON.md) for more info.
+
+For further info on Webhooks, Actors and access level see,
 - **User Types and Access Levels** 
 - **Approving webhook actors**
 
@@ -217,7 +221,7 @@ section of the pipeline file.
 Note. Builds can only be downloaded from the Web User Interface if they are 7z-ed.
 ```
 
-7z hash types available
+7z hash types available (Not available on ubuntu16 branch)
 - **null**      (do not hash)
 - **CRC32**
 - **CRC64**
