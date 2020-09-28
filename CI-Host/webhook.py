@@ -49,10 +49,10 @@ class Webhook( baseHTTPServer.BaseServer ):
             # Get required data from post data.
             actor = common.get_value_at_key( post_data     , *fields["actor"] )
             repo_name = common.get_value_at_key( post_data , *fields["repository"] )
-            # branch = common.get_value_at_key( post_data  , *fields["branch"] )   # TODO: dont forget to check the data.
+            branch = common.get_value_at_key( post_data    , *fields["branch"] )   # TODO: dont forget to check the data.
             build_hash = common.get_value_at_key( post_data, *fields["hash"] )
 
-            if actor is None or repo_name is None or build_hash is None: # or branch is None:
+            if actor is None or repo_name is None or build_hash is None or branch is None:
                 _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 self.process_request( "Error", 404, False )
                 return
