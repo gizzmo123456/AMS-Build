@@ -401,12 +401,24 @@ class BuildTask:
         if self.task_state != BuildTask.TASK_STATE_CANCELED and zip is True:
             _print( "--- Zipping build ---", output_filename=self.stdout_filepath, console=False )
 
-            zip_cmd = "cd {build_dir}; sudo 7z a {build_name}.7z ./build/".format( **self.format_values ) # TODO: fix no -sdel; ubuntu 16
+            zip_cmd = "cd {build_dir}; sudo 7z a {build_name}.7z ./build/ ".format( **self.format_values )
 
             _print( zip_cmd, output_filename=self.stdout_filepath, console=False )
             # zip the build, removing zipped files
+            zip_output = ""
             for line in common.run_process( zip_cmd, "bash" ):
                 _print( line, output_filename=self.stdout_filepath, console=False )
+                zip_output += line
+
+            # Remove the build if no errors or warnings occurred.
+            zip_successful = re.findall( r"warning|error", zip_output, re.IGNORECASE ) == 0
+            if zip_successful:
+                _print("Build zipped with no errors or warning, removing build files.")
+                for line in common.run_process( "sudo rm ./build/", "bash" ):
+                    _print( line, output_filename=self.stdout_filepath, console=False )
+            else:
+                _print("Build zipped with errors or warning, keeping original build files", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
+
             _print( "--- Zipping Complete ---", output_filename=self.stdout_filepath, console=False )
 
             # TODO: fix No 7z hash ubuntu 16
