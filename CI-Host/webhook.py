@@ -54,6 +54,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
             if actor is None or repo_name is None or build_hash is None or branch is None:
                 _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( f"Data Actor: {actor is not None} Repo: {repo_name is not None} Hash {build_hash is not None} Branch {branch is not None}", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 self.process_request( "Error", 404, False )
                 return
 
