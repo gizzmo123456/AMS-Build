@@ -2,16 +2,11 @@
 
 # Change log since version 1.0.0
 
-## Version 1.1.0
+## Version 1.0.2
 
-### Added
 - Added 'Repository' and 'Branch' fields to in-Webhooks as a requirement
 - Added 'webhook_fields.json' to map post data fields to the required webhook fields.
-
-### changes
 - Moved dummyBuild property in 'main-ci-host' to project pipeline file.
-
-# Fixes
 - Fixed *CRASH* when incorrect post data is received for a git webhook
 - Created Ubuntu 16 branch
     - Fixed 7z not having '-sdel' switch
