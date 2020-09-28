@@ -39,7 +39,7 @@ class Webhook( baseHTTPServer.BaseServer ):
             fields = commonProject.get_project_webhook_fields( query["project"] )
 
             # bit bucket give us an option to test the connection.
-            test_conn = self.get_post_field( post_data, fields["test"] )
+            test_conn = common.get_value_at_key( post_data, *fields["test"] )
             if test_conn is not None and test_conn:
                 self.process_request( "Ok", 200, False )
                 return
