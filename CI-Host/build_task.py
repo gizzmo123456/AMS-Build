@@ -411,7 +411,7 @@ class BuildTask:
                 zip_output += line
 
             # Remove the build if no errors or warnings occurred.
-            zip_successful = re.findall( r"warning|error", zip_output, re.IGNORECASE ) == 0
+            zip_successful = len( re.findall( r"warning|error", zip_output, re.IGNORECASE ) ) == 0
             if zip_successful:
                 _print("Build zipped with no errors or warning, removing build files.")
                 for line in common.run_process( "sudo rm ./build/", "bash" ):
