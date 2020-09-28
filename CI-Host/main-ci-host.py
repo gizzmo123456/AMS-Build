@@ -17,10 +17,11 @@ import common
 import user_manager
 import out_webhook
 
-SKIP_TASK_EXECUTION = True      # if Runs the task without executing the container
+# to run a dummy build add ' "dummy-build": true ' to pipeline.json file.
+# Dummy build settings.
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
 SKIP_TASK_INTERVALS = 15        # how many times should we check if the tasks state has changed, ie been cnaceled.
-SKIP_TASK_CLEAN_UP = True
+SKIP_TASK_CLEAN_UP = True       # should clean up be run on dummy builds (True to clean up)
 
 def web_hook( ip, port, ssl_socket ):
     """
@@ -152,7 +153,7 @@ def cancel_worker(job):
 def task_worker(job):
 
     _print("Starting new task")
-    if SKIP_TASK_EXECUTION:
+    if job.get_config_value("dummy-build", default_value=False):
         _print( "Simulating task task" )
         job.build_status = job.BUILD_STATUS_DUMMY
         slept_time = 0
