@@ -36,7 +36,7 @@ def web_hook( ip, port, ssl_socket ):
     redirect_thread = None
 
     if ssl_socket is not None:
-        wh_server.socket = ssl_socket( wh_server.socket, server_side=True, server_hostname="ams-labs.co.uk" )
+        wh_server.socket = ssl_socket( wh_server.socket, server_side=True )
 
     while alive:
         wh_server.serve_forever()
@@ -60,7 +60,7 @@ def www_interface( ip, port, ssl_socket ):
     redirect_thread = None
 
     if ssl_socket is not None:
-        wi_server.socket = ssl_socket( wi_server.socket, server_side=True, server_hostname="ams-labs.co.uk" )
+        wi_server.socket = ssl_socket( wi_server.socket, server_side=True )
 
     while alive:
         wi_server.serve_forever()
