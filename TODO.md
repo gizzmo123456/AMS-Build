@@ -36,6 +36,12 @@ Urgent v1.0.x
     -[x] add own remove method (-sdel does not seam to work on u16) (for 16 only)
     - hash? (hash does not seem to work on u16)
     
+[ ] Fix Favicon / Add Public directory
+[ ] Re route logs to file.
+[ ] Add exception for bad request / brocken pipes (ssl).
+[ ] Make http -> https wraper
+    - [ ] Add ip blocking
+    
 ------------------------------------------------------------------------
 v1.0.0 Missed tasks TODO. 
 ------------------------------------------------------------------------
