@@ -17,6 +17,8 @@ import common
 import user_manager
 import out_webhook
 
+import socket_wrapper
+
 # to run a dummy build add ' "dummy-build": true ' to pipeline.json file.
 # Dummy build settings.
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
@@ -57,6 +59,11 @@ def www_interface( ip, port, ssl_socket ):
     # Use the threaded HTTPServer for the web interface,
     # so we're not handing around while files are downloaded
     # and pre-sockets are opened
+
+    socket = socket_wrapper.SocketWrapper( ip, port, 200, web_interface.WebInterface )
+    socket.serve()
+
+    return
     wi_server = ThreadHTTPServer( (ip, port), web_interface.WebInterface )
     redirect_thread = None
 

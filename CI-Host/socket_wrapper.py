@@ -26,9 +26,15 @@ class SocketWrapper:
         self.port = port
         self.max_connections = max_connections
 
-        #self.ssl_cert = ssl[0]
-        #self.ssl_ca   = ssl[1]
-        #self.ssl_priv = ssl[2]
+        self.use_ssl = True #ssl is not None
+        self.ssl_cert_path = None
+        self.ssl_ca_path = None
+        self.ssl_priv_path = None
+
+        if ssl is not None:
+            self.ssl_cert_path = ssl[0]
+            self.ssl_ca_path   = ssl[1]
+            self.ssl_priv_path = ssl[2]
 
         self.thread_lock = threading.Lock()
 
@@ -118,9 +124,26 @@ class SocketWrapper:
             return
 
         http_header = data.split(b'\r\n')
+        request_line = []
+        if len(http_header) > 0:
+            request_line = http_header[0].split(b' ')
 
         # TODO: check request line
+        if len( request_line ) > 0:
+            for banned in self.banned_request:
+                if banned in request_line:
+                    client_socket.shutdown( socket.SHUT_RDWR )  # Should upgrade protocol to https if request line is correct.
+                    # TODO: Log.
+                    self.ban_ip( ip_address )
+                    _print("Baned IP", ip_address, "baned request made")
+                    return
 
+        _print( http_header, "\n", request_line )
+        if self.use_ssl:
+            # attempt to weed out http request
+            if len(request_line) > 0 and request_line[0] == b"GET":  # TODO: improve.
+                client_socket.shutdown(socket.SHUT_RDWR)             # Should upgrade protocol to https if request line is correct.
+                return
 
         # open the connection the http server and send data from client
         http_con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -161,3 +184,17 @@ class SocketWrapper:
                 break
 
         return data
+
+    def create_ssl_socket_wrapper(self):
+        """ creates an ssl socket
+
+        :return: warp_socket function to be applied to the HTTP Server.
+        """
+
+        ssl_socket = ssl.create_default_context( purpose=ssl.Purpose.CLIENT_AUTH,cafile=self.ssl_ca_path )  # ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
+        ssl_socket.load_cert_chain( certfile=self.ssl_cert_path, keyfile=self.ssl_priv_path )
+
+        a = ssl_socket.wrap_socket()
+
+        return ssl_socket.wrap_socket
+
