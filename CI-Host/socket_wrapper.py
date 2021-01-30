@@ -128,6 +128,9 @@ class SocketPassthrough:
             expected_received_messages = 2
 
         while i <= expected_received_messages:
+            # reduce the sockets timeout
+            if i == 1:
+                s_client_socket.settimeout(1)
             # Receive message from client
             try:
                 data = s_client_socket.recv( 1024 )
