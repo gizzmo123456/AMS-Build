@@ -91,7 +91,7 @@ class SocketPassthrough:
 
             # Create a send and receive thread, to pass the connections onto the ssl socket
             recv_thr = threading.Thread( target=self.receive_thread, args=[ s_sock, p_sock, address[0], i ] )
-            snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, i ] )
+            snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, address[0], i ] )
 
             i += 1
 
@@ -121,7 +121,7 @@ class SocketPassthrough:
                     _print("EXIT rev LOOP", idx)
                     break
 
-                message_bytes += data
+                # message_bytes += data
 
                 for bv in self.banRegex:
                     match = re.search( bv, data.decode("utf-8") )
