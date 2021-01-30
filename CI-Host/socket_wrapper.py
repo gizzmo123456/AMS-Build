@@ -2,199 +2,198 @@ import threading
 from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
 import socket
+import re
 import ssl
 
 import DEBUG
 _print = DEBUG.LOGS.print
 
 # performs basic checks to help prevent unwanted connections.
-# and bans badly behaving clients/IP.
+# and bans badly behaving clients/IPs.
+# Also redirects http requrest to https
 # IE. if a request for HTTP/0.9 comes in. Ban!
-class SocketWrapper:
+# ALSO this is not a intended as a perminent solution
+class SocketPassthrough:
 
-    def __init__( self, ip, port, max_connections, http_class, ssl=None, threaded=True ):
+    def __init__( self, ip, port, passthrough_ip, passthrough_port, max_connections ):
 
         self.alive = True
-
-        self.outer_sock = None
-        self.www_handler = None
-
-        self.http_class = http_class
-        self.threaded = threaded
 
         self.ip = ip
         self.port = port
         self.max_connections = max_connections
 
-        self.use_ssl = True #ssl is not None
-        self.ssl_cert_path = None
-        self.ssl_ca_path = None
-        self.ssl_priv_path = None
+        self.passthrough_ip = passthrough_ip
+        self.passthrough_port = passthrough_port
 
-        if ssl is not None:
-            self.ssl_cert_path = ssl[0]
-            self.ssl_ca_path   = ssl[1]
-            self.ssl_priv_path = ssl[2]
-
-        self.thread_lock = threading.Lock()
-
-        self.accept_thread = None
-        self.http_thread = None
-
-        self.banned_request = [
-            b"http/0.9"
-            b"http/1.0"
-            b"rds"
-        ]
+        self.socket = None
+        self.thread_lock = threading.RLock()
 
         self.banned_ips = [
-
+            #"127.0.0.1"
         ]
 
-    def is_alive( self ):
+        # if any of the following strings are found in any request
+        # the user will be banned this should only be used when ssl
+        # socket is in use. Any plan text should be rejected or if its
+        # valid http we should probably redirect them but this is not
+        # a permanent solution. so i cant be asked.
+        self.banRegex = [
+            r"HTTP/0.9"
+        ]
 
-        with self.thread_lock:
-            return self.alive
+    def is_alive(self):
+        ''' Thread safe method to get is alive '''
+        self.thread_lock.acquire()
+        a = self.alive
+        self.thread_lock.release()
 
-    def set_alive( self, ali ):
+        return a
 
-        with self.thread_lock:
-            self.alive = ali
+    def ip_is_banned(self, ip):
 
-    def ban_ip( self, ip_address ):
+        self.thread_lock.acquire()
+        banned = ip in self.banned_ips
+        self.thread_lock.release()
 
-        with self.thread_lock:
-            self.banned_ips.append( ip_address )
+        return banned
 
-    def serve( self ):
+    def create_socket(self):
 
-        if self.outer_sock is not None:
-            _print( "Socket already created", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
-            return
+        self.socket = socket.socket( socket.AF_INET, socket.SOCK_STREAM )    # the socket that the client connects to.
+        self.socket.setsockopt( socket.SOL_SOCKET, socket.SO_REUSEADDR, 1 )  # alow the socket to be reused onces idled for a long period
+        self.socket.bind((self.ip, self.port))
 
-        self.outer_sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )  # the socket that the client connects to.
-        self.outer_sock.setsockopt( socket.SOL_SOCKET, socket.SO_REUSEADDR, 1 )  # alow the socket to be reused onces idled for a long period
-        self.outer_sock.bind( (self.ip, self.port) )
-        self.outer_sock.listen( self.max_connections + 1 )  # allow 1 extra connection to prevent connections queueing
+        tred = threading.Thread(target=self.wait_for_connections, args=[self.socket])
+        tred.start()
 
-        # only allow local connections to the http server,
-        if self.threaded:
-            self.www_handler = ThreadHTTPServer( ("127.0.0.1", 9998), self.http_class )
-        else:
-            self.www_handler = HTTPServer( ( "127.0.0.1", 9998 ), self.http_class )
+    def wait_for_connections(self, sock):
 
-        self.http_thread = threading.Thread( target=self.http_serve_thread, args=[self.www_handler] )
-        self.http_thread.start()
-
-        self.accept_thread = threading.Thread( target=self.accept_www_thread, args=[self.outer_sock] )
-        self.accept_thread.start()
-
-    def http_serve_thread( self, www_handler ):
-
-        while self.is_alive():
-            www_handler.serve_forever()
-
-    def accept_www_thread( self, _socket ):
+        sock.listen()
+        i = 0
 
         while self.is_alive():
-            client_socket, address = _socket.accept()
 
-            # TODO. check banned list.
-            if address[0] in self.banned_ips:
+            s_sock, address = sock.accept()
+
+            _print( i, "New con from", address )
+
+            # Reject the client if there IP has been banned
+            if self.ip_is_banned( address[0] ):
                 _print("Rejected banned ip", address[0], message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
-                client_socket.shutdown(socket.SHUT_RDWR)
+                s_sock.shutdown(socket.SHUT_RDWR)
+                s_sock.close()
                 continue
 
-            _print( address )
+            # Create a client socket so that data can be passed onto the ssl or http socket
+            p_sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+            p_sock.connect( (self.passthrough_ip, self.passthrough_port) )
 
-            threading.Thread( target=self.process_www_request_thread, args=[ client_socket, address[0] ] ).start()
+            # Create a send and receive thread, to pass the connections onto the ssl socket
+            recv_thr = threading.Thread( target=self.receive_thread, args=[ s_sock, p_sock, address[0], i ] )
+            snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, i ] )
 
+            i += 1
 
-    def process_www_request_thread( self, client_socket, ip_address ):
+            recv_thr.start()
+            snd_thr.start()
 
-        # Read all incoming data from the socket and
-        # forward it onto the http server.
-
-        data = self._receive_data( client_socket, False )
-
-        _print("IN", data)
-        # close any connections that sent us zero bytes.
-        if len( data ) == 0:
-            client_socket.close()
-            return
-
-        http_header = data.split(b'\r\n')
-        request_line = []
-        if len(http_header) > 0:
-            request_line = http_header[0].split(b' ')
-
-        # TODO: check request line
-        if len( request_line ) > 0:
-            for banned in self.banned_request:
-                if banned in request_line:
-                    client_socket.shutdown( socket.SHUT_RDWR )  # Should upgrade protocol to https if request line is correct.
-                    # TODO: Log.
-                    self.ban_ip( ip_address )
-                    _print("Baned IP", ip_address, "baned request made")
-                    return
-
-        _print( http_header, "\n", request_line )
-        if self.use_ssl:
-            # attempt to weed out http request
-            if len(request_line) > 0 and request_line[0] == b"GET":  # TODO: improve.
-                client_socket.shutdown(socket.SHUT_RDWR)             # Should upgrade protocol to https if request line is correct.
-                return
-
-        # open the connection the http server and send data from client
-        http_con = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        http_con.connect( ("127.0.0.1", 9998) )
-
-        http_con.send( data )
-
-        http_data = self._receive_data( http_con, True )
-
-        _print("SEND", http_data)
-
-        # and return the data to the client
-        if len( http_data ) > 0:
-            client_socket.send( http_data )
-        else:    # ban um', no seconds
-            self.ban_ip( ip_address )   # TODO: we need a better way
-
-        client_socket.close()
-
-    def _receive_data( self, sock, close_on_timeout ):
-
-        sock.settimeout(0.5)
-        data = b''
-
-        while True:
-            try:
-                byte = sock.recv( 1024 )
-                if len( byte ) == 0:    # zero bytes are returned then the connection has been closed by the http server.
-                    break
-                data += byte
-            except socket.timeout as e:
-                if close_on_timeout:
-                    sock.close()
-                break
-            except Exception as e:
-                _print( "Bad http socket connection" )
-                sock.close()
-                break
-
-        return data
-
-    def create_ssl_socket_wrapper(self):
-        """ creates an ssl socket
-
-        :return: warp_socket function to be applied to the HTTP Server.
+    def receive_thread(self, s_client_socket, p_client_socket, client_ip, idx):   # received from the server socket
+        """
+        :param s_client_socket:     The socket the client connected to
+        :param p_client_socket:     The socket that passes the connection data on
         """
 
-        ssl_socket = ssl.create_default_context( purpose=ssl.Purpose.CLIENT_AUTH,cafile=self.ssl_ca_path )  # ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
-        ssl_socket.load_cert_chain( certfile=self.ssl_cert_path, keyfile=self.ssl_priv_path )
+        # TODO: NOTE: Might be worth checking if the ip was banned while this socket was open
 
-        a = ssl_socket.wrap_socket()
+        _print("Start Receive", idx)
+        #while self.is_alive():
 
-        return ssl_socket.wrap_socket
+        s_client_socket.settimeout(30)
 
+        banIP = False
+        message_bytes = ""    # store the inbound message, so it can be logged in the client gets baned
+
+        while self.is_alive():
+            try:
+                data = s_client_socket.recv( 1024 )
+                if len( data ) == 0:
+                    _print("EXIT rev LOOP", idx)
+                    break
+
+                message_bytes += data
+
+                for bv in self.banRegex:
+                    match = re.search( bv, data.decode("utf-8") )
+
+                    if match:
+                        banIP = True
+                        break
+
+                if match:
+                    _print( "ban ip triggered!", match )
+                    self.banned_ips.append( client_ip )
+                    break
+                else:
+                    _print( "Valid request", match )
+
+                _print (idx, "request Data:\n", data)
+
+                p_client_socket.sendall( data )
+            except Exception as e:
+                # TODO: if a message has been received, we should consider banning the ip, as this could mean that the SSL is not resolving.
+                _print( e )
+                break
+
+        _print("Exit Receive", idx)
+
+        # shutdown the receive stream on servers socket to prevent any more messages coming in.
+        # send thread will close the connection fully on the socket when the time comes :)
+        try:
+            if not banIP:
+                s_client_socket.shutdown(socket.SHUT_RD)
+            else:   # if the ip is getting baned we must shutdown both sockets in both directions
+                p_client_socket.shutdown(socket.SHUT_RDWR)
+                s_client_socket.shutdown(socket.SHUT_RDWR)
+                _print("BAN HAS SHUTDOWN BOTH P & S SOCKETS")
+        except Exception as e:
+            _print( e )
+
+    def send_thread(self, s_client_socket, p_client_socket, client_ip, idx):      # send from the server socket
+        """
+        :param s_client_socket:     The socket the client connected to
+        :param p_client_socket:     The socket that passes the connection data on
+        """
+
+        # TODO: NOTE: Might be worth checking if the ip was banned while this socket was open
+
+        _print("Start Send", idx)
+
+        while self.is_alive():
+
+            try:
+                data = p_client_socket.recv( 1024 )
+
+                #_print(idx, "HTTP DATA:\n",data)
+
+                if len( data ) == 0:
+                    _print("EXIT Send LOOP", idx)
+                    break
+
+                s_client_socket.sendall( data )
+            except Exception as e:
+                _print( e )
+                break
+
+        pass
+
+        try:
+            # finish closing the 2 sockets
+            p_client_socket.close()
+            s_client_socket.close()
+        except Exception as e:
+            _print("Error closing sockets", idx)
+            _print(e)
+
+        _print( "Sockets Closed!" )
+        _print("Exit Send", idx)
