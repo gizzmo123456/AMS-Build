@@ -42,6 +42,10 @@ class SocketPassthrough:
             r"HTTP/0.9"
         ]
 
+        self.redirectRegex = [
+            r"HTTP/1.1"
+        ]
+
     def is_alive(self):
         ''' Thread safe method to get is alive '''
         self.thread_lock.acquire()
@@ -120,32 +124,40 @@ class SocketPassthrough:
                 if len( data ) == 0:
                     _print("EXIT rev LOOP", idx)
                     break
+            except Exception as e:
+                # TODO: if a message has been received, we should consider banning the ip, as this could mean that the SSL is not resolving.
+                _print(e)
+                break
 
-                # message_bytes += data
+            data_str = ""
 
+            try:
                 for bv in self.banRegex:
                     match = re.search( bv, data.decode("utf-8") )
 
                     if match:
                         banIP = True
                         break
-
-                if match:
-                    _print( "ban ip triggered!", match )
-                    self.banned_ips.append( client_ip )
-                    break
-                else:
-                    _print( "Valid request", match )
-
-                _print (idx, "request Data:\n", data)
-
-                p_client_socket.sendall( data )
-
-                break
             except Exception as e:
-                # TODO: if a message has been received, we should consider banning the ip, as this could mean that the SSL is not resolving.
                 _print( e )
+                # if the exception is raised the client should be rejected unless in ssh mode
+                pass
+
+            if banIP:
+                _print( "ban ip triggered!" )
+                self.banned_ips.append( client_ip )
                 break
+            else:
+                _print( "Valid request" )
+
+            _print (idx, "request Data:\n", data)
+
+            try:
+                p_client_socket.sendall( data )
+            except Exception as e:
+                _print(e)
+
+            break
 
         _print("Exit Receive", idx)
 
