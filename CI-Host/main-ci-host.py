@@ -56,7 +56,7 @@ def www_interface( ip, port, ssl_socket ):
     :param ssl_socket:      ssl_socket (SSLContext) or None if not using ssl
     """
 
-    p_conn = socket_wrapper.SocketPassthrough( ip, port, "127.0.0.1", 45392, 5 )
+    p_conn = socket_wrapper.SocketPassthrough( ip, port, "127.0.0.1", 45392, 5, ssl_socket )
     p_conn.create_socket()
     wi_server = ThreadHTTPServer( ("127.0.0.1", 45392), web_interface.WebInterface )
 
