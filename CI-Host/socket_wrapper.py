@@ -148,6 +148,7 @@ class SocketPassthrough:
                 # if the exception is raised the client should be rejected unless in ssh mode
                 if not self.using_ssl:
                     reject = True
+                    break
                     pass
 
             # ban client if necessary
