@@ -15,13 +15,14 @@ _print = DEBUG.LOGS.print
 # ALSO this is not a intended as a perminent solution
 class SocketPassthrough:
 
-    def __init__( self, ip, port, passthrough_ip, passthrough_port, max_connections ):
+    def __init__( self, ip, port, passthrough_ip, passthrough_port, max_connections, using_ssl=False ):
 
         self.alive = True
 
         self.ip = ip
         self.port = port
         self.max_connections = max_connections
+        self.using_ssl = using_ssl
 
         self.passthrough_ip = passthrough_ip
         self.passthrough_port = passthrough_port
@@ -116,9 +117,12 @@ class SocketPassthrough:
         s_client_socket.settimeout(30)
 
         banIP = False
+        reject = False
+
         message_bytes = ""    # store the inbound message, so it can be logged in the client gets baned
 
         while True:
+            # Receive message from client
             try:
                 data = s_client_socket.recv( 1024 )
                 if len( data ) == 0:
@@ -131,6 +135,7 @@ class SocketPassthrough:
 
             data_str = ""
 
+            # check the message for know banned message
             try:
                 for bv in self.banRegex:
                     match = re.search( bv, data.decode("utf-8") )
@@ -141,8 +146,11 @@ class SocketPassthrough:
             except Exception as e:
                 _print( e )
                 # if the exception is raised the client should be rejected unless in ssh mode
-                pass
+                if not self.using_ssl:
+                    reject = True
+                    pass
 
+            # ban client if necessary
             if banIP:
                 _print( "ban ip triggered!" )
                 self.banned_ips.append( client_ip )
@@ -152,6 +160,7 @@ class SocketPassthrough:
 
             _print (idx, "request Data:\n", data)
 
+            # pass the message onto the http socket
             try:
                 p_client_socket.sendall( data )
             except Exception as e:
@@ -164,9 +173,9 @@ class SocketPassthrough:
         # shutdown the receive stream on servers socket to prevent any more messages coming in.
         # send thread will close the connection fully on the socket when the time comes :)
         try:
-            if not banIP:
+            if not banIP and not reject:
                 s_client_socket.shutdown(socket.SHUT_RD)
-            else:   # if the ip is getting baned we must shutdown both sockets in both directions
+            else:   # if the client is rejected or getting baned we must shutdown both sockets in both directions
                 p_client_socket.shutdown(socket.SHUT_RDWR)
                 s_client_socket.shutdown(socket.SHUT_RDWR)
                 _print("BAN HAS SHUTDOWN BOTH P & S SOCKETS")
