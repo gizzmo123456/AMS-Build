@@ -130,24 +130,26 @@ class SocketPassthrough:
                     break
             except Exception as e:
                 # TODO: if a message has been received, we should consider banning the ip, as this could mean that the SSL is not resolving.
-                _print(e)
+                _print("SRECV:", e)
                 break
 
             data_str = ""
 
             # check the message for know banned message
             try:
-                data = data.decode("utf-8")     # this will most likely raise an error if an ssl connection comes in
+                de_data = data.decode("utf-8")     # this will most likely raise an error if an ssl connection comes in
                 if self.using_ssl:
                     reject = True
                 for bv in self.banRegex:
-                    match = re.search( bv, data )
+                    match = re.search( bv, de_data )
 
                     if match:
                         banIP = True
                         break
+                    if reject:
+                        break
             except Exception as e:
-                _print( e )
+                _print( "RE:", e )
                 # if the exception is raised the client should be rejected unless in ssh mode
                 if not self.using_ssl:
                     reject = True
@@ -168,7 +170,7 @@ class SocketPassthrough:
             try:
                 p_client_socket.sendall( data )
             except Exception as e:
-                _print(e)
+                _print("PSND:",e)
 
             break
 
