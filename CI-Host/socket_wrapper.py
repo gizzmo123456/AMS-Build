@@ -121,7 +121,13 @@ class SocketPassthrough:
 
         message_bytes = ""    # store the inbound message, so it can be logged in the client gets baned
 
-        while True:
+        i = 0
+        expected_received_messages = 1
+
+        if self.using_ssl:
+            expected_received_messages = 2
+
+        while i <= expected_received_messages:
             # Receive message from client
             try:
                 data = s_client_socket.recv( 1024 )
@@ -172,7 +178,7 @@ class SocketPassthrough:
             except Exception as e:
                 _print("PSND:",e)
 
-            break
+            i += 1
 
         _print("Exit Receive", idx)
 
@@ -215,6 +221,12 @@ class SocketPassthrough:
                 break
 
         pass
+
+        try:
+            p_client_socket.shutdown(socket.SHUT_RDWR)
+            s_client_socket.shutdown(socket.SHUT_RDWR)
+        except:
+            pass
 
         try:
             # finish closing the 2 sockets
