@@ -114,7 +114,7 @@ class SocketPassthrough:
         banIP = False
         message_bytes = ""    # store the inbound message, so it can be logged in the client gets baned
 
-        while self.is_alive():
+        while True:
             try:
                 data = s_client_socket.recv( 1024 )
                 if len( data ) == 0:
@@ -140,6 +140,8 @@ class SocketPassthrough:
                 _print (idx, "request Data:\n", data)
 
                 p_client_socket.sendall( data )
+
+                break
             except Exception as e:
                 # TODO: if a message has been received, we should consider banning the ip, as this could mean that the SSL is not resolving.
                 _print( e )
