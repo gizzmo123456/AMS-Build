@@ -74,7 +74,7 @@ class SocketPassthrough:
 
     def wait_for_connections(self, sock):
 
-        sock.listen()
+        sock.listen(0)
         i = 0
 
         while self.is_alive():
