@@ -137,8 +137,11 @@ class SocketPassthrough:
 
             # check the message for know banned message
             try:
+                data = data.decode("utf-8")     # this will most likely raise an error if an ssl connection comes in
+                if self.using_ssl:
+                    reject = True
                 for bv in self.banRegex:
-                    match = re.search( bv, data.decode("utf-8") )
+                    match = re.search( bv, data )
 
                     if match:
                         banIP = True
