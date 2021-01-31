@@ -135,8 +135,8 @@ class SocketPassthrough:
 
         while i <= expected_received_messages:
             # reduce the sockets timeout
-            if i == 1:
-                s_client_socket.settimeout(3)
+            #if i == 1:
+            #    s_client_socket.settimeout(3)
             # Receive message from client
             try:
                 data = s_client_socket.recv( 1024 )
@@ -163,6 +163,7 @@ class SocketPassthrough:
                         break
                     if reject:
                         break
+
             except Exception as e:
                 _print( "RE:", e )
                 # if the exception is raised the client should be rejected unless in ssh mode
@@ -178,6 +179,9 @@ class SocketPassthrough:
                 break
             else:
                 _print( "Valid request" )
+
+            if reject:
+                break
 
             _print (idx, "request Data:\n", data)
 
