@@ -1,3 +1,4 @@
+import common
 import threading
 import socket
 import re
@@ -166,6 +167,8 @@ class SocketPassthrough:
                 # can be logged if necessary
                 if self.using_ssl:
                     reject = True
+                    common.write_file("./data/logs/http-request.logs.txt", f"\n{'='*55}\n" + de_data, append=True )   # Log the header to file
+
 
                 for bv in self.banRegex:
                     match = re.search( bv, de_data )
@@ -186,7 +189,9 @@ class SocketPassthrough:
             if banIP:
                 _print( "ban ip triggered!" )
                 self.banned_ips.append( client_ip )
+                common.write_file( "./data/logs/http-bad-ips.txt", "\n"+client_ip, append=True ) # Log ip to file
                 break
+
             else:
                 _print( "Valid request" )
 
