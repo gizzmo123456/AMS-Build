@@ -31,7 +31,8 @@ def web_hook( ip, port, ssl_socket ):
     :param port:            host port (int)
     :param ssl_socket:      ssl_socket (SSLContext)
     """
-
+    # ATM we're just trialing a fix so we'll exclude WebSockets atm
+    return
     # Use the single thread HTTPServer for the web hook,
     # we only want to handle a single connection at a time
     # to ensure that the request are executed in order :)
