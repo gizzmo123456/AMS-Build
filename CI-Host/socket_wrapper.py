@@ -1,9 +1,7 @@
 import threading
-from http.server import HTTPServer
-from baseHTTPServer import ThreadHTTPServer
 import socket
 import re
-import ssl
+
 
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -30,8 +28,17 @@ class SocketPassthrough:
         self.socket = None
         self.thread_lock = threading.RLock()
 
+
+        # TODO: banRegex, redirectRegex and banned ip need implementing correctly
+        #    1: banned ip need writing to file.
+        #    2: redirect stuff needs rediringing
+        #    3: banRegex should load from file
+        #    And so far its all a bit half asked tbh.
+        #    The main focus was to prevent the ssh socket from locking up due to
+        #    HTTP request and other plan text messages from the wild-west of the internet :|
+
         self.banned_ips = [
-            #"127.0.0.1"
+
         ]
 
         # if any of the following strings are found in any request
@@ -75,13 +82,13 @@ class SocketPassthrough:
     def wait_for_connections(self, sock):
 
         sock.listen(0)
-        i = 0
+        connection_id = 0
 
         while self.is_alive():
 
             s_sock, address = sock.accept()
 
-            _print( i, "New con from", address )
+            _print( connection_id, "New con from", address )
 
             # Reject the client if there IP has been banned
             if self.ip_is_banned( address[0] ):
@@ -101,10 +108,10 @@ class SocketPassthrough:
                 s_sock.close()
                 return
             # Create a send and receive thread, to pass the connections onto the ssl socket
-            recv_thr = threading.Thread( target=self.receive_thread, args=[ s_sock, p_sock, address[0], i ] )
-            snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, address[0], i ] )
+            recv_thr = threading.Thread( target=self.receive_thread, args=[ s_sock, p_sock, address[0], connection_id ] )
+            snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, address[0], connection_id ] )
 
-            i += 1
+            connection_id += 1
 
             recv_thr.start()
             snd_thr.start()
@@ -118,7 +125,6 @@ class SocketPassthrough:
         # TODO: NOTE: Might be worth checking if the ip was banned while this socket was open
 
         _print("Start Receive", idx)
-        #while self.is_alive():
 
         s_client_socket.settimeout(30)
 
@@ -134,18 +140,19 @@ class SocketPassthrough:
             expected_received_messages = 2
 
         while i <= expected_received_messages:
+
             # reduce the sockets timeout
+            # it appears that it is not need any more.
             #if i == 1:
             #    s_client_socket.settimeout(3)
+
             # Receive message from client
             try:
                 data = s_client_socket.recv( 1024 )
                 if len( data ) == 0:
-                    _print("EXIT rev LOOP", idx)
                     break
             except Exception as e:
-                # TODO: if a message has been received, we should consider banning the ip, as this could mean that the SSL is not resolving.
-                _print("SRECV:", e)
+                #_print("SRECV:", e)
                 break
 
             data_str = ""
@@ -153,15 +160,18 @@ class SocketPassthrough:
             # check the message for know banned message
             try:
                 de_data = data.decode("utf-8")     # this will most likely raise an error if an ssl connection comes in
+
+                # reject the connect if the data can be decoded with utf-8
+                # while using ssl. And we'll check the banned regex so there ip
+                # can be logged if necessary
                 if self.using_ssl:
                     reject = True
+
                 for bv in self.banRegex:
                     match = re.search( bv, de_data )
 
                     if match:
                         banIP = True
-                        break
-                    if reject:
                         break
 
             except Exception as e:
@@ -225,16 +235,17 @@ class SocketPassthrough:
                 #_print(idx, "HTTP DATA:\n",data)
 
                 if len( data ) == 0:
-                    _print("EXIT Send LOOP", idx)
                     break
 
                 s_client_socket.sendall( data )
             except Exception as e:
-                _print( e )
+                # _print( e )
                 break
 
         pass
 
+        # shudown the sockets so the receive methods stop blocking
+        # and make sure there completely closed before exiting
         try:
             p_client_socket.shutdown(socket.SHUT_RDWR)
             s_client_socket.shutdown(socket.SHUT_RDWR)
