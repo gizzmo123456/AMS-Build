@@ -2,7 +2,13 @@
 
 # Change log since version 1.0.0
 
-## Version 1.0.2
+## Version 1.0.3 (31-01-21)
+- Added a pass through socket to check for a http request when using https (ssl)
+  - Fixes the ssl socket locking up when receiving http request
+  - Added check for known bad request and bans ip
+  - Added Log to file for bad ip's and none https request
+
+## Version 1.0.2 (28-09-20)
 
 - Added 'Repository' and 'Branch' fields to in-Webhooks as a requirement
 - Added 'webhook_fields.json' to map post data fields to the required webhook fields.
@@ -12,7 +18,7 @@
     - Fixed 7z not having '-sdel' switch
     - Known issue: No 7z hash :(
     
-## version 1.0.1
+## version 1.0.1 (26-08-20))
 Version 1.0.1 has changes that will break the current configuration
 1) updating will remove the ```ams_path_config``` file, triggering the 
 new not installed check. (It was incorrectly tracked by git)
@@ -41,7 +47,7 @@ than being in the config file.
 - wrong git hash when building from the www interface
 
 
-## Initial Release (v1.0.0)
+## Initial Release (v1.0.0) (19-08-20)
 ### Features 
 - Pull and Run docker containers to automate tasks
 - update projects via git

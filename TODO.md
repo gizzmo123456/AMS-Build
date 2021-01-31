@@ -34,14 +34,15 @@ Urgent v1.0.x
 
 [ ] Fix 7zip in ubuntu 16.x
     -[x] add own remove method (-sdel does not seam to work on u16) (for 16 only)
-    - hash? (hash does not seem to work on u16)
+    -[x] hash? (hash does not seem to work on u16)
     
 [ ] Fix Favicon / Add Public directory
-[ ] Re route logs to file.
-[ ] Add exception for bad request / brocken pipes (ssl).
-[ ] Make http -> https wraper
-    - [ ] Add ip blocking
-    
+[ ] Re route debug logs to file.
+[x] Add exception for bad request / brocken pipes (ssl).
+[x] Make http -> https wraper
+    - [x] Add ip blocking
+[ ] imporve IP Blocking
+
 ------------------------------------------------------------------------
 v1.0.0 Missed tasks TODO. 
 ------------------------------------------------------------------------
@@ -65,7 +66,7 @@ v1.0.0 Missed tasks TODO.
     - [ ] canceled by   
 
 [ ] Find out why we get Can not cancel build, insfficient priv's when a task completes.
-    (this is hampering because no user is added for 'task complete' object. Its fine tho as its only a queue un-blocking task )
+    (this is haperning because no user is added for 'task complete' object. Its fine tho as its only a queue un-blocking task )
 [ ] Improve WWWUser message feedback when trigger tasks via the web_userInterface.
     - ATM users have to be logged in to receive messages and messages are very
       static.
@@ -77,7 +78,7 @@ v1.0.0 Missed tasks TODO.
 Post v1.0.0 Release TODO.
 ------------------------------------------------------------------------
 
-[ ] Add test connection for bitBucket
+[x] Add test connection form bitBucket
 [x] Automatically detect install path
 [ ] In init we need to detect if the cd/git commands fail.
     And if a input is required for what ever reason.
