@@ -90,6 +90,7 @@ class SocketPassthrough:
                 s_sock.close()
                 continue
 
+            _print("Connecting to P...")
             # Create a client socket so that data can be passed onto the ssl or http socket
             # p_sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
             try:
@@ -135,7 +136,7 @@ class SocketPassthrough:
         while i <= expected_received_messages:
             # reduce the sockets timeout
             if i == 1:
-                s_client_socket.settimeout(1)
+                s_client_socket.settimeout(3)
             # Receive message from client
             try:
                 data = s_client_socket.recv( 1024 )
