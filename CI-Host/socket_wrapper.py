@@ -91,9 +91,14 @@ class SocketPassthrough:
                 continue
 
             # Create a client socket so that data can be passed onto the ssl or http socket
-            p_sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
-            p_sock.connect( (self.passthrough_ip, self.passthrough_port) )
-
+            # p_sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
+            try:
+                p_sock = socket.create_connection( (self.passthrough_ip, self.passthrough_port), 1 )
+            except:
+                _print("Unable to connect to HTTP :( ", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
+                s_sock.shutdown(socket.SHUT_RDWR)
+                s_sock.close()
+                return
             # Create a send and receive thread, to pass the connections onto the ssl socket
             recv_thr = threading.Thread( target=self.receive_thread, args=[ s_sock, p_sock, address[0], i ] )
             snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, address[0], i ] )
