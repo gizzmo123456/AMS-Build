@@ -183,7 +183,7 @@ class SocketPassthrough:
             if reject:
                 break
 
-            _print (idx, "request Data:\n", data)
+            #_print (idx, "request Data:\n", data)
 
             # pass the message onto the http socket
             try:
