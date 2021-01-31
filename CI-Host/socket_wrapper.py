@@ -165,7 +165,7 @@ class SocketPassthrough:
                         break
 
             except Exception as e:
-                _print( "RE:", e )
+                #_print( "RE:", e )
                 # if the exception is raised the client should be rejected unless in ssh mode
                 if not self.using_ssl:
                     reject = True
