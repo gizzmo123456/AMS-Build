@@ -167,7 +167,7 @@ class SocketPassthrough:
                 # can be logged if necessary
                 if self.using_ssl:
                     reject = True
-                    common.write_file("./data/logs/http-request.logs.txt", f"\n{'='*55}\n" + de_data, append=True )   # Log the header to file
+                    common.write_file("./data/logs/http-request.logs.txt", f"\n{'='*55}\n{client_ip}\n{'='*55}\n" + de_data, append=True )   # Log the header to file
 
 
                 for bv in self.banRegex:
