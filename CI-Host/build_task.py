@@ -110,7 +110,7 @@ class BuildTask:
 
         }
 
-        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
+        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo".format( **self.format_values )
         self.project_info = None
 
         self._update_project_info() # this must be called at least once
