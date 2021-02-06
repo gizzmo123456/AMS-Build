@@ -297,7 +297,7 @@ class BuildTask:
         if not self.get_private_config_value( "prepare-build", section, "ssh", "use", default_value=False ):
             return ""
 
-        ssh_key_name = self.get_private_config_value("prepare-build", section, "ssh", "name", default_value="id.rsa")
+        ssh_key_name = self.get_private_config_value("prepare-build", section, "ssh", "name", default_value="id_rsa.pub")
         return "eval $(ssh-agent -s);ssh-add {base_directory}/CI-Host/data/.sccrets/.ssh/{project_name}/{key_name};".format( base_directory=BASE_DIRECTORY, project_name=self.format_values["project"], key_name=ssh_key_name )
 
     def local_image_exist( self ):
