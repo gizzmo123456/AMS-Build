@@ -74,7 +74,8 @@ class BuildTask:
 
         # values are public to the pipeline file
         # it might be worth passing this into the contatiner.
-        # also might be worth moving directories into its own dict.
+        # also might be worth moving directories into its own dict as
+        # this could be used tp leak full paths out.
         self.format_values = {
             # directorys
             "project_dir": PROJECT_DIRECTORY,
@@ -100,7 +101,7 @@ class BuildTask:
             "started_build": -1
         }
 
-        self.__format_values = {
+        self.__format_values = {    # this is for the private ones.
 
         }
 
@@ -141,6 +142,10 @@ class BuildTask:
         # Note: until the master directory is copied, the output does not exist,
         #       So _print calls with output_filename defined are queued, until the file does exist
         _print("\nStarting master/pre-build commands for project '{project}' @ {created}: LOG OUTPUT FILE PATH: {stdout}".format( stdout=self.stdout_filepath, **self.format_values), self.stdout_filepath)
+
+        # TODO: this following needs to be combined into a single set of commands.
+        #       I feel there should be a class that builds the required bash script
+        #       which is passed into run_process
 
         # prepare the build.
         # - run master dir commands in the master project source
