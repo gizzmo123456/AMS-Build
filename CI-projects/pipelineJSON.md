@@ -1,10 +1,16 @@
+# Pipeline.json 
+The pipeline.json file must be placed at the root of the project and is required
+to run tasks in AMS-Build. 
+
+If an SSH key is required to update the git repo see [pipeline-configJSON.md](./pipeline-configJSON.md) for more info
+
 ```
-> Json Pipeline for AMS-Build
-> Example Json file with comments
-> this is valid Json if the comments are removed.
+Note: pipeline.json is considered a public file, since it could be placed in a public git repo.
+      While pipeline-config.json is considered private and IS NOT included in the project.
 ```
 
- The build pipe lines have access to a number of variables  
+
+ The build pipelines have access to a number of variables  
  all variables must be formatted in curly braces, as if you where using String.format  
  eg. {variable_name}  
  
@@ -32,6 +38,11 @@
 **There are others but there not recommended and may be removed in the future for that reason**
 
 ### Example Json File
+```
+> Json Pipeline for AMS-Build
+> Example Json file with comments
+> this is valid Json if the comments are removed.
+```
 ```
 
 {

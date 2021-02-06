@@ -1,0 +1,10 @@
+{
+  "prepare-build": {
+    "master-dir-commands": {
+      "ssh": {
+        "use": true,
+        "name": "id.rsa"
+      }
+    }
+  }
+}
