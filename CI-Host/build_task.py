@@ -49,7 +49,8 @@ class BuildTask:
 
         self.uac = uac
         # load config file,
-        self.config = commonProject.get_project_pipeline( uac, project_name )
+        self.config = commonProject.get_project_pipeline( uac, project_name )                               # public pipeline file in project source
+        self.private_config = commonProject.get_project_config( uac, project_name, "pipeline-config.json")  # private pipeline file in project config
 
         # make sure that the config file contains the bare minimal
         # Use the IsValid Method to check if the task is in a valid state
@@ -61,6 +62,10 @@ class BuildTask:
         if not self.__valid:
             _print( "Task not valid, ignoring. Either no pipeline, Invalid pipeline or no access ", project_name, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
+
+        if self.private_config is None:
+            self.private_config = {}
+            _print("Project does not contain a pipeline-config")
 
         build_name_str = "{project}_{build_hash}_build_{build_index}"
 
@@ -147,6 +152,14 @@ class BuildTask:
         #       I feel there should be a class that builds the required bash script
         #       which is passed into run_process
 
+        # TODO: Also i noticed the other day while looking at subprocess python lib
+        #       there theres a method to issue command. this should be looked into
+        #       as we'll have much more control over the console.
+        #       For instance we should really get the pid for the ssh agent so we can
+        #       make shore is exits. However should be ok as ssh-agents are relevant
+        #       to the environments it is set up in. (At least i hope so..., i'll check :p)
+        # TODO: Check the above statement is true :DDDD
+
         # prepare the build.
         # - run master dir commands in the master project source
         # - update git hash if required.
@@ -155,8 +168,10 @@ class BuildTask:
         _print( "--- Executing Master Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "master-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "master-dir-commands" ] ) > 0:
 
+            ssh_cmd = self.get_ssh_agent_string( "master-dir-commands" )
+
             master_commands = [ mc.format( **self.format_values ) for mc in self.config[ "prepare-build" ][ "master-dir-commands" ] ]
-            for line in common.run_process( ( "cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
+            for line in common.run_process( ( ssh_cmd+"cd {master_source_dir}; " + '; '.join( master_commands ) ).format( **self.format_values ), shell="bash"):
                 _print(line, output_filename=self.stdout_filepath, console=False)
 
         # -
@@ -189,8 +204,10 @@ class BuildTask:
         _print( "--- Executing Build Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "build-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "build-dir-commands" ] ) > 0:
 
+            ssh_cmd = self.get_ssh_agent_string("master-dir-commands")
+
             build_commands = [ bc.format( **self.format_values ) for bc in self.config[ "prepare-build" ][ "build-dir-commands" ] ]
-            for line in common.run_process( ( "cd {build_source_dir}; " + '; '.join( build_commands ) ).format( **self.format_values ), shell="bash"):
+            for line in common.run_process( ( ssh_cmd + "cd {build_source_dir}; " + '; '.join( build_commands ) ).format( **self.format_values ), shell="bash"):
                 _print(line, output_filename=self.stdout_filepath, console=False)
 
         # create the local and docker configs
@@ -255,7 +272,7 @@ class BuildTask:
         file.write( json.dumps( json_dict ) )
         file.truncate()
 
-    def get_config_value( self, *keys, default_value=None ):    ## Todo this needs to be replaced with common.get_value_at_key
+    def get_config_value( self, *keys, default_value=None ):
         """Safely gets the config value at keys
         :param keys:            each key of the config value ie.
                                 keys "docker", "image" would return config[docker][image]
@@ -265,6 +282,23 @@ class BuildTask:
         """
         return common.get_value_at_key(self.config, *keys, noValue=default_value)
 
+    def get_private_config_value( self, *keys, default_value=None ):
+        """Safely gets the config value at keys
+        :param keys:            each key of the config value ie.
+                                keys "docker", "image" would return config[docker][image]
+                                or "pipeline", "commands", 0 would return config[pipeline][commands][0]
+                                Returns None if no set.
+        :param default_value:   The default value to be returned if the key is not found
+        """
+        return common.get_value_at_key(self.private_config, *keys, noValue=default_value)
+
+    def get_ssh_agent_string(self, section ):
+
+        if not self.get_private_config_value( ["prepare-build", section, "ssh", "use"], default_value=False ):
+            return ""
+
+        ssh_key_name = self.get_private_config_value(["prepare-build", section, "ssh", "name"], default_value="id.rsa")
+        return "eval $(ssh-agent -s);ssh-add {base_directory}/CI-Host/data/.sccrets/.ssh/{key_name};".format( base_directory=BASE_DIRECTORY, key_name=ssh_key_name )
 
     def local_image_exist( self ):
         """check if the docker image in config exist locally"""
