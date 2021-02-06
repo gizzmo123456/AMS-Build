@@ -50,7 +50,7 @@ class BuildTask:
         self.uac = uac
         # load config file,
         self.config = commonProject.get_project_pipeline( uac, project_name )                               # public pipeline file in project source
-        self.private_config = commonProject.get_project_config( uac, project_name, "pipeline-config.json")  # private pipeline file in project config
+        self.private_config = commonProject.get_project_config( uac, project_name, "pipeline-config")  # private pipeline file in project config
 
         # make sure that the config file contains the bare minimal
         # Use the IsValid Method to check if the task is in a valid state
@@ -110,7 +110,7 @@ class BuildTask:
 
         }
 
-        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo".format( **self.format_values )
+        self._project_info_path = "{relv_proj_dir}/{project}/projectInfo.json".format( **self.format_values )
         self.project_info = None
 
         self._update_project_info() # this must be called at least once
