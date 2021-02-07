@@ -204,7 +204,7 @@ class BuildTask:
         _print( "--- Executing Build Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "build-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "build-dir-commands" ] ) > 0:
 
-            ssh_cmd = self.get_ssh_agent_string("master-dir-commands")
+            ssh_cmd = self.get_ssh_agent_string("build-dir-commands")
 
             build_commands = [ bc.format( **self.format_values ) for bc in self.config[ "prepare-build" ][ "build-dir-commands" ] ]
             for line in common.run_process( ( ssh_cmd + "cd {build_source_dir}; " + '; '.join( build_commands ) ).format( **self.format_values ), shell="bash"):
