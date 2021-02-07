@@ -170,9 +170,16 @@ class BuildTask:
 
             ssh_start_cmd, ssh_kill_command = self.get_ssh_agent_strings( "master-dir-commands" )
 
+            # TODO: we need to capture the ssh agents PID in case the last command fails.
+            #       At the moment to ensure the agent does not exit erly we have had to && it to the last command
+            #       Which means that the last command MUST be successful.
+            #       Really we should capture the PID, start a new process and kill it once the master/build commands
+            #       are complete. Buts it working for now tho it might bite
+            # Also we have had to remove the final ';' so they can be added together
+
             master_commands = [ mc.format( **self.format_values ) for mc in self.config[ "prepare-build" ][ "master-dir-commands" ] ]
-            for line in common.run_process( ( ssh_start_cmd+"cd {master_source_dir}; " + '; '.join( master_commands ) + ssh_kill_command ).format( **self.format_values ), shell="bash"):
-                _print(line, output_filename=self.stdout_filepath, console=False)
+            for line in common.run_process( ( ssh_start_cmd+"cd {master_source_dir}; " + ('; '.join( master_commands ))[:-1] + ssh_kill_command ).format( **self.format_values ), shell="bash"):
+               _print(line, output_filename=self.stdout_filepath, console=False)
 
         # -
 
@@ -205,9 +212,9 @@ class BuildTask:
         if "build-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "build-dir-commands" ] ) > 0:
 
             ssh_start_cmd, ssh_kill_cmd = self.get_ssh_agent_strings("build-dir-commands")
-
+            # TODO: See TODO in Executing Master Dir Prepare Commands
             build_commands = [ bc.format( **self.format_values ) for bc in self.config[ "prepare-build" ][ "build-dir-commands" ] ]
-            for line in common.run_process( ( ssh_start_cmd + "cd {build_source_dir}; " + '; '.join( build_commands ) + ssh_kill_cmd ).format( **self.format_values ), shell="bash"):
+            for line in common.run_process( ( ssh_start_cmd + "cd {build_source_dir}; " + ('; '.join( build_commands ))[:-1] + ssh_kill_cmd ).format( **self.format_values ), shell="bash"):
                 _print(line, output_filename=self.stdout_filepath, console=False)
 
         # create the local and docker configs
@@ -301,7 +308,7 @@ class BuildTask:
 
         ssh_key_name = self.get_private_config_value("prepare-build", section, "ssh", "name", default_value="id_rsa")
         return ("eval $(ssh-agent -s); ssh-add {base_directory}/CI-Host/data/.secrets/.ssh/{project_name}/{key_name};".format( base_directory=BASE_DIRECTORY, project_name=self.format_values["project"], key_name=ssh_key_name ),
-                "eval $(ssh-agent -k);"
+                "&&eval $(ssh-agent -k);"
                 )
 
     def local_image_exist( self ):
