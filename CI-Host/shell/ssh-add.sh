@@ -2,7 +2,7 @@
 
 lassign $argv path pass
 
-spawn ssh-add $a
+spawn ssh-add $pass
 
 expect "Enter passphrase for $path"
 
