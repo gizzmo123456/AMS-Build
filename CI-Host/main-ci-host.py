@@ -31,22 +31,19 @@ def web_hook( ip, port, ssl_socket ):
     :param port:            host port (int)
     :param ssl_socket:      ssl_socket (SSLContext)
     """
-    # ATM we're just trialing a fix so we'll exclude WebSockets atm
-    return
+    p_conn = socket_wrapper.SocketPassthrough(ip, port, "127.0.0.1", 45393, 5, using_ssl=(ssl_socket is not None))
+    p_conn.create_socket()
+
     # Use the single thread HTTPServer for the web hook,
     # we only want to handle a single connection at a time
     # to ensure that the request are executed in order :)
-    wh_server = HTTPServer( (ip, port), webhook.Webhook )
-    redirect_thread = None
+    wh_server = HTTPServer( ("127.0.0.1", 45393), webhook.Webhook )
 
     if ssl_socket is not None:
         wh_server.socket = ssl_socket( wh_server.socket, server_side=True )
 
     while alive:
         wh_server.serve_forever()
-
-    if redirect_thread is not None and redirect_thread.is_alive():
-        redirect_thread.join()
 
     wh_server.server_close()
 
