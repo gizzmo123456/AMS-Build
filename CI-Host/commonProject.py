@@ -151,7 +151,8 @@ def get_project_config( uac, project_name, config_name):
 
     config = common.get_dict_from_json( config_path )
 
-    if config_name != "webhooks":   # prevent a recursive nightmare
+    # NOTE: I think this is only required if the supplied UAC is WEBHOOCK?
+    if config_name != "webhooks":   # prevent a recursive nightmare, Why??
         webhook_access = get_project_config( uac, project_name, "webhooks")
     else:
         webhook_access = config
