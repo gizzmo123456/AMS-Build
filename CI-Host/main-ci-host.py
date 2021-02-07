@@ -17,6 +17,8 @@ import common
 import user_manager
 import out_webhook
 
+import socket_wrapper
+
 # to run a dummy build add ' "dummy-build": true ' to pipeline.json file.
 # Dummy build settings.
 SKIP_TASK_DELAY = 15            # if task execution is skipped how long to halt the worker, to emulate execution
@@ -29,7 +31,8 @@ def web_hook( ip, port, ssl_socket ):
     :param port:            host port (int)
     :param ssl_socket:      ssl_socket (SSLContext)
     """
-
+    # ATM we're just trialing a fix so we'll exclude WebSockets atm
+    return
     # Use the single thread HTTPServer for the web hook,
     # we only want to handle a single connection at a time
     # to ensure that the request are executed in order :)
@@ -54,6 +57,21 @@ def www_interface( ip, port, ssl_socket ):
     :param ssl_socket:      ssl_socket (SSLContext) or None if not using ssl
     """
 
+    p_conn = socket_wrapper.SocketPassthrough( ip, port, "127.0.0.1", 45392, 5, ssl_socket )
+    p_conn.create_socket()
+    wi_server = ThreadHTTPServer( ("127.0.0.1", 45392), web_interface.WebInterface )
+
+    # wrap the http socket into the ssl socket
+    if ssl_socket is not None:
+        wi_server.socket = ssl_socket( wi_server.socket, server_side=True )
+
+    while alive:
+        wi_server.serve_forever()
+
+    wi_server.server_close()
+
+
+    return
     # Use the threaded HTTPServer for the web interface,
     # so we're not handing around while files are downloaded
     # and pre-sockets are opened
@@ -80,7 +98,8 @@ def create_ssl_socket_wrapper(cert_filepath, key_filepath, ca_bundle_filepath):
     :return: warp_socket function to be applied to the HTTP Server.
     """
 
-    ssl_socket = ssl.create_default_context( purpose=ssl.Purpose.CLIENT_AUTH,cafile=ca_bundle_filepath )  # ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
+    # NOTE: i think this is mant to be wrap socket.
+    ssl_socket = ssl.create_default_context( purpose=ssl.Purpose.CLIENT_AUTH, cafile=ca_bundle_filepath )  # ssl.SSLContext( ssl.PROTOCOL_TLS_SERVER )
     ssl_socket.load_cert_chain( certfile=cert_filepath, keyfile=key_filepath )
     # ssl_socket.load_verify_locations( ca_bundle_filepath )
 
