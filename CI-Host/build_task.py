@@ -204,7 +204,7 @@ class BuildTask:
         _print( "--- Executing Build Dir Prepare Commands ---", output_filename=self.stdout_filepath, console=False )
         if "build-dir-commands" in self.config[ "prepare-build" ] and len( self.config[ "prepare-build" ][ "build-dir-commands" ] ) > 0:
 
-            ssh_cmd = self.get_ssh_agent_string("master-dir-commands")
+            ssh_cmd = self.get_ssh_agent_string("build-dir-commands")
 
             build_commands = [ bc.format( **self.format_values ) for bc in self.config[ "prepare-build" ][ "build-dir-commands" ] ]
             for line in common.run_process( ( ssh_cmd + "cd {build_source_dir}; " + '; '.join( build_commands ) ).format( **self.format_values ), shell="bash"):
@@ -298,7 +298,7 @@ class BuildTask:
             return ""
 
         ssh_key_name = self.get_private_config_value("prepare-build", section, "ssh", "name", default_value="id_rsa.pub")
-        return "eval $(ssh-agent -s);ssh-add {base_directory}/CI-Host/data/.sccrets/.ssh/{project_name}/{key_name};".format( base_directory=BASE_DIRECTORY, project_name=self.format_values["project"], key_name=ssh_key_name )
+        return "eval $(ssh-agent -s); .{base_directory}/CI-Host/shell/ssh-add.sh {base_directory}/CI-Host/data/.sccrets/.ssh/{project_name}/{key_name};".format( base_directory=BASE_DIRECTORY, project_name=self.format_values["project"], key_name=ssh_key_name )
 
     def local_image_exist( self ):
         """check if the docker image in config exist locally"""
