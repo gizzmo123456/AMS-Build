@@ -57,7 +57,7 @@ def www_interface( ip, port, ssl_socket ):
     :param ssl_socket:      ssl_socket (SSLContext) or None if not using ssl
     """
 
-    p_conn = socket_wrapper.SocketPassthrough( ip, port, "127.0.0.1", 45392, 5, ssl_socket )
+    p_conn = socket_wrapper.SocketPassthrough( ip, port, "127.0.0.1", 45392, 5, using_ssl=(ssl_socket is not None) )
     p_conn.create_socket()
     wi_server = ThreadHTTPServer( ("127.0.0.1", 45392), web_interface.WebInterface )
 
@@ -67,25 +67,6 @@ def www_interface( ip, port, ssl_socket ):
 
     while alive:
         wi_server.serve_forever()
-
-    wi_server.server_close()
-
-
-    return
-    # Use the threaded HTTPServer for the web interface,
-    # so we're not handing around while files are downloaded
-    # and pre-sockets are opened
-    wi_server = ThreadHTTPServer( (ip, port), web_interface.WebInterface )
-    redirect_thread = None
-
-    if ssl_socket is not None:
-        wi_server.socket = ssl_socket( wi_server.socket, server_side=True )
-
-    while alive:
-        wi_server.serve_forever()
-
-    if redirect_thread is not None and redirect_thread.is_alive():
-        redirect_thread.join()
 
     wi_server.server_close()
 
