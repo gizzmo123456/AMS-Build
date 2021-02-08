@@ -135,12 +135,8 @@ class SocketPassthrough:
         message_bytes = ""    # store the inbound message, so it can be logged in the client gets baned
 
         i = 0
-        expected_received_messages = 1
 
-        if self.using_ssl:
-            expected_received_messages = 2
-
-        while i <= expected_received_messages:
+        while self.is_alive():
 
             # reduce the sockets timeout
             # it appears that it is not need any more.
