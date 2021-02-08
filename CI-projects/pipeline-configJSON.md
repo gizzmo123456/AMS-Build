@@ -10,7 +10,7 @@ The structure of the file mimics that of pipeline.json, tho currently it only ha
 SSH "prepare-build" section (ie in both subsections "master-dir-commands" and "build-dir-commands").
 
 ## SSH Keys
-At the present time adding an SSH key is NOT an automated process anf therefore must be done manually.  
+At the present time adding an SSH key is NOT an automated process and therefore must be done manually.  
 Furthermore, the SSH folder is NOT created by AMS-Build and must be created by an admin with 
 root privileges.
 
@@ -31,15 +31,16 @@ sudo chmod 700 .ssh/
 NOTE: this step is only required the first time you add an SSH key
 ```
 2. Add a new directory to the ```.ssh/``` directoy with the exact name of the project 
-   (the same as the one in ```CI-project```). with root privileges only.
+   (the same as the one in ```CI-project```).
 ```bash
 sudo madir .ssh/exampleProject/
-sudo chmod 700 .ssh/exampleProject/
 ```
-```Currently AMS-build on supports a singal SSH key per defined section```
+```
+Currently AMS-build on supports a singal SSH key per defined section
+```
 
-3. Create/Move your ssh key into the directory. The name of the SSH key can be 
-   specified in the ```pipeline-config.js``` file
+3. Create/Move your ssh key into the directory ```Importent the key must have root priviliges```.  
+   The name of the SSH key can be specified in the ```pipeline-config.js``` file
 
 ## Variables
 No variables are available at this time since it only enable SSH
@@ -51,7 +52,7 @@ No variables are available at this time since it only enable SSH
     "master-dir-commands": {
       "ssh": {                
         "use": true,            # should SSH be used on while executing the master-dir-commands (default: false)
-        "name": "ams.id.rsa"    # (optinal) the file name of the SSH key. (DO NOT include the path) (default: "id.rsa").
+        "name": "ams.id.rsa"    # (optinal) the file name of the SSH key. (DO NOT include the path) (default: "id_rsa").
       }
     }
     "build-dir-commands": {

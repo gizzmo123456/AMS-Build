@@ -77,11 +77,18 @@ v1.0.0 Missed tasks TODO.
 ------------------------------------------------------------------------
 Post v1.0.0 Release TODO.
 ------------------------------------------------------------------------
-
+[ ] intergrate the SSH discription into the READ me. (it too late now)
 [x] Add test connection form bitBucket
 [x] Automatically detect install path
 [ ] In init we need to detect if the cd/git commands fail.
     And if a input is required for what ever reason.
+
+[ ] Once the master dir commands have run the pipeline config should be reloaded
+[ ] Add method to disable webhooks
+
+[ ] When starting the ssh-agent it should capture the pid in case the shell doent exit cleanly
+[ ] update the install.sh file to include the log folder and generally clean it up
+    its a bit silly atm tbf
 
 [ ] Update Directory names from CI-XXX to AMS-XXX.
     (this is going to be a bit of a pain)
