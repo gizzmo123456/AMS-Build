@@ -308,6 +308,9 @@ While the rest are optional
 See ```../Ci-project/PipelineJSON.md``` for a full description 
 of each field in the file.
 
+See [pipeline-config](CI-projects/pipeline-configJSON.md) If you project requires an 
+SSH key during the update phase
+
 Once the pipeline is complete, the project is all set up.
 See the next section (Accepting Webhooks), for information on setting the webhook,
 to automate the build trigger.  
@@ -666,6 +669,7 @@ access
 Reset AMS-Build and you good to go :D
 
 ## 7. More Documents
+[pipeline-config](CI-projects/pipeline-configJSON.md) (Info on setting up SSH keys)  
 [CI-Project Directory Structure](./CI-projects/README.md)  
 [Build Pipeline Config](./CI-projects/pipelineJSON.md)  
 [Webhooks Config](./CI-projects/webhooksJSON.md)

@@ -2,7 +2,7 @@ import config_manager
 import urllib
 
 APP_NAME    = "ams-ci"
-APP_VERSION = "1.0.2"
+APP_VERSION = "1.0.4"
 
 # AMS-Build setup
 DEFAULT_SHELL = config_manager.ConfigManager.get( "default_shell", "sh" )

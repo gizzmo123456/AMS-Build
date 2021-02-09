@@ -2,11 +2,15 @@
 
 # Change log since version 1.0.0
 
+## Version 1.0.4 (08/02/2021)
+- Added support for ssh keys  
+  See [pipeline-configJSON.md](CI-projects/pipeline-configJSON.md) for more info
+
 ## Version 1.0.3 (31-01-21)
 - Added a pass through socket to check for a http request when using https (ssl)
   - Fixes the ssl socket locking up when receiving http request
   - Added check for known bad request and bans ip
-  - Added Log to file for bad ip's and none https request
+  - Added Log file for bad ip's and none https request
 
 ## Version 1.0.2 (28-09-20)
 
