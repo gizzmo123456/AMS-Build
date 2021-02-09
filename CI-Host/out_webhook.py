@@ -53,7 +53,7 @@ class BaseOutWebhook:
         post_data = post_data.encode( 'ascii' )
 
         # set the length of the post data
-        self.headers["Content-length"] = str( len(out_data) )
+        # self.headers["Content-length"] = str( len(out_data) )     # For some reason this has started causing the connection to be 'reset by peer' :|
         resend_attempts = 0
         max_attempts = 3
         sent = False
@@ -67,18 +67,18 @@ class BaseOutWebhook:
                 sent = True
                 break
             except ConnectionResetError as e:
-                _print( e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( "OUT-WEBHOOK:", e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             except ConnectionAbortedError as e:
-                _print( e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( "OUT-WEBHOOK:", e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             except Exception as e:
-                _print( e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( "OUT-WEBHOOK:", e, message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 break
 
             resend_attempts += 1
             time.sleep(1)           # reset for a sec before retry
 
         if not sent:
-            _print( "Unable to send Webhook", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            _print( "OUT-WEBHOOK: Unable to send Webhook", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
 
     @staticmethod
     def format_webhook_data(data, format_data):
@@ -185,7 +185,7 @@ class DiscordsWebhook( BaseOutWebhook ):
                     for ef in e["fields"]:
                         self.add_embed_field( **ef )
 
-        _print("EXE OUT:", data_dict, print_now=True)
+        _print("OUT-WEBHOOK:", data_dict, print_now=True)
         self._send_request( **main_data, embeds=self.embed )
 
         # reset the embeds and fields, in case of re-use.
