@@ -77,6 +77,7 @@ v1.0.0 Missed tasks TODO.
 ------------------------------------------------------------------------
 Post v1.0.0 Release TODO.
 ------------------------------------------------------------------------
+[ ] add support for signals from the kernel 
 [ ] intergrate the SSH discription into the READ me. (it too late now)
 [x] Add test connection form bitBucket
 [x] Automatically detect install path
