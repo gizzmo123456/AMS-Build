@@ -243,7 +243,7 @@ class SocketPassthrough:
                        output_filename=f"./data/logs/{self.log_name}",
                        console=False )
         except Exception as e:
-            _print( "Exception: ", e,
+            _print( f"{idx} Exception: ", e,
                     output_filename=f"./data/logs/{self.log_name}",
                     console=False )
 
@@ -292,7 +292,7 @@ class SocketPassthrough:
             _print("Error closing sockets", idx,
                    output_filename=f"./data/logs/{self.log_name}",
                    console=False )
-            _print("Exception:", e,
+            _print(f"{idx} Exception:", e,
                    output_filename=f"./data/logs/{self.log_name}",
                    console=False)
 
