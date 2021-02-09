@@ -197,7 +197,11 @@ class WebInterface( baseHTTPServer.BaseServer ):
 
             user_man = user_manager.UserManager()
             # redirect user when login info send received, to prevent resubmit data on refresh
-            redirect_header = { "location": f"/{WebInterface.ROOT}/" }
+            if "page_redirect" in get_data:
+                redirect_header = { "location": f"/{WebInterface.ROOT}/{get_data['page_redirect']}" }
+            else:
+                redirect_header = { "location": f"/{WebInterface.ROOT}/" }
+
             user_access = user_man.authorize_user(post_data["user"], post_data["password"])
 
             if user_access > WWWUser.UAC_NO_AUTH:
