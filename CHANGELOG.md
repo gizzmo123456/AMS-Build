@@ -2,7 +2,11 @@
 
 # Change log since version 1.0.0
 
-## Version 1.0.4 (08/02/2021)
+## Version 1.0.4b (09/02/2021)
+- Improved socket wrapper prints and redirected to file
+- Add page redirect to login->auth
+
+## Version 1.0.4 (07/02/2021)
 - Added support for ssh keys  
   See [pipeline-configJSON.md](CI-projects/pipeline-configJSON.md) for more info
 
