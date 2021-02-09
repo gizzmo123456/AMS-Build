@@ -2,7 +2,7 @@ import common
 import threading
 import socket
 import re
-
+import datetime
 
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -108,6 +108,7 @@ class SocketPassthrough:
                 s_sock.shutdown(socket.SHUT_RDWR)
                 s_sock.close()
                 return
+
             # Create a send and receive thread, to pass the connections onto the ssl socket
             recv_thr = threading.Thread( target=self.receive_thread, args=[ s_sock, p_sock, address[0], connection_id ] )
             snd_thr = threading.Thread( target=self.send_thread, args=[ s_sock, p_sock, address[0], connection_id ] )
@@ -163,7 +164,8 @@ class SocketPassthrough:
                 # can be logged if necessary
                 if self.using_ssl:
                     reject = True
-                    common.write_file("./data/logs/http-request.logs.txt", f"\n{'='*55}\n{client_ip}\n{'='*55}\n" + de_data, append=True )   # Log the header to file
+                    time_of_request = datetime.datetime.utcnow().strftime("%d/%m/%Y @ %H:%M:%S.%f")
+                    common.write_file("./data/logs/http-request.logs.txt", f"\n{'='*55}\n{client_ip} at {time_of_request}\n{'='*55}\n" + de_data, append=True )   # Log the header to file
 
 
                 for bv in self.banRegex:
@@ -183,13 +185,10 @@ class SocketPassthrough:
 
             # ban client if necessary
             if banIP:
-                _print( "ban ip triggered!" )
+                _print( f"*** ban ip ({client_ip}) triggered! (con:{idx})" )
                 self.banned_ips.append( client_ip )
                 common.write_file( "./data/logs/http-bad-ips.txt", "\n"+client_ip, append=True ) # Log ip to file
                 break
-
-            else:
-                _print( "Valid request" )
 
             if reject:
                 break
@@ -214,7 +213,7 @@ class SocketPassthrough:
             else:   # if the client is rejected or getting baned we must shutdown both sockets in both directions
                 p_client_socket.shutdown(socket.SHUT_RDWR)
                 s_client_socket.shutdown(socket.SHUT_RDWR)
-                _print("BAN HAS SHUTDOWN BOTH P & S SOCKETS")
+                _print(f"BAN HAS SHUTDOWN BOTH P & S SOCKETS FOR IP {client_ip} (con: {idx})")
         except Exception as e:
             _print( e )
 
