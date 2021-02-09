@@ -152,8 +152,26 @@ class WWWPage:
 
         return content
 
-    def build_content( self, content ):
-        return { **self.content_dict, **content, "www_root": web_interface.WebInterface.ROOT }    # overwrite the values in content dict
+    def extract_get_content(self, get_data):
+        """Extracts GET params that can be used as content"""
+        content = {"page_redirect": ""}
+        # if the params in this list exist the will be formated as &{key}={value}
+        # and stored in content as "get_{key}'
+        get_params = ["page_redirect"]
+
+        # make sure we only use keys that can be used in content
+        # and in a useable format :)
+        for k in get_data:
+            if k in content:
+                if k in get_params:
+                    content[f"get_{k}"] = f"&{k}={get_data[k]}"
+
+                content[k] = get_data[k]
+
+        return content
+
+    def build_content( self, content, get_data ):
+        return { **self.content_dict, **self.extract_get_content( get_data ), **content, "www_root": web_interface.WebInterface.ROOT }    # overwrite the values in content dict
 
     def access( self, user ):
         return user.get_access_level() >= self.minimal_user_access_level
@@ -222,9 +240,9 @@ class WWWPage:
             page_output = json.dumps( content )
         elif isinstance( content, list ):   # if content is list, we need to return the template for all elements
             for i in self.__get_list_order_range( len(content) ):
-                page_output += www_page.load_template().format( **www_page.build_content( content[i] ) )
+                page_output += www_page.load_template().format( **www_page.build_content( content[i], get_data ) )
         elif len(content) > 0 and isinstance( content, dict):    # if content is dict, we only have to format it into the template
-            page_output = www_page.load_template().format( **www_page.build_content( content ) )
+            page_output = www_page.load_template().format( **www_page.build_content( content, get_data ) )
         else:
             _print("WWWPage: Bad content format for page:", self.page_name)
 

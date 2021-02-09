@@ -172,13 +172,15 @@ Web-pages Todo. No Rush, it can all be done back end :)
 [ ] Pipeline Editor  
 [ ] Remove Builds    
 
-[ ] Add method to get empty templates, useful for message output  
+[ ] Add method to get empty templates, useful for message output   
 
-[x] Message section.  
+[x] Message section.   
 
-[ ] Fixed view overflowing on the X axis
-[x] Add AMS-Labs Logo 
-[ ] Add Zip hash to builds panel
+[ ] Fixed view overflowing on the X axis  
+[x] Add AMS-Labs Logo   
+[ ] Add Zip hash to builds panel  
+
+[ ] Add page redirect to remaining pages (atm its only implemented on login/auth)
 
 ------------------------------------------------------------------------
 API and CORS plans

@@ -396,9 +396,18 @@ Each definition must contain 5 fields.
 The data field closely resembles the Discord webhook structure (but not quite exact)
 
 For links to work in outbound webhooks the ```web_address``` must be set to the 
-sites domain or IP address in ```./CI-Host/data/configs/web_conf.json```
+sites domain or IP address in ```./CI-Host/data/configs/web_conf.json```   
+Also if the links are to view/download project info the user must go to the login page first,
+otherwise they will be presented with a 404 (not found) page. direct the user to home page with
+query string '?page_redirect={path}'. ```NOTE: this MUST NOT start with '/' nor contain the base path ```
 
-See ```CI-Projects\webhookJSON.md``` for more info on outbound webhooks
+Example:  
+```
+https://mydomain.com/ams-build/?page_reqirect=output/exampleProject/output_log_name
+```
+```ALSO NOTE: page_redirect is not available if the user is already loged in.```
+
+See ```CI-Projects/webhookJSON.md``` for more info on outbound webhooks
 ## 5. Adding and Updating Users
 
 ##### New user
