@@ -6,6 +6,7 @@ import common
 
 _print = DEBUG.LOGS.print
 
+# TODO: this needs to be renamed, Its the "HTTPRequestHandler" or "BaseHTTPInterface" :P
 class BaseServer(BaseHTTPRequestHandler):
 
     BLOCK_CORS = False
@@ -29,7 +30,7 @@ class BaseServer(BaseHTTPRequestHandler):
 
         _print( "GET:", GET, "POST", not GET, "request: ", self.path )
 
-        # Treat any request with origin header set as a CORS request.
+        # Treat any request with origin header as a CORS request.
         # for now ALL CORS request are blocked
         origin_header = self.headers.get("origin")
 
