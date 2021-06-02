@@ -39,8 +39,8 @@ class Cipher:
 
 class Hash( Cipher ):
 
-    def __init__( self, cipher_name, key_length=16 ):
-        super().__init__( cipher_name, key_length )
+    def __init__( self, secrets_path, cipher_name, key_length=16 ):
+        super().__init__( secrets_path, cipher_name, key_length )
         self.hasher = BLAKE2b.new( digest_bits=512, key=self.get_or_create_key(), update_after_digest=True )
 
     def new( self ):
