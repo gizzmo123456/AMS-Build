@@ -34,7 +34,7 @@ AMS-Build runs on Ubuntu 18+ (with very limited support for windows)
 ### Dependencies  
 | Product        | Version | Notes  |
 | :------------: | :-----: | :----: |
-| Ubuntu (64bit) | 18+     | use branch 'ubuntu16' for ubuntu 16 support |
+| Ubuntu (64bit) | 18+     | use branch 'ubuntu16' for ubuntu 16 support (Deprecated)|
 | Python         | 3.7     |        |
 | PyCryptodome   | 3.9.8   |        |
 | (Py) FileLock  | 3.0.12  |        |

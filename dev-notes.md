@@ -1,0 +1,13 @@
+# Dev Notes
+
+### Dev Versions as of 02/06/21
+| Dependence     | Version |
+| :------------: | :-----: |
+| Ubuntu (64bit) | 20.04.2 LTS |
+| Git            | 2.25.1      |
+| Docker         | 20.10.2     |
+| 7Zip           | 16.02       |
+| Python         | 3.8.5       |
+| pip3           | 20.0.2      |
+| PyCryptodome   | 3.9.8       |
+| (Py) FileLock  | 3.0.12      |

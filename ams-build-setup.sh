@@ -4,6 +4,8 @@
 # create the ams_path_config file
 # add ams-build  alias
 
+# TODO: check dependencies ie pip, docker, 7z
+
 ROOT_DIRECTORY=$PWD
 
 echo "Installing Python 3 Requirements..."
