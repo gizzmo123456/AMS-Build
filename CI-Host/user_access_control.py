@@ -20,7 +20,7 @@ class UAC:
     def __init__(self, username=None, access_level=NO_AUTH, subname=None):
 
         self.username = username            # the user the uac belogs to
-        self.subname = subname              # the subname is used to store any secondary names. ie the webhook name.
+        self.subname = subname              # the subname is used to store any secondary names. ie the webhook name. # ToDo: change to origin
         self.access_level = access_level    # the users access level
 
         self.projects = []                  # this list of projects available to the user, does not apply to webhooks

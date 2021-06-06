@@ -11,7 +11,6 @@ import re
 import DEBUG
 _print = DEBUG.LOGS.print
 
-
 class BuildTask:
     "Build tasks..."
 
@@ -146,6 +145,7 @@ class BuildTask:
 
         # Note: until the master directory is copied, the output does not exist,
         #       So _print calls with output_filename defined are queued, until the file does exist
+        # TODO: ^^ Add a temp directory, so the log file can be created.
         _print("\nStarting master/pre-build commands for project '{project}' @ {created}: LOG OUTPUT FILE PATH: {stdout}".format( stdout=self.stdout_filepath, **self.format_values), self.stdout_filepath)
 
         # TODO: this following needs to be combined into a single set of commands.
@@ -577,4 +577,3 @@ class BuildTask:
             self.stop_container()
 
         _print( "--- Task Canceled ---", output_filename=self.stdout_filepath, console=False )
-

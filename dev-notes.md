@@ -11,3 +11,9 @@
 | pip3           | 20.0.2      |
 | PyCryptodome   | 3.9.8       |
 | (Py) FileLock  | 3.0.12      |
+
+### Readme update todo:
+- Queue Items (Activities)
+  - Finalize dedicated readme  
+  - Update task in main read me.
+    
