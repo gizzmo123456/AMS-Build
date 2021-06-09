@@ -121,7 +121,7 @@ def get_project_build_info( uac, project_name ):
 
 
 def get_project_pipeline( uac, project_name ):
-    """ Gets the project pipeline. None if project or file does not exist does not exist or the user does not have access. """
+    """ Gets the project pipeline. None if project or file does not exist or the user does not have access. """
 
     pipeline_path = "{relevent_proj_path}/{project_name}/master/project_source/pipeline.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
                                                                                               project_name=project_name )

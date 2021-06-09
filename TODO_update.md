@@ -3,7 +3,7 @@
 
 -----------
 ### Tasks
-- [ ] Base Task
+- [ ] Base Task (see [activites readme](CI-Host/jobs/readme.md) for more info)
   - [ ] Build
   - [ ] Run (A task that run an application until stopped)
 - [ ] Add a method to define shell commands for different OS's and methods
@@ -105,10 +105,11 @@ This would then allow webhoocks to be 0b00000010 (0x2) and prevent the permision
 ### (outbound) Webhooks
 - Add Slack support
 - Add Teams support
-- Find out if
 
 ### Debugging
 - [ ] Add write stdout to file
 
 ### Other
-- Need to create the logs directory
+- [ ] Need to create the logs directory for the socket wrapper
+- [ ] Clean up printing and debugging messages.
+

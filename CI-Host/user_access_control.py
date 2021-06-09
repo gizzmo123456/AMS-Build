@@ -51,7 +51,11 @@ class UAC:
             self.projects = []
 
     def has_project_access( self, project, webhooks=None ):
-        """ the in_webhooks must be supplied for webhook access """
+        """
+            the in_webhooks must be supplied for webhook access
+            :param project:
+            :param webhooks: webhook config
+        """
 
         if self.access_level == UAC.NO_AUTH:
             return False

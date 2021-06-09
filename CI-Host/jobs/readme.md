@@ -1,4 +1,12 @@
-# Activities (Queue Items)
+# Jobs (Queue Items) and Activities 
+
+## Jobs
+A job is a wrapper class containing all activities to get the "job done" :P  
+A job ensures the user has access to achieve each activity before commencing  
+
+this is a work in progress :P
+
+## Activities
 
 Aa activity is an item that can be queued to be processed by the CI-Host.  
 Queue Items come in two main flavors
@@ -8,9 +16,7 @@ Queue Items come in two main flavors
 2. Task
   ``A task that is lunched into a new (or its own) environment 
     (such as a docker container) to be executed``
-
-?? Queue Items can be chained together ??
-
+   
 ```
 Queue Items
 
