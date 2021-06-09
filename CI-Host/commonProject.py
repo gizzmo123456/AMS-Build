@@ -120,11 +120,13 @@ def get_project_build_info( uac, project_name ):
         return json.loads( project_info_string )
 
 
-def get_project_pipeline( uac, project_name ):
+def get_project_pipeline( uac, project_name, v2_config=False ): # TODO: V2 config needs removing once the new system is in place.
     """ Gets the project pipeline. None if project or file does not exist or the user does not have access. """
 
-    pipeline_path = "{relevent_proj_path}/{project_name}/master/project_source/pipeline.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
-                                                                                              project_name=project_name )
+    file = "pipeline" if not v2_config else "pipeline.v2"
+
+    pipeline_path = "{relevent_proj_path}/{project_name}/master/project_source/{file}.json".format( relevent_proj_path=RELEVENT_PROJECT_PATH,
+                                                                                                    project_name=project_name, file=file )
 
     if not os.path.exists( pipeline_path ):
         return None

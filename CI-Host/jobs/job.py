@@ -66,13 +66,22 @@ class Job:
         # authorize the activity by attempting to load the pipeline config.
         # if None is returned, either the project does not exist or the user
         # does not have access.
-        pipeline_config = commonProject.get_project_pipeline( uac, project )
+        pipeline_config = commonProject.get_project_pipeline( uac, project, v2_config=True )    # TODO: remove v2_config once change is complete.
 
         if pipeline_config is None:
             complete_callback( False, "Unable to create job. Failed to load pipeline config." ) # TODO: find out if its an access or project issue
             return False
 
-        # TODO: Create tasks and job from pipeline
+        if "jobs" not in pipeline_config:
+            complete_callback( False, "Unable to create jobs. Jobs not defined in pipeline config" )
+            return False
+
+        jobs = pipeline_config["jobs"]
+        job_names = list(jobs["jobs"])
+
+        for job in job_names:
+            stages = jobs[job]
+            # TODO: create jobs from stages
 
         return True
 

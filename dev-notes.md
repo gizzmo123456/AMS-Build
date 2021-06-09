@@ -17,3 +17,7 @@
   - Finalize dedicated readme  
   - Update task in main read me.
     
+### TODO:
+- commonProject.get_project_pipline needs param v2_config removing
+  - this will also need top be done in Job.create_jobs_from_pipeline
+  - Also the .v2. will need removing from the pipeline file
