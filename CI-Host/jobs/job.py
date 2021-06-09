@@ -5,6 +5,14 @@ class Job:
 
     """
 
+    STATUS_STARTING = 0
+    STATUS_IDLE     = 1
+    STATUS_RUNNING  = 2
+    STATUS_COMPLETE = 3
+    STATUS_FAILED   = 4
+    STATUS_INVALID  = 5
+    STATUS_NO_AUTH  = 6
+
     @property
     def access_level(self):
         """
@@ -22,7 +30,7 @@ class Job:
         :param kwargs:
         """
 
-        self.__status = 0   # TODO, create status consts
+        self.__status = Job.STATUS_STARTING
 
         self.uac = uac
         self.project = project
@@ -61,8 +69,7 @@ class Job:
         pipeline_config = commonProject.get_project_pipeline( uac, project )
 
         if pipeline_config is None:
-            # TODO: update status
-            complete_callback( False, "Unable to load pipeline config." ) # TODO: find out if its an access or project issue
+            complete_callback( False, "Unable to create job. Failed to load pipeline config." ) # TODO: find out if its an access or project issue
             return False
 
         # TODO: Create tasks and job from pipeline
