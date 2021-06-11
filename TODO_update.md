@@ -20,6 +20,19 @@
   Also it doent seem locgical to pull the project to find that the pipline has changed.
   ```
 
+### sharedQueue
+- [ ] Change the shared queue constructor, to create a new queue if None is used?
+  - I'm not convinced this is any better, it would just help to clean main
+- On a reflection i think it might be more viable to remove the shared queue system, 
+  along with the queue items, since they are now 'Jobs' of witch handles the 
+  activities and related permissions. Furthermore, the current queue is confusing as,
+  and something needs to be done about that.
+  Another thing to think about is what to do with the queue itself. 
+  For now, it should remain in main, however im sure how viable this is moving forwards
+  Should the queue be made static inside 'Job'? probably not, but it will need 
+  access if its to auto queue
+  or; Should it have its own class?
+
 
 ### Job Queue, tasks and project
 - [ ] Add project task cool down

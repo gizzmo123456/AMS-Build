@@ -194,11 +194,11 @@ if __name__ == "__main__":
     # Load Config files.
     config = config_manager.ConfigManager
 
-    thr_lock_tasks = threading.Lock()
+    thr_lock_tasks = threading.Lock()   # should this be FLock or whatever it is?
     alive = True
     update_queue_file = False
 
-    task_queue = queue.Queue()
+    task_queue = queue.Queue()  # TODO: rename to job queue.
 
     # setup queue items
     # All Queue items action (execution) callback functions must container exactly one param, q_item.

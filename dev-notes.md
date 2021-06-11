@@ -32,3 +32,7 @@
     - [ ] check it fails if the defined task does not exist
     - [ ] check fails if the user (uac) does not have access
     - [ ] 
+  
+
+##### something something 
+- Docker finds image if the image name is empty ie. ```image: "" ```
