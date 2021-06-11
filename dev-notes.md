@@ -21,3 +21,14 @@
 - commonProject.get_project_pipline needs param v2_config removing
   - this will also need top be done in Job.create_jobs_from_pipeline
   - Also the .v2. will need removing from the pipeline file
+  
+#### Testing
+- Test job
+  - create jobs from pipeline
+    - [ ] check job is skiped if stages is not defined
+    - [ ] check job is skiped if stages contains no stages
+  - create job of tasks
+    - [ ] check it fails if no task is defined
+    - [ ] check it fails if the defined task does not exist
+    - [ ] check fails if the user (uac) does not have access
+    - [ ] 

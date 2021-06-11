@@ -185,7 +185,7 @@ if __name__ == "__main__":
 
     # make sure that the install script as been run.
     if not common.installed():
-        _print("I would appear that AMS-Build has not been setup", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
+        _print("It would appear that AMS-Build has not been setup", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
         _print("When your ready please run '../ams-build-setup.sh', Exiting...")
         time.sleep( 1 )  # prevent debug from stopping before all message have been printed.
         DEBUG.LOGS.close()

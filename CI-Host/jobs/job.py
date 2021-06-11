@@ -3,6 +3,7 @@ import DEBUG
 
 _print = DEBUG.LOGS.print
 
+
 class Job:
     """
 
