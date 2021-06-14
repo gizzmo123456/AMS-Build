@@ -292,6 +292,7 @@ if __name__ == "__main__":
                     active_tasks.pop(i)
                     update_queue_file = True
                     _print("complete task removed ({active_tasks}/{max_task})".format(active_tasks=len(active_tasks), max_task=max_running_tasks))
+
             # - start new tasks
             while len(active_tasks) < max_running_tasks and len(pending_tasks) > 0:
                 start_task = pending_tasks.pop(0)
@@ -299,9 +300,9 @@ if __name__ == "__main__":
                 worker.start()
                 active_tasks.append( (worker, start_task) )
                 update_queue_file = True
-                _print( "Active task {active_tasks} of {max_tasks} | current pending {pending}".format(active_tasks=len(active_tasks),
-                                                                                                       max_tasks=max_running_tasks,
-                                                                                                       pending=len(pending_tasks) ))
+                _print( "Active task {active_tasks} of {max_tasks} | current pending {pending}".format( active_tasks=len(active_tasks),
+                                                                                                        max_tasks=max_running_tasks,
+                                                                                                        pending=len(pending_tasks) ))
                 start_task = None
 
             if update_queue_file:   # this could be threaded, if we copy the list

@@ -9,9 +9,10 @@ class Job:
 
     """
 
+    # TODO: change to a dict. to make it easier to print out the names rather than code.
     STATUS_STARTING = -1    # job is currently being created
-    STATUS_PENDING  = 0     # Pending the completion of another job
-    STATUS_IDLE     = 1     # waiting to be promoted to an active task
+    STATUS_IDLE     = 0     # Idle until the completion of another job
+    STATUS_PENDING  = 1     # Pending to be promoted to an active task
     STATUS_RUNNING  = 2     # job is currently running
     STATUS_COMPLETE = 3     # job has complete
     STATUS_FAILED   = 4     # job has failed
@@ -62,8 +63,8 @@ class Job:
 
     def promote_to_idle(self):
         """Promotes the pending task to idle"""
-        if self.status == Job.STATUS_PENDING:
-            self.__status = Job.STATUS_IDLE
+        if self.status == Job.STATUS_IDLE:
+            self.__status = Job.STATUS_PENDING
         else:
             _print("Unable to promote the job to IDLE. Task is not pending.")
 
@@ -79,6 +80,8 @@ class Job:
     # The static methods should be preferred over using the constructor directly.
     # Furthermore, mixing tasks and action should be avoided, since actions
     # usually required elevated privileges.
+
+    # TODO: I think these static methods should be in the job queue.
 
     @staticmethod
     def create_jobs_from_pipeline( uac, project, complete_callback=None ):
@@ -118,8 +121,8 @@ class Job:
                 output_message += f"Skipping job '{job}' contains no stages\n"
                 continue
 
-            stages = jobs[job]
-            created_job, message = Job.create_job_of_tasks( uac, project, jobs[job]["stages"] )
+            stages = jobs[job]["stages"]
+            created_job, message = Job.create_job_of_tasks( uac, project, stages )
 
             output_message += message
 
