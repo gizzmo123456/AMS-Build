@@ -1,7 +1,7 @@
 import DEBUG
 import threading
 import queue
-import job
+import jobs.job as job
 import time
 
 _print = DEBUG.LOGS.print
