@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import DEBUG
-import config_loader    # Loads in all config file.
+import config_loader    # Loads in all config file. (this must be here, even if the editor suggest its not used!)
 import config_manager
 import build_task
 import webhook
@@ -10,9 +10,10 @@ import time
 from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
 import ssl
-import queue
-import sharedQueue
-import queue_item
+import queue            # TODO: remove
+import sharedQueue      # TODO: remove
+import queue_item       # TODO: Remove
+import jobs.job_queue   # TODO: Remove the above in faver of the job queue
 import common
 import user_manager
 import out_webhook
@@ -198,7 +199,9 @@ if __name__ == "__main__":
     alive = True
     update_queue_file = False
 
-    task_queue = queue.Queue()  # TODO: rename to job queue.
+    # TODO: Remove, all queue aspects.
+    #       and replace with the job queue.
+    task_queue = queue.Queue()
 
     # setup queue items
     # All Queue items action (execution) callback functions must container exactly one param, q_item.
@@ -214,6 +217,9 @@ if __name__ == "__main__":
     # Sharded queue actions, must return a constructed instance of either a BuildTask or QueueItem.
     sharded_queue.set_action( "build",       lambda uac, project, git_hash, complete_callback=None: build_task.BuildTask(uac, project, git_hash=git_hash, complete_callback=complete_callback) )
     sharded_queue.set_action( "cancel_task", lambda uac, project, build_hash, complete_callback=None: queue_item.QueueItem(uac, project, "cancel_task", build_hash=build_hash, complete_callback=complete_callback) )
+
+    # start the job Job Queue
+    job_queue = jobs.job_queue.JobQueue()
 
     # assign the shared queue with only the required objects to the modules
     webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build"] )
@@ -253,13 +259,17 @@ if __name__ == "__main__":
     web_interface_thread.start()
 
     # Initialize
-    _print("Initializing, Hold tight...")
+    _print("Initializing, Hold tight...") # TODO: this should be at the top :)
 
     # create an instance of user manager to create user files if not already setup.
     user_manager.UserManager()  # make sure this is last. so the test account details are not berried in the log
 
     _print("Initializing, Complete!")
     _print("Starting...")
+
+    # TODO: remove the old queue handlering in faver of the job queue.
+    # its been left in to not break anything
+    job_queue.process_forever()
 
     while alive:
 
