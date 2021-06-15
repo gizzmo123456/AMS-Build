@@ -70,7 +70,7 @@ class JobQueue:
         output_message = ""             # output message to be pushed into the complete callback.
         jobs_to_queue = []
         jobs = pipeline_config["jobs"]
-        job_names = list(jobs["jobs"])
+        job_names = list(jobs)
 
         for job in job_names:
             # check stages has been defined and it contains at least one stage.
