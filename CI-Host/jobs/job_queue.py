@@ -2,7 +2,7 @@ import DEBUG
 import commonProject
 import threading
 import queue
-import jobs.job as job
+import jobs.job as job_obj
 import time
 
 _print = DEBUG.LOGS.print
@@ -82,7 +82,7 @@ class JobQueue:
                 continue
 
             stages = jobs[job]["stages"]
-            created_job, message = job.Job.create_job_of_tasks( uac, project, stages )
+            created_job, message = job_obj.Job.create_job_of_tasks( uac, project, stages )
 
             output_message += message
 
