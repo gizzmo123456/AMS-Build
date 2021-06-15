@@ -38,7 +38,7 @@ class JobQueue:
         :param job_to_queue: job object to be queued
         :return: None
         """
-        if not isinstance( job_to_queue, job.Job ):
+        if not isinstance( job_to_queue, job_obj.Job ):
             _print( "Unable to queue item. Not a job", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
             return
 
@@ -122,7 +122,7 @@ class JobQueue:
 
                 # Clean up active tasks that have completed.
                 for i in range( len( self.__active )-1, -1, -1 ):
-                    if self.__active[i].status >= job.Job.STATUS["COMPLETE"]:
+                    if self.__active[i].status >= job_obj.Job.STATUS["COMPLETE"]:
                         self.__active.pop( i )
                         self.update_queue_file = True
                         _print( f"Job completed with status {self.__active[i].status_name} ({ self.__active[i].status})" )
