@@ -65,17 +65,17 @@ class JobQueue:
 
                 # Clean up active tasks that have completed.
                 for i in range( len( self.__active )-1, -1, -1 ):
-                    if self.__active[i].status >= job.Job.STATUS_COMPLETE:
+                    if self.__active[i].status >= job.Job.STATUS["COMPLETE"]:
                         self.__active.pop( i )
                         self.update_queue_file = True
-                        _print( f"Job completed with status {self.__active[i].status}" )    # TODO: this should print out the name of the status rather than status code.
+                        _print( f"Job completed with status {self.__active[i].status_name} ({ self.__active[i].status})" )
 
                 # promote any pending tasks, if there is an active slot available.
                 while len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS and len( self.__pending ) > 0:
                     for i in range( len( self.__pending) ):
                         # make sure the status is pending.
                         # otherwise the job is waiting for the completion of another task.
-                        if self.__pending[i].status == job.Job.STATUS_PENDING:
+                        if self.__pending[i].compare_status("PENDING"):
                             promoted_task = self.__pending.pop(i)
                             self.__active.append( promoted_task )
                             promoted_task.execute()

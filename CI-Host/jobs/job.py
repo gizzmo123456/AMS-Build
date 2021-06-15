@@ -10,14 +10,16 @@ class Job:
     """
 
     # TODO: change to a dict. to make it easier to print out the names rather than code.
-    STATUS_STARTING = -1    # job is currently being created
-    STATUS_IDLE     = 0     # Idle until the completion of another job
-    STATUS_PENDING  = 1     # Pending to be promoted to an active task
-    STATUS_RUNNING  = 2     # job is currently running
-    STATUS_COMPLETE = 3     # job has complete
-    STATUS_FAILED   = 4     # job has failed
-    STATUS_INVALID  = 5     # job is invalid
-    STATUS_NO_AUTH  = 6     # user does not have access to preform the job
+    STATUS = {
+        "STARTING": -1,# Job is currently being created
+        "CREATED":   0,# The job has been created but waiting to progress to pending
+        "PENDING":   1,# Pending to be promoted to an active task
+        "RUNNING":   2,# job is currently running
+        "COMPLETE":  3,# job has complete
+        "FAILED":    4,# job has failed
+        "INVALID":   5,# job is invalid
+        "NO_AUTH":   6 # user does not have access to preform the job
+    }
 
     JOB_TYPES = {"actions": {}, "tasks": {}}
 
@@ -38,7 +40,7 @@ class Job:
         :param kwargs:
         """
 
-        self.__status = Job.STATUS_STARTING
+        self.__status = Job.STATUS["STARTING"]
         self.__minimal_access_level = 1
 
         self.uac = uac
@@ -51,8 +53,22 @@ class Job:
         self.next_job = None
 
     @property
+    def status_name(self):
+        for key in Job.STATUS:
+            if Job.STATUS[key] == self.__status:
+                return key
+
+    @property
     def status(self):
         return self.__status
+
+    def compare_status(self, status_name):
+        """
+            Compares the status with the jobs status
+            :param status_name:
+            :return True if status match otherwise false
+        """
+        return Job.STATUS[ status_name ] == self.__status
 
     def append_activity(self, activity):
         # Update the minimal access level.
@@ -63,8 +79,8 @@ class Job:
 
     def promote_to_idle(self):
         """Promotes the pending task to idle"""
-        if self.status == Job.STATUS_IDLE:
-            self.__status = Job.STATUS_PENDING
+        if self.status == Job.STATUS["CREATED"]:
+            self.__status = Job.STATUS["PENDING"]
         else:
             _print("Unable to promote the job to IDLE. Task is not pending.")
 
