@@ -13,6 +13,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
     # set to main task queue
     shared_task_queue = None
+    job_queue = None
 
     ROOT = config_manager.ConfigManager.get("web_root", "ams-build")
     # Remove any outer slashes
@@ -103,7 +104,8 @@ class Webhook( baseHTTPServer.BaseServer ):
                 self.process_request( "Error", 404, False )
                 return
 
-            Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], git_hash=build_hash )
+            Webhook.job_queue.create_jobs_from_pipeline( uac, query["project"],
+                                                         lambda successful, msg: _print( f"successful: {successful} | {msg}"))
 
             self.process_request( "Ok", 200, False )
 
