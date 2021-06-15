@@ -114,7 +114,7 @@ class Job:
         for stage in stages:
             # check that a task has been defined and the task exists
             if "task" not in stage:
-                return None, "Failed to create job, task no defined"
+                return None, "Failed to create job, task not defined in stage"
             elif stage["task"] not in Job.JOB_TYPES["tasks"]:
                 return None, f"Failed to create job. Task '{stage['task']}' does not exist"
 
