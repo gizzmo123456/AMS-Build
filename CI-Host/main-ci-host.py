@@ -220,6 +220,7 @@ if __name__ == "__main__":
 
     # start the job Job Queue
     job_queue = jobs.job_queue.JobQueue()
+    webhook.Webhook.job_queue = job_queue
 
     # assign the shared queue with only the required objects to the modules
     webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build"] )
