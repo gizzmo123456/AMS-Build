@@ -5,11 +5,16 @@ APP_NAME    = "ams-ci"
 APP_VERSION = "1.0.4b"
 
 # AMS-Build setup
-DEFAULT_SHELL = config_manager.ConfigManager.get( "default_shell", "sh" )
+DEFAULT_SHELL = config_manager.ConfigManager.get( "default_shell", "sh" )   # TODO: this should be bash
 BASE_DIRECTORY = config_manager.ConfigManager.get( "base_directory", "${HOME}/ams-build")
 
 PROJECT_DIRECTORY = BASE_DIRECTORY + "/CI-projects"
 RELEVENT_PROJECT_PATH = "../CI-projects"            # relevant to the CI-Host folder
+
+# Date and Time
+TIME_FORMAT = "%H:%M:%S"
+DATE_FORMAT = "%d/%m/%Y"
+DATE_TIME_FORMAT = f"{TIME_FORMAT} @ {DATE_FORMAT}"
 
 # Web Const
 WEB_ADDRESS = config_manager.ConfigManager.get( "web_address", "localhost" )
