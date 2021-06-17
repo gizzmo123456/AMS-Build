@@ -29,10 +29,15 @@
     - [ ] check job is skiped if stages contains no stages
   - create job of tasks
     - [ ] check it fails if no task is defined
-    - [ ] check it fails if the defined task does not exist
+    - [x] check it fails if the defined task does not exist
     - [ ] check fails if the user (uac) does not have access
+      - [ ] www interface
+      - [x] webhooks
     - [ ] 
   
 
 ##### something something 
 - Docker finds image if the image name is empty ie. ```image: "" ```
+
+- Add logs directory to projects
+- Build 

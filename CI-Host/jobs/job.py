@@ -9,16 +9,15 @@ class Job:
 
     """
 
-    # TODO: change to a dict. to make it easier to print out the names rather than code.
     STATUS = {
-        "STARTING": -1,# Job is currently being created
-        "CREATED":   0,# The job has been created but waiting to progress to pending
-        "PENDING":   1,# Pending to be promoted to an active task
-        "RUNNING":   2,# job is currently running
-        "COMPLETE":  3,# job has complete
-        "FAILED":    4,# job has failed
-        "INVALID":   5,# job is invalid
-        "NO_AUTH":   6 # user does not have access to preform the job
+        "STARTING": -1,  # Job is currently being created
+        "CREATED":   0,  # The job has been created but waiting to progress to pending
+        "PENDING":   1,  # Pending to be promoted to an active task
+        "RUNNING":   2,  # job is currently running
+        "COMPLETE":  3,  # job has complete
+        "FAILED":    4,  # job has failed
+        "INVALID":   5,  # job is invalid
+        "NO_AUTH":   6   # user does not have access to preform the job
     }
 
     JOB_TYPES = {"actions": {}, "tasks": {}}
@@ -41,7 +40,7 @@ class Job:
         """
 
         self.__status = Job.STATUS["STARTING"]
-        self.__minimal_access_level = 1
+        self.__minimal_access_level = 2  # webhook and above
 
         self.uac = uac
         self.project = project
