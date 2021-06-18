@@ -106,7 +106,7 @@ class JobQueue:
         """ Processes the job queue until exited """
         while self.process:
 
-            print_queue_stats = False
+            print_queue_stats = True
 
             # wait for a new job to arrive while theres no jobs pending.
             new_job = self.__queue.get( block=True, timeout=None )
