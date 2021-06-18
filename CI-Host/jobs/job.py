@@ -162,7 +162,7 @@ class Job:
 
             # create and authorize the task, appending it to the job if authorization was successful
             # otherwise reject the job.
-            task = Job.JOB_TYPES["tasks"][ stage["task"] ](uac, project, complete_callback, stage)
+            task = Job.JOB_TYPES["tasks"][ stage["task"] ](job, **stage)
 
             if uac.access_level < task.access_level:    # TODO: UAC Update.
                 return None, "Failed to create job. User does not have permission to run task."
