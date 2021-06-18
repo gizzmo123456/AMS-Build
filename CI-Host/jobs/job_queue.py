@@ -140,8 +140,8 @@ class JobQueue:
                             self.__active.append( promoted_task )
                             promoted_task.execute()
                             self.update_queue_file = True
-                            print_queue_stats = True
                             _print( "promoted pending task to active." )
+                        print_queue_stats = True
 
                 if self.update_queue_file:
                     # TODO: update queue file.
