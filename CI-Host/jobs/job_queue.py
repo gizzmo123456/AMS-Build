@@ -103,6 +103,8 @@ class JobQueue:
         """ Processes the job queue until exited """
         while self.process:
 
+            print_queue_stats = False
+
             # wait for a new job to arrive while theres no jobs pending.
             new_job = self.__queue.get( block=True, timeout=None )
             _print(f"Collected new job (jov status code: {new_job.status})")
@@ -125,6 +127,7 @@ class JobQueue:
                     if self.__active[i].status >= job_obj.Job.STATUS["COMPLETE"]:
                         self.__active.pop( i )
                         self.update_queue_file = True
+                        print_queue_stats = True
                         _print( f"Job completed with status {self.__active[i].status_name} ({ self.__active[i].status})" )
 
                 # promote any pending tasks, if there is an active slot available.
@@ -137,11 +140,16 @@ class JobQueue:
                             self.__active.append( promoted_task )
                             promoted_task.execute()
                             self.update_queue_file = True
+                            print_queue_stats = True
                             _print( "promoted pending task to active." )
 
                 if self.update_queue_file:
                     # TODO: update queue file.
+                    pass
+
+                if print_queue_stats:
                     _print( f"active tasks: {len(self.__active)}; pending tasks: {len(self.__pending)}")  # TODO: this should print out the name of the status rather than status code.
+                    print_queue_stats = False
 
                 # take a nap.
                 time.sleep(1)
