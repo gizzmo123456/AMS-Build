@@ -128,7 +128,7 @@ class JobQueue:
                         _print( f"Job completed with status {self.__active[i].status_name} ({ self.__active[i].status})" )
 
                 # promote any pending tasks, if there is an active slot available.
-                while len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS and len( self.__pending ) > 0:
+                if len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS:
                     for i in range( len( self.__pending) ):
                         # make sure the status is pending.
                         # otherwise the job is waiting for the completion of another task.
@@ -138,8 +138,6 @@ class JobQueue:
                             promoted_task.execute()
                             self.update_queue_file = True
                             _print( "promoted pending task to active." )
-                        else:
-                            _print("No jobs in a pending state.")
 
                 if self.update_queue_file:
                     # TODO: update queue file.
