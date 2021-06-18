@@ -80,7 +80,7 @@ class Job:
 
     def append_activity(self, activity):
         # Update the minimal access level.
-        if activity.access_level > self.__minimal_access_level:
+        if activity.access_level() > self.__minimal_access_level:
             self.__minimal_access_level = activity.access_level
 
         self.activities.append( activity )
