@@ -164,7 +164,7 @@ class Job:
             # otherwise reject the job.
             task = Job.JOB_TYPES["tasks"][ stage["task"] ](job, **stage)
 
-            if uac.access_level < task.access_level:    # TODO: UAC Update.
+            if uac.access_level < task.access_level():    # TODO: UAC Update.
                 return None, "Failed to create job. User does not have permission to run task."
 
             job.append_activity( task )
