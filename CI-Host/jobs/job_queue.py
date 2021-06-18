@@ -106,7 +106,7 @@ class JobQueue:
         """ Processes the job queue until exited """
         while self.process:
 
-            print_queue_stats = True
+            print_queue_stats = False
 
             # wait for a new job to arrive while theres no jobs pending.
             new_job = self.__queue.get( block=True, timeout=None )
@@ -132,8 +132,6 @@ class JobQueue:
                         self.update_queue_file = True
                         print_queue_stats = True
                         _print( f"Job completed with status {self.__active[i].status_name} ({ self.__active[i].status})" )
-                    else:
-                        _print("a:", self.__active[i].status)
 
                 # promote any pending tasks, if there is an active slot available.
                 if len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS:

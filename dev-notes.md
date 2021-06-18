@@ -38,6 +38,6 @@
 
 ##### something something 
 - Docker finds image if the image name is empty ie. ```image: "" ```
-
 - Add logs directory to projects
-- Build 
+
+- Needs to add job to unblock queue once a job has finished. 
