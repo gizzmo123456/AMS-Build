@@ -93,6 +93,9 @@ class JobQueue:
             jobs_to_queue.append( created_job )
             # TODO: Set the new job into the previous job, so it can be released once the previous job is released
 
+            # premote the first job.
+            jobs_to_queue[0].promote_to_pending()
+
         # queue jobs.
         for j in jobs_to_queue:
             self.queue_job( j )
@@ -141,7 +144,7 @@ class JobQueue:
                             promoted_task.execute()
                             self.update_queue_file = True
                             _print( "promoted pending task to active." )
-                        print_queue_stats = True
+                        print_queue_stats = True    # TODO: this needs to be tabbed over. (here for debuging)
 
                 if self.update_queue_file:
                     # TODO: update queue file.

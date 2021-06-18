@@ -60,6 +60,8 @@ class Job:
 
         self.next_job = None
 
+        self.__status = Job.STATUS["CREATED"]
+
     @property
     def status_name(self):
         for key in Job.STATUS:
@@ -85,7 +87,7 @@ class Job:
 
         self.activities.append( activity )
 
-    def promote_to_idle(self):
+    def promote_to_pending(self):
         """Promotes the pending task to idle"""
         if self.status == Job.STATUS["CREATED"]:
             self.__status = Job.STATUS["PENDING"]
@@ -130,7 +132,7 @@ class Job:
                 _print("All Activities are complete for current job")
 
                 if self.next_job is not None:
-                    self.next_job.promote_to_idle()
+                    self.next_job.promote_to_pending()
                     _print("promoting next job")
 
     #########
