@@ -132,6 +132,8 @@ class JobQueue:
                         self.update_queue_file = True
                         print_queue_stats = True
                         _print( f"Job completed with status {self.__active[i].status_name} ({ self.__active[i].status})" )
+                    else:
+                        _print("a:", self.__active[i].status)
 
                 # promote any pending tasks, if there is an active slot available.
                 if len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS:
