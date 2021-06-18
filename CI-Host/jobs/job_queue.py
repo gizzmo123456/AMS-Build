@@ -105,7 +105,7 @@ class JobQueue:
 
             # wait for a new job to arrive while theres no jobs pending.
             new_job = self.__queue.get( block=True, timeout=None )
-            _print("Collected new job")
+            _print(f"Collected new job (jov status code: {new_job.status})")
 
             # process the active and pending queues
             # 1. when a new job arrives
@@ -138,6 +138,8 @@ class JobQueue:
                             promoted_task.execute()
                             self.update_queue_file = True
                             _print( "promoted pending task to active." )
+                        else:
+                            _print("No jobs in a pending state.")
 
                 if self.update_queue_file:
                     # TODO: update queue file.
