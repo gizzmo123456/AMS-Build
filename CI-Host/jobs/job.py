@@ -1,7 +1,9 @@
 import DEBUG
 import threading
-import queue
 from jobs.base_activity import BaseActivity as Activity, BaseTask as Task, BaseAction as Action
+
+# this must be here, even if the editor says otherwise.
+import jobs.activity_import  # imports subclasses from tasks and actions file. (See notes in import)
 
 _print = DEBUG.LOGS.print
 

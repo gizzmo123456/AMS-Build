@@ -1,7 +1,5 @@
 from const import *
-import commonProject
 from datetime import datetime
-import jobs.job
 
 # NOTE: when adding a new activity, make sure to inherit from 'BaseTask' or 'BaseAction' (or any subclass of the two)
 #       The will ensure that the activity is registered into Job.JOB_ACTIVITIES. See base classes at bottom.
