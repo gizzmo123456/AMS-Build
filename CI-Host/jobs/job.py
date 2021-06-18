@@ -1,5 +1,7 @@
-import commonProject
 import DEBUG
+import threading
+import queue
+from jobs.base_activity import BaseActivity as Activity, BaseTask as Task, BaseAction as Action
 
 _print = DEBUG.LOGS.print
 
@@ -20,7 +22,7 @@ class Job:
         "NO_AUTH":   6   # user does not have access to preform the job
     }
 
-    JOB_TYPES = {"actions": {}, "tasks": {}}
+    JOB_TYPES = {"actions": Action.__get_subclasses_dict__(), "tasks": Task.__get_subclasses_dict__()}
 
     @property
     def access_level(self):
@@ -30,7 +32,7 @@ class Job:
         """
         return self.__minimal_access_level
 
-    def __init__(self, uac, project, complete_callback=None, **kwargs):
+    def __init__(self, uac, project, complete_callback=None, **kwargs): # not sure if kwargs is necessary
         """
 
         :param uac:
@@ -44,9 +46,14 @@ class Job:
 
         self.uac = uac
         self.project = project
-        self.complete_callback = complete_callback
+        self.complete_callback = complete_callback  # im not sure if this is really necessary.
 
         self.data = kwargs
+
+        self.job_worker = None
+        self.job_lock = threading.RLock()   # TODO: make thread safe.
+
+        self.current_activity_id = 0
         self.activities = []
 
         self.next_job = None
@@ -84,11 +91,45 @@ class Job:
             _print("Unable to promote the job to IDLE. Task is not pending.")
 
     def execute(self):
-        pass
+        """
+            executes the activities on a new thread
+        """
 
-    def release_next_job(self):
-        if self.next_job is not None:
-            self.next_job.promote_to_idle()
+        if self.status != Job.STATUS["PENDING"]:
+            _print( f"Unable to start job. Status is not pending. (current status: {self.status})", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+        elif self.job_worker is not None:
+            _print( f"Unable to start job. Job worker is already set.")
+
+        self.job_worker = threading.Thread( target=self.execute_worker(), args=() )
+
+    def execute_worker(self):
+
+        while self.status < Job.STATUS["COMPLETE"]:
+
+            act = self.activities[ self.current_activity_id ]
+            status, msg = act.execute()
+
+            if status != Activity.STATUS["COMPLETE"]:
+                self.__status = Job.STATUS["FAILED"]
+                _print( f"Unable to complete job. The current activity has not exited with status COMPLETE (exit code: {status}, message: {msg}). Exiting job" )
+                break
+
+            _print("Attempting to clean up activity.")
+
+            try:
+                act.cleanup()
+            except Exception as e:
+                _print( "Unable to clean up activity.", e )
+
+            self.current_activity_id += 1
+
+            if self.current_activity_id == len( self.activities):
+                self.__status = Job.STATUS["COMPLETE"]
+                _print("All Activities are complete for current job")
+
+                if self.next_job is not None:
+                    self.next_job.promote_to_idle()
+                    _print("promoting next job")
 
     #########
     # Static Methods.
