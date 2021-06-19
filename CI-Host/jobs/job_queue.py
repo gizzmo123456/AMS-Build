@@ -98,8 +98,11 @@ class JobQueue:
             jobs_to_queue[0].promote_to_pending()
 
         # queue jobs.
-        for j in jobs_to_queue:
-            self.queue_job( j )
+        if len( jobs_to_queue ) == 0:
+            output_message += "Unable to create any jobs from pipeline. (Have any jobs been defined?)"
+        else:
+            for j in jobs_to_queue:
+                self.queue_job( j )
 
         _print( output_message )
 
