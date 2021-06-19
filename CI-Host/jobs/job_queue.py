@@ -54,6 +54,7 @@ class JobQueue:
         :return: True if successful full otherwise False
         """
 
+        _print("Created jobs from pipeline file.")
         # authorize the activity by attempting to load the pipeline config.
         # if None is returned, either the project does not exist or the user
         # does not have access.
@@ -100,6 +101,8 @@ class JobQueue:
         for j in jobs_to_queue:
             self.queue_job( j )
 
+        _print( output_message )
+
         return True
 
     def process_forever(self):
@@ -110,7 +113,7 @@ class JobQueue:
 
             # wait for a new job to arrive while theres no jobs pending.
             new_job = self.__queue.get( block=True, timeout=None )
-            _print(f"Collected new job (jov status code: {new_job.status})")
+            _print(f"Collected new job (job status code: {new_job.status})")
 
             # process the active and pending queues
             # 1. when a new job arrives
@@ -134,7 +137,7 @@ class JobQueue:
                         completed_job = self.__active.pop( i )
                         self.update_queue_file = True
                         print_queue_stats = True
-                        _print( f"Job completed with status { completed_job.status_name } ({ completed_job.status })" )
+                        _print( f"Job completed with status { completed_job.status_name } (status code: { completed_job.status })" )
 
                 # promote any pending tasks, if there is an active slot available.
                 if len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS:
