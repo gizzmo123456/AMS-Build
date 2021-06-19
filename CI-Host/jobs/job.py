@@ -25,6 +25,7 @@ class Job:
     }
 
     JOB_TYPES = {"actions": Action.__get_subclasses_dict__(), "tasks": Task.__get_subclasses_dict__()}
+    complete_callback = None    # params: job
 
     @property
     def access_level(self):
@@ -34,7 +35,7 @@ class Job:
         """
         return self.__minimal_access_level
 
-    def __init__(self, uac, project, complete_callback=None, **kwargs): # not sure if kwargs is necessary
+    def __init__(self, uac, project, **kwargs): # not sure if kwargs is necessary
         """
 
         :param uac:
@@ -48,7 +49,6 @@ class Job:
 
         self.uac = uac
         self.project = project
-        self.complete_callback = complete_callback  # im not sure if this is really necessary.
 
         self.data = kwargs
 
@@ -86,6 +86,10 @@ class Job:
             self.__minimal_access_level = activity.access_level
 
         self.activities.append( activity )
+
+    @property
+    def activity_count(self):
+        return len( self.activities )
 
     def promote_to_pending(self):
         """Promotes the pending task to idle"""
@@ -140,10 +144,13 @@ class Job:
                     self.next_job.promote_to_pending()
                     _print("promoting next job")
 
+        self.__job_complete()
+
         _print("Exiting job...")
 
     def __job_complete(self):
-        pass
+        if Job.complete_callback is not None:
+            Job.complete_callback(self)
 
     #########
     # Static Methods.

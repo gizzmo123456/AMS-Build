@@ -14,6 +14,7 @@ import queue            # TODO: remove
 import sharedQueue      # TODO: remove
 import queue_item       # TODO: Remove
 import jobs.job_queue   # TODO: Remove the above in faver of the job queue
+import jobs.job
 import common
 import user_manager
 import out_webhook
@@ -220,6 +221,7 @@ if __name__ == "__main__":
 
     # start the job Job Queue
     job_queue = jobs.job_queue.JobQueue()
+    jobs.job.Job.complete_callback = lambda job: job_queue.queue_job( jobs.job.Job( job.uac, job.project ) )   # queue an empty job to unblock the queue.
     webhook.Webhook.job_queue = job_queue
 
     # assign the shared queue with only the required objects to the modules

@@ -104,8 +104,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 self.process_request( "Error", 404, False )
                 return
 
-            Webhook.job_queue.create_jobs_from_pipeline( uac, query["project"],
-                                                         lambda successful, msg: _print( f"successful: {successful} | {msg}"))
+            Webhook.job_queue.create_jobs_from_pipeline( uac, query["project"] )
 
             self.process_request( "Ok", 200, False )
 

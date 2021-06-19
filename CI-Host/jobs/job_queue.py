@@ -122,7 +122,10 @@ class JobQueue:
 
                 # move the new job to the pending queue.
                 if new_job is not None:
-                    self.__pending.append( new_job )
+                    if new_job.activity_count > 0:
+                        self.__pending.append( new_job )
+                    else:
+                        _print("skipping new job. No activities set. (Unblock Task)")
                     new_job = None
 
                 # Clean up active tasks that have completed.
