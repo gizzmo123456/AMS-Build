@@ -25,10 +25,10 @@
 #### Testing
 - Test job
   - create jobs from pipeline
-    - [ ] check job is skiped if stages is not defined
-    - [ ] check job is skiped if stages contains no stages
+    - [x] check job is skiped if stages is not defined
+    - [x] check job is skiped if stages contains no stages
   - create job of tasks
-    - [ ] check it fails if no task is defined
+    - [x] check it fails if no task is defined
     - [x] check it fails if the defined task does not exist
     - [ ] check fails if the user (uac) does not have access
       - [ ] www interface
