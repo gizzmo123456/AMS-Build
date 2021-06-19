@@ -2,6 +2,19 @@
 
 # Change log since version 1.0.0
 
+## Version 1.1.x (TBD)
+- Added Jobs and Activities
+  - Activities is an individual action or task to be preformed on a project.
+  - while a job is a collection of activities
+  This is to give grater control over the activities that are preformed on the project.
+- Changed pipeline.json format
+  - To support jobs and activities.
+- Added dedicated Job Queue.
+- Added Pseudo Terminal
+  - This now allows to preform a command at a time and gives better 
+    control when an activity is interacting with the system via the command line.
+    
+
 ## Version 1.0.4b (09/02/2021)
 - Improved socket wrapper prints and redirected to file
 - Add page redirect to login->auth
