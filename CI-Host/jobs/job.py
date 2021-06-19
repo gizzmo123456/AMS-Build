@@ -104,11 +104,16 @@ class Job:
         elif self.job_worker is not None:
             _print( f"Unable to start job. Job worker is already set.")
 
+        _print( "Starting job worker..." )
+
         self.job_worker = threading.Thread( target=self.execute_worker(), args=() )
+        self.job_worker.start()
 
     def execute_worker(self):
 
         while self.status < Job.STATUS["COMPLETE"]:
+
+            _print( f"starting activity { self.current_activity_id } of {len( self.activities )} ")
 
             act = self.activities[ self.current_activity_id ]
             status, msg = act.execute()
@@ -134,6 +139,11 @@ class Job:
                 if self.next_job is not None:
                     self.next_job.promote_to_pending()
                     _print("promoting next job")
+
+        _print("Exiting job...")
+
+    def __job_complete(self):
+        pass
 
     #########
     # Static Methods.
