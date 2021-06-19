@@ -66,7 +66,7 @@ class Webhook( baseHTTPServer.BaseServer ):
             webhook_config = commonProject.get_project_config( uac, query[ "project" ], "webhooks" )
 
             if webhook_config is None:
-                _print( "Error: Invalid project or Access, For project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( f"Error: Invalid project or Access. Project: { query[ 'project' ] } Actor: { actor }", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 self.process_request( "Error", 404, False )
                 return
 
