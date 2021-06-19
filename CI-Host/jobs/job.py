@@ -106,7 +106,7 @@ class Job:
 
         _print( "Starting job worker..." )
 
-        self.job_worker = threading.Thread( target=self.execute_worker(), args=() )
+        self.job_worker = threading.Thread( target=self.execute_worker, args=() )
         self.job_worker.start()
 
     def execute_worker(self):
