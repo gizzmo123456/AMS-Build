@@ -113,7 +113,7 @@ class Job:
 
         while self.status < Job.STATUS["COMPLETE"]:
 
-            _print( f"starting activity { self.current_activity_id } of {len( self.activities )} ")
+            _print( f"starting activity { self.current_activity_id + 1 } of {len( self.activities )} ")
 
             act = self.activities[ self.current_activity_id ]
             status, msg = act.execute()
