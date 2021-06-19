@@ -14,7 +14,8 @@ class Prepare( base_activities.BaseTask ):
 
         with terminal.Terminal() as console:
             output = console.write( f"cd {self._get_format_value('project_source_dir')}" )
+            _print("1) ", output)
             output = console.write( "git status" )
-            _print( output )
+            _print( "2) ", output )
 
         return base_activities.BaseActivity.STATUS["INVALID"], "Activity not implemented"

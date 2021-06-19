@@ -54,7 +54,7 @@ class Terminal:
 
         while self.waitingForOutput:
             output += os.read( self.stdout.fileno(), 1024 ).decode()
-
+            _print(">>>", output)
             if output[ -len(self.input_str): ] == self.input_str:
                 output = output[ len(input_cmd):-len(self.input_str)-1 ] # remove the inputed command and end input string from the output
                 self.waitingForOutput = False
