@@ -18,4 +18,4 @@ class Prepare( base_activities.BaseTask ):
             output = console.write( "git status" )
             _print( output[1] )
 
-        return base_activities.BaseActivity.STATUS["INVALID"], "Activity not implemented"
+        return base_activities.BaseActivity.STATUS["COMPLETE"], "Activity not implemented"
