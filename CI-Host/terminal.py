@@ -8,7 +8,7 @@ _print = DEBUG.LOGS.print
 
 class Terminal:
 
-    def __init__(self, input_str="bash-5.0$ " ):
+    def __init__(self, input_str="bash-5.0# " ):
 
         self.input_str = input_str
 
@@ -54,8 +54,6 @@ class Terminal:
 
         while self.waitingForOutput:
             output += os.read( self.stdout.fileno(), 1024 ).decode()
-
-            _print( f"'{output[ -len(self.input_str): ]}' == '{self.input_str}' = {output[ -len(self.input_str): ] == self.input_str}" )
 
             if output[ -len(self.input_str): ] == self.input_str:
                 output = output[ len(input_cmd):-len(self.input_str)-1 ] # remove the inputed command and end input string from the output
