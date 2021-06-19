@@ -44,7 +44,7 @@ class JobQueue:
 
         self.__queue.put( job_to_queue )
 
-    def create_jobs_from_pipeline( self, uac, project, complete_callback=None ):
+    def create_jobs_from_pipeline( self, uac, project ):
         """
             Creates and queues jobs from the project pipeline config file
             if the uac permits ALL jobs
@@ -60,11 +60,11 @@ class JobQueue:
         pipeline_config = commonProject.get_project_pipeline( uac, project, v2_config=True )    # TODO: remove v2_config once change is complete.
 
         if pipeline_config is None:
-            complete_callback( False, "Unable to create job. Failed to load pipeline config." ) # TODO: find out if its an access or project issue
+            _print( "Unable to create job. Failed to load pipeline config." ) # TODO: find out if its an access or project issue
             return False
 
         if "jobs" not in pipeline_config:
-            complete_callback( False, "Unable to create jobs. Jobs not defined in pipeline config" )
+            _print( "Unable to create jobs. Jobs not defined in pipeline config" )
             return False
 
         output_message = ""             # output message to be pushed into the complete callback.
@@ -87,7 +87,7 @@ class JobQueue:
             output_message += message
 
             if created_job is None:
-                complete_callback( False, output_message )
+                _print( output_message )
                 return False
 
             jobs_to_queue.append( created_job )

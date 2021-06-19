@@ -161,7 +161,7 @@ class Job:
     # TODO: I think these static methods should be in the job queue.
 
     @staticmethod
-    def create_job_of_tasks( uac, project, stages, complete_callback=None ):    # TODO: NOTE: im sure about this complete callback!
+    def create_job_of_tasks( uac, project, stages ):    # TODO: NOTE: im sure about this complete callback!
         """
             Creates a job of tasks to be performed on the project
         :param uac:
@@ -169,7 +169,7 @@ class Job:
         :param stages: List of stages containing task. any stages containing actions will be skipped
         :return: tuple ( job, message ). Failed to create job if job is None, See message for details
         """
-        job = Job( uac, project, complete_callback )
+        job = Job( uac, project )
         output_message = ""
 
         for stage in stages:
@@ -192,7 +192,7 @@ class Job:
         return job, f"Successfully created job for {project}\n"+output_message
 
     @staticmethod
-    def create_job_of_actions( uac, project, actions, complete_callback=None):
+    def create_job_of_actions( uac, project, actions ):
         """
             Creates a job of actions to be performed on the project and inserts
             it into the queue if uac permits.
