@@ -83,7 +83,7 @@ class BaseActivity:
             "output_dir":         f"{base_dir}/builds/{output_name}",                       # TODO: change builds to outputs
             "output_source_dir":  f"{base_dir}/builds/{output_name}/project_source",        # TODO: change builds to outputs
             "output_config_dir":  f"{base_dir}/builds/{output_name}/config",                # TODO: change builds to outputs
-            "logs_output_dir":    f"{base_dir}/builds/logs/{output_name}"                   # TODO: add logs directory
+            "logs_output_dir":    f"{base_dir}/builds/{output_name}/logs"                   # TODO: add logs directory
         }
 
         self.init()
