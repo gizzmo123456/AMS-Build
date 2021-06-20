@@ -79,9 +79,11 @@ class BaseActivity:
         self.__private_format_values = {
             "project_dir":        f"{base_dir}/master",
             "project_source_dir": f"{base_dir}/master/project_source",
-            "output_dir":         f"{base_dir}/builds/{output_name}",
-            "output_source_dir":  f"{base_dir}/builds/{output_name}",
-            "logs_output_dir":    f"{base_dir}/logs/{output_name}"  # TODO: add logs directory
+            "project_config_dir": f"{base_dir}/master/config",
+            "output_dir":         f"{base_dir}/builds/{output_name}",                       # TODO: change builds to outputs
+            "output_source_dir":  f"{base_dir}/builds/{output_name}/project_source",        # TODO: change builds to outputs
+            "output_config_dir":  f"{base_dir}/builds/{output_name}/config",                # TODO: change builds to outputs
+            "logs_output_dir":    f"{base_dir}/builds/logs/{output_name}"                   # TODO: add logs directory
         }
 
         self.init()
@@ -110,12 +112,22 @@ class BaseActivity:
         v = self.__format_values.setdefault( key, None ) if v is None else v
         return v if v is not None else default_value
 
+    @property
+    def _all_format_values(self):
+        return { **self.__format_values, **self.__private_format_values }
+
     def set_format_value(self, key, value, private=False):
 
         if private:
             self.__private_format_values[ key ] = value
         else:
             self.__format_values[ key ] = value
+
+    @property
+    def log_header(self):
+        return f"{'=' * 24}" \
+               f"Activity - {self.__class__.__name__}" \
+               f"{'=' * 24}"
 
     def execute(self):
         """
