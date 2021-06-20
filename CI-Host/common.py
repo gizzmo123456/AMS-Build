@@ -60,10 +60,7 @@ def get_dict_from_json( file_name, lock_file=False ):
 
 def write_file( filepath, string, append=False, lock=True ):
 
-    mode = 'w'
-
-    if append:
-        mode = 'a'
+    mode = 'w' if not append else 'a'
 
     if lock:
         with LockFile( filepath, mode ) as file:
