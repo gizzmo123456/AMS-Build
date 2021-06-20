@@ -49,7 +49,7 @@ class Prepare( base_activities.BaseTask ):
             self.terminal_write( "cp -r {project_source_dir} {output_source_dir}".format(**self._all_format_values), console, log_output_filepath )
 
             # change to the output source directory and run the prepare output commands.
-            self.terminal_write( f"cd {self._get_format_value('output_source_dir')}", output, log_output_filepath )
+            self.terminal_write( f"cd {self._get_format_value('output_source_dir')}", console, log_output_filepath )
 
             # TODO: run prepare output commands.
 
