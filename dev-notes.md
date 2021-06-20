@@ -41,3 +41,5 @@
 - Add logs directory to projects
 
 - Needs to add job to unblock queue once a job has finished. 
+
+- Prepare activity needs to only run once per project, per branch
