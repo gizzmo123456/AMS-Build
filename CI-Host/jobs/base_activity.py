@@ -104,11 +104,11 @@ class BaseActivity:
     def get_format_value(self, key, default_value=None):
         return self.__format_values.setdefault( key, default_value )
 
-    def _get_format_value(self, key): # for internal use only
+    def _get_format_value(self, key, default_value=None): # for internal use only
         """Gets the private or public format value"""
         v = self.__private_format_values.setdefault( key, None )
         v = self.__format_values.setdefault( key, None ) if v is None else v
-        return v
+        return v if v is not None else default_value
 
     def set_format_value(self, key, value, private=False):
 
