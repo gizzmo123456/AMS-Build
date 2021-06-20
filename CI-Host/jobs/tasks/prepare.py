@@ -18,7 +18,7 @@ class Prepare( base_activities.BaseTask ):
 
     def activity(self):
 
-        output_dir = self._get_format_value('output_dir')
+        success, output_dir = self._get_format_value('output_dir')
         log_dir = self._get_format_value('logs_output_dir')
         log_output_filepath = f"{log_dir}/output.txt"
 
@@ -30,8 +30,8 @@ class Prepare( base_activities.BaseTask ):
             elif log_dir is None:
                 return base_activities.BaseActivity.STATUS["FAILED"], "Failed to create logs direct. Directory not set."
 
-            output =  console.write( f"mkdir {output_dir} -v" )
-            output += console.write( f"mkdir {log_dir} -v" )
+            output =  console.write( f"mkdir {output_dir} -v" )[1]
+            output += console.write( f"mkdir {log_dir} -v" )[1]
 
             _print( output )
 
