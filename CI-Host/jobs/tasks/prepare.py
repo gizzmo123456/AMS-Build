@@ -12,13 +12,13 @@ class Prepare( base_activities.BaseTask ):
         pass
 
     def terminal_write(self, cmd, term, stdout_file):
-        output = term.write( cmd )
+        success, output = term.write( cmd )
         _print( output, output_filename=stdout_file, console=True )
         return output
 
     def activity(self):
 
-        success, output_dir = self._get_format_value('output_dir')
+        output_dir = self._get_format_value('output_dir')
         log_dir = self._get_format_value('logs_output_dir')
         log_output_filepath = f"{log_dir}/output.txt"
 
