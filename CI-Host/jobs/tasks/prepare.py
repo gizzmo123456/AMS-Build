@@ -30,8 +30,10 @@ class Prepare( base_activities.BaseTask ):
             elif log_dir is None:
                 return base_activities.BaseActivity.STATUS["FAILED"], "Failed to create logs direct. Directory not set."
 
-            output =  console.write( f"mkdir {output_dir}" )
-            output += console.write( f"mkdir {log_dir}" )
+            output =  console.write( f"mkdir {output_dir} -v" )
+            output += console.write( f"mkdir {log_dir} -v" )
+
+            _print( output )
 
             # create log files and write the output.
             common.write_file( f"{log_output_filepath}", f"{'='*24}\n{self.get_format_value('output-name')}\n{'='*24}\n{self.log_header}")
