@@ -30,9 +30,9 @@ class Prepare( base_activities.BaseTask ):
             elif log_dir is None:
                 return base_activities.BaseActivity.STATUS["FAILED"], "Failed to create logs direct. Directory not set."
 
-            output =  console.write( f"mkdir {output_dir} -v" )[1]
-            output += console.write( f"mkdir {log_dir} -v" )[1]
-
+            output =  console.write( f"mkdir -v {output_dir}" )[1]
+            _print( output )
+            output = console.write( f"mkdir -v {log_dir}" )[1]
             _print( output )
 
             # create log files and write the output.
@@ -45,8 +45,8 @@ class Prepare( base_activities.BaseTask ):
             # TODO: run prepare main commands.
 
             # Copy the main config and project source directory to the output directory
-            self.terminal_write( "cp -r {project_config_dir} {output_config_dir}".format(**self._all_format_values), console, log_output_filepath )
-            self.terminal_write( "cp -r {project_source_dir} {output_source_dir}".format(**self._all_format_values), console, log_output_filepath )
+            self.terminal_write( "cp -rv {project_config_dir} {output_config_dir}".format(**self._all_format_values), console, log_output_filepath )
+            self.terminal_write( "cp -rv {project_source_dir} {output_source_dir}".format(**self._all_format_values), console, log_output_filepath )
 
             # change to the output source directory and run the prepare output commands.
             self.terminal_write( f"cd {self._get_format_value('output_source_dir')}", console, log_output_filepath )
