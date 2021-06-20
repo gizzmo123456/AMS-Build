@@ -125,9 +125,9 @@ class BaseActivity:
 
     @property
     def log_header(self):
-        return f"{'=' * 24}" \
-               f"Activity - {self.__class__.__name__}" \
-               f"{'=' * 24}"
+        return f"{'=' * 24}\n" \
+               f"Activity - {self.__class__.__name__}\n" \
+               f"{'=' * 24}\n"
 
     def execute(self):
         """

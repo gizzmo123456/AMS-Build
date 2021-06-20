@@ -45,8 +45,8 @@ class Prepare( base_activities.BaseTask ):
             # TODO: run prepare main commands.
 
             # Copy the main config and project source directory to the output directory
-            self.terminal_write( "cp -rv {project_config_dir} {output_config_dir}".format(**self._all_format_values), console, log_output_filepath )
-            self.terminal_write( "cp -rv {project_source_dir} {output_source_dir}".format(**self._all_format_values), console, log_output_filepath )
+            self.terminal_write( "cp -r {project_config_dir} {output_config_dir}".format(**self._all_format_values), console, log_output_filepath )
+            self.terminal_write( "cp -r {project_source_dir} {output_source_dir}".format(**self._all_format_values), console, log_output_filepath )
 
             # change to the output source directory and run the prepare output commands.
             self.terminal_write( f"cd {self._get_format_value('output_source_dir')}", console, log_output_filepath )
