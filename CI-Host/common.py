@@ -125,9 +125,14 @@ class LockDirectory:
         Creates a lock file to flag that the directory is being modified by another process.
     """
     def __init__( self, directory ):
+        self.directory = directory
         self.lock_file = FileLock( directory + ".dir_lock" )
 
     def __enter__(self):
+
+        if self.is_locked:
+            _print( f"Waiting for directory '{self.directory}' to unlock. ")
+
         self.lock_file.acquire()
         return self
 
