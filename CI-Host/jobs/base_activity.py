@@ -66,7 +66,7 @@ class BaseActivity:
             # project
             "project": job.project,
             "branch": "master",                     # TODO: <<
-            "build-index": 0,                       # TODO: Load in the current build index.
+            "build-index": 0,                          # TODO: Load in the current build index.
             # hashes
             "activity_hash": "some hash in sha-1",  # TODO: <<
             # util
