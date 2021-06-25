@@ -119,7 +119,27 @@ def get_value_at_key( dict, *keys, noValue=None ):
 
     return value
 
-class LockFile:
+
+class LockDirectory:
+    """
+        Creates a lock file to flag that the directory is being modified by another process.
+    """
+    def __init__( self, directory ):
+        self.lock_file = FileLock( directory + ".dir_lock" )
+
+    def __enter__(self):
+        self.lock_file.acquire()
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.lock_file.release()
+
+    @property
+    def is_locked(self):
+        return self.lock_file.is_locked
+
+
+class LockFile:  # TODO: this should inherit from lockDirectory?
 
     def __init__( self, file_name, mode='r' ):
 
