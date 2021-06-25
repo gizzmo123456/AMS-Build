@@ -2,6 +2,8 @@ import jobs.base_activity as base_activities
 import terminal
 import common
 import DEBUG
+import const
+from datetime import datetime
 
 _print = DEBUG.LOGS.print
 
@@ -43,7 +45,7 @@ class Prepare( base_activities.BaseTask ):
             # create log files and write the queued outputs.
             common.write_file( f"{log_output_filepath}", f"{'='*24}\n"
                                                          f"Log Output: {self.get_format_value('output-name')}\n"
-                                                         f"Created At: {self.get_format_value('created_at')}\n"
+                                                         f"Created At: {datetime.now().strftime( const.DATE_TIME_FORMAT )}\n"   # use the time the file was created.
                                                          f"{self.log_header}")
             for o in queued_outputs:
                 _print(o, output_filename=f"{log_output_filepath}", console=True)
