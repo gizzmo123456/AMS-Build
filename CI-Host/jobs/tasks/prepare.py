@@ -39,11 +39,11 @@ class Prepare( base_activities.BaseTask ):
                 queued_outputs = []
 
                 # create output directory
-                output =  console.write( f"mkdir -v {output_dir}" )[1]
+                output =  console.write( f"mkdir -v '{output_dir}'" )[1]
                 queued_outputs.append( output )
 
                 # create logs directory
-                output = console.write( f"mkdir -v {log_dir}" )[1]
+                output = console.write( f"mkdir -v '{log_dir}'" )[1]
                 queued_outputs.append( output )
 
                 # create log files and write the queued outputs.
@@ -55,19 +55,19 @@ class Prepare( base_activities.BaseTask ):
                     _print(o, output_filename=f"{log_output_filepath}", console=True)
 
                 # Change to the main project source directory, and run the prepare main commands.
-                self.terminal_write( f"cd {self._get_format_value('project_source_dir')}", console, log_output_filepath)
+                self.terminal_write( f"cd '{self._get_format_value('project_source_dir')}'", console, log_output_filepath)
 
                 # TODO: Start SSH agent if used.
                 # TODO: run prepare main commands.
 
                 # Copy the main config and project source directory to the output directory
-                self.terminal_write( "cp -r {project_config_dir} {output_config_dir}".format(**self._all_format_values), console, log_output_filepath )
-                self.terminal_write( "cp -r {project_source_dir} {output_source_dir}".format(**self._all_format_values), console, log_output_filepath )
+                self.terminal_write( "cp -r '{project_config_dir}' '{output_config_dir}'".format(**self._all_format_values), console, log_output_filepath )
+                self.terminal_write( "cp -r '{project_source_dir}' '{output_source_dir}'".format(**self._all_format_values), console, log_output_filepath )
 
                 # TODO: From here we can unlock the directory
 
                 # change to the output source directory and run the prepare output commands.
-                self.terminal_write( f"cd {self._get_format_value('output_source_dir')}", console, log_output_filepath )
+                self.terminal_write( f"cd '{self._get_format_value('output_source_dir')}'", console, log_output_filepath )
 
                 # TODO: run prepare output commands.
 
