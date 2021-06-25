@@ -47,3 +47,8 @@ and 'free' for mem usage
 - Needs to add job to unblock queue once a job has finished. 
 
 - Prepare activity needs to only run once per project, per branch
+
+
+# bugs.
+- [ ] print is cutting off the first character of when printing from terminal. 
+      However it is printing to file correctly.

@@ -41,7 +41,10 @@ class Prepare( base_activities.BaseTask ):
             queued_outputs.append( output )
 
             # create log files and write the queued outputs.
-            common.write_file( f"{log_output_filepath}", f"{'='*24}\n{self.get_format_value('output-name')}\n{'='*24}\n{self.log_header}")
+            common.write_file( f"{log_output_filepath}", f"{'='*24}\n"
+                                                         f"Log Output: {self.get_format_value('output-name')}\n"
+                                                         f"Created At: {self.get_format_value('created_at')}\n"
+                                                         f"{self.log_header}")
             for o in queued_outputs:
                 _print(o, output_filename=f"{log_output_filepath}", console=True)
 
