@@ -71,13 +71,15 @@ class BaseActivity:
         # NOTE: there should be no overlap in key values between the public and private format values.
         # define default data for all activities
         self.__format_values = {
-            "job-name": kwargs.setdefault("job-name", "Not Defined"),
+            "job-name": kwargs.setdefault("job-name", "Not-Defined"),
             # project
             "project": job.project,
             "branch": "master",                     # TODO: <<
             "build-index": 0,                       # TODO: Load in the current build index.
             # hashes
+            "job_hash": "Some hash in sha-1",       # TODO: <<
             "activity_hash": "some hash in sha-1",  # TODO: <<
+            "git_hash": None,                       # TODO: <<
             # util
             "actor": job.uac.username,
             "created_at": datetime.now().strftime( DATE_TIME_FORMAT ),
