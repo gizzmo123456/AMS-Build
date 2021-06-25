@@ -4,6 +4,7 @@ import threading
 import queue
 import jobs.job as job_obj
 import time
+import const
 
 _print = DEBUG.LOGS.print
 
@@ -71,7 +72,7 @@ class JobQueue:
         pipeline_data = {   # Pipeline data to be passed into the activities
             "active": pipeline_config.setdefault("active", True),
             "dummy-task": pipeline_config.setdefault("dummy-task", False),
-            "output-name-format": pipeline_config.setdefault("output-name-format", "{project}-{job-name}-{build-id}")
+            "output-name-format": pipeline_config.setdefault("output-name-format", const.DEFAULT_OUTPUT_NAME_FORMAT)
         }
 
         if pipeline_data["active"] == False:

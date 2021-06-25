@@ -1,5 +1,8 @@
 from const import *
 from datetime import datetime
+import DEBUG
+
+_print = DEBUG.LOGS.print
 
 # NOTE: when adding a new activity, make sure to inherit from 'BaseTask' or 'BaseAction' (or any subclass of the two)
 #       The will ensure that the activity is registered into Job.JOB_ACTIVITIES. See base classes at bottom.
@@ -76,8 +79,12 @@ class BaseActivity:
         if kwargs.setdefault("increase-build-index", False):
             self.__format_values["build-index"] += 1
 
-        output_name = kwargs.setdefault("output-name-format", "{project}-{job-name}-{build-id}")
-        output_name = self.__format_values["output-name"] =  output_name.format(self.__format_values)
+        output_name = kwargs.setdefault("output-name-format", DEFAULT_OUTPUT_NAME_FORMAT)
+        try:
+            output_name = self.__format_values["output-name"] =  output_name.format(self.__format_values)
+        except KeyError as e:
+            _print(f"Unable to format output name. (Key error: {e}) Using default output format instead")
+            output_name = self.__format_values["output-name"] = DEFAULT_OUTPUT_NAME_FORMAT.format(self.__format_values)
 
         # define project directories
         base_dir = f"{PROJECT_DIRECTORY}/{job.project}"

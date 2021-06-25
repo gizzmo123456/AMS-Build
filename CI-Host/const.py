@@ -16,6 +16,9 @@ TIME_FORMAT = "%H:%M:%S"
 DATE_FORMAT = "%d/%m/%Y"
 DATE_TIME_FORMAT = f"{TIME_FORMAT} @ {DATE_FORMAT}"
 
+# Activity default strings
+DEFAULT_OUTPUT_NAME_FORMAT = "{project}-{job-name}-{build-id}"
+
 # Web Const
 WEB_ADDRESS = config_manager.ConfigManager.get( "web_address", "localhost" )
 WEB_PATH = config_manager.ConfigManager.get( "web_path", "/ams-build" )
