@@ -50,8 +50,8 @@ class Webhook( baseHTTPServer.BaseServer ):
             # Get required data from post data.
             actor = common.get_value_at_key( post_data     , *fields["actor"] )
             repo_name = common.get_value_at_key( post_data , *fields["repository"] )
-            branch = common.get_value_at_key( post_data    , *fields["branch"] )   # TODO: dont forget to check the data.
-            build_hash = common.get_value_at_key( post_data, *fields["hash"] )
+            branch = common.get_value_at_key( post_data    , *fields["branch"] )    # TODO: dont forget to check the data.
+            build_hash = common.get_value_at_key( post_data, *fields["hash"] )      # TODO: rename to git hash
 
             if actor is None or repo_name is None or build_hash is None or branch is None:
                 _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
@@ -104,7 +104,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 self.process_request( "Error", 404, False )
                 return
 
-            Webhook.job_queue.create_jobs_from_pipeline( uac, query["project"] )
+            Webhook.job_queue.create_jobs_from_pipeline( uac, query["project"] ) #, branch=branch, git_hash=build_hash )
 
             self.process_request( "Ok", 200, False )
 

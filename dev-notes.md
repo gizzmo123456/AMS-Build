@@ -12,6 +12,10 @@
 | PyCryptodome   | 3.9.8       |
 | (Py) FileLock  | 3.0.12      |
 
+# 
+have a look at 'mpstat' for reporting cpu usage ect.
+and 'free' for mem usage 
+
 ### Readme update todo:
 - Queue Items (Activities)
   - Finalize dedicated readme  
