@@ -56,22 +56,28 @@ class BaseActivity:
         self.job = job                  # the job that owns/created the activity
         self.activity_data = kwargs     # stage/activity data from config/pipeline.
 
-        output_name = "BUILD-NAME-HERE" # TODO: <<
-
         # NOTE: there should be no overlap in key values between the public and private format values.
         # define default data for all activities
         self.__format_values = {
-            "output-name": output_name,
+            "job-name": kwargs.setdefault("job-name", "Not Defined"),
             # project
             "project": job.project,
             "branch": "master",                     # TODO: <<
+            "build-index": 0,                       # TODO: Load in the current build index.
             # hashes
             "activity_hash": "some hash in sha-1",  # TODO: <<
             # util
             "actor": job.uac.username,
             "created_at": datetime.now().strftime( DATE_TIME_FORMAT ),
-            "completed_at": None,
+            "executed_at": None,
+            "completed_at": None
         }
+
+        if kwargs.setdefault("increase-build-index", False):
+            self.__format_values["build-index"] += 1
+
+        output_name = kwargs.setdefault("output-name-format", "{project}-{job-name}-{build-id}")
+        output_name = self.__format_values["output-name"] =  output_name.format(self.__format_values)
 
         # define project directories
         base_dir = f"{PROJECT_DIRECTORY}/{job.project}"
@@ -138,6 +144,7 @@ class BaseActivity:
         # TODO: check job state and permision.
 
         self.__status = BaseActivity.STATUS["ACTIVE"]
+        self.__format_values["executed_at"] = datetime.now().strftime( DATE_TIME_FORMAT )
 
         self.__status, message = self.activity()
 

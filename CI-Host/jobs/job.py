@@ -161,12 +161,13 @@ class Job:
     # TODO: I think these static methods should be in the job queue.
 
     @staticmethod
-    def create_job_of_tasks( uac, project, stages ):    # TODO: NOTE: im sure about this complete callback!
+    def create_job_of_tasks( uac, project, stages, **kwargs ):
         """
             Creates a job of tasks to be performed on the project
         :param uac:
         :param project:
         :param stages: List of stages containing task. any stages containing actions will be skipped
+        :param kwargs: any additional data to be passed into the activities.
         :return: tuple ( job, message ). Failed to create job if job is None, See message for details
         """
         job = Job( uac, project )
@@ -181,7 +182,7 @@ class Job:
 
             # create and authorize the task, appending it to the job if authorization was successful
             # otherwise reject the job.
-            task = Job.JOB_TYPES["tasks"][ stage["task"] ](job, **stage)
+            task = Job.JOB_TYPES["tasks"][ stage["task"] ](job, **stage, **kwargs)
 
             if uac.access_level < task.access_level():    # TODO: UAC Update.
                 return None, "Failed to create job. User does not have permission to run task."

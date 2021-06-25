@@ -28,9 +28,6 @@ class Prepare( base_activities.BaseTask ):
 
         # lock the project directory, to prevent it being modified by another activity.
         with common.LockDirectory( self._get_format_value( 'project_dir' ) ) as lock_dir:
-            _print("Directory Locked. @ ", time.time())
-            _print("sleeping for 10 seconds")
-            time.sleep(10)
             with terminal.Terminal() as console:
 
                 # create the output and logs directory
@@ -60,7 +57,6 @@ class Prepare( base_activities.BaseTask ):
                 # Change to the main project source directory, and run the prepare main commands.
                 self.terminal_write( f"cd {self._get_format_value('project_source_dir')}", console, log_output_filepath)
 
-                # TODO: at this point we need to lock the directory, to prevent another process updating it.
                 # TODO: Start SSH agent if used.
                 # TODO: run prepare main commands.
 

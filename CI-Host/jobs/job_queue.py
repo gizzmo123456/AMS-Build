@@ -68,6 +68,16 @@ class JobQueue:
             _print( "Unable to create jobs. Jobs not defined in pipeline config" )
             return False
 
+        pipeline_data = {   # Pipeline data to be passed into the activities
+            "active": pipeline_config.setdefault("active", True),
+            "dummy-task": pipeline_config.setdefault("dummy-task", False),
+            "output-name-format": pipeline_config.setdefault("output-name-format", "{project}-{job-name}-{build-id}")
+        }
+
+        if pipeline_data["active"] == False:
+            _print("Unable to create job. Pipeline file is not active")
+            return False
+
         output_message = ""             # output message to be pushed into the complete callback.
         jobs_to_queue = []
         jobs = pipeline_config["jobs"]
@@ -82,8 +92,10 @@ class JobQueue:
                 output_message += f"Skipping job '{job}' contains no stages\n"
                 continue
 
+            pipeline_data["job-name"] = job
+
             stages = jobs[job]["stages"]
-            created_job, message = job_obj.Job.create_job_of_tasks( uac, project, stages )
+            created_job, message = job_obj.Job.create_job_of_tasks( uac, project, stages, **pipeline_data )
 
             output_message += message
 
