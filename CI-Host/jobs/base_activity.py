@@ -1,5 +1,6 @@
 from const import *
 from datetime import datetime
+import commonProject
 import DEBUG
 
 _print = DEBUG.LOGS.print
@@ -59,6 +60,14 @@ class BaseActivity:
         self.job = job                  # the job that owns/created the activity
         self.activity_data = kwargs     # stage/activity data from config/pipeline.
 
+        # load in the config file if defined in kwargs
+        if "conf" in kwargs:
+            conf = commonProject.get_project_config( job.uac, job.project, kwargs["conf"] )
+            if conf is not None:
+                self.activity_data.update( conf )
+            else:
+                _print( f"unable to load config file '{kwargs['conf']}' for project {job.project}")
+
         # NOTE: there should be no overlap in key values between the public and private format values.
         # define default data for all activities
         self.__format_values = {
@@ -66,7 +75,7 @@ class BaseActivity:
             # project
             "project": job.project,
             "branch": "master",                     # TODO: <<
-            "build-index": 0,                          # TODO: Load in the current build index.
+            "build-index": 0,                       # TODO: Load in the current build index.
             # hashes
             "activity_hash": "some hash in sha-1",  # TODO: <<
             # util
