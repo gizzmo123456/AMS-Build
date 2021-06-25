@@ -5,6 +5,7 @@ import subprocess
 import json
 import os
 from filelock import FileLock
+from filelock import Timeout as FLTimeout
 import DEBUG
 _print = DEBUG.LOGS.print
 
@@ -129,11 +130,12 @@ class LockDirectory:
         self.lock_file = FileLock( directory + ".dir_lock" )
 
     def __enter__(self):
+        try:
+            self.lock_file.acquire(timeout=0.01)
+        except FLTimeout :
+            _print( f"Waiting for directory '{self.directory}' to unlocked." )
+            self.lock_file.acquire()    # wait for the file to unlock.
 
-        if self.is_locked:
-            _print( f"Waiting for directory '{self.directory}' to unlock. ")
-
-        self.lock_file.acquire()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
