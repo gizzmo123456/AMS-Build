@@ -24,7 +24,7 @@ class Prepare( base_activities.BaseTask ):
         if "ssh" in self.activity_data:
             # attempt to load the ssh config file.
             name = self.activity_data["ssh"]
-            ssh_conf = commonProject.get_project_config( self.job.uac, self.job.project, "ssh.json")
+            ssh_conf = commonProject.get_project_config( self.job.uac, self.job.project, "ssh")
 
             if ssh_conf is None:
                 _print("Unable to load SSH config", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
@@ -100,7 +100,7 @@ class Prepare( base_activities.BaseTask ):
                         # s) Identity added: {path} (user)
                         # f) {Path}: No such file or directory
                 else:
-                    _print("No SSH Agent used!")
+                    _print("SSH Agent not required!", output_filename=f"{log_output_filepath}", console=True)
 
                 # TODO: run prepare main commands.
 
