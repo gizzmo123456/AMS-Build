@@ -49,6 +49,9 @@ def read_file( file_name, lock=False ):
 
     return data
 
+def file_exist( filepath ):
+    """Returns true if the file exist"""
+    return os.path.isfile( filepath )
 
 def get_dict_from_json( file_name, lock_file=False ):
     """returns json string as dict, empty if not valid"""
