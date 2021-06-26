@@ -87,7 +87,7 @@ class Prepare( base_activities.BaseTask ):
                     output = self.terminal_write( "eval $(ssh-agent -s)", console, log_output_filepath )
                     pid = re.findall( r'Agent pid ([0-9]+)', output )
                     if len( pid ) != 1:
-                        _print("Failed to capture SSH agent pid. killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=f"{log_output_filepath}", console=True)
+                        _print("Failed to capture SSH agent pid. killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=log_output_filepath, console=True)
                         self.terminal_write("eval $(ssh-agent -k)", console, log_output_filepath)
                     else:
                         self._private_format_values["ssh"]["pid"] = pid[0]
@@ -103,17 +103,30 @@ class Prepare( base_activities.BaseTask ):
                             self._private_format_values["ssh"]["key_count"] += 1
                             _print("Key added successfully!", output_filename=log_output_filepath, console=True )
                         else:
-                            _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=f"{log_output_filepath}", console=True )
+                            _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=log_output_filepath, console=True )
 
                 else:
                     _print("SSH Agent not required!", output_filename=log_output_filepath, console=True)
 
-                # TODO: run prepare main commands.
+                # load the cmd to run in the main and output source directory
+                run_main_cmd = []
+                run_output_cmd = []
+
                 if "run" in self.activity_data:
-                    pass
+                    if type( self.activity_data["run"] ) is dict:
+                        run_main_cmd = self.activity_data["run"].get("main", [])
+                        run_output_cmd = self.activity_data["run"].get("output", [])
+                    else:
+                        _print("run is of an incorrect format. Must be a dict, containing keys 'main' and 'output' with a list of commands for values.",
+                               message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                               output_filename=log_output_filepath, console=True)
                 else:
-                    pass
-                    #_print("")
+                    _print("run is not defined in pipeline or config file.", message_type=DEBUG.LOGS.MSG_TYPE_WARNING,
+                           output_filename=log_output_filepath, console=True)
+
+                # run the main commands
+                for cmd in run_main_cmd:
+                    self.terminal_write( cmd, console, log_output_filepath )
 
                 # kill the ssh-agent once the prepare commands have been run on the main project source.
                 if "pid" in self._private_format_values["ssh"]:
@@ -133,8 +146,9 @@ class Prepare( base_activities.BaseTask ):
                 # change to the output source directory and run the prepare output commands.
                 self.terminal_write( f"cd '{self._get_format_value('output_source_dir')}'", console, log_output_filepath )
 
-                # TODO: run prepare output commands.
+                for cmd in run_output_cmd:
+                    self.terminal_write( cmd, console, log_output_filepath )
 
-        _print("Directory unlocked @ ", time.time())
+        _print(f"Directory '{self._get_format_value( 'project_dir' )}' unlocked @ {time.time()}")
 
-        return base_activities.BaseActivity.STATUS["COMPLETE"], "Activity not implemented"
+        return base_activities.BaseActivity.STATUS["COMPLETE"], f"{self.job.project} has been prepared successfully"
