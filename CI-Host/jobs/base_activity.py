@@ -71,7 +71,7 @@ class BaseActivity:
         # NOTE: there should be no overlap in key values between the public and private format values.
         # define default data for all activities
         self.__format_values = {
-            "job-name": kwargs.setdefault("job-name", "Not-Defined"),
+            "job-name": kwargs.get("job-name", "Not-Defined"),
             # project
             "project": job.project,
             "branch": "master",                     # TODO: <<
@@ -87,10 +87,10 @@ class BaseActivity:
             "completed_at": None
         }
 
-        if kwargs.setdefault("increase-build-index", False):
+        if kwargs.get("increase-build-index", False):
             self.__format_values["build-index"] += 1
 
-        output_name = kwargs.setdefault("output-name-format", DEFAULT_OUTPUT_NAME_FORMAT)
+        output_name = kwargs.get("output-name-format", DEFAULT_OUTPUT_NAME_FORMAT)
         try:
             output_name = self.__format_values["output-name"] =  output_name.format(**self.__format_values)
         except KeyError as e:
@@ -128,12 +128,12 @@ class BaseActivity:
         return self.__status < BaseActivity.STATUS["INVALID"]
 
     def get_format_value(self, key, default_value=None):
-        return self.__format_values.setdefault( key, default_value )
+        return self.__format_values.get( key, default_value )
 
     def _get_format_value(self, key, default_value=None): # for internal use only
         """Gets the private or public format value"""
-        v = self.__private_format_values.setdefault( key, None )
-        v = self.__format_values.setdefault( key, None ) if v is None else v
+        v = self.__private_format_values.get( key, None )
+        v = self.__format_values.get( key, None ) if v is None else v
         return v if v is not None else default_value
 
     @property
