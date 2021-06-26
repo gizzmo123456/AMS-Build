@@ -94,7 +94,7 @@ class BaseActivity:
         try:
             output_name = self._format_values["output-name"] =  output_name.format(**self._format_values)
         except KeyError as e:
-            _print(f"Unable to format output name. (Key error: {e}) Using default output format instead")
+            _print(f"Unable to format output name. (Key error: {e}) Using default output format instead", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
             output_name = self._format_values["output-name"] = DEFAULT_OUTPUT_NAME_FORMAT.format(**self._format_values)
 
         # define project directories
