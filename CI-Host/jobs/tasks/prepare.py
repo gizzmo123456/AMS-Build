@@ -1,9 +1,11 @@
 import jobs.base_activity as base_activities
 import terminal
 import common
+import commonProject
 import DEBUG
 import const
 from datetime import datetime
+import re
 
 import time # temp
 
@@ -15,7 +17,7 @@ class Prepare( base_activities.BaseTask ):
     def init(self):
 
         self.__private_format_values["ssh"] = {
-            "using": False
+            "active": False
         }
 
         # find if ssh should be used.
@@ -32,7 +34,7 @@ class Prepare( base_activities.BaseTask ):
             for conf in ssh_conf:
                 if name == conf["name"]:
                     self.__private_format_values["ssh"]["name"]  = conf["name"]
-                    self.__private_format_values["ssh"]["using"] = conf["active"]
+                    self.__private_format_values["ssh"]["active"] = conf["active"]
                     if conf["active"]:
                         self.__private_format_values["ssh"]["key-name"] = conf["key-name"]
 
@@ -78,14 +80,46 @@ class Prepare( base_activities.BaseTask ):
                 # Change to the main project source directory, and run the prepare main commands.
                 self.terminal_write( f"cd '{self._get_format_value('project_source_dir')}'", console, log_output_filepath)
 
-                # TODO: Start SSH agent if used.
+                # Start SSH agent if used.
+                if self.__private_format_values["ssh"]["active"]:
+                    output = self.terminal_write( "eval $(ssh-agent -s)", console, log_output_filepath )
+                    pid = re.findall( r'Agent pid ([0-9]+)', output )
+                    if len( pid ) != 1:
+                        _print("Failed to capture SSH agent pid. killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=f"{log_output_filepath}", console=True)
+                        self.terminal_write("eval $(ssh-agent -k)", console, log_output_filepath)
+                    else:
+                        self.__private_format_values["ssh"]["pid"] = pid[0]
+
+                        # load the required ssh key into the agent.
+                        output = self.terminal_write( "ssh-add {BASE_DIR}/CI-Host/data/.secrets/.ssh/"
+                                                      "{project}/{key_name}".format( BASE_DIR=const.BASE_DIRECTORY,
+                                                                                     project=self.job.project,
+                                                                                     key_name=self.__private_format_values["ssh"]["key-name"] ),
+                                                      console, log_output_filepath )
+                        # TODO: Check that the key was loaded successfully.
+                        # s) Identity added: {path} (user)
+                        # f) {Path}: No such file or directory
+                else:
+                    _print("No SSH Agent used!")
+
                 # TODO: run prepare main commands.
+
+                # kill the ssh-agent once the prepare commands have been run on the main project source.
+                if "pid" in self.__private_format_values["ssh"]:
+                    output = self.terminal_write( "eval $(ssh-agent -k)", console, log_output_filepath )
+                    killed_pid = re.findall( r'Agent pid ([0-9]+) killed', output )
+                    if len( killed_pid ) == 1 and killed_pid[0] == self.__private_format_values["ssh"]["pid"]:
+                        # remove the pid key to show that no ssh agents are running.
+                        del self.__private_format_values["ssh"]["pid"]
+                        _print("SSH Agent killed!", output_filename=f"{log_output_filepath}", console=True)
+                    else:
+                        _print( f"Failed to kill ssh agent (pid: {self.__private_format_values['ssh']['pid']}).")
 
                 # Copy the main config and project source directory to the output directory
                 self.terminal_write( "cp -r '{project_config_dir}' '{output_config_dir}'".format(**self._all_format_values), console, log_output_filepath )
                 self.terminal_write( "cp -r '{project_source_dir}' '{output_source_dir}'".format(**self._all_format_values), console, log_output_filepath )
 
-                # TODO: From here we can unlock the directory
+
 
                 # change to the output source directory and run the prepare output commands.
                 self.terminal_write( f"cd '{self._get_format_value('output_source_dir')}'", console, log_output_filepath )

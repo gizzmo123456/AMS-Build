@@ -48,6 +48,7 @@ and 'free' for mem usage
 
 - Prepare activity needs to only run once per project, per branch
 
+- pipeline-config can be removed, once new ssh config file is added.
 
 # bugs.
 - [ ] print is cutting off the first character of when printing from terminal. 
