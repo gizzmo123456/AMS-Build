@@ -70,7 +70,7 @@ class BaseActivity:
 
         # NOTE: there should be no overlap in key values between the public and private format values.
         # define default data for all activities
-        self.__format_values = {
+        self._format_values = {
             "job-name": kwargs.get("job-name", "Not-Defined"),
             # project
             "project": job.project,
@@ -88,19 +88,19 @@ class BaseActivity:
         }
 
         if kwargs.get("increase-build-index", False):
-            self.__format_values["build-index"] += 1
+            self._format_values["build-index"] += 1
 
         output_name = kwargs.get("output-name-format", DEFAULT_OUTPUT_NAME_FORMAT)
         try:
-            output_name = self.__format_values["output-name"] =  output_name.format(**self.__format_values)
+            output_name = self._format_values["output-name"] =  output_name.format(**self._format_values)
         except KeyError as e:
             _print(f"Unable to format output name. (Key error: {e}) Using default output format instead")
-            output_name = self.__format_values["output-name"] = DEFAULT_OUTPUT_NAME_FORMAT.format(**self.__format_values)
+            output_name = self._format_values["output-name"] = DEFAULT_OUTPUT_NAME_FORMAT.format(**self._format_values)
 
         # define project directories
         base_dir = f"{PROJECT_DIRECTORY}/{job.project}"
 
-        self.__private_format_values = {
+        self._private_format_values = {
             "project_dir":        f"{base_dir}/master",
             "project_source_dir": f"{base_dir}/master/project_source",
             "project_config_dir": f"{base_dir}/master/config",
@@ -128,24 +128,24 @@ class BaseActivity:
         return self.__status < BaseActivity.STATUS["INVALID"]
 
     def get_format_value(self, key, default_value=None):
-        return self.__format_values.get( key, default_value )
+        return self._format_values.get( key, default_value )
 
     def _get_format_value(self, key, default_value=None): # for internal use only
         """Gets the private or public format value"""
-        v = self.__private_format_values.get( key, None )
-        v = self.__format_values.get( key, None ) if v is None else v
+        v = self._private_format_values.get( key, None )
+        v = self._format_values.get( key, None ) if v is None else v
         return v if v is not None else default_value
 
     @property
     def _all_format_values(self):
-        return { **self.__format_values, **self.__private_format_values }
+        return { **self._format_values, **self._private_format_values }
 
     def set_format_value(self, key, value, private=False):
 
         if private:
-            self.__private_format_values[ key ] = value
+            self._private_format_values[ key ] = value
         else:
-            self.__format_values[ key ] = value
+            self._format_values[ key ] = value
 
     @property
     def log_header(self):
@@ -162,7 +162,7 @@ class BaseActivity:
         # TODO: check job state and permision.
 
         self.__status = BaseActivity.STATUS["ACTIVE"]
-        self.__format_values["executed_at"] = datetime.now().strftime( DATE_TIME_FORMAT )
+        self._format_values["executed_at"] = datetime.now().strftime( DATE_TIME_FORMAT )
 
         self.__status, message = self.activity()
 
