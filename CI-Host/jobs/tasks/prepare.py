@@ -101,14 +101,19 @@ class Prepare( base_activities.BaseTask ):
                         key_added = re.findall( r'^(Identity added:)', output )
                         if len( key_added ) == 1 and key_added[0] == "Identity added:":
                             self._private_format_values["ssh"]["key_count"] += 1
-                            _print("Key added successfully!", output_filename=f"{log_output_filepath}", console=True )
+                            _print("Key added successfully!", output_filename=log_output_filepath, console=True )
                         else:
                             _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=f"{log_output_filepath}", console=True )
 
                 else:
-                    _print("SSH Agent not required!", output_filename=f"{log_output_filepath}", console=True)
+                    _print("SSH Agent not required!", output_filename=log_output_filepath, console=True)
 
                 # TODO: run prepare main commands.
+                if "run" in self.activity_data:
+                    pass
+                else:
+                    pass
+                    #_print("")
 
                 # kill the ssh-agent once the prepare commands have been run on the main project source.
                 if "pid" in self._private_format_values["ssh"]:
