@@ -13,7 +13,28 @@ _print = DEBUG.LOGS.print
 class Prepare( base_activities.BaseTask ):
 
     def init(self):
-        pass
+
+        self.__private_format_values["ssh"] = {
+            "using": False
+        }
+
+        # find if ssh should be used.
+        if "ssh" in self.activity_data:
+            # attempt to load the ssh config file.
+            name = self.activity_data["ssh"]
+            ssh_conf = commonProject.get_project_config( self.job.uac, self.job.project, "ssh.json")
+
+            if ssh_conf is None:
+                _print("Unable to load SSH config", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
+                return
+
+            # Check the name of the ssh key exist and load relevant data.
+            for conf in ssh_conf:
+                if name == conf["name"]:
+                    self.__private_format_values["ssh"]["name"]  = conf["name"]
+                    self.__private_format_values["ssh"]["using"] = conf["active"]
+                    if conf["active"]:
+                        self.__private_format_values["ssh"]["key-name"] = conf["key-name"]
 
     def terminal_write(self, cmd, term, stdout_file):
         success, output = term.write( cmd )
