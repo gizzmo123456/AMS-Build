@@ -26,17 +26,18 @@ class Prepare( base_activities.BaseTask ):
             name = self.activity_data["ssh"]
             ssh_conf = commonProject.get_project_config( self.job.uac, self.job.project, "ssh")
 
-            if ssh_conf is None:
+            if name is None or ssh_conf is None:
                 _print("Unable to load SSH config", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
                 return
 
             # Check the name of the ssh key exist and load relevant data.
             for conf in ssh_conf:
-                if name == conf["name"]:
+                if name == conf.get("name", None):
+                    key_name = conf.get("key-name", None)
                     self._private_format_values["ssh"]["name"]  = conf["name"]
-                    self._private_format_values["ssh"]["active"] = conf["active"]
+                    self._private_format_values["ssh"]["active"] = key_name is not None and conf.get("active", False)
                     if conf["active"]:
-                        self._private_format_values["ssh"]["key-name"] = conf["key-name"]
+                        self._private_format_values["ssh"]["key-name"] = key_name
 
     def terminal_write(self, cmd, term, stdout_file):
         success, output = term.write( cmd )
@@ -118,8 +119,6 @@ class Prepare( base_activities.BaseTask ):
                 # Copy the main config and project source directory to the output directory
                 self.terminal_write( "cp -r '{project_config_dir}' '{output_config_dir}'".format(**self._all_format_values), console, log_output_filepath )
                 self.terminal_write( "cp -r '{project_source_dir}' '{output_source_dir}'".format(**self._all_format_values), console, log_output_filepath )
-
-
 
                 # change to the output source directory and run the prepare output commands.
                 self.terminal_write( f"cd '{self._get_format_value('output_source_dir')}'", console, log_output_filepath )
