@@ -37,7 +37,8 @@ class Prepare( base_activities.BaseTask ):
                     self._private_format_values["ssh"]["name"]  = conf["name"]
                     self._private_format_values["ssh"]["active"] = key_name is not None and conf.get("active", False)
                     if conf["active"]:
-                        self._private_format_values["ssh"]["key-name"] = key_name
+                        self._private_format_values["ssh"]["key-name"]  = key_name
+                        self._private_format_values["ssh"]["key_count"] = 0
 
     def terminal_write(self, cmd, term, stdout_file):
         success, output = term.write( cmd )
@@ -97,9 +98,13 @@ class Prepare( base_activities.BaseTask ):
                                                                                      project=self.job.project,
                                                                                      key_name=self._private_format_values["ssh"]["key-name"] ),
                                                       console, log_output_filepath )
-                        # TODO: Check that the key was loaded successfully.
-                        # s) Identity added: {path} (user)
-                        # f) {Path}: No such file or directory
+                        key_added = re.findall( r'^(Identity added:)', output )
+                        if len( key_added ) == 1 and key_added[0] == "Identity added:":
+                            self._private_format_values["ssh"]["key_count"] += 1
+                            _print("Key added successfully!", output_filename=f"{log_output_filepath}", console=True )
+                        else:
+                            _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=f"{log_output_filepath}", console=True )
+
                 else:
                     _print("SSH Agent not required!", output_filename=f"{log_output_filepath}", console=True)
 
