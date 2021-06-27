@@ -221,7 +221,7 @@ if __name__ == "__main__":
 
     # start the job Job Queue
     job_queue = jobs.job_queue.JobQueue()
-    jobs.job.Job.complete_callback = lambda job: job_queue.queue_job( jobs.job.Job( job.uac, job.project ) )   # queue an empty job to unblock the queue.
+    jobs.job.Job.complete_callback = lambda job: job_queue.queue_job( jobs.job.Job( job.uac, job.project, queue_unblock=True ) )   # queue an empty job to unblock the queue.
     webhook.Webhook.job_queue = job_queue
 
     # assign the shared queue with only the required objects to the modules

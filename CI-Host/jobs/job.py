@@ -20,6 +20,9 @@ class Job:
     """
 
     STATUS = {
+        "UNBLOCK":  -2,  # This job is be used to solely unblock the job queue.
+                         # As a result the job is not fully initialized and therefore
+                         # will be discarded without execution.
         "STARTING": -1,  # Job is currently being created
         "CREATED":   0,  # The job has been created but waiting to progress to pending
         "PENDING":   1,  # Pending to be promoted to an active task
@@ -28,6 +31,7 @@ class Job:
         "FAILED":    4,  # job has failed
         "INVALID":   5,  # job is invalid
         "NO_AUTH":   6   # user does not have access to preform the job
+
     }
 
     JOB_TYPES = {"actions": Action.__get_subclasses_dict__(), "tasks": Task.__get_subclasses_dict__()}
@@ -41,20 +45,22 @@ class Job:
         """
         return self.__minimal_access_level
 
-    def __init__(self, uac, project): # not sure if kwargs is necessary
+    def __init__(self, uac, project, queue_unblock=False): # not sure if kwargs is necessary
         """
 
         :param uac:
         :param project:
-        :param complete_callback:
-        :param kwargs:
+        :param queue_unblock: if true, the job is discarded without execution.
         """
 
-        self.__status = Job.STATUS["STARTING"]
+        self.__status = Job.STATUS["STARTING"] if not queue_unblock else Job.STATUS["UNBLOCK"]
         self.__minimal_access_level = 2  # webhook and above
 
         self.uac = uac
         self.project = project
+
+        if self.__status == Job.STATUS["UNBLOCK"]:
+            return
 
         self.__project_paths = {
             "root": f"{const.PROJECT_DIRECTORY}/{project}"
@@ -67,6 +73,7 @@ class Job:
             "executed_at": None,
             "completed_at": None
         }
+
         self.update_job_info()
 
         self.job_worker = None
