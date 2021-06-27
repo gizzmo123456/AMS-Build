@@ -1,6 +1,8 @@
 from const import *
 from datetime import datetime
+import time
 import commonProject
+import hashlib
 import DEBUG
 
 _print = DEBUG.LOGS.print
@@ -75,20 +77,17 @@ class BaseActivity:
             # project
             "project": job.project,
             "branch": "master",                     # TODO: <<
-            "build-index": 0,                       # TODO: Load in the current build index.
+            "job-index": job.info["index"],
             # hashes
-            "job_hash": "Some hash in sha-1",       # TODO: <<
-            "activity_hash": "some hash in sha-1",  # TODO: <<
-            "git_hash": None,                       # TODO: <<
+            "job_hash": job.info["hash"],
+            "activity_hash": BaseActivity.__create_activity_hash( job.project, self.__class__.__name__ ),
+            "git_hash": self.activity_data.get("git_hash", None),
             # util
             "actor": job.uac.username,
             "created_at": datetime.now().strftime( DATE_TIME_FORMAT ),
             "executed_at": None,
             "completed_at": None
         }
-
-        if kwargs.get("increase-build-index", False):
-            self._format_values["build-index"] += 1
 
         output_name = kwargs.get("output-name-format", DEFAULT_OUTPUT_NAME_FORMAT)
         try:
@@ -101,6 +100,7 @@ class BaseActivity:
         base_dir = f"{PROJECT_DIRECTORY}/{job.project}"
 
         self._private_format_values = {
+            "root":                  base_dir,
             "project_dir":        f"{base_dir}/master",
             "project_source_dir": f"{base_dir}/master/project_source",
             "project_config_dir": f"{base_dir}/master/config",
@@ -117,6 +117,12 @@ class BaseActivity:
     def init(self):
         """(abstract method to initialize activity)"""
         pass
+
+    @property
+    def log_header(self):
+        return f"{'=' * 24}\n" \
+               f"Activity - {self.__class__.__name__}\n" \
+               f"{'=' * 24}\n"
 
     @property
     def status(self):
@@ -146,12 +152,6 @@ class BaseActivity:
             self._private_format_values[ key ] = value
         else:
             self._format_values[ key ] = value
-
-    @property
-    def log_header(self):
-        return f"{'=' * 24}\n" \
-               f"Activity - {self.__class__.__name__}\n" \
-               f"{'=' * 24}\n"
 
     def execute(self):
         """
@@ -183,6 +183,12 @@ class BaseActivity:
     def terminate(self):
         """ Terminate the activity """
         raise Exception("Not implemented")
+
+    @staticmethod
+    def __create_activity_hash( project_name, activity_name ):
+        s = hashlib.sha1()
+        s.update( f"ACTIVITY-{project_name}-{activity_name}-{time.time()}".encode() )
+        return s.hexdigest()
 
 
 class BaseTask( BaseActivity ):

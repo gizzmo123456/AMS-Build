@@ -1,5 +1,11 @@
 import DEBUG
 import threading
+import common
+from datetime import datetime
+import time
+import const
+import hashlib
+import json
 from jobs.base_activity import BaseActivity as Activity, BaseTask as Task, BaseAction as Action
 
 # this must be here, even if the editor says otherwise.
@@ -35,7 +41,7 @@ class Job:
         """
         return self.__minimal_access_level
 
-    def __init__(self, uac, project, **kwargs): # not sure if kwargs is necessary
+    def __init__(self, uac, project): # not sure if kwargs is necessary
         """
 
         :param uac:
@@ -50,7 +56,18 @@ class Job:
         self.uac = uac
         self.project = project
 
-        self.data = kwargs
+        self.__project_paths = {
+            "root": f"{const.PROJECT_DIRECTORY}/{project}"
+        }
+
+        self.info = {
+            "index": None,
+            "hash": None,
+            "created_at": None,
+            "executed_at": None,
+            "completed_at": None
+        }
+        self.update_job_info()
 
         self.job_worker = None
         self.job_lock = threading.RLock()   # TODO: make thread safe.
@@ -90,6 +107,52 @@ class Job:
     @property
     def activity_count(self):
         return len( self.activities )
+
+    def update_job_info(self):
+        """
+            Gets and update the project job information.
+            (Creates the job info file if does not already exist)
+        """
+
+        # load or create a new job info file.
+
+        default = {
+            "ProjectName": self.project,
+            "latest_job_index": -1,
+            "latest_job_hash": "NONE",
+            "last_job_created_time": -1,
+            "last_job_execute_time": -1,
+            "last_job_complete_time": -1
+        }
+
+        created, job_info = common.get_or_create_json_file(self.__project_paths["root"], "projectJobInfo.json", default)
+
+        # Lock job info file, to minimize another job attempting to update the project info at the same time.
+        # TODO: this should include the get or create json file.
+        with common.LockFile( f"{self.__project_paths['root']}/projectJobInfo.json", "r+" ) as file:
+
+            # update the basic job information, if not already set.
+            if self.info["index"] is None:
+                job_info["latest_job_index"] += 1 if not created else 0
+                self.info["index"] = job_info["latest_job_index"]
+
+            if self.info["hash"] is None:
+                self.info["hash"] = job_info["latest_job_hash"] = Job.__create_job_hash( self.project, self.info["index"] )
+
+            if self.info["created_at"] is None:
+                self.info["created_at"] = job_info["last_job_created_time"] = datetime.now().strftime( const.DATE_TIME_FORMAT )
+
+            # Only update the executed and complete times if they have been set into the job.
+            if self.info["executed_at"] is not None:
+                job_info["last_job_execute_time"] = self.info["executed_at"]
+
+            if self.info["completed_at"] is not None:
+                job_info["last_job_complete_time"] = self.info["completed_at"]
+
+            # update the job info file.
+            file.seek(0)
+            file.write( json.dumps( job_info ) )
+            file.truncate()
 
     def promote_to_pending(self):
         """Promotes the pending task to idle"""
@@ -154,6 +217,13 @@ class Job:
 
     #########
     # Static Methods.
+
+    @staticmethod
+    def __create_job_hash( project_name, job_id ):
+        s = hashlib.sha1()
+        s.update( f"JOB-{project_name}-{job_id}-{time.time()}".encode() )
+        return s.hexdigest()
+
     # The static methods should be preferred over using the constructor directly.
     # Furthermore, mixing tasks and action should be avoided, since actions
     # usually required elevated privileges.
