@@ -10,7 +10,8 @@ import json
 PATHS = {
     "PROJECT":  RELEVENT_PROJECT_PATH+"/{project_name}",
     "INFO":     RELEVENT_PROJECT_PATH+"/{project_name}/projectInfo.json",
-    "PIPELINE": RELEVENT_PROJECT_PATH+"/{project_name}/master/config/pipeline.json"
+    "PIPELINE": RELEVENT_PROJECT_PATH+"/{project_name}/master/config/pipeline.json",
+    "ACTIVITY_LOG": PROJECT_DIRECTORY+"/{project_name}/activity.txt"
 }
 
 
@@ -28,6 +29,30 @@ def project_exist( uac, project_name ):
     """ Check if a project exist """
 
     return uac.has_project_access( project_name ) and __project_exist( project_name )
+
+
+def get_activity_log_path( project_name=None ):
+    """
+        Gets the activity log path for project_name. making sure the file has been created.
+        If the project does not exist or None, the path points to the activity.txt file in the host logs.
+
+        The Activity log is intended for any activity that is preformed on the project,
+        where the data has no dedicated output log file.
+
+        This is useful to see if activity has been reject or whatever.
+    """
+
+    if project_name is not None and __project_exist( project_name ):
+        path = PATHS["ACTIVITY_LOG"].format( project_name=project_name )
+        name = project_name
+    else:
+        path = f"{LOG_PATH}/activity.txt"
+        name = "Host Activity"
+
+    if not common.file_exist( path ):
+        common.write_file( path, f"Activity Log for {name}\n{'='*24}" )
+
+    return path
 
 
 def get_project_list( uac ):
