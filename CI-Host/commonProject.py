@@ -50,7 +50,7 @@ def get_activity_log_path( project_name=None ):
         name = "Host Activity"
 
     if not common.file_exist( path ):
-        common.write_file( path, f"Activity Log for {name}\n{'='*24}" )
+        common.write_file( path, f"Activity Log for {name}\n{'='*24}\n" )
 
     return path
 

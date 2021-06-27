@@ -26,7 +26,7 @@ class Webhook( baseHTTPServer.BaseServer ):
 
         activity_log_filepath = commonProject.get_activity_log_path(None)
 
-        _print(f"Received Webhook. (path: {self.path})")
+        _print(f"Received Webhook. (path: {self.path})", output_filename=activity_log_filepath )
 
         request = urlparse( self.path )
         path = request.path
