@@ -141,10 +141,13 @@ class JobQueue:
 
                 # move the new job to the pending queue.
                 if new_job is not None:
-                    if not new_job.compare_status("UNBLOCK") and new_job.activity_count > 0:
+                    is_unblock = new_job.compare_status("UNBLOCK")
+                    if not is_unblock and new_job.activity_count > 0:
                         self.__pending.append( new_job )
+                    elif is_unblock:
+                        _print(f"Received unblock job from project {new_job.project}")
                     else:
-                        _print("skipping new job. No activities set. (Unblock Task)")
+                        _print(f"skipping new job from project {new_job.project}. No activities set.")
                     new_job = None
 
                 # Clean up active tasks that have completed.
