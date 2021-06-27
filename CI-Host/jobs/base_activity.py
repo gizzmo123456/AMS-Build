@@ -202,6 +202,8 @@ class BaseActivity:
             (This is called when the activity completes)
         """
 
+        _print(f"Appending activity info to file...")
+
         # define default activity information
         activity_info = {
             "activity": self.__class__.__name__,
