@@ -24,7 +24,10 @@ class Webhook( baseHTTPServer.BaseServer ):
 
     def do_POST( self ):
 
-        _print("Processing Webhook :)")
+        activity_log_filepath = commonProject.get_activity_log_path(None)
+
+        _print(f"Received Webhook. (path: {self.path})")
+
         request = urlparse( self.path )
         path = request.path
         query = dict(parse_qsl( request.query ))
@@ -35,16 +38,22 @@ class Webhook( baseHTTPServer.BaseServer ):
 
         if path != f"/{Webhook.ROOT}/request" or "name" not in query or "project" not in query:
             self.process_request( "Error", 404, False )
-            _print( "Bad webhook request, maybe name or project not set?", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            _print( f"Bad webhook request (path: {self.path}). Invalid Path, name or project",
+                    message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                    output_filename=activity_log_filepath )
         else:
 
-            _print("WH DATA IN: ", content_str )
+            # attempt to redirect the activity log to the projects activity log (if exist)
+            activity_log_filepath = commonProject.get_activity_log_path(query["project"])
+            _print("Webhook POST data: ", content_str, output_filename=activity_log_filepath, console=False )
+
             fields = commonProject.get_project_webhook_fields( query["project"] )
 
             # bit bucket give us an option to test the connection.
             test_conn = common.get_value_at_key( post_data, *fields["test"] )
             if test_conn is not None and test_conn:
                 self.process_request( "Ok", 200, False )
+                _print("Webhook: Test connection successful ", output_filename=activity_log_filepath, console=False)
                 return
 
             # Get required data from post data.
@@ -54,7 +63,10 @@ class Webhook( baseHTTPServer.BaseServer ):
             build_hash = common.get_value_at_key( post_data, *fields["hash"] )      # TODO: rename to git hash
 
             if actor is None or repo_name is None or build_hash is None or branch is None:
-                _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print("Webhook: required data not supplied",
+                       message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                       output_filename=activity_log_filepath,
+                       console=False )
                 self.process_request( "Error", 404, False )
                 return
 
@@ -66,7 +78,10 @@ class Webhook( baseHTTPServer.BaseServer ):
             webhook_config = commonProject.get_project_config( uac, query[ "project" ], "webhooks" )
 
             if webhook_config is None:
-                _print( f"Error: Invalid project or Access. Project: { query[ 'project' ] } | Actor: { actor }", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( f"Webhook: Invalid project or Access. Project: { query[ 'project' ] } | Actor: { actor }",
+                        message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                        output_filename=activity_log_filepath,
+                        console=False )
                 self.process_request( "Error", 404, False )
                 return
 
@@ -86,21 +101,33 @@ class Webhook( baseHTTPServer.BaseServer ):
                     break
 
             if repo_name != webhook_repo:
-                _print("Error, Unreconzied repo has trigger webhook for project", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print("Webhook:, Unrecognized repo has trigger webhook for project", query[ "project" ],
+                       message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                       output_filename=activity_log_filepath,
+                       console=False )
                 self.process_request( "Error", 404, False )
                 return
 
             if branch != webhook_branch:
-                _print( f"Webhook has been trigger by incorrect branch ({webhook_branch} != {branch}). Project: {query[ 'project' ]}", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
+                _print( f"Webhook: triggered by incorrect branch ({webhook_branch} != {branch}). Project: {query[ 'project' ]}",
+                        message_type=DEBUG.LOGS.MSG_TYPE_WARNING,
+                        output_filename=activity_log_filepath,
+                        console=False )
                 self.process_request( "Error", 404, False )
                 return
 
             if webhook_actors is None:
-                _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print("Webhook: name (", query["name"],") not defined for project ", query[ "project" ],
+                       message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                       output_filename=activity_log_filepath,
+                       console=False )
                 self.process_request( "Error", 404, False )
                 return
             elif actor not in webhook_actors:
-                _print( "Error: Invalid actor (", actor, "), for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+                _print( "Webhook: Invalid actor (", actor, "), for project ", query[ "project" ],
+                        message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                        output_filename=activity_log_filepath,
+                        console=False )
                 self.process_request( "Error", 404, False )
                 return
 
@@ -113,6 +140,11 @@ class Webhook( baseHTTPServer.BaseServer ):
         request = urlparse( self.path )
         path = request.path
         query = parse_qsl( request.query )
+
+        _print(f"Webhook: No data supplied (path: {self.path})",
+               message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+               output_filename=commonProject.get_activity_log_path(None),
+               console=False)
 
         if path != "/request":
             self.process_request("", 404, True)
