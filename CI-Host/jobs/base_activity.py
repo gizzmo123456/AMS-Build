@@ -1,7 +1,9 @@
 from const import *
 from datetime import datetime
 import time
+import common
 import commonProject
+import json
 import cipher
 import DEBUG
 
@@ -100,7 +102,7 @@ class BaseActivity:
         base_dir = f"{PROJECT_DIRECTORY}/{job.project}"
 
         self._private_format_values = {
-            "root":                  base_dir,
+            "project_root":                  base_dir,
             "project_dir":        f"{base_dir}/master",
             "project_source_dir": f"{base_dir}/master/project_source",
             "project_config_dir": f"{base_dir}/master/config",
@@ -167,6 +169,7 @@ class BaseActivity:
         self.__status, message = self.activity()
 
         self.set_format_value( "completed_at", datetime.now().strftime( DATE_TIME_FORMAT ) )
+        self._append_activity_info_to_file()
 
         return self.__status, message
 
@@ -178,11 +181,54 @@ class BaseActivity:
 
     def cleanup(self):
         """ Cleans up the activity once complete"""
-        raise Exception("Not implemented")
+        raise Exception("Not Implemented")
 
     def terminate(self):
         """ Terminate the activity """
-        raise Exception("Not implemented")
+        raise Exception("Not Implemented")
+
+    @property
+    def _activity_info(self):
+        """ (Abstract)
+            Defines the activity info to be append to file.
+        :return: dict of activity info to append to file.
+        :raise: Exception if activity info should not be appended to file.
+        """
+        raise Exception("Not Implemented")
+
+    def _append_activity_info_to_file(self):
+        """
+            Appends activity info to file including self._activity_info.
+            (This is called when the activity completes)
+        """
+
+        # define default activity information
+        activity_info = {
+            "activity": self.__class__.__name__,
+            "job_hash": self._format_values.get("job_hash", "Error"),
+            "activity_hash": self._format_values.get("job_hash", "Error"),
+        }
+
+        # append the additional info, if implemented.
+        try:
+            activity_info.update( self._activity_info )
+        except Exception as e:
+            _print(f"No additional activity info supplied: {e}")
+
+        activity_filepath = f"{self._private_format_values['project_root']}/projectActivityInfo.json"
+
+        new_file = False
+
+        if common.file_exist( activity_filepath ):
+            common.write_file(activity_filepath, "")
+            new_file = True
+
+        # Note. The activity info json file needs to be wrapped in '[]' to make it valid json.
+        #       We do this so we can just append the data to file, without having to decode the json ect...
+
+        with common.LockFile( activity_filepath, mode="a" ) as file:
+            comma = "," if not new_file else ""
+            file.write( f"{comma}{json.dumps( activity_info )}" )
 
     @staticmethod
     def __create_activity_hash( project_name, activity_name ):
