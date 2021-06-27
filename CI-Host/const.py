@@ -10,6 +10,7 @@ BASE_DIRECTORY = config_manager.ConfigManager.get( "base_directory", "${HOME}/am
 
 PROJECT_DIRECTORY = BASE_DIRECTORY + "/CI-projects"
 RELEVENT_PROJECT_PATH = "../CI-projects"            # relevant to the CI-Host folder
+LOG_PATH = BASE_DIRECTORY+"/CI-Host/logs"
 
 # Date and Time
 TIME_FORMAT = "%H:%M:%S"
