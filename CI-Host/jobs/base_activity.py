@@ -221,7 +221,7 @@ class BaseActivity:
 
         new_file = False
 
-        if common.file_exist( activity_filepath ):
+        if not common.file_exist( activity_filepath ):
             common.write_file(activity_filepath, "")
             new_file = True
 
