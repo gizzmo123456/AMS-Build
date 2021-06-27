@@ -4,7 +4,7 @@ import common
 from datetime import datetime
 import time
 import const
-import hashlib
+import cipher
 import json
 from jobs.base_activity import BaseActivity as Activity, BaseTask as Task, BaseAction as Action
 
@@ -220,9 +220,7 @@ class Job:
 
     @staticmethod
     def __create_job_hash( project_name, job_id ):
-        s = hashlib.sha1()
-        s.update( f"JOB-{project_name}-{job_id}-{time.time()}".encode() )
-        return s.hexdigest()
+        return cipher.Hash.sha1(f"JOB-{project_name}-{job_id}-{time.time()}")
 
     # The static methods should be preferred over using the constructor directly.
     # Furthermore, mixing tasks and action should be avoided, since actions

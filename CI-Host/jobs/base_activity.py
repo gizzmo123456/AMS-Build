@@ -2,7 +2,7 @@ from const import *
 from datetime import datetime
 import time
 import commonProject
-import hashlib
+import cipher
 import DEBUG
 
 _print = DEBUG.LOGS.print
@@ -186,9 +186,7 @@ class BaseActivity:
 
     @staticmethod
     def __create_activity_hash( project_name, activity_name ):
-        s = hashlib.sha1()
-        s.update( f"ACTIVITY-{project_name}-{activity_name}-{time.time()}".encode() )
-        return s.hexdigest()
+        return cipher.Hash.sha1(f"ACTIVITY-{project_name}-{activity_name}-{time.time()}")
 
 
 class BaseTask( BaseActivity ):

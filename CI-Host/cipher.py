@@ -5,6 +5,8 @@ from Crypto.Cipher import AES as crypto_aes
 from Crypto.Random import get_random_bytes
 from Crypto.Hash import BLAKE2b
 
+import hashlib
+
 class Cipher:
 
     def __init__( self, secrets_path, cipher_name, key_length=16 ):
@@ -50,6 +52,13 @@ class Hash( Cipher ):
         self.hasher.update( data_str.encode() )
 
         return self.hasher.hexdigest()
+
+    @staticmethod
+    def sha1(data_str):
+        """ Creates SHA1 hash"""
+        s = hashlib.sha1()
+        s.update(data_str.encode())
+        return s.hexdigest()
 
 # TODO: Update AES to support the base Cipher class
 class AES:
