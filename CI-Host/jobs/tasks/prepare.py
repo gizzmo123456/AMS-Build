@@ -27,7 +27,8 @@ class Prepare( base_activities.BaseTask ):
             ssh_conf = commonProject.get_project_config( self.job.uac, self.job.project, "ssh")
 
             if name is None or ssh_conf is None:
-                _print("Unable to load SSH config", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
+                _print(f"{self._print_lable} Unable to load SSH config", message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
+                       console=False, output_filename=self._activity_log_filepath)
                 return
 
             # Check the name of the ssh key exist and load relevant data.
@@ -42,10 +43,13 @@ class Prepare( base_activities.BaseTask ):
 
     def terminal_write(self, cmd, term, stdout_file):
         success, output = term.write( cmd )
-        _print( output, output_filename=stdout_file, console=True )
+        _print( output, output_filename=stdout_file, console=False )
         return output
 
     def activity(self):
+
+        _print(f"{self._print_lable} Starting Activity!",
+               console=False, output_filename=self._activity_log_filepath)
 
         output_dir = self._get_format_value('output_dir')
         log_dir = self._get_format_value('logs_output_dir')
@@ -53,6 +57,8 @@ class Prepare( base_activities.BaseTask ):
 
         # lock the project directory, to prevent it being modified by another activity.
         with common.LockDirectory( self._get_format_value( 'project_dir' ) ) as lock_dir:
+            _print(f"{self._print_lable} Directory '{self._get_format_value('project_dir')}' locked @ {time.time()}",
+                   output_filename=f"{self._activity_log_filepath}", console=False)
             with terminal.Terminal() as console:
 
                 # create the output and logs directory
@@ -77,7 +83,7 @@ class Prepare( base_activities.BaseTask ):
                                                              f"Created At: {datetime.now().strftime( const.DATE_TIME_FORMAT )}\n"   # use the time the file was created.
                                                              f"{self.log_header}")
                 for o in queued_outputs:
-                    _print(o, output_filename=f"{log_output_filepath}", console=True)
+                    _print(o, output_filename=f"{log_output_filepath}", console=False)
 
                 # Change to the main project source directory, and run the prepare main commands.
                 self.terminal_write( f"cd '{self._get_format_value('project_source_dir')}'", console, log_output_filepath)
@@ -87,7 +93,7 @@ class Prepare( base_activities.BaseTask ):
                     output = self.terminal_write( "eval $(ssh-agent -s)", console, log_output_filepath )
                     pid = re.findall( r'Agent pid ([0-9]+)', output )
                     if len( pid ) != 1:
-                        _print("Failed to capture SSH agent pid. killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=log_output_filepath, console=True)
+                        _print("Failed to capture SSH agent pid. killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=log_output_filepath, console=False)
                         self.terminal_write("eval $(ssh-agent -k)", console, log_output_filepath)
                     else:
                         self._private_format_values["ssh"]["pid"] = pid[0]
@@ -101,12 +107,12 @@ class Prepare( base_activities.BaseTask ):
                         key_added = re.findall( r'^(Identity added:)', output )
                         if len( key_added ) == 1 and key_added[0] == "Identity added:":
                             self._private_format_values["ssh"]["key_count"] += 1
-                            _print("Key added successfully!", output_filename=log_output_filepath, console=True )
+                            _print("Key added successfully!", output_filename=log_output_filepath, console=False )
                         else:
-                            _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=log_output_filepath, console=True )
+                            _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=log_output_filepath, console=False )
 
                 else:
-                    _print("SSH Agent not required!", output_filename=log_output_filepath, console=True)
+                    _print("SSH Agent not required!", output_filename=log_output_filepath, console=False)
 
                 # load the cmd to run in the main and output source directory
                 run_main_cmd = []
@@ -119,10 +125,10 @@ class Prepare( base_activities.BaseTask ):
                     else:
                         _print("run is of an incorrect format. Must be a dict, containing keys 'main' and 'output' with a list of commands for values.",
                                message_type=DEBUG.LOGS.MSG_TYPE_ERROR,
-                               output_filename=log_output_filepath, console=True)
+                               output_filename=log_output_filepath, console=False)
                 else:
                     _print("run is not defined in pipeline or config file.", message_type=DEBUG.LOGS.MSG_TYPE_WARNING,
-                           output_filename=log_output_filepath, console=True)
+                           output_filename=log_output_filepath, console=False)
 
                 # run the main commands
                 for cmd in run_main_cmd:
@@ -135,9 +141,10 @@ class Prepare( base_activities.BaseTask ):
                     if len( killed_pid ) == 1 and killed_pid[0] == self._private_format_values["ssh"]["pid"]:
                         # remove the pid key to show that no ssh agents are running.
                         del self._private_format_values["ssh"]["pid"]
-                        _print("SSH Agent killed!", output_filename=f"{log_output_filepath}", console=True)
+                        _print("SSH Agent killed!", output_filename=f"{log_output_filepath}", console=False)
                     else:
-                        _print( f"Failed to kill ssh agent (pid: {self._private_format_values['ssh']['pid']}).")
+                        _print( f"Failed to kill ssh agent (pid: {self._private_format_values['ssh']['pid']}).",
+                                message_type=DEBUG.LOGS.MSG_TYPE_ERROR, output_filename=f"{log_output_filepath}", console=False)
 
                 # Copy the main config and project source directory to the output directory
                 self.terminal_write( "cp -r '{project_config_dir}' '{output_config_dir}'".format(**self._all_format_values), console, log_output_filepath )
@@ -149,6 +156,7 @@ class Prepare( base_activities.BaseTask ):
                 for cmd in run_output_cmd:
                     self.terminal_write( cmd, console, log_output_filepath )
 
-        _print(f"Directory '{self._get_format_value( 'project_dir' )}' unlocked @ {time.time()}")
+        _print(f"{self._print_lable} Directory '{self._get_format_value( 'project_dir' )}' unlocked @ {time.time()}",
+               output_filename=f"{self._activity_log_filepath}", console=False)
 
         return base_activities.BaseActivity.STATUS["COMPLETE"], f"{self.job.project} has been prepared successfully"

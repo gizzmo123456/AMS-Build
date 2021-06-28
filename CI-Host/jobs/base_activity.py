@@ -54,7 +54,7 @@ class BaseActivity:
         return 2    # webhooks and above
 
     @property
-    def __print_lable(self):
+    def _print_lable(self):
         return f"Job {self.job.info['hash']} -> {self.__class__.__name__} {self._format_values['activity_hash'] if 'activity_hash' in self._format_values else ''}:"
 
     def __init__(self, job, **kwargs):
@@ -75,7 +75,7 @@ class BaseActivity:
             if conf is not None:
                 self.activity_data.update( conf )
             else:
-                _print( f"{self.__print_lable} unable to load config file '{kwargs['conf']}' for project {job.project}",
+                _print( f"{self._print_lable} unable to load config file '{kwargs['conf']}' for project {job.project}",
                         console=False, output_filename=self._activity_log_filepath) # TODO: i think this should be pushed into the output log file.
 
         # NOTE: there should be no overlap in key values between the public and private format values.
@@ -101,8 +101,8 @@ class BaseActivity:
         try:
             output_name = self._format_values["output-name"] =  output_name.format(**self._format_values)
         except KeyError as e:
-            _print(f"{self.__print_lable} Unable to format output name. (Key error: {e}) Using default output format instead",
-                   message_type=DEBUG.LOGS.MSG_TYPE_WARNING, console=False, output_filename=self._activity_log_filepath )
+            _print(f"{self._print_lable} Unable to format output name. (Key error: {e}) Using default output format instead",
+                   message_type=DEBUG.LOGS.MSG_TYPE_WARNING, console=False, output_filename=self._activity_log_filepath)
             output_name = self._format_values["output-name"] = DEFAULT_OUTPUT_NAME_FORMAT.format(**self._format_values)
 
         # define project directories
@@ -209,7 +209,7 @@ class BaseActivity:
             (This is called when the activity completes)
         """
 
-        _print(f"{self.__print_lable} Appending activity info to file...", console=False, output_filename=self._activity_log_filepath)
+        _print(f"{self._print_lable} Appending activity info to file...", console=False, output_filename=self._activity_log_filepath)
 
         # define default activity information
         activity_info = {
@@ -222,7 +222,7 @@ class BaseActivity:
         try:
             activity_info.update( self._activity_info )
         except Exception as e:
-            _print(f"{self.__print_lable} No additional activity info supplied: {e}", console=False, output_filename=self._activity_log_filepath)
+            _print(f"{self._print_lable} No additional activity info supplied: {e}", console=False, output_filename=self._activity_log_filepath)
 
         activity_filepath = f"{self._private_format_values['project_root']}/projectActivityInfo.json"
 
