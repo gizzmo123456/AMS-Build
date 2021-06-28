@@ -46,6 +46,16 @@ class Job:
         """
         return self.__minimal_access_level
 
+    @property
+    def hash(self):
+        try:
+            return self.info["hash"]
+        except:
+            if self.__status == Job.STATUS["UNBLOCK"]:
+                return "Unblock Task."
+            else:
+                return "Job hash not set! (None)"
+
     def __init__(self, uac, project, queue_unblock=False): # not sure if kwargs is necessary
         """
 

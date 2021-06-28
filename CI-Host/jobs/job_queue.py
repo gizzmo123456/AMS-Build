@@ -129,7 +129,7 @@ class JobQueue:
 
             # wait for a new job to arrive while theres no jobs pending.
             new_job = self.__queue.get( block=True, timeout=None )
-            _print(f"Collected new job (job status code: {new_job.status})")
+            _print(f"Job Queue: Collected new job (job status code: {new_job.status} hash: {new_job.hash})")
 
             # process the active and pending queues
             # 1. when a new job arrives
@@ -145,9 +145,9 @@ class JobQueue:
                     if not is_unblock and new_job.activity_count > 0:
                         self.__pending.append( new_job )
                     elif is_unblock:
-                        _print(f"Received unblock job from project '{new_job.project}'")
+                        _print(f"Job Queue: Received unblock job from project '{new_job.project}'")
                     else:
-                        _print(f"skipping new job from project '{new_job.project}'. No activities set.")
+                        _print(f"Job Queue: Skipping new job from project '{new_job.project}'. No activities set.")
                     new_job = None
 
                 # Clean up active tasks that have completed.
@@ -156,7 +156,7 @@ class JobQueue:
                         completed_job = self.__active.pop( i )
                         self.update_queue_file = True
                         print_queue_stats = True
-                        _print( f"Job completed with status { completed_job.status_name } (status code: { completed_job.status })" )
+                        _print( f"Job Queue: Job ({completed_job.hash}) completed with status { completed_job.status_name } (status code: { completed_job.status })" )
 
                 # promote any pending tasks, if there is an active slot available.
                 if len( self.__active ) < JobQueue.MAX_ACTIVE_JOBS:
@@ -168,7 +168,7 @@ class JobQueue:
                             self.__active.append( promoted_task )
                             promoted_task.execute()
                             self.update_queue_file = True
-                            _print( "promoted pending task to active." )
+                            _print( f"Job Queue: promoted pending job ({promoted_task.hash}) to active." )
                         print_queue_stats = True    # TODO: this needs to be tabbed over. (here for debuging)
 
                 if self.update_queue_file:
@@ -176,7 +176,7 @@ class JobQueue:
                     pass
 
                 if print_queue_stats:
-                    _print( f"active tasks: {len(self.__active)}; pending tasks: {len(self.__pending)}")  # TODO: this should print out the name of the status rather than status code.
+                    _print( f"Job Queue: active tasks: {len(self.__active)}; pending tasks: {len(self.__pending)}")  # TODO: this should print out the name of the status rather than status code.
                     print_queue_stats = False
 
                 # take a nap.

@@ -54,15 +54,15 @@ class BaseActivity:
         return 2    # webhooks and above
 
     @property
-    def activity_id(self):
+    def hash(self):
         try:
             return self._format_values['activity_hash']
         except:
-            return "Not Set."
+            return "Activity Hash Not Set. (None)"
 
     @property
     def _print_lable(self):
-        return f"Job {self.job.info['hash']} -> {self.__class__.__name__} {self.activity_id}:"
+        return f"Job {self.job.info['hash']} -> {self.__class__.__name__} {self.hash}:"
 
     def __init__(self, job, **kwargs):
         """
