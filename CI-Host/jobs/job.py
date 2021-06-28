@@ -211,7 +211,7 @@ class Job:
 
         while self.status < Job.STATUS["COMPLETE"]:
 
-            _print( f"Job {self.info['hash']}: starting activity { self.current_activity_id + 1 } of {len( self.activities )} ",
+            _print( f"Job {self.info['hash']}: starting activity ({self.activities[ self.current_activity_id ].hash}) { self.current_activity_id + 1 } of {len( self.activities )} ",
                     console=False, output_filename=self._activity_log_filepath)
 
             act = self.activities[ self.current_activity_id ]
