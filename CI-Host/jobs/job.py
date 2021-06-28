@@ -149,7 +149,7 @@ class Job:
 
             # update the basic job information, if not already set.
             if self.info["index"] is None:
-                job_info["latest_job_index"] += 1 if not created else 0
+                job_info["latest_job_index"] += 1
                 self.info["index"] = job_info["latest_job_index"]
 
             if self.info["hash"] is None:
