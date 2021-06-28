@@ -1,6 +1,7 @@
 import DEBUG
 import threading
 import common
+import commonProject
 from datetime import datetime
 import time
 import const
@@ -53,6 +54,10 @@ class Job:
         :param queue_unblock: if true, the job is discarded without execution.
         """
 
+        self._activity_log_filepath = commonProject.get_activity_log_path( project )
+        _print( f"Creating new job for project '{project}'. (Actor: {uac.username})",
+                console=False, output_filename=self._activity_log_filepath )
+
         self.__status = Job.STATUS["STARTING"] if not queue_unblock else Job.STATUS["UNBLOCK"]
         self.__minimal_access_level = 2  # webhook and above
 
@@ -75,6 +80,8 @@ class Job:
         }
 
         self.update_job_info()
+        _print(f"Job index: {self.info['index']}; hash: {self.info['hash']}",
+               console=False, output_filename=self._activity_log_filepath)
 
         self.job_worker = None
         self.job_lock = threading.RLock()   # TODO: make thread safe.
@@ -165,8 +172,11 @@ class Job:
         """Promotes the pending task to idle"""
         if self.status == Job.STATUS["CREATED"]:
             self.__status = Job.STATUS["PENDING"]
+            _print( f"Job {self.info['hash']}: Promoting job to IDLE. Task is not pending.",
+                    console=False, output_filename=self._activity_log_filepath)
         else:
-            _print("Unable to promote the job to IDLE. Task is not pending.")
+            _print( f"Job {self.info['hash']}: Unable to promote job to IDLE. Task is not pending.",
+                    console=False, output_filename=self._activity_log_filepath)
 
     def execute(self):
         """
@@ -174,11 +184,13 @@ class Job:
         """
 
         if self.status != Job.STATUS["PENDING"]:
-            _print( f"Unable to start job. Status is not pending. (current status: {self.status})", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            _print( f"Job {self.info['hash']}: Unable to start job. Status is not pending. (current status: {self.status})",
+                    message_type=DEBUG.LOGS.MSG_TYPE_ERROR, console=False, output_filename=self._activity_log_filepath )
         elif self.job_worker is not None:
-            _print( f"Unable to start job. Job worker is already set.")
+            _print( f"Job {self.info['hash']}: Unable to start job. Job worker is already set.",
+                    console=False, output_filename=self._activity_log_filepath)
 
-        _print( "Starting job worker..." )
+        _print( f"Job {self.info['hash']}: Starting job worker...", console=False, output_filename=self._activity_log_filepath )
 
         self.job_worker = threading.Thread( target=self.execute_worker, args=() )
         self.job_worker.start()
@@ -187,36 +199,41 @@ class Job:
 
         while self.status < Job.STATUS["COMPLETE"]:
 
-            _print( f"starting activity { self.current_activity_id + 1 } of {len( self.activities )} ")
+            _print( f"Job {self.info['hash']}: starting activity { self.current_activity_id + 1 } of {len( self.activities )} ",
+                    console=False, output_filename=self._activity_log_filepath)
 
             act = self.activities[ self.current_activity_id ]
             status, msg = act.execute()
 
             if status != Activity.STATUS["COMPLETE"]:
                 self.__status = Job.STATUS["FAILED"]
-                _print( f"Unable to complete job. The current activity has not exited with status COMPLETE (exit code: {status}, message: {msg}). Exiting job" )
+                _print( f"Job {self.info['hash']}: Unable to complete job. The current activity has not exited with status COMPLETE (exit code: {status}, message: {msg}). Exiting job",
+                        console=False, output_filename=self._activity_log_filepath )
                 break
 
-            _print("Attempting to clean up activity.")
+            _print( f"Job {self.info['hash']}: Attempting to clean up activity.",
+                    console=False, output_filename=self._activity_log_filepath)
 
             try:
                 act.cleanup()
             except Exception as e:
-                _print( "Unable to clean up activity.", e )
+                _print( f"Job {self.info['hash']}: Unable to clean up activity.", e,
+                        console=False, output_filename=self._activity_log_filepath )
 
             self.current_activity_id += 1
 
             if self.current_activity_id == len( self.activities):
                 self.__status = Job.STATUS["COMPLETE"]
-                _print("All Activities are complete for current job")
+                _print( f"Job {self.info['hash']}: All Activities are complete for current job",
+                        console=False, output_filename=self._activity_log_filepath)
 
                 if self.next_job is not None:
                     self.next_job.promote_to_pending()
-                    _print("promoting next job")
+                    _print( f"Job {self.info['hash']}: promoting next job", console=False, output_filename=self._activity_log_filepath)
 
         self.__job_complete()
 
-        _print("Exiting job...")
+        _print(f"Exiting job {self.info['hash']}")
 
     def __job_complete(self):
         if Job.complete_callback is not None:
