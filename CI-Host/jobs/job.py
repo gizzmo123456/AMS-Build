@@ -184,10 +184,10 @@ class Job:
         """Promotes the pending task to idle"""
         if self.status == Job.STATUS["CREATED"]:
             self.__status = Job.STATUS["PENDING"]
-            _print( f"Job {self.info['hash']}: Promoting job to IDLE. Task is not pending.",
+            _print( f"Job {self.info['hash']}: Promoting job to PENDING",
                     console=False, output_filename=self._activity_log_filepath)
         else:
-            _print( f"Job {self.info['hash']}: Unable to promote job to IDLE. Task is not pending.",
+            _print( f"Job {self.info['hash']}: Unable to promote job to PENDING. Task does not have status CREATED",
                     console=False, output_filename=self._activity_log_filepath)
 
     def execute(self):
