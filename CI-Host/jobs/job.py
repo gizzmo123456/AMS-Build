@@ -245,7 +245,7 @@ class Job:
 
         self.__job_complete()
 
-        _print(f"Exiting job {self.info['hash']}")
+        _print(f"Exiting job {self.info['hash']}", console=False, output_filename=self._activity_log_filepath)
 
     def __job_complete(self):
         if Job.complete_callback is not None:
