@@ -65,6 +65,8 @@ class Job:
         self.project = project
 
         if self.__status == Job.STATUS["UNBLOCK"]:
+            _print(f"Created Unblock tast from project '{project}'. (Actor: {uac.username})",
+                   console=False, output_filename=self._activity_log_filepath)
             return
 
         self.__project_paths = {
