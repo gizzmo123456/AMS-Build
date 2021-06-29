@@ -265,8 +265,8 @@ class BaseActivity:
 
 class BaseTask( BaseActivity ):
 
-    def __init__(self, job, **kwargs):
-        super().__init__(job, **kwargs)
+    def __init__(self, activity_name, job, **kwargs):
+        super().__init__(activity_name, job, **kwargs)
 
     @staticmethod
     def __get_subclasses_dict__():
@@ -276,8 +276,8 @@ class BaseTask( BaseActivity ):
 
 class BaseAction( BaseActivity ):
 
-    def __init__(self, job, **kwargs):
-        super().__init__(job, **kwargs)
+    def __init__(self, activity_name, job, **kwargs):
+        super().__init__(activity_name, job, **kwargs)
 
     @staticmethod
     def __get_subclasses_dict__():
