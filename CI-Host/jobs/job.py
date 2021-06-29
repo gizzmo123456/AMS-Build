@@ -98,8 +98,8 @@ class Job:
         self.job_worker = None
         self.job_lock = threading.RLock()   # TODO: make thread safe.
 
-        self.current_activity_id = 0
-        self.activities = []
+        self.current_activity_id  = 0
+        self.activities = {}        # key: name, value: activity. # name as defined in pipeline otherwise auto generated
 
         self.next_job = None
 
@@ -124,11 +124,16 @@ class Job:
         return Job.STATUS[ status_name ] == self.__status
 
     def append_activity(self, activity):
+        """
+            Appends an activity to the job.
+            Activities must be appended in the order of execution.
+        """
+
         # Update the minimal access level.
         if activity.access_level() > self.__minimal_access_level:
             self.__minimal_access_level = activity.access_level
 
-        self.activities.append( activity )
+        self.activities[activity.activity_name] = activity
 
     @property
     def activity_count(self):
@@ -198,9 +203,11 @@ class Job:
         if self.status != Job.STATUS["PENDING"]:
             _print( f"Job {self.info['hash']}: Unable to start job. Status is not pending. (current status: {self.status})",
                     message_type=DEBUG.LOGS.MSG_TYPE_ERROR, console=False, output_filename=self._activity_log_filepath )
+            return
         elif self.job_worker is not None:
             _print( f"Job {self.info['hash']}: Unable to start job. Job worker is already set.",
                     console=False, output_filename=self._activity_log_filepath)
+            return
 
         _print( f"Job {self.info['hash']}: Starting job worker...", console=False, output_filename=self._activity_log_filepath )
 
@@ -211,10 +218,12 @@ class Job:
 
         while self.status < Job.STATUS["COMPLETE"]:
 
-            _print( f"Job {self.info['hash']}: starting activity ({self.activities[ self.current_activity_id ].hash}) { self.current_activity_id + 1 } of {len( self.activities )} ",
-                    console=False, output_filename=self._activity_log_filepath)
+            current_activity_key = list( self.activities )[ self.current_activity_id ]
 
-            act = self.activities[ self.current_activity_id ]
+            _print( f"Job {self.info['hash']}: starting activity [{current_activity_key}] ({self.activities[ current_activity_key ].hash}) { self.current_activity_id + 1 } of {len( self.activities )} ",
+                    console=True, output_filename=self._activity_log_filepath)  # TODO: set console to false.
+
+            act = self.activities[ current_activity_key ]
             status, msg = act.execute()
 
             if status != Activity.STATUS["COMPLETE"]:
@@ -234,7 +243,7 @@ class Job:
 
             self.current_activity_id += 1
 
-            if self.current_activity_id == len( self.activities):
+            if self.current_activity_id == len( self.activities ):
                 self.__status = Job.STATUS["COMPLETE"]
                 _print( f"Job {self.info['hash']}: All Activities are complete for current job",
                         console=False, output_filename=self._activity_log_filepath)
@@ -276,6 +285,7 @@ class Job:
         """
         job = Job( uac, project )
         output_message = ""
+        stage_index = 0
 
         for stage in stages:
             # check that a task has been defined and the task exists
@@ -284,15 +294,19 @@ class Job:
             elif stage["task"] not in Job.JOB_TYPES["tasks"]:
                 return None, f"Failed to create job. Task '{stage['task']}' does not exist"
 
+            activity_name = stage.get("name", f"Activity-{stage_index}")
+
             # create and authorize the task, appending it to the job if authorization was successful
             # otherwise reject the job.
-            task = Job.JOB_TYPES["tasks"][ stage["task"] ](job, **stage, **kwargs)
+            task = Job.JOB_TYPES["tasks"][ stage["task"] ](activity_name, job, **stage, **kwargs)
 
             if uac.access_level < task.access_level():    # TODO: UAC Update.
                 return None, "Failed to create job. User does not have permission to run task."
 
             job.append_activity( task )
             output_message += f"Added { stage['task'] } to job\n"
+
+            stage_index += 1
 
         return job, f"Successfully created job for {project}\n"+output_message
 
