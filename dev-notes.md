@@ -54,3 +54,34 @@ and 'free' for mem usage
 # bugs.
 - [ ] print is cutting off the first character of when printing from terminal. 
       However it is printing to file correctly.
+
+# Jobs
+- Tasks
+  ```
+  Each task needs to have a name assiged, so there data can be referenced later. 
+  ```
+  - prepare
+    ```
+    Prepares the project source.
+    - updates the project source directory
+    ```
+  - build
+    ```
+    - creates output directory
+    - copies the project source
+    - executes run cmd's
+    ```
+  - test
+    ```
+    - runs test on the build
+    ```
+  - deploy
+    ```
+    - Deploies the build or project source.
+    - run indefently
+    ```
+  - package
+    ```
+    packages the output accordingly
+    ```
+  
