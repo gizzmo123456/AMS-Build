@@ -64,7 +64,7 @@ class BaseActivity:
     def _print_lable(self):
         return f"Job {self.job.info['hash']} -> {self.__class__.__name__} {self.hash}:"
 
-    def __init__(self, job, **kwargs):
+    def __init__(self, activity_name, job, **kwargs):
         """
         :param job:     the job that owns/created the activity
         :param kwargs:  stage/activity data (from config/pipeline file)
@@ -72,6 +72,8 @@ class BaseActivity:
 
         self._activity_log_filepath = commonProject.get_activity_log_path( job.project )
         self.__status = BaseActivity.STATUS["CREATING"]   # Status of activity
+
+        self.activity_name = activity_name
 
         self.job = job                  # the job that owns/created the activity
         self.activity_data = kwargs     # stage/activity data from config/pipeline.
