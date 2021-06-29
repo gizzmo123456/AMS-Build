@@ -93,6 +93,7 @@ class BaseActivity:
             "project": job.project,
             "branch": "master",                     # TODO: <<
             "job-index": job.info["index"],
+            "output-index": -1,
             # hashes
             "job_hash": job.info["hash"],
             "activity_hash": BaseActivity.__create_activity_hash( job.project, self.__class__.__name__ ),
@@ -159,7 +160,11 @@ class BaseActivity:
         return v if v is not None else default_value
 
     @property
-    def _all_format_values(self):
+    def format_values(self):
+        return { **self._format_values }    # return a copy of the format values so the original dict cant be directly modified
+
+    @property
+    def _all_format_values(self): # for internal use only
         return { **self._format_values, **self._private_format_values }
 
     def set_format_value(self, key, value, private=False):
@@ -223,6 +228,11 @@ class BaseActivity:
             "activity": self.__class__.__name__,
             "job_hash": self._format_values.get("job_hash", "Error"),
             "activity_hash": self._format_values.get("job_hash", "Error"),
+            "status": self.__status,
+            "created_at": self._format_values.get("created_at", "Error"),
+            "executed_at": self._format_values.get("executed_at", "Error"),
+            "completed_at": self._format_values.get("completed_at", "Error"),
+            "actor": self._format_values.get("actor", "Error")
         }
 
         # append the additional info, if implemented.
