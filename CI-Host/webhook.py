@@ -63,8 +63,9 @@ class Webhook( baseHTTPServer.BaseServer ):
             uac.set_webhook(hook_name, actor, branch, repo_name)
 
             if not uac.has_project_access( project ):
-                _print( f"Webhook does not have access to the request project '{project}'", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
+                _print( f"Webhook does not have access to the requested project '{project}'", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
                 self.process_request( "Error", 404, False )
+                return
 
             #Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], git_hash=build_hash )
             job_queue.JobQueue.create_jobs_from_pipeline( uac, query["project"],
