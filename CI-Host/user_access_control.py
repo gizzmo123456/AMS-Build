@@ -116,7 +116,7 @@ class UAC:
         if webhook_config is None:
             _print(f"Unable to load webhook config fro project {project}.")
             return False
-        elif "in-webhook" not in webhook_config:
+        elif "in-webhooks" not in webhook_config:
             _print(f"No inbound webhooks configured for project '{project}'.")
             return False
 
