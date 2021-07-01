@@ -52,7 +52,7 @@ class UAC:
         else:
             self.projects = []
 
-    def has_project_access( self, project, webhooks=None ):
+    def has_project_access( self, project, webhooks=None ): # TODO: remove webhooks.
         """ the in_webhooks must be supplied for webhook access """
 
         if self.access_level == UAC.NO_AUTH:
@@ -60,16 +60,22 @@ class UAC:
 
         self.__update_user_projects()
 
-        if webhooks is not None and "in-webhooks" in webhooks and self.access_level == UAC.WEBHOOK:
-            all_in_hooks = common.get_value_at_key( webhooks, "in-webhooks", noValue=[] )
-            for wh in all_in_hooks:
-                if common.get_value_at_key(wh, "name", noValue="") == self.subname:
-                    authorized_actors = common.get_value_at_key( wh, "authorized-actors", noValue=[] )
-                    if self.username in authorized_actors:
-                        return True
-                    else:
-                        return False    # actor not in webhook actor list
-            return False    # webhook not found
+        if self.access_level == UAC.WEBHOOK:
+            # load in the projects webhook config and confirm self.username is listed as a authorized actor.
+            webhook_config = commonProject.get_project_config( self, project, "webhooks" )
+            if webhook_config is None:
+                _print("UAC: Unable to load webhook config.")
+                return False
+            elif "in-webhook" not in webhook_config:
+                _print("UAC: No inbound webhooks configed.")
+                return False
+
+            all_hooks = webhook_config.get( "in-webhooks", noValue=[] )
+            for hook in all_hooks:
+                if self.subname is not None and hook.get( "name", None ) == self.subname:
+                    authorized_actors = hook.get( "authorized-actors", [] )
+                    return self.username in authorized_actors
+
         elif self.access_level != UAC.WEBHOOK:
             return project in self.projects
 
