@@ -17,10 +17,12 @@ class UAC:
 
     __PROJECT_CACHE_TTL = 30        # seconds, update projects list, at most once every TTL
 
-    def __init__(self, username=None, access_level=NO_AUTH, subname=None):
+    def __init__(self, username=None, access_level=NO_AUTH, subname=None, origin=None):
 
-        self.username = username            # the user the uac belogs to
+        self.username = username            # the username the uac belogs to
         self.subname = subname              # the subname is used to store any secondary names. ie the webhook name.
+        self.origin = origin                # The origin of witch the uac was created. (TODO: replaces subname)
+
         self.access_level = access_level    # the users access level
 
         self.projects = []                  # this list of projects available to the user, does not apply to webhooks
