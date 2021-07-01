@@ -125,8 +125,6 @@ class UAC:
         for hook in all_in_hooks:
             if self.compare_webhook_data( hook.get( "name", None ), hook.get( "branch", None ), hook.get( "repository", None ) ):
                 authorized_actors = hook.get( "authorized-actors", [] )
-                _print( hook )
-                _print("OK", authorized_actors, "->", self.username)
                 return self.username in authorized_actors
 
         _print("Webhook not found.")
