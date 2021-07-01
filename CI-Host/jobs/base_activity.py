@@ -95,7 +95,7 @@ class BaseActivity:
             "project": job.project,
             "branch": "master",                     # TODO: <<
             "job-index": job.info["index"],
-            "output-index": -1,
+            "output-index": self._get_output_index( self.activity_data.get("increment-output-index", False) ),
             # hashes
             "job_hash": job.info["hash"],
             "activity_hash": BaseActivity.__create_activity_hash( job.project, self.__class__.__name__ ),
@@ -175,6 +175,21 @@ class BaseActivity:
             self._private_format_values[ key ] = value
         else:
             self._format_values[ key ] = value
+
+    def _get_output_index(self, increment):
+
+        output_index_filepath = f"{self._private_format_values['project_root']}/projectOutputIndex"
+
+        if not common.file_exist( output_index_filepath ):
+            common.write_file(output_index_filepath, -1)
+
+        with common.LockFile( output_index_filepath, mode="r+" ) as file:
+            index = int(file.read())
+            if increment or index == -1:
+                index += 1
+            file.write( f"{index}" )
+
+        return index
 
     def execute(self):
         """

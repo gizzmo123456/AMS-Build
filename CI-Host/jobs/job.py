@@ -221,7 +221,7 @@ class Job:
             current_activity_key = list( self.activities )[ self.current_activity_id ]
 
             _print( f"Job {self.info['hash']}: starting activity [{current_activity_key}] ({self.activities[ current_activity_key ].hash}) { self.current_activity_id + 1 } of {len( self.activities )} ",
-                    console=True, output_filename=self._activity_log_filepath)  # TODO: set console to false.
+                    console=False, output_filename=self._activity_log_filepath)
 
             act = self.activities[ current_activity_key ]
             status, msg = act.execute()
