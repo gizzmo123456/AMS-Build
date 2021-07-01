@@ -46,6 +46,7 @@ class JobQueue:
 
         self.alive = True
         update_queue_file = False
+        _print("JobQueue: Starting to process jobs.")
 
         #
         while self.alive:
@@ -88,6 +89,8 @@ class JobQueue:
                     time.sleep(1)
 
         self.alive = False
+        _print("JobQueue: Ended processing jobs.")
+
 
     def exit(self):
 
@@ -103,4 +106,4 @@ class JobQueue:
         :param project: project to create jobs for
         :param kwargs:  additional data to be set into the job.
         """
-        pass
+        _print("CREATE JOB FROM PIPELINE")
