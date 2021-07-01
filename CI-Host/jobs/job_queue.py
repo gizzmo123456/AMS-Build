@@ -1,5 +1,6 @@
 import queue
 import time
+import jobs.job as job
 
 import DEBUG
 
@@ -35,6 +36,7 @@ class JobQueue:
         """
 
         self.alive = True
+        update_queue_file = False
 
         #
         while self.alive:
@@ -44,18 +46,33 @@ class JobQueue:
             _print( "JobQueue: Collected new job!", console=True )
 
             # move the new job into the pending queue.
-            # ...
+            if isinstance( new_job, job.Job ) :
+                if new_job.status == job.Job.STATUS["CREATED"]:
+                    self.pending.append( new_job )
+                    update_queue_file = True
+                else:
+                    _print( f"JobQueue: Unable to queue job. Status is not CREATED. (status: {new_job.status} )" )
 
             # process the pending and active queues,
             # unless theres a new job to be collected from the queue.
             while len( self.pending ) > 0 and self.queue.empty():
                 # clean up any active jobs that have completed.
                 for i in range( len(self.active)-1, -1, -1 ):
-                    pass
+                    if self.active[ i ].is_complete:
+                        completed_job = self.active.pop( i )
+                        update_queue_file = True
+                        _print(f"JobQueue: Job Complete: {completed_job.name} ({completed_job.hash})")
 
                 # promote pending tasks, while there are active slots available.
                 while len( self.pending ) > 0 and len( self.active ) < JobQueue.MAX_ACTIVE:
-                    pass
+                    promoted_job = self.pending.pop( 0 )
+                    promoted_job.execute()
+                    self.active.append( promoted_job )
+                    update_queue_file = True
+                    _print(f"JobQueue: Promoted job {promoted_job.name} ({promoted_job.hash})")
+
+                if update_queue_file:
+                    update_queue_file = False
 
                 # while theres no jobs to collect sleep for a second.
                 if self.queue.empty():

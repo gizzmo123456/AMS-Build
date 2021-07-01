@@ -5,7 +5,8 @@ class Job:
 
     STATUS = {
         "UNBLOCK": -99,
-        "INIT": -3,
+        "INIT": -4,
+        "CREATED": -3,
         "PENDING": -2,
         "ACTIVE": -1,
         "COMPLETED": 0,
@@ -17,6 +18,8 @@ class Job:
     def __init__(self):
 
         self._status = Job.STATUS["INIT"]
+        self.name = ""
+        self.hash = ""
 
         self.activities = {}    # key: user defined name, value: activity. (if the name if undefined auto generated.)
 
@@ -25,7 +28,7 @@ class Job:
 
         self.init()
 
-        self._status = Job.STATUS["PENDING"]
+        self._status = Job.STATUS["CREATED"]
 
     def init(self):
         """(abstract) method to extend init"""
@@ -42,6 +45,10 @@ class Job:
                 return stat_name
 
         return "Unknown Status"
+
+    @property
+    def is_complete(self):
+        return self._status == Job.STATUS["COMPLETE"] and self.job_thread is not None and not self.job_thread.is_alive()
 
     def execute(self):
         pass
