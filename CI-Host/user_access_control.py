@@ -77,7 +77,7 @@ class UAC:
         else:
             self.projects = []
 
-    def has_project_access( self, project, webhook_config=None ): # TODO: remove webhooks.
+    def has_project_access( self, project ):
         """ the in_webhooks must be supplied for webhook access """
 
         if self.access_level == UAC.NO_AUTH:
