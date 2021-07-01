@@ -10,9 +10,13 @@ import time
 from http.server import HTTPServer
 from baseHTTPServer import ThreadHTTPServer
 import ssl
+# TO be Removed.
 import queue
 import sharedQueue
 import queue_item
+# Eof.
+from jobs.job_queue import JobQueue # replaces queue
+
 import common
 import user_manager
 import out_webhook
@@ -198,6 +202,10 @@ if __name__ == "__main__":
     alive = True
     update_queue_file = False
 
+    # Setup queue
+    job_queue = JobQueue()
+
+    # Todo: Remove queue and items ect below.
     task_queue = queue.Queue()
 
     # setup queue items
@@ -218,6 +226,7 @@ if __name__ == "__main__":
     # assign the shared queue with only the required objects to the modules
     webhook.Webhook.shared_task_queue = sharded_queue.clone( ["build"] )
     web_interface.WebInterface.shared_task_queue = sharded_queue.clone( ["build", "cancel_task"] )
+
 
     # build tasks
     max_running_tasks = 1
@@ -260,6 +269,8 @@ if __name__ == "__main__":
 
     _print("Initializing, Complete!")
     _print("Starting...")
+
+    job_queue.process_forever()
 
     while alive:
 

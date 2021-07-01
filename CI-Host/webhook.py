@@ -5,14 +5,12 @@ import json
 import common
 import commonProject
 import config_manager
+import jobs.job_queue as job_queue
 import DEBUG
 _print = DEBUG.LOGS.print
 
 
 class Webhook( baseHTTPServer.BaseServer ):
-
-    # set to main task queue
-    shared_task_queue = None
 
     ROOT = config_manager.ConfigManager.get("web_root", "ams-build")
     # Remove any outer slashes
@@ -50,15 +48,15 @@ class Webhook( baseHTTPServer.BaseServer ):
             actor = common.get_value_at_key( post_data     , *fields["actor"] )
             repo_name = common.get_value_at_key( post_data , *fields["repository"] )
             branch = common.get_value_at_key( post_data    , *fields["branch"] )   # TODO: dont forget to check the data.
-            build_hash = common.get_value_at_key( post_data, *fields["hash"] )
+            git_hash = common.get_value_at_key( post_data, *fields["hash"] )
 
-            if actor is None or repo_name is None or build_hash is None or branch is None:
+            if actor is None or repo_name is None or git_hash is None or branch is None:
                 _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
                 self.process_request( "Error", 404, False )
                 return
 
             # we must set the sub name, so we can check that the actor belongs to webhook of name for project
-            uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK, query["name"] )
+            uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK, query["name"], origin="webhook" )
 
             # check the request is defined within the projects webhooks config
             # and the git actor has access
@@ -103,7 +101,11 @@ class Webhook( baseHTTPServer.BaseServer ):
                 self.process_request( "Error", 404, False )
                 return
 
-            Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], git_hash=build_hash )
+            #Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], git_hash=build_hash )
+            job_queue.JobQueue.create_jobs_from_pipeline( uac, query["project"],
+                                                          git_repo_name=repo_name,
+                                                          git_branch=branch,
+                                                          git_commit_hash=git_hash )
 
             self.process_request( "Ok", 200, False )
 

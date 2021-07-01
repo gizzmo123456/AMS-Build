@@ -9,6 +9,7 @@ _print = DEBUG.LOGS.print
 class JobQueue:
 
     MAX_ACTIVE = 3
+    __queue_job = None
 
     def __init__(self):
 
@@ -18,8 +19,16 @@ class JobQueue:
         self.active  = []               # active jobs
         self.pending = []               # pending execution.
 
+        JobQueue._queue_job = self.queue_job
+
     def queue_job(self, job):
-        pass
+
+        if not isinstance( job, job.Job ):
+            _print( "JobQueue: Unable to queue job. Item is not an instance of job.")
+            return
+
+        self.queue.put( job )
+
 
     def queueCount(self):
         """
@@ -86,3 +95,12 @@ class JobQueue:
         _print( "JobQueue: exiting")
 
     # static methods
+    @staticmethod
+    def create_jobs_from_pipeline( uac, project, **kwargs ):
+        """
+            Creates and queues jobs from pipeline file.
+        :param uac:     user access controle object
+        :param project: project to create jobs for
+        :param kwargs:  additional data to be set into the job.
+        """
+        pass

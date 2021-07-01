@@ -26,13 +26,7 @@ class Job:
         self.job_thread = None
         self.thread_lock = threading.RLock()
 
-        self.init()
-
         self._status = Job.STATUS["CREATED"]
-
-    def init(self):
-        """(abstract) method to extend init"""
-        pass
 
     @property
     def status(self):
@@ -58,4 +52,5 @@ class Job:
 
     def terminate(self):
         pass
+
 
