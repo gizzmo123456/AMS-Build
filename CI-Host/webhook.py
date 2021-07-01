@@ -44,11 +44,14 @@ class Webhook( baseHTTPServer.BaseServer ):
                 self.process_request( "Ok", 200, False )
                 return
 
+            hook_name = query["name"]
+            project = query["project"]
+
             # Get required data from post data.
             actor = common.get_value_at_key( post_data     , *fields["actor"] )
             repo_name = common.get_value_at_key( post_data , *fields["repository"] )
-            branch = common.get_value_at_key( post_data    , *fields["branch"] )   # TODO: dont forget to check the data.
-            git_hash = common.get_value_at_key( post_data, *fields["hash"] )
+            branch = common.get_value_at_key( post_data    , *fields["branch"] )
+            git_hash = common.get_value_at_key( post_data  , *fields["hash"] )
 
             if actor is None or repo_name is None or git_hash is None or branch is None:
                 _print("Invalid Webhook Data Supplied", message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
@@ -56,50 +59,12 @@ class Webhook( baseHTTPServer.BaseServer ):
                 return
 
             # we must set the sub name, so we can check that the actor belongs to webhook of name for project
-            uac = user_access_control.UAC( actor, user_access_control.UAC.WEBHOOK, query["name"], origin="webhook" )
+            uac = user_access_control.UAC( actor, user_access_control.UAC.TRIGGER, origin="webhook" )
+            uac.set_webhook(hook_name, actor, branch, repo_name)
 
-            # check the request is defined within the projects webhooks config
-            # and the git actor has access
-            webhook_config = commonProject.get_project_config( uac, query[ "project" ], "webhooks" )
-
-            if webhook_config is None:
-                _print( "Error: Invalid project or Access, For project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
+            if not uac.has_project_access( project ):
+                _print( f"Webhook does not have access to the request project '{project}'", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
                 self.process_request( "Error", 404, False )
-                return
-
-            webhooks = common.get_value_at_key( webhook_config, "in-webhooks", noValue=[] )
-            webhook_repo = None
-            webhook_branch = None
-            webhook_actors = None
-
-            # find if the webhook is defined for project and that the git actor has access
-            for whi in range( len(webhooks) ):
-                webhook_name = common.get_value_at_key( webhook_config, "in-webhooks", whi,  "name" )
-
-                if webhook_name == query[ "name" ]:
-                    webhook_repo = common.get_value_at_key( webhook_config  , "in-webhooks", whi, "repository" )
-                    webhook_branch = common.get_value_at_key( webhook_config, "in-webhooks", whi, "branch" )
-                    webhook_actors = common.get_value_at_key( webhook_config, "in-webhooks", whi, "authorized-actors" )
-                    break
-
-            if repo_name != webhook_repo:
-                _print("Error, Unreconzied repo has trigger webhook for project", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
-                self.process_request( "Error", 404, False )
-                return
-
-            if branch != webhook_branch:
-                _print( f"Webhook has been trigger by incorrect branch ({webhook_branch} != {branch}). Project: {query[ 'project' ]}", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
-                self.process_request( "Error", 404, False )
-                return
-
-            if webhook_actors is None:
-                _print("Error, Webhook (", query["name"],") not defined for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
-                self.process_request( "Error", 404, False )
-                return
-            elif actor not in webhook_actors:
-                _print( "Error: Invalid actor (", actor, "), for project ", query[ "project" ], message_type=DEBUG.LOGS.MSG_TYPE_ERROR )
-                self.process_request( "Error", 404, False )
-                return
 
             #Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], git_hash=build_hash )
             job_queue.JobQueue.create_jobs_from_pipeline( uac, query["project"],

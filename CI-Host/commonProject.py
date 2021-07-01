@@ -151,17 +151,10 @@ def get_project_config( uac, project_name, config_name):
 
     config = common.get_dict_from_json( config_path )
 
-    # NOTE: I think this is only required if the supplied UAC is WEBHOOCK?
-    if config_name != "webhooks":   # prevent a recursive nightmare, Why??
-        webhook_access = get_project_config( uac, project_name, "webhooks")
-    else:
-        webhook_access = config
-
-    if not uac.has_project_access( project_name, webhook_access ):
+    if not uac.has_project_access( project_name ):
         return None
 
     return config
-
 
 def get_project_webhook_fields( project_name ):
     """ Gets the inbound data fields

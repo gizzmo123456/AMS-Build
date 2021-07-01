@@ -2,6 +2,8 @@ import user_manager
 import commonProject
 import time
 import common
+import const
+import os
 
 import DEBUG
 _print = DEBUG.LOGS.print
@@ -11,6 +13,7 @@ class UAC:
     NO_AUTH         = 0             # No permissions
     USER            = 1             # View/download assigned project only
     WEBHOOK         = 2             # Triggers builds, if actor is listed in pipeline webhook config.
+    TRIGGER         = 2             # Triggers jobs. (TODO: this is to replace WEBHOOK)
     MOD             = 3             # UAC_USER + Can trigger builds
     PROJECT_ADMIN   = 4             # UAC_MOD + Can Add/Assigned new user to project                (TODO)
     SERVER_ADMIN    = 5             # All permissions on all projects. # Can also add new projects  (TODO)
@@ -20,19 +23,41 @@ class UAC:
     def __init__(self, username=None, access_level=NO_AUTH, subname=None, origin=None):
 
         self.username = username            # the username the uac belogs to
-        self.subname = subname              # the subname is used to store any secondary names. ie the webhook name.
         self.origin = origin                # The origin of witch the uac was created. (TODO: replaces subname)
 
-        self.access_level = access_level    # the users access level
+        self.access_level = access_level    # the requested access level.
 
         self.projects = []                  # this list of projects available to the user, does not apply to webhooks
-        self.next_projects_update = 0
+        self.webhook  = None                # data required to authorize a webhook
 
+        self.next_projects_update = 0
 
     def set_user( self, username, access_level ):
 
         self.username = username
         self.access_level = access_level
+
+    def set_webhook(self, name, actor, branch, repo):
+
+        self.webhook = {
+            "name": name,
+            "actor": actor,
+            "branch": branch,
+            "repo": repo
+        }
+
+    def compare_webhook_data(self, name, branch, repo):
+
+        if self.origin != "webhook":
+            return False
+
+        # make sure the webhook data has been set correctly.
+        for wh_key in self.webhook:
+            if self.webhook[wh_key] is None:
+                return False
+
+        # don't compare the actor. since its possible the actor is being verified.
+        return self.webhook["name"] == name and self.webhook["branch"] == branch and self.webhook["repo"] == repo
 
     def __update_user_projects( self ):
 
@@ -52,7 +77,7 @@ class UAC:
         else:
             self.projects = []
 
-    def has_project_access( self, project, webhooks=None ): # TODO: remove webhooks.
+    def has_project_access( self, project, webhook_config=None ): # TODO: remove webhooks.
         """ the in_webhooks must be supplied for webhook access """
 
         if self.access_level == UAC.NO_AUTH:
@@ -60,24 +85,47 @@ class UAC:
 
         self.__update_user_projects()
 
-        if self.access_level == UAC.WEBHOOK:
-            # load in the projects webhook config and confirm self.username is listed as a authorized actor.
-            webhook_config = commonProject.get_project_config( self, project, "webhooks" )
-            if webhook_config is None:
-                _print("UAC: Unable to load webhook config.")
-                return False
-            elif "in-webhook" not in webhook_config:
-                _print("UAC: No inbound webhooks configed.")
-                return False
-
-            all_hooks = webhook_config.get( "in-webhooks", noValue=[] )
-            for hook in all_hooks:
-                if self.subname is not None and hook.get( "name", None ) == self.subname:
-                    authorized_actors = hook.get( "authorized-actors", [] )
-                    return self.username in authorized_actors
-
-        elif self.access_level != UAC.WEBHOOK:
+        if self.origin == "webhook" and self.access_level == UAC.TRIGGER:
+            return self.__webhook_has_project_access( project )
+        elif self.origin != "webhook":
             return project in self.projects
+        else:
+            _print("UAC: Unable to get project access. Incorrect access level for webhook", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
+
+        return False
+
+    def __webhook_has_project_access( self, project ):
+
+        if self.access_level != self.TRIGGER or self.origin != "webhook":
+            _print("uac does not originate from a webhook")
+            return False
+        elif self.webhook is None:
+            _print("Unable to verify if webhook has project access. Webhook data not set in UAC")
+            return False
+
+        config_path = "{relevent_proj_path}/{project_name}/master/config/webhooks.json".format(
+                        relevent_proj_path=const.RELEVENT_PROJECT_PATH,
+                        project_name=project )
+
+        if not os.path.exists( config_path ):
+            _print("Unable to verify if webhook has project access. 'webhooks.json' does not exist")
+            return False
+
+        webhook_config = common.get_dict_from_json( config_path )
+
+        if webhook_config is None:
+            _print(f"Unable to load webhook config fro project {project}.")
+            return False
+        elif "in-webhook" not in webhook_config:
+            _print(f"No inbound webhooks configured for project '{project}'.")
+            return False
+
+        all_in_hooks = webhook_config.get( "in-webhooks", [] )
+
+        for hook in all_in_hooks:
+            if self.compare_webhook_data( hook.get( "name", None ), hook.get( "branch", None ), hook.get( "repository", None ) ):
+                authorized_actors = hook.get( "authorized_actors", [] )
+                return self.username in authorized_actors
 
         return False
 
