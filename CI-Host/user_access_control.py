@@ -149,12 +149,3 @@ class UAC:
         _print("UAC: Webhook not found.")
 
         return False
-
-    def has_build_access( self, access_level ):
-        return access_level > UAC.USER
-
-    def is_valid( self ):
-        return self.username is not None
-
-    def has_uac_auth( self ):
-        return self.is_valid() and self.access_level > UAC.NO_AUTH
