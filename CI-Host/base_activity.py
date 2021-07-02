@@ -37,6 +37,10 @@ class BaseActivity:
 
         self._status = BaseActivity.STATUS["INIT"]
 
+    def init(self):
+        """(abstract) Method to extend __init__()"""
+        pass
+
     def execute(self):
         pass
 
