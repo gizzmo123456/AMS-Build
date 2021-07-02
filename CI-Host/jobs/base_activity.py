@@ -1,6 +1,7 @@
 import cipher
 import time
 import user_access_control as uac
+import helpers
 
 class BaseActivity:
 
@@ -46,3 +47,31 @@ class BaseActivity:
 
     def terminate(self):
         pass
+
+    # static methods
+    @staticmethod
+    def get_subclass_dict():
+        raise Exception("Not implemented")
+
+
+class BaseTask(BaseActivity):
+
+    def __init__(self, name, job):
+        super().__init__(name, job)
+
+    @staticmethod
+    def get_subclass_dict():
+        subclasses = helpers.get_all_subclasses_of_type( BaseActivity, BaseTask )
+        return dict(zip([sc.__name__.lower() for sc in subclasses], subclasses))
+
+
+class BaseAction(BaseActivity):
+
+    def __init__(self, name, job):
+        super().__init__(name, job)
+
+    @staticmethod
+    def get_subclass_dict():
+        subclasses = helpers.get_all_subclasses_of_type( BaseActivity, BaseTask )
+        return dict(zip([sc.__name__.lower() for sc in subclasses], subclasses))
+

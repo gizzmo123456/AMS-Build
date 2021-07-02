@@ -2,6 +2,8 @@ import queue
 import time
 import jobs.job as job
 
+import jobs.base_activity # TEMP TODO: remove.
+
 import DEBUG
 
 _print = DEBUG.LOGS.print
@@ -99,11 +101,29 @@ class JobQueue:
 
     # static methods
     @staticmethod
-    def create_jobs_from_pipeline( uac, project, **kwargs ):
+    def create_jobs_from_pipeline( uac, project, **data ):
         """
             Creates and queues jobs from pipeline file.
         :param uac:     user access controle object
         :param project: project to create jobs for
-        :param kwargs:  additional data to be set into the job.
+        :param data:  additional data to be set into the job.
         """
-        _print("CREATE JOB FROM PIPELINE")
+
+        _print("CREATING JOB FROM PIPELINE ...")
+
+        new_job = job.Job( "My Fist Job", uac, project, **data )
+
+        activity = job.base_activities.BaseActivity( "activity", job )
+        action   = job.base_activities.BaseAction( "action", job )
+        task     = job.base_activities.BaseTask( "task", job )
+        not_an_activity = 55
+
+        _print("APPENDING ACTIVITIES")
+        new_job.append_activity( activity )
+        new_job.append_activity( action )
+        new_job.append_activity( task )
+
+        _print("APPENDING NOT AN ACTIVITY (ie an int)")
+        new_job.append_activity( not_an_activity )
+
+        _print("JOB CREATED FROM PIPELINE")
