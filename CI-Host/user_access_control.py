@@ -42,7 +42,7 @@ class UAC:
         self.username = username
         self.access_level = access_level
 
-    def set_webhook(self, project, name, actor, branch, repo):
+    def set_webhook(self, hook_name, project, actor, branch, repo):
 
         if self.origin != "webhook":
             _print("UAC: Can not set webhook data on UAC that has not originated from 'webhook'")
@@ -50,7 +50,7 @@ class UAC:
 
         self.webhook = {
             "project": project,
-            "name": name,
+            "name": hook_name,
             "actor": actor,
             "branch": branch,
             "repo": repo
