@@ -27,7 +27,7 @@ class UAC:
 
         self.access_level = UAC.NO_AUTH     # the users access level.
 
-        self.projects = []  # this list of projects available to the user
+        self.projects = []                  # this list of projects available to the user
         self.webhook  = None                # data required to authorize a webhook
 
         self.next_projects_update = 0
@@ -37,10 +37,11 @@ class UAC:
         if origin != "webhook":
             self.__update_user()
 
-    def set_user( self, username, access_level ):
+    def set_user( self, username ):
 
         self.username = username
-        self.access_level = access_level
+        self.access_level = UAC.NO_AUTH
+        self.__update_user()
 
     def set_webhook(self, hook_name, project, actor, branch, repo):
 

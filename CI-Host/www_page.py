@@ -38,7 +38,7 @@ class WWWUser:
 
     def set_user( self, username, session_id, access_level ):
 
-        self.__uac.set_user( username, access_level)
+        self.__uac.set_user( username, access_level) # TODO: Access_level has been removed.
 
         self.session_id = session_id
         self.set_cookie( "session_id", session_id, path="/"+web_interface.WebInterface.ROOT )
