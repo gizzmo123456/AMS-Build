@@ -58,7 +58,7 @@ class Webhook( baseHTTPServer.BaseServer ):
                 return
 
             # we must set the sub name, so we can check that the actor belongs to webhook of name for project
-            uac = user_access_control.UAC( actor, user_access_control.UAC.TRIGGER, origin="webhook" )
+            uac = user_access_control.UAC( username=actor, origin="webhook", webhook_project=project )
             uac.set_webhook(hook_name, actor, branch, repo_name)
 
             if not uac.has_project_access( project ):

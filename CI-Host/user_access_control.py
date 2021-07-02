@@ -20,31 +20,45 @@ class UAC:
 
     __PROJECT_CACHE_TTL = 30        # seconds, update projects list, at most once every TTL
 
-    def __init__(self, username=None, access_level=NO_AUTH, subname=None, origin=None):
+    def __init__(self, username=None, origin=None ):
 
         self.username = username            # the username the uac belogs to
-        self.origin = origin                # The origin of witch the uac was created. (TODO: replaces subname)
+        self.origin = origin                # The origin of witch the uac was created.
 
-        self.access_level = access_level    # the requested access level.
+        self.access_level = UAC.NO_AUTH     # the users access level.
 
-        self.projects = []                  # this list of projects available to the user, does not apply to webhooks
+        self.projects = []  # this list of projects available to the user
         self.webhook  = None                # data required to authorize a webhook
 
         self.next_projects_update = 0
+
+        # update the user if we have not originated from a webhook
+        # otherwise wait for set_webhook to be called.
+        if origin != "webhook":
+            self.__update_user()
 
     def set_user( self, username, access_level ):
 
         self.username = username
         self.access_level = access_level
 
-    def set_webhook(self, name, actor, branch, repo):
+    def set_webhook(self, project, name, actor, branch, repo):
+
+        if self.origin != "webhook":
+            _print("UAC: Can not set webhook data on UAC that has not originated from 'webhook'")
+            return
 
         self.webhook = {
+            "project": project,
             "name": name,
             "actor": actor,
             "branch": branch,
             "repo": repo
         }
+
+        # reset the projects next update time to make sure it updates now
+        self.next_projects_update = 0
+        self.__update_user( project )
 
     def compare_webhook_data(self, name, branch, repo):
 
@@ -59,23 +73,28 @@ class UAC:
         # don't compare the actor. since its possible the actor is being verified.
         return self.webhook["name"] == name and self.webhook["branch"] == branch and self.webhook["repo"] == repo
 
-    def __update_user_projects( self ):
+    def __update_user(self, project=None):
 
         if time.time() < self.next_projects_update:
             return
 
         self.next_projects_update = time.time() + UAC.__PROJECT_CACHE_TTL
 
-        if self.access_level == UAC.NO_AUTH or self.access_level == UAC.WEBHOOK:
-            self.projects = []
-            return
+        if self.origin == "webhook" and project is not None and self.__webhook_has_project_access( project ):
+            self.projects = [project]
+            self.access_level = UAC.TRIGGER
+        elif self.origin != "webhook":
+            user = user_manager.UserManager().get_user( self.username )
 
-        user = user_manager.UserManager().get_user( self.username )
-
-        if user is not None and "projects" in user and user["projects"] is not None:
-            self.projects = user[ "projects" ]
+            if user is not None and "projects" in user and "access_level" in user:
+                self.projects = user["projects"]
+                self.access_level = user["access_level"] # TODO: make sure the access level exist.
+            else:
+                self.projects = []
+                self.access_level = UAC.NO_AUTH
         else:
             self.projects = []
+            self.access_level = UAC.NO_AUTH
 
     def has_project_access( self, project ):
         """ the in_webhooks must be supplied for webhook access """
@@ -83,7 +102,7 @@ class UAC:
         if self.access_level == UAC.NO_AUTH:
             return False
 
-        self.__update_user_projects()
+        self.__update_user()
 
         if self.origin == "webhook" and self.access_level == UAC.TRIGGER:
             return self.__webhook_has_project_access( project )
