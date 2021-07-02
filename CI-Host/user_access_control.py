@@ -115,11 +115,11 @@ class UAC:
 
     def __webhook_has_project_access( self, project ):
 
-        if self.access_level != self.TRIGGER or self.origin != "webhook":
-            _print("uac does not originate from a webhook")
+        if self.origin != "webhook":
+            _print("UAC: does not originate from a webhook")
             return False
         elif self.webhook is None:
-            _print("Unable to verify if webhook has project access. Webhook data not set in UAC")
+            _print("UAC: Unable to verify if webhook has project access. Webhook data not set in UAC")
             return False
 
         config_path = "{relevent_proj_path}/{project_name}/master/config/webhooks.json".format(
@@ -127,16 +127,16 @@ class UAC:
                         project_name=project )
 
         if not os.path.exists( config_path ):
-            _print("Unable to verify if webhook has project access. 'webhooks.json' does not exist")
+            _print("UAC: Unable to verify if webhook has project access. 'webhooks.json' does not exist")
             return False
 
         webhook_config = common.get_dict_from_json( config_path )
 
         if webhook_config is None:
-            _print(f"Unable to load webhook config fro project {project}.")
+            _print(f"UAC: Unable to load webhook config fro project {project}.")
             return False
         elif "in-webhooks" not in webhook_config:
-            _print(f"No inbound webhooks configured for project '{project}'.")
+            _print(f"UAC: No inbound webhooks configured for project '{project}'.")
             return False
 
         all_in_hooks = webhook_config.get( "in-webhooks", [] )
@@ -146,7 +146,7 @@ class UAC:
                 authorized_actors = hook.get( "authorized-actors", [] )
                 return self.username in authorized_actors
 
-        _print("Webhook not found.")
+        _print("UAC: Webhook not found.")
 
         return False
 
