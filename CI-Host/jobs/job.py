@@ -50,6 +50,8 @@ class Job:
 
         _print( f"Job {job_name} ({self.hash}) Created for project {project}")
 
+        self.activities = {}    # key: user defined name, value: activity. (if the name if undefined auto generated.)
+
         # default data, that is available to all activities.
         # Data is extended by the activities that are run.
         self.data = {
@@ -58,7 +60,7 @@ class Job:
             "job-hash": self.hash,
             # stats
             "current-activity-id": -1,
-            "activity-count": 0,
+            "activity-count": lambda: len( self.activities ),
             # project
             "project": project,
             "project-branch": "master",
@@ -72,7 +74,6 @@ class Job:
             **data
         }
 
-        self.activities = {}    # key: user defined name, value: activity. (if the name if undefined auto generated.)
 
         self.job_thread = None
         self.thread_lock = threading.RLock()
@@ -106,7 +107,6 @@ class Job:
             _print(f"{self.print_label} Unable to append activity. (Status: {self.status_name})")
 
         self.activities[ activity.name ] = activity
-        self.data["activity-count"] += 1
 
         _print( f"{self.print_label} Activity {activity.name} ({activity.hash[:7]}) appended to job. (activity count: {self.data['activity-count']})")
 
