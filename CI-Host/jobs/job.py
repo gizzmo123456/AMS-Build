@@ -48,7 +48,7 @@ class Job:
         self.hash = cipher.Hash.sha1( f"job-{job_name}-{time.time()}" )
         self.uac = uac
 
-        _print( f"Job {job_name} ({self.hash}) Created for project {project}")
+        _print( f"Job {job_name} ({self.hash[:7]}) Created for project {project}")
 
         self.activities = {}    # key: user defined name, value: activity. (if the name if undefined auto generated.)
 
