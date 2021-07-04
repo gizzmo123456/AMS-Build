@@ -99,7 +99,7 @@ class Job:
 
     @property
     def is_complete(self):
-        return self._status == Job.STATUS["COMPLETE"] and self.job_thread is not None and not self.job_thread.is_alive()
+        return self._status == Job.STATUS["COMPLETED"] and self.job_thread is not None and not self.job_thread.is_alive()
 
     def append_activity(self, activity ):
 
