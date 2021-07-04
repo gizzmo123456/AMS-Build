@@ -175,7 +175,7 @@ class JobQueue:
 
                 if not uac.can_execute_activity( stage_task ):
                     _print(
-                        f"JQ-CreateJob: Unable to create job ({job_name}). User ({uac.username}) does not have permission to execute task ({task_name}) (stage: {stage_name})")
+                        f"JQ-CreateJob: Unable to create job ({job_name}) for project ({project}). User ('{uac.username}' origin: {uac.origin} ) does not have permission to execute task ({task_name}) (stage: {stage_name})")
                     skip_job = True
                     break
 
