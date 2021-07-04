@@ -23,7 +23,7 @@ class BaseActivity:
     def access_level():
         return uac.UAC.TRIGGER
 
-    def __init__(self, name, job, stage_data):
+    def __init__(self, name, job, stage ):
 
         self._status = BaseActivity.STATUS["INIT"]
 
@@ -31,10 +31,11 @@ class BaseActivity:
         self.hash = cipher.Hash.sha1( f"act-{self.__class__.__name__}-{name}-{time.time()}" )
 
         self.job = job
-        self.stage_data = stage_data
+        self.stage_data = {}
 
         self.__dir = {}
 
+        self.set_stage_data( stage )
         self.init()
 
         self._status = BaseActivity.STATUS["INIT"]
@@ -42,6 +43,14 @@ class BaseActivity:
     def init(self):
         """(abstract) Method to extend __init__()"""
         pass
+
+    def set_stage_data(self, data):
+        """
+            Sets the stage data
+            (virtual method intended to set relevent stage data into the self.job.data )
+        """
+
+        self.stage_data = data
 
     def execute(self):
         pass
