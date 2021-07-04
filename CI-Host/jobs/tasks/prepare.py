@@ -1,7 +1,11 @@
 import jobs.base_activity as base_activities
-
+import user_access_control as uac
 
 class Prepare( base_activities.BaseTask ):
+
+    @staticmethod
+    def access_level():
+        return uac.UAC.SERVER_ADMIN
 
     def init(self):
         pass
