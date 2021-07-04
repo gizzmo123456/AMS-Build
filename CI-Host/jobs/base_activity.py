@@ -19,11 +19,11 @@ class BaseActivity:
     def print_label(self):
         return f"Activity '{self.name}' ({self.hash[:7]}):"
 
-    @property
-    def access_level(self):
+    @staticmethod
+    def access_level():
         return uac.UAC.TRIGGER
 
-    def __init__(self, name, job):
+    def __init__(self, name, job, stage_data):
 
         self._status = BaseActivity.STATUS["INIT"]
 
@@ -31,6 +31,7 @@ class BaseActivity:
         self.hash = cipher.Hash.sha1( f"act-{self.__class__.__name__}-{name}-{time.time()}" )
 
         self.job = job
+        self.stage_data = stage_data
 
         self.__dir = {}
 
@@ -56,8 +57,8 @@ class BaseActivity:
 
 class BaseTask(BaseActivity):
 
-    def __init__(self, name, job):
-        super().__init__(name, job)
+    def __init__(self, name, job, stage_data):
+        super().__init__(name, job, stage_data)
 
     @staticmethod
     def get_subclass_dict():
@@ -67,8 +68,8 @@ class BaseTask(BaseActivity):
 
 class BaseAction(BaseActivity):
 
-    def __init__(self, name, job):
-        super().__init__(name, job)
+    def __init__(self, name, job, stage_data):
+        super().__init__(name, job, stage_data)
 
     @staticmethod
     def get_subclass_dict():
