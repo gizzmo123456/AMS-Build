@@ -191,4 +191,7 @@ class JobQueue:
             JobQueue.__queue_job( new_job )
             created_job_count += 1
 
-        _print(f"JQ-CreateJob: Successfully created {created_job_count} of {len( pipeline_jobs )} job from project ({project}) pipeline")
+        if created_job_count == 0:
+            _print( f"JQ-CreateJob: Failed to create any jobs from project ({project}) pipeline file.", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
+        else:
+            _print(f"JQ-CreateJob: Successfully created {created_job_count} of {len( pipeline_jobs )} job from project ({project}) pipeline")
