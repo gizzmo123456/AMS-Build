@@ -32,6 +32,10 @@ class Job:
     def print_label(self):
         return f"Job '{self.name}' ({self.hash[:7]}):"
 
+    @property
+    def short_hash(self):
+        return self.hash[:7]
+
     def __init__(self, job_name, uac, project, **data ):
         """
 

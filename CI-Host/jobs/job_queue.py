@@ -25,14 +25,14 @@ class JobQueue:
 
         JobQueue.__queue_job = self.queue_job
 
-    def queue_job(self, job):
+    def queue_job(self, job_to_queue):
 
-        if not isinstance( job, job.Job ):
+        if not isinstance( job_to_queue, job.Job ):
             _print( "JobQueue: Unable to queue job. Item is not an instance of job.")
             return
 
-        self.queue.put( job )
-        _print(f"JobQueue: Job '{job.name}' ({job.hash[:7]}) queued.")
+        self.queue.put( job_to_queue )
+        _print(f"JobQueue: Job '{job_to_queue.name}' ({job_to_queue.short_hash}) queued.")
 
     def queueCount(self):
         """
