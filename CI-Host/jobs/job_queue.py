@@ -152,6 +152,7 @@ class JobQueue:
             new_job = jobs.job.Job( job_name, uac, project, **data )    # TODO: add some of the pipeline data.
             job_stages = pipeline_job["stages"]
             stage_index = 0
+            skip_job = False
 
             for stage in job_stages:
 
@@ -160,6 +161,7 @@ class JobQueue:
                 if "task" not in stage:
                     _print(
                         f"JQ-CreateJob: Unable to create job ({job_name}). 'task' is not defined in stage ({stage_name}).")
+                    skip_job = True
                     break
 
                 task_name = stage["task"]
@@ -168,11 +170,13 @@ class JobQueue:
                 if stage_task is None:
                     _print(
                         f"JQ-CreateJob: Unable to create job ({job_name}). The defined task ({stage['task']}) in stage does not exist.")
+                    skip_job = True
                     break
 
                 if not uac.can_execute_activity( stage_task ):
                     _print(
                         f"JQ-CreateJob: Unable to create job ({job_name}). User ({uac.username}) does not have permission to execute task ({task_name}) (stage: {stage_name})")
+                    skip_job = True
                     break
 
                 stage_task = stage_task( stage_name, new_job, stage )
@@ -180,6 +184,9 @@ class JobQueue:
                 _print(f"JS-CreateJob: Created job from project ({project}) pipeline")
 
                 stage_index += 1
+
+            if skip_job:
+                continue
 
             JobQueue.__queue_job( new_job )
             created_job_count += 1
