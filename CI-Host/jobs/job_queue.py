@@ -1,6 +1,8 @@
 import queue
 import time
 import jobs.job as job
+import common
+import commonProject
 
 import jobs.base_activity # TEMP TODO: remove.
 
@@ -103,13 +105,80 @@ class JobQueue:
     @staticmethod
     def create_jobs_from_pipeline( uac, project, **data ):
         """
-            Creates and queues jobs from pipeline file.
+            Creates and queues jobs from the projects pipeline file.
         :param uac:     user access controle object
         :param project: project to create jobs for
         :param data:  additional data to be set into the job.
         """
 
         _print("CREATING JOB FROM PIPELINE ...")
+
+        # load the projects pipeline file.
+        # if none is returned either the project does not exist or the user does not have access to the project.
+        pipeline_conf = commonProject.get_project_pipeline( uac, project, version2=True )
+
+        if pipeline_conf is None:
+            _print(f"JQ-CreateJob: Failed to load pipeline for project '{project}'. "
+                   f"(either project does not exist or user does not have access)",
+                   message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
+            return
+
+        if not pipeline_conf.get( "active", True ):
+            _print(f"JQ-CreateJob: Unable to create jobs from project ({project}) pipeline. Pipeline not active")
+            return
+
+        if "jobs" not in pipeline_conf:
+            _print(f"JQ-CreateJob: Unable to create jobs from project ({project}) pipeline. 'jobs' is not defined")
+            return
+
+        pipeline_jobs = pipeline_conf["jobs"]  # Key: job name, Value: stages []
+        job_names = list( pipeline_jobs )
+
+        if len( pipeline_jobs ) == 0:
+            _print(f"JQ-CreateJob: Unable to create jobs from project ({project}) pipeline. 'jobs' contains not jobs")
+            return
+
+        for job_name in job_names:
+            pipeline_job = pipeline_jobs[job_name]
+
+            if "stages" not in pipeline_job:
+                _print(f"JQ-CreateJob: Unable to create job ({job_name}) from project ({project}) pipeline. 'stages' not defined for job")
+                continue
+            elif type( pipeline_job["stages"] ) is not list:
+                _print(f"JQ-CreateJob: Unable to create job ({job_name}) from project ({project}) pipeline. stages is not an Array.")
+                continue
+
+            new_job = jobs.job.Job( job_name, uac, project, **data )    # TODO: add some of the pipeline data.
+            job_stages = pipeline_job["stages"]
+            stage_index = 0
+
+            for stage in job_stages:
+
+                stage_name = stage.get( "name", f"stage-{stage_index}" )
+
+                if "task" not in stage:
+                    _print(
+                        f"JQ-CreateJob: Unable to create job ({job_name}). 'task' is not defined in stage ({stage_name}).")
+                    break
+
+                task_name = stage["task"]
+                stage_task = jobs.job.Job.ACTIVITIES["TASKS"].get( task_name, None )
+
+                if stage_task is None:
+                    _print(
+                        f"JQ-CreateJob: Unable to create job ({job_name}). The defined task ({stage['task']}) in stage does not exist.")
+                    break
+
+                if not uac.can_execute_activity( stage_task ):
+                    _print(
+                        f"JQ-CreateJob: Unable to create job ({job_name}). User ({uac.username}) does not have permission to execute task ({task_name}) (stage: {stage_name})")
+                    break
+
+                stage_task = stage_task( stage_name, new_job, stage )
+                new_job.append_activity( stage_task )
+                _print(f"JS-CreateJob: Created job from project ({project}) pipeline")
+
+                stage_index += 1
 
         new_job = job.Job( "My Fist Job", uac, project, **data )
 
