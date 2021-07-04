@@ -132,7 +132,7 @@ def get_project_pipeline( uac, project_name, version2=False ):  # TODO: version 
 
     pipeline = common.get_dict_from_json( pipeline_path )
 
-    if not uac.has_project_access( project_name, get_project_config( uac, project_name, "webhooks") ):
+    if not uac.has_project_access( project_name ):
         return None
 
     return pipeline
