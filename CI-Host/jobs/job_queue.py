@@ -32,7 +32,7 @@ class JobQueue:
             return
 
         self.queue.put( job )
-
+        _print(f"JobQueue: Job '{job.name}' ({job.hash[:7]}) queued.")
 
     def queueCount(self):
         """
@@ -133,6 +133,7 @@ class JobQueue:
 
         pipeline_jobs = pipeline_conf["jobs"]  # Key: job name, Value: stages []
         job_names = list( pipeline_jobs )
+        created_job_count = 0
 
         if len( pipeline_jobs ) == 0:
             _print(f"JQ-CreateJob: Unable to create jobs from project ({project}) pipeline. 'jobs' contains not jobs")
@@ -180,19 +181,7 @@ class JobQueue:
 
                 stage_index += 1
 
-        new_job = job.Job( "My Fist Job", uac, project, **data )
+            JobQueue.__queue_job( new_job )
+            created_job_count += 1
 
-        activity = job.base_activities.BaseActivity( "activity", job )
-        action   = job.base_activities.BaseAction( "action", job )
-        task     = job.base_activities.BaseTask( "task", job )
-        not_an_activity = 55
-
-        _print("APPENDING ACTIVITIES")
-        new_job.append_activity( activity )
-        new_job.append_activity( action )
-        new_job.append_activity( task )
-
-        _print("APPENDING NOT AN ACTIVITY (ie an int)")
-        new_job.append_activity( not_an_activity )
-
-        _print("JOB CREATED FROM PIPELINE")
+        _print(f"JQ-CreateJob: Successfully created {created_job_count} of {len( pipeline_jobs )} job from project ({project}) pipeline")
