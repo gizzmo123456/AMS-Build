@@ -23,6 +23,10 @@ class BaseActivity:
     def short_hash(self):
         return self.hash[:7]
 
+    @property
+    def activity_name(self):
+        return self.__class__.__name__.lower()
+
     @staticmethod
     def access_level():
         return uac.UAC.TRIGGER
@@ -32,7 +36,7 @@ class BaseActivity:
         self._status = BaseActivity.STATUS["INIT"]
 
         self.name = name
-        self.hash = cipher.Hash.sha1( f"act-{self.__class__.__name__}-{name}-{time.time()}" )
+        self.hash = cipher.Hash.sha1( f"act-{self.activity_name}-{name}-{time.time()}" )
 
         self.job = job
         self.stage_data = {}
