@@ -23,7 +23,7 @@ class JobQueue:
         self.active  = []               # active jobs
         self.pending = []               # pending execution.
 
-        JobQueue._queue_job = self.queue_job
+        JobQueue.__queue_job = self.queue_job
 
     def queue_job(self, job):
 
