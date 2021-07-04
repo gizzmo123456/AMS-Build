@@ -16,16 +16,16 @@ class BaseActivity:
     }
 
     @property
-    def print_label(self):
-        return f"Activity '{self.name}' ({self.hash[:7]}):"
-
-    @property
     def short_hash(self):
         return self.hash[:7]
 
     @property
     def activity_name(self):
         return self.__class__.__name__.lower()
+
+    @property
+    def print_label(self):
+        return f"Activity '{self.name}' ({self.short_hash}):"
 
     @staticmethod
     def access_level():
@@ -46,7 +46,7 @@ class BaseActivity:
         self.set_stage_data( stage )
         self.init()
 
-        self._status = BaseActivity.STATUS["INIT"]
+        self._status = BaseActivity.STATUS["CREATED"]
 
     def init(self):
         """(abstract) Method to extend __init__()"""
