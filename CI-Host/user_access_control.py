@@ -1,5 +1,6 @@
 import user_manager
 import commonProject
+import jobs.base_activity as base_activities
 import time
 import common
 import const
@@ -150,3 +151,10 @@ class UAC:
         _print("UAC: Webhook not found.")
 
         return False
+
+    def can_execute_activity(self, activity_cls):
+        if not issubclass( activity_cls, base_activities.BaseActivity ):
+            _print("UAC: Activity_cls is not of type BaseActivity")
+            return False
+
+        return activity_cls.access_level() <= self.access_level
