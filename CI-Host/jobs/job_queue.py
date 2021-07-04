@@ -136,7 +136,7 @@ class JobQueue:
         created_job_count = 0
 
         if len( pipeline_jobs ) == 0:
-            _print(f"JQ-CreateJob: Unable to create jobs from project ({project}) pipeline. 'jobs' contains not jobs")
+            _print(f"JQ-CreateJob: Unable to create jobs from project ({project}) pipeline. 'jobs' contains no jobs")
             return
 
         for job_name in job_names:

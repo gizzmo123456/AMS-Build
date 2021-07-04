@@ -19,6 +19,10 @@ class BaseActivity:
     def print_label(self):
         return f"Activity '{self.name}' ({self.hash[:7]}):"
 
+    @property
+    def short_hash(self):
+        return self.hash[:7]
+
     @staticmethod
     def access_level():
         return uac.UAC.TRIGGER

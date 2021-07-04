@@ -113,7 +113,7 @@ class Job:
         self.activities[ activity.name ] = activity
         self.data[ "activity-count"] += 1
 
-        _print( f"{self.print_label} Activity {activity.name} ({activity.hash[:7]}) appended to job. (activity count: {self.data['activity-count']})")
+        _print( f"{self.print_label} Activity {activity.name} ({activity.short_hash}) appended to job. (activity count: {self.data['activity-count']})")
 
     def append_data(self, **data ):
         self.data.update( data )
