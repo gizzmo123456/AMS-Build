@@ -171,7 +171,7 @@ class Job:
 
             self.current_activity_id += 1
 
-        self._status = self.STATUS["COMPLETE"] if successful else self.STATUS["FAILED"]
+        self._status = Job.STATUS["COMPLETED"] if successful else Job.STATUS["FAILED"]
 
         if successful:
             _print( f"{self.print_label}: All Activities have completed successfully" )
