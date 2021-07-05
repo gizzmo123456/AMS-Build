@@ -132,6 +132,8 @@ class Job:
         elif self.job_thread is not None:
             _print(f"{self.print_label} Unable to execute job. Already executed? ")
             return
+        else:
+            _print(f"{self.print_label} Starting job thread...")
 
         self._status = Job.STATUS["ACTIVE"]
 
