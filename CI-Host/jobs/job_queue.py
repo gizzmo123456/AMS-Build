@@ -85,7 +85,7 @@ class JobQueue:
                     promoted_job = self.pending.pop( 0 )
                     if promoted_job.execute():
                         self.active.append( promoted_job )
-                        _print(f"JobQueue: Successfully promoted job from 'PENDING' to 'ACTIVE ")
+                        _print(f"JobQueue: Successfully promoted job ({promoted_job.short_hash}) from 'PENDING' to 'ACTIVE ")
                     else:
                         _print(f"JobQueue: Failed to execute job ({promoted_job.short_hash})")
 
