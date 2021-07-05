@@ -181,6 +181,8 @@ class Job:
         else:
             _print( f"{self.print_label} Failed to execute activity '{current_key}'. Job exited with status {self.status_name}")
 
+        _print(self.data)
+
     def terminate(self):
         pass
 
