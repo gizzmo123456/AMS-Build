@@ -34,6 +34,7 @@ class Prepare( base_activities.BaseTask ):
 
             if ssh_conf is not None:
                 found_key = False
+                active = False
                 # look up the ssh name and set the ssh data if defined/active.
                 for ssh_key in ssh_conf:
                     if "name" in ssh_key and ssh_key["name"] == self.stage_data["ssh"]:
@@ -49,11 +50,14 @@ class Prepare( base_activities.BaseTask ):
                             "name": self.stage_data["ssh"],
                             "key-name": ssh_key.get("key-name", None)
                         }
-                        _print( self.print_label, "SSH Found.", self._data["ssh"] ) # TODO: Remove.
+                        _print( self.print_label, f"SSH config '{self.stage_data['ssh']}' loaded.")
                         break
 
                 if not found_key:
                     _print( self.print_label, "SSH key not found in ssh config" )
+                elif not active:
+                    _print( self.print_label, "Ignoring found ssh key. Not active." )
+
             else:
                 _print( self.print_label, "Unable to load 'ssh' config.")
 
