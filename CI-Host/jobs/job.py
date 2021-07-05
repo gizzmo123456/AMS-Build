@@ -138,10 +138,10 @@ class Job:
 
         if self._status != self.STATUS["PENDING"]:
             _print(f"{self.print_label} Unable to execute job status is not pending. (current status: {self._status})")
-            return
+            return False
         elif self.job_thread is not None:
             _print(f"{self.print_label} Unable to execute job. Already executed? ")
-            return
+            return False
         else:
             _print(f"{self.print_label} Starting job thread...")
 
@@ -149,6 +149,8 @@ class Job:
 
         self.job_thread = threading.Thread( target=self.execute_thread )
         self.job_thread.start()
+
+        return True
 
     def execute_thread(self):
 

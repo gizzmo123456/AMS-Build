@@ -83,10 +83,13 @@ class JobQueue:
                 # promote pending tasks, while there are active slots available.
                 while len( self.pending ) > 0 and len( self.active ) < JobQueue.MAX_ACTIVE:
                     promoted_job = self.pending.pop( 0 )
-                    promoted_job.execute()
-                    self.active.append( promoted_job )
+                    if promoted_job.execute():
+                        self.active.append( promoted_job )
+                        _print(f"JobQueue: Successfully promoted job from 'PENDING' to 'ACTIVE ")
+                    else:
+                        _print(f"JobQueue: Failed to execute job ({promoted_job.short_hash})")
+
                     update_queue_file = True
-                    _print(f"JobQueue: Promoted job {promoted_job.name} ({promoted_job.hash})")
 
                 if update_queue_file:
                     update_queue_file = False
