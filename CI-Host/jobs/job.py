@@ -78,7 +78,6 @@ class Job:
             **data
         }
 
-
         self.job_thread = None
         self.thread_lock = threading.RLock()
 
@@ -115,7 +114,13 @@ class Job:
 
         _print( f"{self.print_label} Activity '{activity.activity_name}:{activity.name}' ({activity.short_hash}) appended to job. (activity count: {self.data['activity-count']})")
 
-    def append_data(self, **data ):
+    def add_unique_data(self, **data ):
+        """ Adds data to the to self.data if the values does not already exist."""
+        for d in data:
+            self.data.setdefault( d, data[d] )
+
+    def update_data(self, **data ):
+        """ Updates self.data, overwriting any values that already exist."""
         self.data.update( data )
 
     def execute(self):
