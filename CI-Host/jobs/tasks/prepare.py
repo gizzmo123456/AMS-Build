@@ -73,7 +73,7 @@ class Prepare( base_activities.BaseTask ):
         with terminal.Terminal() as console:
             pass
 
-        return True
+        return False
 
     def terminate(self):
         pass
