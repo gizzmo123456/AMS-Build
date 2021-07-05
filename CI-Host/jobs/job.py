@@ -163,13 +163,16 @@ class Job:
 
         for key in activity_keys:
             current_key = key
-            _print( f"{self.print_label} Starting activity '{self.name}' ({self.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
-            successful = self.activities[ key ].execute()
+            activity =  self.activities[ key ]
+            _print( f"{self.print_label} Starting activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
+            successful = activity.execute()
 
             if not successful:
                 break
 
+            _print( f"{self.print_label} Successfully completed activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
             self.current_activity_id += 1
+
 
         self._status = Job.STATUS["COMPLETED"] if successful else Job.STATUS["FAILED"]
 
