@@ -97,6 +97,15 @@ class Job:
 
         return "Unknown Status"
 
+    def promote_to_pending(self):
+
+        if self._status != Job.STATUS[ "CREATED" ]:
+            _print(f"{self.print_label} Unable to promote job to pending. status is not created (Current status: {self.status_name}")
+            return False
+
+        self._status = Job.STATUS[ "PENDING" ]
+        return True
+
     @property
     def is_complete(self):
         return self._status == Job.STATUS["COMPLETED"] and self.job_thread is not None and not self.job_thread.is_alive()

@@ -62,8 +62,11 @@ class JobQueue:
             # move the new job into the pending queue.
             if isinstance( new_job, job.Job ) :
                 if new_job.status == job.Job.STATUS["CREATED"]:
-                    self.pending.append( new_job )
-                    update_queue_file = True
+                    if new_job.promote_to_pending():
+                        self.pending.append( new_job )
+                        update_queue_file = True
+                    else:
+                        _print(f"JobQueue: Discarding job ({new_job.short_hash}). Unable to promote to a pending state. ")   # TODO: This could be because the job is waiting for the completion of another job
                 else:
                     _print( f"JobQueue: Unable to queue job. Status is not CREATED. (status: {new_job.status} )" )
 
