@@ -105,7 +105,7 @@ class BaseActivity:
                                  datetime.datetime.now().strftime( const.DATE_TIME_FORMAT ),
                                  append_to_job=True )
 
-        return self._status == BaseActivity.STATUS["COMPLETE"]
+        return successful
 
     def activity(self):
         raise Exception("Not implemented")
