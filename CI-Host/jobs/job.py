@@ -54,6 +54,7 @@ class Job:
 
         _print( f"Job {job_name} ({self.hash[:7]}) Created for project {project}")
 
+        self.current_activity_id = 0
         self.activities = {}    # key: user defined name, value: activity. (if the name if undefined auto generated.)
 
         # default data, that is available to all activities.
@@ -124,10 +125,44 @@ class Job:
         self.data.update( data )
 
     def execute(self):
-        pass
+
+        if self._status != self.STATUS["PENDING"]:
+            _print(f"{self.print_label} Unable to execute job status is not pending. (current status: {self._status})")
+            return
+        elif self.job_thread is not None:
+            _print(f"{self.print_label} Unable to execute job. Already executed? ")
+            return
+
+        self._status = Job.STATUS["ACTIVE"]
+
+        self.job_thread = threading.Thread( target=self.execute_thread )
+        self.job_thread.start()
 
     def execute_thread(self):
-        pass
+
+        # execute each activity.
+        with self.thread_lock:
+            activity_keys = list( self.activities )
+
+        successful = False
+        current_key = ''
+
+        for key in activity_keys:
+            current_key = key
+            _print( f"{self.print_label} Starting activity '{self.name}' ({self.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
+            successful = self.activities[ key ].execute()
+
+            if not successful:
+                break
+
+            self.current_activity_id += 1
+
+        self._status = self.STATUS["COMPLETE"] if successful else self.STATUS["FAILED"]
+
+        if successful:
+            _print( f"{self.print_label}: All Activities have completed successfully" )
+        else:
+            _print( f"{self.print_label}: Failed to execute activity '{current_key}'. Job exited with status {self.status_name}")
 
     def terminate(self):
         pass
