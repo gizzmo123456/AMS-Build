@@ -50,7 +50,7 @@ class Prepare( base_activities.BaseTask ):
                             "name": self.stage_data["ssh"],
                             "key-name": ssh_key.get("key-name", None)
                         }
-                        _print( self.print_label, f"SSH config '{self.stage_data['ssh']}' loaded.")
+                        _print( self.print_label, f"SSH config '{self.stage_data['ssh']}' loaded.", ssh_key)
                         break
 
                 if not found_key:
