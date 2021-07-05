@@ -23,7 +23,7 @@ else:
 # data time format
 TIME_FORMAT = "%H:%M:%S"
 DATE_FORMAT = "%d/%m/%Y"
-DATA_TIME_FORMAT = f"{DATE_FORMAT} @ {TIME_FORMAT}"
+DATE_TIME_FORMAT = f"{DATE_FORMAT} @ {TIME_FORMAT}"
 
 def GET_BASE_WEB_ADDRESS(port):
     return f"{WEB_PROTOCOL}://{WEB_ADDRESS}:{port}{WEB_PATH}"
