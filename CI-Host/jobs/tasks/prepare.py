@@ -1,15 +1,16 @@
 import commonProject
 import jobs.base_activity as base_activities
 import user_access_control as uac
-import DEBUG
+import terminal
 
+import DEBUG
 _print  = DEBUG.LOGS.print
 
 class Prepare( base_activities.BaseTask ):
     """
         Updates the project source directory, ready for build, test or deploy
 
-        Supported stage data:
+        Supported stage data (excluding base class(es) data):
           key : description
           -----------------
         - ssh : (optional) name of ssh key config to use.
@@ -61,8 +62,16 @@ class Prepare( base_activities.BaseTask ):
             else:
                 _print( self.print_label, "Unable to load 'ssh' config.")
 
-    def execute(self):
-        pass
+    def terminal_write(self, console, cmd, stdout=""):
+        """writes to the terminal and prints the output to stdout if supplied otherwise prints directly to console"""
+        success, output = console.write( cmd )
+        _print( f"{self.print_label} {output} (successful: {success})", output_filename=stdout, console=stdout=="" )
+        return output
+
+    def activity(self):
+
+        with terminal.Terminal() as console:
+            pass
 
     def terminate(self):
         pass
