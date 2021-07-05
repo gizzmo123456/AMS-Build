@@ -104,7 +104,7 @@ class Job:
             return False
 
         self._status = Job.STATUS[ "PENDING" ]
-        _print(f"{self.print_label} Promoted job to PENDING state ")
+
         return True
 
     @property
