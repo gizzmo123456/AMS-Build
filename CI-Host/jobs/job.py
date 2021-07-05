@@ -73,7 +73,7 @@ class Job:
             "created-by": uac.username,
             "created-origin": uac.origin,
             # time
-            "created-at": datetime.datetime.now().strftime( const.DATA_TIME_FORMAT ),
+            "created-at": datetime.datetime.now().strftime( const.DATE_TIME_FORMAT ),
             "executed-at": None,
             "completed-at": None,
             **data
