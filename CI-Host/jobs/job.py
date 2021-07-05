@@ -156,6 +156,7 @@ class Job:
 
         # execute each activity.
         with self.thread_lock:
+            self.data["executed-at"] = datetime.datetime.now().strftime( const.DATE_TIME_FORMAT )
             activity_keys = list( self.activities )
 
         successful = False
@@ -173,8 +174,8 @@ class Job:
             _print( f"{self.print_label} Successfully completed activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
             self.current_activity_id += 1
 
-
         self._status = Job.STATUS["COMPLETED"] if successful else Job.STATUS["FAILED"]
+        self.data["completed-at"] = datetime.datetime.now().strftime( const.DATE_TIME_FORMAT )
 
         if successful:
             _print( f"{self.print_label} All Activities have completed successfully" )
