@@ -40,7 +40,7 @@ class LOGS:
         LOGS.debug_thread.start()
 
     @staticmethod
-    def print( *argv, message_type=1, sept=' ', output_filename="", console=True, print_now=False ):
+    def print( *argv, message_type=1, sept=' ', output_filename="", console=True, print_now=False, display_timestamp=True ):
         """
 
         :param argv:
@@ -74,7 +74,7 @@ class LOGS:
         else:
             message_type_name = "MESSAGE"
 
-        LOGS.print_que.put( (time_str, message_type_name, sept.join(argv), output_filename, console) )
+        LOGS.print_que.put( (time_str, message_type_name, sept.join(argv), output_filename, console, display_timestamp) )
 
     @staticmethod
     def debug_print_thread( ):
@@ -90,8 +90,8 @@ class LOGS:
 
             log = LOGS.print_que.get(block=True, timeout=None)
 
-            if len(log) == 5:
-                log_time, log_type, message, output_file, console = log
+            if len(log) == 6:
+                log_time, log_type, message, output_file, console, display_timestamp = log
             elif len(log) == 1 and log[0] == QUEUE_UNBLOCK_MESSAGE:
                 print("Killing Debug thread")
                 break
@@ -99,11 +99,13 @@ class LOGS:
                 print("Error: Invalid Debug Log Message (", log, ") ")
                 continue
 
+            time_format = "| {0} | {1} " if display_timestamp else ""
+
             if console:
-                print( "| {0} | {1} | {2} ".format( log_time, log_type, message ) )
+                print( (time_format+" | {2} ").format( log_time, log_type, message ) )
 
             if output_file:
-                LOGS.__log_to_file(output_file, "| {0} | {1} ".format( log_time, message ))
+                LOGS.__log_to_file(output_file, time_format.format( log_time, message ))
 
         LOGS.active = False
         print("Dead debug thread")
