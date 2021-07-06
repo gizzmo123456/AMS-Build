@@ -120,6 +120,18 @@ class Prepare( base_activities.BaseTask ):
                 git_hash = self.terminal_write( term, "git rev-parse HEAD" )
                 self.job.add_unique_data( **{"git-hash": git_hash} )
 
+            # TODO: Should probably add a method to run this when exiting the with statement, to make sure it is run.
+            if "pid" in self._data["ssh"]:
+                output = self.terminal_write(term, "eval $(ssh-agent -k)" )
+                killed_pid = re.findall(r'Agent pid ([0-9]+) killed', output)
+                if len(killed_pid) == 1 and killed_pid[0] == self._data["ssh"]["pid"]:
+                    # remove the pid key to show that no ssh agents are running.
+                    del self._data["ssh"]["pid"]
+                    _print(f"{self.print_label} SSH Agent killed!", **self.redirect_print)
+                else:
+                    _print(f"{self.print_label} Failed to kill ssh agent (pid: {self._private_format_values['ssh']['pid']}).",
+                           message_type=DEBUG.LOGS.MSG_TYPE_ERROR, **self.redirect_print)
+
         return True
 
     def terminate(self):
