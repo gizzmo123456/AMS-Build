@@ -27,7 +27,7 @@ class Prepare( base_activities.BaseTask ):
 
     def init(self):
 
-        self._data["project_source_path"] = f"{self.job.project_root}/{self.job.data['project_branch']}/project_source"
+        self._data["project_source_path"] = f"{self.job.project_root}/{self.job.data['project-branch']}/project_source"
 
     def set_stage_data(self, data):
         super().set_stage_data(data)
