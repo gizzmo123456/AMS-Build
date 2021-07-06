@@ -217,9 +217,9 @@ class Job:
         _print( f"\n{'='*24}\nJob completed at: {self.data['completed-at']}", **self.redirect_print, display_timestamp=False)
 
         if successful:
-            _print( f"{self.print_label} All Activities have completed successfully", **self.redirect_print )
+            _print( f"{self.print_label} All Activities have completed successfully", **self.redirect_print, display_timestamp=False )
         else:
-            _print( f"{self.print_label} Failed to execute activity '{current_key}'. Job exited with status {self.status_name}", **self.redirect_print)
+            _print( f"{self.print_label} Failed to execute activity '{current_key}'. Job exited with status {self.status_name}", **self.redirect_print, display_timestamp=False)
 
 
 
