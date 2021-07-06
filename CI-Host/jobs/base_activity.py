@@ -117,7 +117,7 @@ class BaseActivity:
                                  datetime.datetime.now().strftime( const.DATE_TIME_FORMAT ),
                                  append_to_job=True )
 
-        _print( self.output_file_header, **self.redirect_print )
+        _print( self.output_file_header, **self.redirect_print, display_timestamp=False )
 
         successful = self.activity()
 
