@@ -56,7 +56,7 @@ class Job:
     def redirect_print(self):
         return {
             "console": False,
-            "output_filepath": self.output_log_path
+            "output_filename": self.output_log_path
         }
 
     def __init__(self, job_name, uac, project, **data ):

@@ -58,7 +58,7 @@ class BaseActivity:
     def redirect_print(self):
         return {
             "console": False,
-            "output_filepath": self.job.output_log_path
+            "output_filename": self.job.output_log_path
         }
 
     @staticmethod
