@@ -42,6 +42,7 @@ class Job:
     def output_file_header(self):
         return f"{'='*24}\n" \
                f"Output:     {self.output_name}\n" \
+               f"Job name:       {self.name}\n"\
                f"Project:    {self.project}\n"\
                f"Branch:     {self.data['project-branch']}\n"\
                f"Job:        {self.name}\n"\
@@ -50,6 +51,13 @@ class Job:
                f"Origin:     {self.uac.origin}\n"\
                f"Crated at:  {self.data['created-at']}\n"\
                f"{'='*24}\n"
+
+    @property
+    def redirect_print(self):
+        return {
+            "console": False,
+            "output_filepath": self.output_log_path
+        }
 
     def __init__(self, job_name, uac, project, **data ):
         """
@@ -182,7 +190,7 @@ class Job:
         os.mkdir( self.output_root )
         common.write_file(self.output_log_path, self.output_file_header)
 
-        _print(f"{self.print_label} Created output directory and output log file.", console=False, output_filename=self.output_log_path)
+        _print(f"{self.print_label} Created output directory and output log file.", **self.redirect_print)
 
         # execute each activity.
         with self.thread_lock:

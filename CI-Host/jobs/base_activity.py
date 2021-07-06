@@ -6,6 +6,10 @@ import datetime
 import user_access_control as uac
 import helpers
 
+import DEBUG
+
+_print = DEBUG.LOGS.print
+
 class BaseActivity:
     """
         Base activity for Actions and Tasks
@@ -40,6 +44,22 @@ class BaseActivity:
     @property
     def print_label(self):
         return f"Activity '{self.name}' ({self.short_hash}):"
+
+    @property
+    def output_file_header(self):
+        return f"{'='*24}\n"\
+               f"Activity:       {self.activity_name}\n"\
+               f"Name:           {self.name}\n"\
+               f"Hash:           {self.hash} ({self.short_hash})\n"\
+               f"Executed at:    {self.stage_data['executed-at']}\n"\
+               f"{'='*24}"
+
+    @property
+    def redirect_print(self):
+        return {
+            "console": False,
+            "output_filepath": self.job.output_log_path
+        }
 
     @staticmethod
     def access_level():
@@ -96,6 +116,8 @@ class BaseActivity:
         self._update_stage_data( "executed-at",
                                  datetime.datetime.now().strftime( const.DATE_TIME_FORMAT ),
                                  append_to_job=True )
+
+        _print( self.output_file_header, **self.redirect_print )
 
         successful = self.activity()
 
