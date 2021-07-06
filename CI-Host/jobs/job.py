@@ -42,7 +42,6 @@ class Job:
     def output_file_header(self):
         return f"{'='*24}\n" \
                f"Output:     {self.output_name}\n" \
-               f"Job name:       {self.name}\n"\
                f"Project:    {self.project}\n"\
                f"Branch:     {self.data['project-branch']}\n"\
                f"Job:        {self.name}\n"\

@@ -47,7 +47,7 @@ class BaseActivity:
 
     @property
     def output_file_header(self):
-        return f"{'='*24}\n"\
+        return f"\n{'='*24}\n"\
                f"Activity:       {self.activity_name}\n"\
                f"Name:           {self.name}\n"\
                f"Hash:           {self.hash} ({self.short_hash})\n"\
