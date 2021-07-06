@@ -49,7 +49,7 @@ class Job:
                f"Actor:      {self.uac.username}\n"\
                f"Origin:     {self.uac.origin}\n"\
                f"Crated at:  {self.data['created-at']}\n"\
-               f"{'='*24}\n"
+               f"{'='*24}\n\n"
 
     @property
     def redirect_print(self):
