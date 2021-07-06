@@ -81,7 +81,7 @@ class Job:
             **data
         }
 
-        self.output_name  = f"{project}-{self.data['project-branch']}-[{job_name}-{self.hash}]" # todo. This should be custumizable
+        self.output_name  = f"{project}-{self.data['project-branch']}-{job_name}-{self.hash}" # todo. This should be custumizable
         self.project_root = f"{const.PROJECT_DIRECTORY}/{self.project}"
         self.output_root  = f"{self.project_root}/outputs/{self.output_name}"
         self.output_log   = f"{self.output_root}/log.txt"
