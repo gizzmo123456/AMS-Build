@@ -8,9 +8,18 @@ _print = DEBUG.LOGS.print
 
 class Terminal:
 
-    def __init__(self, input_str="bash-5.0# " ):
+    def __init__(self, input_str="bash-5.0# ", log_filepath="" ):
+        """
+
+        :param input_str:       waiting for input string
+        :param log_filepath:    log path for prints (this does not log the output of the terminal to file.)
+        """
 
         self.input_str = input_str
+        self.redirect_print = {
+            "console": True,
+            "output_filename": log_filepath
+        }
 
         self.active = True
         self.cmd_queue = []  # change to Queue?
@@ -31,7 +40,7 @@ class Terminal:
         # read and discard the message printed by bash at the start
         self.read() # TODO: Log somewhere..
 
-        _print(f"Opened new terminal -> PID: {self.__terminal.pid} ")
+        _print(f"Opened new terminal -> PID: {self.__terminal.pid} ", **self.redirect_print)
 
     def __enter__(self):
         return self
@@ -103,7 +112,7 @@ class Terminal:
         :yields: output, per-command
         """
         if len( self.cmd_queue ) == 0:
-            _print("Unable to process queue. No commands queued")
+            _print("Unable to process queue. No commands queued", **self.redirect_print)
             return
         while len( self.cmd_queue ) > 0:
             cmd = self.cmd_queue.pop(0)
@@ -114,6 +123,6 @@ class Terminal:
                 yield output
 
     def terminate(self):
-        _print("Terminating terminal with pid:", self.__terminal.pid)
+        _print("Terminating terminal with pid:", self.__terminal.pid, **self.redirect_print)
         self.active = False
         self.__terminal.terminate()
