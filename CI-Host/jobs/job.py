@@ -137,13 +137,13 @@ class Job:
     def execute(self):
 
         if self._status != self.STATUS["PENDING"]:
-            _print(f"{self.print_label} Unable to execute job status is not pending. (current status: {self._status})")
+            _print(f"{self.print_label} Unable to execute job, status is not pending. (current status: {self._status})")
             return False
         elif self.job_thread is not None:
             _print(f"{self.print_label} Unable to execute job. Already executed? ")
             return False
-        else:
-            _print(f"{self.print_label} Starting job thread...")
+
+        _print(f"{self.print_label} Starting job thread...")
 
         self._status = Job.STATUS["ACTIVE"]
 
@@ -152,7 +152,7 @@ class Job:
 
         return True
 
-    def execute_thread(self):
+    def execute_thread(self):   # TODO: this needs to be made more thread safe!
 
         # execute each activity.
         with self.thread_lock:
