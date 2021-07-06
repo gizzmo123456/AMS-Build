@@ -38,6 +38,18 @@ class Job:
     def short_hash(self):
         return self.hash[:7]
 
+    @property
+    def output_file_header(self):
+        return f"{'='*24}\n" \
+               f"Output for: {self.output_name}\n" \
+               f"Project:    {self.project}\n"\
+               f"Job:        {self.name}\n"\
+               f"Job hash:   {self.hash} ({self.short_hash})\n"\
+               f"Actor:      {self.uac.username}\n"\
+               f"Origin:     {self.uac.origin}\n"\
+               f"Crated at:  {self.data['created-at']}\n"\
+               f"{'='*24}\n"
+
     def __init__(self, job_name, uac, project, **data ):
         """
 
@@ -167,7 +179,7 @@ class Job:
             return
 
         os.mkdir( self.output_root )
-        common.write_file( self.output_log, f"{'='*24}\nOutput {self.output_name}\n{'='*24}\n" )
+        common.write_file( self.output_log, self.output_file_header )
 
         _print(f"{self.print_label} Created output directory and output log file.")
 
