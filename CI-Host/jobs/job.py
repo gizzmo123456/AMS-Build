@@ -202,22 +202,22 @@ class Job:
         for key in activity_keys:
             current_key = key
             activity =  self.activities[ key ]
-            _print( f"{self.print_label} Starting activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
+            _print( f"{self.print_label} Starting activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] ", **self.redirect_print )
             successful = activity.execute()
 
             if not successful:
                 break
 
-            _print( f"{self.print_label} Successfully completed activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] " )
+            _print( f"{self.print_label} Successfully completed activity '{activity.name}' ({activity.short_hash}) [{self.current_activity_id+1} of {len(activity_keys)}] ", **self.redirect_print )
             self.current_activity_id += 1
 
         self._status = Job.STATUS["COMPLETED"] if successful else Job.STATUS["FAILED"]
         self.data["completed-at"] = datetime.datetime.now().strftime( const.DATE_TIME_FORMAT )
 
         if successful:
-            _print( f"{self.print_label} All Activities have completed successfully" )
+            _print( f"{self.print_label} All Activities have completed successfully", **self.redirect_print )
         else:
-            _print( f"{self.print_label} Failed to execute activity '{current_key}'. Job exited with status {self.status_name}")
+            _print( f"{self.print_label} Failed to execute activity '{current_key}'. Job exited with status {self.status_name}", **self.redirect_print)
 
         _print(self.data)
 
