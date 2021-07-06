@@ -100,12 +100,13 @@ class LOGS:
                 continue
 
             time_format = "| {0} | {1} " if display_timestamp else ""
+            output_format = time_format + "| {2} "
 
             if console:
-                print( (time_format+" | {2} ").format( log_time, log_type, message ) )
+                print( output_format.format( log_time, log_type, message ) )
 
             if output_file:
-                LOGS.__log_to_file(output_file, time_format.format( log_time, message ))
+                LOGS.__log_to_file(output_file, output_format.format( log_time, log_type, message ))
 
         LOGS.active = False
         print("Dead debug thread")
