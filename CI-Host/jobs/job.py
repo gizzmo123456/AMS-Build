@@ -97,7 +97,7 @@ class Job:
         self.output_name  = f"{project}-{self.data['project-branch']}-{job_name}-{self.hash}" # todo. This should be custumizable
         self.project_root = f"{const.PROJECT_DIRECTORY}/{self.project}"
         self.output_root  = f"{self.project_root}/outputs/{self.output_name}"
-        self.output_log   = f"{self.output_root}/log.txt"
+        self.output_log_path   = f"{self.output_root}/log.txt"
 
         self.job_thread = None
         self.thread_lock = threading.RLock()
@@ -180,9 +180,9 @@ class Job:
             return
 
         os.mkdir( self.output_root )
-        common.write_file( self.output_log, self.output_file_header )
+        common.write_file(self.output_log_path, self.output_file_header)
 
-        _print(f"{self.print_label} Created output directory and output log file.")
+        _print(f"{self.print_label} Created output directory and output log file.", console=False, output_filename=self.output_log_path)
 
         # execute each activity.
         with self.thread_lock:
