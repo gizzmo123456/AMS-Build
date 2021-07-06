@@ -2,6 +2,8 @@ import commonProject
 import jobs.base_activity as base_activities
 import user_access_control as uac
 import terminal
+import const
+import re
 
 import DEBUG
 _print  = DEBUG.LOGS.print
@@ -24,7 +26,8 @@ class Prepare( base_activities.BaseTask ):
     """
 
     def init(self):
-        pass
+
+        self._data["project_source_path"] = f"{self.job.project_root}/{self.job.data['project_branch']}/project_source"
 
     def set_stage_data(self, data):
         super().set_stage_data(data)
@@ -62,18 +65,62 @@ class Prepare( base_activities.BaseTask ):
             else:
                 _print( self.print_label, "Unable to load 'ssh' config.")
 
-    def terminal_write(self, console, cmd, stdout=""):
+    def terminal_write(self, term, cmd ):
         """writes to the terminal and prints the output to stdout if supplied otherwise prints directly to console"""
-        success, output = console.write( cmd )
-        _print( f"{self.print_label} {output} (successful: {success})", output_filename=stdout, console=stdout=="" )
+        success, output = term.write( cmd )
+        _print( f"{self.print_label} {output} (successful: {success})", **self.redirect_print )
         return output
 
     def activity(self):
 
-        with terminal.Terminal() as console:
-            pass
+        if "run" not in self.stage_data:
+            _print( f"{self.print_label} Unable to run activity. 'run' has not been supplied." )
+            return False
 
-        return False
+        # TODO: should probably "lock" the directory using a lock file.
+        with terminal.Terminal( log_filepath=self.job.output_log_path ) as term:
+
+            # change the directory to the project source.
+            self.terminal_write( term, f"cd {self._data['project_source_path']}")
+
+            # start start ssh agent and cache the pid
+            # TODO: it might be worth moving start SSH agent and Add keys to a terminal helper module/class.
+            if "ssh" in self._data:
+                output = self.terminal_write(term, "eval $(ssh-agent -s)" )
+                pid = re.findall(r'Agent pid ([0-9]+)', output)
+
+                if len( pid ) != 1:
+                    _print("Failed to capture SSH agent pid. Killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, **self.redirect_print )
+                    self.terminal_write( term, "eval $(ssh-agent -k)")
+                else:
+                    self._data["ssh"]["pid"] = pid[0]
+
+                # load the ssh-key into the agent.
+                output = self.terminal_write(term, "ssh-add {BASE_DIR}/CI-Host/data/.secrets/.ssh/{project}/{key_name}"
+                                             .format(BASE_DIR=const.BASE_DIRECTORY, project=self.job.project, key_name=self._data["ssh"]["key-name"]))
+
+                key_added = re.findall(r'^(Identity added:)', output)
+
+                if len(key_added) == 1 and key_added[0] == "Identity added:":
+                    _print("Key added successfully!", **self.redirect_print)
+                else:
+                    _print("Failed to load SSH key", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, **self.redirect_print)
+
+            else:
+                _print("SSH Agent not required!", **self.redirect_print)
+
+            run_cmd = self.stage_data["run"]
+
+            for cmd in run_cmd:
+                self.terminal_write( term, cmd )
+
+            # this assumes that the repo has been updated.
+            # if the git hash has not been supplied to job get the latest git hash for this job.
+            if "git-hash" not in self.job.data:
+                git_hash = self.terminal_write( term, "git rev-parse HEAD" )
+                self.job.add_unique_data( **{"git-hash": git_hash} )
+
+        return True
 
     def terminate(self):
         pass
