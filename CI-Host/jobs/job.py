@@ -5,6 +5,8 @@ import threading
 import time
 import datetime
 import const
+import os, os.path
+import common
 import DEBUG
 
 _print = DEBUG.LOGS.print
@@ -78,6 +80,11 @@ class Job:
             "completed-at": None,
             **data
         }
+
+        self.project_root = f"{const.PROJECT_DIRECTORY}/{self.project}"
+        self.output_name  = f"{project}-{self.data['project-branch']}-[{job_name}-{self.hash}]"
+        self.output_root  = f"{self.output_root}/outputs/{self.output_name}"
+        self.output_log   = f"{self.output_root}/log.txt"
 
         self.job_thread = None
         self.thread_lock = threading.RLock()
@@ -153,6 +160,16 @@ class Job:
         return True
 
     def execute_thread(self):   # TODO: this needs to be made more thread safe!
+
+        # create the output directory and logs file for job.
+        if os.path.exists( self.output_root ):
+            _print(f"{self.print_label} Unable to created output directory. Already exist. Exiting job.")
+            return
+
+        os.mkdir( self.output_root )
+        common.write_file( self.output_log, f"{'='*24}\nOutput {self.output_name}\n{'='*24}\n" )
+
+        _print(f"{self.print_label} Created output directory and output log file.")
 
         # execute each activity.
         with self.thread_lock:

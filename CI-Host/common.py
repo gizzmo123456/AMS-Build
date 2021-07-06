@@ -15,7 +15,7 @@ def installed():
 
     return True
 
-def run_process( command, shell="python3" ):
+def run_process( command, shell="python3" ): # TODO: this can be removed.
 
     process = subprocess.Popen( [shell, '-c', command], stdout=subprocess.PIPE, stderr=subprocess.STDOUT )
 
