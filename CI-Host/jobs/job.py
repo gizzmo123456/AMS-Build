@@ -41,8 +41,9 @@ class Job:
     @property
     def output_file_header(self):
         return f"{'='*24}\n" \
-               f"Output for: {self.output_name}\n" \
+               f"Output:     {self.output_name}\n" \
                f"Project:    {self.project}\n"\
+               f"Branch:     {self.data['project-branch']}\n"\
                f"Job:        {self.name}\n"\
                f"Job hash:   {self.hash} ({self.short_hash})\n"\
                f"Actor:      {self.uac.username}\n"\
