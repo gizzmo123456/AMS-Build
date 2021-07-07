@@ -118,7 +118,7 @@ class Prepare( base_activities.BaseTask ):
             # if the git hash has not been supplied to job get the latest git hash for this job.
             if "git-commit-hash--" not in self.job.data:
                 git_hash = self.terminal_write( term, "git rev-parse HEAD" )
-                git_commit_hash = re.findall( r'\n([a-z0-9])\r', git_hash )
+                git_commit_hash = re.findall( r'\n([a-z0-9]+)\r', git_hash ) # i could use '{40}' insted of '+'
                 self.job.add_unique_data( **{"git-commit-hash--": git_hash} )
                 _print( git_commit_hash )
 
