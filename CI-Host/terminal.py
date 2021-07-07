@@ -2,6 +2,7 @@
 import pty              # (unix only)
 import subprocess
 import os
+import re
 import DEBUG
 _print = DEBUG.LOGS.print
 
@@ -24,6 +25,7 @@ class Terminal:
         self.active = True
         self.cmd_queue = []  # change to Queue?
         self.print_inputs = True
+        self.remove_color_formats = True
         self.waitingForOutput = False
 
         # Create a new pseudo terminal
@@ -70,6 +72,9 @@ class Terminal:
                 # remove the inputted command and end input string from the output
                 output = output[ len(input_cmd):-len(self.input_str)-1 ]
                 self.waitingForOutput = False
+
+        if self.remove_color_formats:
+            output = re.sub( r'\^\[\[[0-9]*m', "", output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
 
         return cmd, output   # cmd, output (where cmd can include the input string.)
 
