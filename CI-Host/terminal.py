@@ -76,7 +76,7 @@ class Terminal:
         if self.remove_color_formats:
             # TODO: for some reason this is not working.
             #       It works in isolation. and iv tried the multiline flag.
-            matches = re.findall( r'(\[[0-9]*m)', output, flags=re.IGNORECASE )
+            matches = re.findall( r'(\[\[[0-9]*m)', output, flags=re.IGNORECASE )
             a = re.sub( r'\[[0-9]*m', '', output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
             _print( output, "=====", a, "=====", "\n", matches )
 
