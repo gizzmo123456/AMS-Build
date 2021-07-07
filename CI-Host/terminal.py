@@ -77,7 +77,7 @@ class Terminal:
             # TODO: for some reason this is not working.
             #       It works in isolation. and iv tried the multiline flag.
             matches = re.findall( r'(\[[0-9]*m)', output, flags=re.IGNORECASE )
-            output = re.sub( r'(\[[0-9]*)', '', output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
+            output = re.sub( r'(\[[0-9]*m)', '', output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
             _print( output, "=====", "=====\n", "\n", matches )
 
         return cmd, output   # cmd, output (where cmd can include the input string.)
