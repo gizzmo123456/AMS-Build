@@ -75,8 +75,9 @@ class Terminal:
 
         if self.remove_color_formats:
             _print("========REMOVING COLOUR================")
-            output = re.sub( r'\^\[\[[0-9]*m', "", output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
-            _print( output )
+            a = re.sub( r'\^\[\[[0-9]*m', "", output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
+            _print( a )
+
         return cmd, output   # cmd, output (where cmd can include the input string.)
 
     def write(self, cmd):
