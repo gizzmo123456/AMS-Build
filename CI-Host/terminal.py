@@ -52,43 +52,50 @@ class Terminal:
         """
             reads from the stdout until the input string has been printed.
             (blocks until the output has finished)
-        :return: output
+        :return: command, output (if print inputs is set, the input str is included in the cmd string)
         """
 
         self.waitingForOutput = True
-        start = ""
+        cmd = self.last_cmd
         input_cmd = self.last_cmd + "\n\n"
         output = ""
 
         if self.print_inputs:
-            start = self.input_str
-            input_cmd = ""
+            cmd = self.input_str + cmd
 
         while self.waitingForOutput:
             output += os.read( self.stdout.fileno(), 1024 ).decode()
 
             if output[ -len(self.input_str): ] == self.input_str:
-                output = output[ len(input_cmd):-len(self.input_str)-1 ] # remove the inputed command and end input string from the output
+                # remove the inputted command and end input string from the output
+                output = output[ len(input_cmd):-len(self.input_str)-1 ]
                 self.waitingForOutput = False
 
-        return start + output
+        return cmd, output   # cmd, output (where cmd can include the input string.)
 
     def write(self, cmd):
         """
             writes to the stdin and waits for the output.
         :param cmd: command to execute
-        :returns: successful, output (or message if not successful)
+        :returns: successful, cmd, output (or message if not successful) (if print inputs is set, the input str is included in the cmd string)
         """
 
+        cmd_input_str = cmd
+
+        if self.print_inputs:
+            cmd_input_str = self.input_str + cmd_input_str
+
         if not self.active:
-            return False, "Unable to write command. Terminal not active."
+            return False, cmd_input_str, "Unable to write command. Terminal not active."
         elif self.waitingForOutput:
-            return False, "Unable to write command. Waiting for output"
+            return False, cmd_input_str, "Unable to write command. Waiting for output"
 
         self.last_cmd = cmd
         os.write( self.stdin.fileno(), cmd.encode() + b'\n' )
 
-        return True, self.read()
+        cmd_input_str, output = self.read()
+
+        return True, cmd_input_str, output
 
     def queue_cmd(self, cmd="echo ' '"):
         """
@@ -126,3 +133,10 @@ class Terminal:
         _print("Terminating terminal with pid:", self.__terminal.pid, **self.redirect_print)
         self.active = False
         self.__terminal.terminate()
+
+
+if __name__ == "__main__":
+    term = Terminal()
+
+    while True:
+        _print( term.write( input() ) )
