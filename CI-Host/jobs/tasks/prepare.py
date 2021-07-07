@@ -66,9 +66,13 @@ class Prepare( base_activities.BaseTask ):
                 _print( self.print_label, "Unable to load 'ssh' config.")
 
     def terminal_write(self, term, cmd ):
-        """writes to the terminal and prints the output to stdout if supplied otherwise prints directly to console"""
-        success, output = term.write( cmd )
-        _print( f"{self.print_label} {output} (successful: {success})", **self.redirect_print )
+        """
+            writes to the terminal and prints the cmd and output to stdout if supplied otherwise prints directly to console
+            :return output
+            (if the command is needed use term.last_cmd)
+        """
+        success, cmd, output = term.write( cmd )
+        _print( f"{self.print_label}\n{cmd}\n{output} (successful: {success})", **self.redirect_print )
         return output
 
     def activity(self):
@@ -100,7 +104,7 @@ class Prepare( base_activities.BaseTask ):
                                              .format(BASE_DIR=const.BASE_DIRECTORY, project=self.job.project, key_name=self._data["ssh"]["key-name"]))
 
                 key_added = re.findall(r'^(Identity added:)', output)
-                _print(" -> KEY -> ", key_added)
+                _print(output, " -> KEY -> ", key_added)
 
                 if len(key_added) == 1 and key_added[0] == "Identity added:":
                     _print("Key added successfully!", **self.redirect_print)
