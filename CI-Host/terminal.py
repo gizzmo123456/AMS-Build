@@ -133,10 +133,3 @@ class Terminal:
         _print("Terminating terminal with pid:", self.__terminal.pid, **self.redirect_print)
         self.active = False
         self.__terminal.terminate()
-
-
-if __name__ == "__main__":
-    term = Terminal()
-
-    while True:
-        _print( term.write( input() ) )
