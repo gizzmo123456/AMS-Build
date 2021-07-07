@@ -68,9 +68,9 @@ class Webhook( baseHTTPServer.BaseServer ):
 
             #Webhook.shared_task_queue.queue_task( "build", uac=uac, project=query["project"], git_hash=build_hash )
             job_queue.JobQueue.create_jobs_from_pipeline( uac, query["project"],
-                                                          git_repo_name=repo_name,
-                                                          git_branch=branch,
-                                                          git_commit_hash=git_hash )
+                                                          **{"git-repo-name": repo_name,
+                                                             "git-branch": branch,
+                                                             "git-commit-hash": git_hash} )
 
             self.process_request( "Ok", 200, False )
 

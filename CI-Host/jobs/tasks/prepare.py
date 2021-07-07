@@ -137,7 +137,7 @@ class Prepare( base_activities.BaseTask ):
                     del self._data["ssh"]["pid"]
                     _print(f"{self.print_label} SSH Agent killed!", **self.redirect_print)
                 else:
-                    _print(f"{self.print_label} Failed to kill ssh agent (pid: {self._private_format_values['ssh']['pid']}).",
+                    _print(f"{self.print_label} Failed to kill ssh agent (pid: {self._data['ssh']['pid']}).",
                            message_type=DEBUG.LOGS.MSG_TYPE_ERROR, **self.redirect_print)
 
         return True
