@@ -72,7 +72,7 @@ class Prepare( base_activities.BaseTask ):
             (if the command is needed use term.last_cmd)
         """
         success, cmd, output = term.write( cmd )
-        _print( f"{self.print_label}\n{cmd}\n{output} (successful: {success})", **self.redirect_print )
+        _print( f"{self.print_label}\n{cmd}\n{output}\n(command run successfully: {success})", **self.redirect_print )
         return output
 
     def activity(self):
@@ -104,7 +104,6 @@ class Prepare( base_activities.BaseTask ):
                                              .format(BASE_DIR=const.BASE_DIRECTORY, project=self.job.project, key_name=self._data["ssh"]["key-name"]))
 
                 key_added = re.findall(r'^(Identity added:)', output)
-                _print(output, " -> KEY -> ", key_added)
 
                 if len(key_added) == 1 and key_added[0] == "Identity added:":
                     _print("Key added successfully!", **self.redirect_print)
