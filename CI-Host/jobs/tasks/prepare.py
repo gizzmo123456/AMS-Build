@@ -116,9 +116,11 @@ class Prepare( base_activities.BaseTask ):
 
             # this assumes that the repo has been updated.
             # if the git hash has not been supplied to job get the latest git hash for this job.
-            if "git-hash" not in self.job.data:
+            if "git-commit-hash--" not in self.job.data:
                 git_hash = self.terminal_write( term, "git rev-parse HEAD" )
-                self.job.add_unique_data( **{"git-hash": git_hash} )
+                git_commit_hash = re.findall( r'\n([a-z0-9])\r', git_hash )
+                self.job.add_unique_data( **{"git-commit-hash--": git_hash} )
+                _print( git_commit_hash )
 
             # TODO: Should probably add a method to run this when exiting the with statement, to make sure it is run.
             if "pid" in self._data["ssh"]:
