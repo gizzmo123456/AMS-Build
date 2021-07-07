@@ -74,9 +74,10 @@ class Terminal:
                 self.waitingForOutput = False
 
         if self.remove_color_formats:
-            _print("========REMOVING COLOUR================")
-            a = re.sub( r'\^\[\[[0-9]*m', "", output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
-            _print( a )
+            # TODO: for some reason this is not working.
+            #       It works in isolation. and iv tried the multiline flag.
+            output = re.sub( r'\^\[\[[0-9]*m', '', output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
+            _print( output )
 
         return cmd, output   # cmd, output (where cmd can include the input string.)
 
