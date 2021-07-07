@@ -74,9 +74,8 @@ class Terminal:
                 self.waitingForOutput = False
 
         if self.remove_color_formats:
-            # TODO: for some reason this is not working.
-            #       It works in isolation. and iv tried the multiline and unicode flags.
             output = re.sub( r'(\033\[[0-9]*m)', '', output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
+                                                              #       NOTE: '\e' (or '^[') is '\033' in regex :)
 
         return cmd, output   # cmd, output (where cmd can include the input string.)
 
