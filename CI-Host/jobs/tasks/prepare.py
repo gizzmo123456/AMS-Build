@@ -100,7 +100,7 @@ class Prepare( base_activities.BaseTask ):
                                              .format(BASE_DIR=const.BASE_DIRECTORY, project=self.job.project, key_name=self._data["ssh"]["key-name"]))
 
                 key_added = re.findall(r'^(Identity added:)', output)
-
+                _print(key_added)
                 if len(key_added) == 1 and key_added[0] == "Identity added:":
                     _print("Key added successfully!", **self.redirect_print)
                 else:
@@ -114,13 +114,15 @@ class Prepare( base_activities.BaseTask ):
             for cmd in run_cmd:
                 self.terminal_write( term, cmd )
 
-            # this assumes that the repo has been updated.
+            # assuming that the repo/project has been updated.
             # if the git hash has not been supplied to job get the latest git hash for this job.
-            if "git-commit-hash--" not in self.job.data:
+            if "git-commit-hash" not in self.job.data:
                 git_hash = self.terminal_write( term, "git rev-parse HEAD" )
                 git_commit_hash = re.findall( r'\n([a-z0-9]+)\r', git_hash ) # i could use '{40}' insted of '+'
-                self.job.add_unique_data( **{"git-commit-hash--": git_hash} )
-                _print( git_commit_hash )
+                if len( git_commit_hash ) == 1:
+                    self.job.add_unique_data( **{"git-commit-hash": git_commit_hash} )
+                else:
+                    _print( f"{self.print_label} Failed to capture git commit hash", **self.redirect_print, message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
 
             # TODO: Should probably add a method to run this when exiting the with statement, to make sure it is run.
             if "pid" in self._data["ssh"]:
