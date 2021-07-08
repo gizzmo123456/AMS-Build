@@ -53,7 +53,7 @@ class BaseActivity:
                f"Name:           {self.name}\n"\
                f"Hash:           {self.hash} ({self.short_hash})\n"\
                f"Executed at:    {self.stage_data['executed-at']}\n"\
-               f"{'='*24}"
+               f"{'='*24}\n"
 
     @property
     def redirect_print(self):
