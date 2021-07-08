@@ -203,7 +203,7 @@ class JobQueue:
                 stage_task = stage_task( stage_name, new_job, stage )
 
                 if not stage_task.is_valid:
-                    _print( f"JQ-CreateJob: Unable to create job ({job_name}) for project ({project}). Invalid Action ({stage_task.action_name}::{stage_task.name}) created." )
+                    _print( f"JQ-CreateJob: Unable to create job ({job_name}) for project ({project}). Invalid Action ({stage_task.activity_name}::{stage_task.name}) created." )
                     skip_job = True
                     break
 
