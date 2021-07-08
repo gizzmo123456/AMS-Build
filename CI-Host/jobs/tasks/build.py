@@ -49,15 +49,15 @@ class Build( base_activities.BaseTask ):
         self.stage_data.setdefault( "docker", None )
 
         # check docker has been configured correctly
-        if self._data["docker"] is not None:
+        if self.stage_data["docker"] is not None:
 
-            if "image" not in self._data["docker"]:
+            if "image" not in self.stage_data["docker"]:
                 _print( f"{self.print_label} Invalid docker settings for activity ({self.activity_name}::{self.name})"
                         f"docker must contain 'image'.")
                 self._status = base_activities.BaseActivity.STATUS["INVALID"]
                 return
 
-            self._data["docker"].setdefault("args", "")
+            self.stage_data["docker"].setdefault("args", "")
 
     def activity(self):
         pass
