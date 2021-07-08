@@ -186,12 +186,20 @@ class JobQueue:
                     break
 
                 stage_task = stage_task( stage_name, new_job, stage )
+
+                if not stage_task.is_valid:
+                    _print( f"JQ-CreateJob: Unable to create job ({job_name}) for project ({project}). Invalid Action ({stage_task.action_name}::{stage_task.name}) created." )
+                    skip_job = True
+                    break
+
                 new_job.append_activity( stage_task )
                 _print(f"JQ-CreateJob: Created job from project ({project}) pipeline")
 
                 stage_index += 1
 
             if skip_job:
+                # discard and move onto the next job.
+                del new_job
                 continue
 
             JobQueue.__queue_job( new_job )

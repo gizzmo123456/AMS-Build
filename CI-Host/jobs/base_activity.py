@@ -30,7 +30,8 @@ class BaseActivity:
         "ACTIVE"    : -1,
         "COMPLETE"  :  0,
         "FAILED"    :  1,
-        "NO-AUTH"   :  2
+        "INVALID"   :  2,
+        "NO-AUTH"   :  3
     }
 
     @property
@@ -83,7 +84,12 @@ class BaseActivity:
         self.set_stage_data( stage )
         self.init()
 
-        self._status = BaseActivity.STATUS["CREATED"]
+        if self._status is BaseActivity.STATUS["INIT"]:
+            self._status = BaseActivity.STATUS["CREATED"]
+
+    @property
+    def is_vaild(self):
+        return self._status < BaseActivity.STATUS["INVALID"]
 
     def init(self):
         """(abstract) Method to extend __init__()"""
@@ -112,12 +118,18 @@ class BaseActivity:
 
     def execute(self):
 
-        self._status = BaseActivity.STATUS["ACTIVE"]
+        if self.is_vaild:
+            self._status = BaseActivity.STATUS["ACTIVE"]
+
         self._update_stage_data( "executed-at",
                                  datetime.datetime.now().strftime( const.DATE_TIME_FORMAT ),
                                  append_to_job=True )
 
         _print( self.output_file_header, **self.redirect_print, display_timestamp=False )
+
+        if not self.is_vaild:
+            _print( f"{self.print_label} Unable to execute activity. Activity is invalid.", **self.redirect_print )
+            return False
 
         successful = self.activity()
 
