@@ -139,6 +139,7 @@ class JobQueue:
 
         pipeline_jobs = pipeline_conf["jobs"]  # Key: job name, Value: stages []
         job_names = list( pipeline_jobs )
+        activity_names = [] # used to check that the names of the activities are unique
         created_job_count = 0
 
         if len( pipeline_jobs ) == 0:
@@ -163,6 +164,20 @@ class JobQueue:
             for stage in job_stages:
 
                 stage_name = stage.get( "name", f"stage-{stage_index}" )
+
+                # rename the activity is the name is not unique
+                original_name = None
+                rename_index = 1
+
+                while stage_name in activity_names:
+                    original_name = stage_name
+                    stage_name += "-"+str( rename_index )
+                    rename_index += 1
+
+                if original_name is not None:
+                    _print( f"JQ-CreateJob: Renamed activity '{original_name}' to '{stage_name}'. Activity names must be unique" )
+
+                activity_names.append( stage_name )
 
                 if "task" not in stage:
                     _print(
