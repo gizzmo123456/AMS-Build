@@ -30,6 +30,8 @@ class Prepare( base_activities.BaseTask ):
         self._data["project_source_path"] = f"{self.job.project_root}/{self.job.data['project-branch']}/project_source"
 
     def set_stage_data(self, data):
+        self._status = base_activities.BaseActivity.STATUS["INVALID"]
+        return
         super().set_stage_data(data)
 
         if "ssh" in self.stage_data:
