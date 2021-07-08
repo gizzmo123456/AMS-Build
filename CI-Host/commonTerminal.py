@@ -1,6 +1,7 @@
 # Common commands and helper methods to use with terminal
 
 import DEBUG
+import re
 
 _print = DEBUG.LOGS.print
 
@@ -24,3 +25,16 @@ def terminal_print( term, cmd, prefix_label="", **print_options ):
 
 
 # Common commands
+# Git
+
+# SSH
+def ssh_agent_start( terminal, prefix_label="", **print_options ):
+    pass
+
+def ssh_add_key( terminal, prefix_label="", **print_options ):
+    pass
+
+def ssh_agent_close( terminal, prefix_label="", **print_options ):
+    pass
+
+# Docker
