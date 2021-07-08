@@ -88,7 +88,7 @@ class BaseActivity:
             self._status = BaseActivity.STATUS["CREATED"]
 
     @property
-    def is_vaild(self):
+    def is_valid(self):
         return self._status < BaseActivity.STATUS["INVALID"]
 
     def init(self):
@@ -118,7 +118,7 @@ class BaseActivity:
 
     def execute(self):
 
-        if self.is_vaild:
+        if self.is_valid:
             self._status = BaseActivity.STATUS["ACTIVE"]
 
         self._update_stage_data( "executed-at",
@@ -127,7 +127,7 @@ class BaseActivity:
 
         _print( self.output_file_header, **self.redirect_print, display_timestamp=False )
 
-        if not self.is_vaild:
+        if not self.is_valid:
             _print( f"{self.print_label} Unable to execute activity. Activity is invalid.", **self.redirect_print )
             return False
 
