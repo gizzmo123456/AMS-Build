@@ -208,7 +208,7 @@ class JobQueue:
                     break
 
                 new_job.append_activity( stage_task )
-                _print(f"JQ-CreateJob: Created job from project ({project}) pipeline")
+                _print(f"JQ-CreateJob: Created activity from project ({project}) pipeline")
 
                 stage_index += 1
 
