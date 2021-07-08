@@ -2,6 +2,7 @@
 
 # Tasks
 import jobs.tasks.prepare
+import jobs.tasks.build
 
 # Actions
 
