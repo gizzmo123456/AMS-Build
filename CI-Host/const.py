@@ -11,6 +11,11 @@ BASE_DIRECTORY = config_manager.ConfigManager.get( "base_directory", "${HOME}/am
 PROJECT_DIRECTORY = BASE_DIRECTORY + "/CI-projects"
 RELEVENT_PROJECT_PATH = "../CI-projects"            # relevant to the CI-Host folder
 
+# data time format
+TIME_FORMAT = "%H:%M:%S"
+DATE_FORMAT = "%d/%m/%Y"
+DATE_TIME_FORMAT = f"{DATE_FORMAT} @ {TIME_FORMAT}"
+
 # Web Const
 WEB_ADDRESS = config_manager.ConfigManager.get( "web_address", "localhost" )
 WEB_PATH = config_manager.ConfigManager.get( "web_path", "/ams-build" )
@@ -19,11 +24,6 @@ if config_manager.ConfigManager.get( "use_ssl", False ):
     WEB_PROTOCOL = "https"
 else:
     WEB_PROTOCOL = "http"
-
-# data time format
-TIME_FORMAT = "%H:%M:%S"
-DATE_FORMAT = "%d/%m/%Y"
-DATE_TIME_FORMAT = f"{DATE_FORMAT} @ {TIME_FORMAT}"
 
 def GET_BASE_WEB_ADDRESS(port):
     return f"{WEB_PROTOCOL}://{WEB_ADDRESS}:{port}{WEB_PATH}"

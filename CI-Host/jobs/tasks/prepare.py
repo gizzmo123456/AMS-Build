@@ -18,7 +18,7 @@ class Prepare( base_activities.BaseTask ):
         - ssh : (optional) name of ssh key config to use.
         - run : List of commands to run in the project source directory
 
-        values registered into job.data (key format '{activity-name}.{key-name}')
+        values registered into job.data (key format '{self.name}.{key-name}')
           key : description
           -----------------
         - git-hash: The latest git commit hash. (only set if not already)
