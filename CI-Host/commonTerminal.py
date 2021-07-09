@@ -76,7 +76,7 @@ class Docker:
         # if the first word of the output is error we have failed to pull the docker image.
         # Note: we only support pulling from public registries.
 
-        return output[:5].lower() != "error"
+        return output[:5].lower() != "error" and output[:7].lower() != "invalid"
 
     def run(self, container_name, args):
 

@@ -69,7 +69,7 @@ class Build( base_activities.BaseTask ):
 
                 # check if the docker image exist and pull the image if necessary
                 if not docker.image_exist_locally():
-                    docker.pull_image()
+                    return docker.pull_image()
 
                 return True
 
