@@ -1,4 +1,6 @@
 import jobs.base_activity as base_activities
+import terminal
+import commonTerminal
 
 import DEBUG
 
@@ -30,9 +32,6 @@ class Build( base_activities.BaseTask ):
 
     DEFAULT_BUILD_NAME = "{project}-{name}-{build-id}"
 
-    def init(self):
-        pass
-
     def set_stage_data(self, data):
 
         super().set_stage_data( data )
@@ -60,7 +59,29 @@ class Build( base_activities.BaseTask ):
             self.stage_data["docker"].setdefault("args", "")
 
     def activity(self):
-        pass
+
+        with terminal.Terminal( log_filepath=self.job.output_log_path ) as term:
+
+            # configure docker if used.
+            if self.stage_data["docker"] is not None:
+
+                docker = commonTerminal.Docker( term, self.stage_data["docker"]["image"], self.print_label, **self.redirect_print )
+
+                # check if the docker image exist and pull the image if necessary
+                if not docker.image_exist_locally():
+                    docker.pull_image()
+
+                return True
+
+            _print( f"{self.print_label} No support for non docker build :(. (TODO: support <<)" )
+            return False
 
     def terminate(self):
-        pass
+
+        with terminal.Terminal( log_filepath=self.job.output_log_path ) as term:
+
+            if self.stage_data["docker"] is not None:
+                docker = commonTerminal.Docker( term, self.stage_data["docker"]["image"], self.print_label, **self.redirect_print )
+                docker.stop()
+            else:
+                _print( f"{self.print_label} Unable to stop build. No support for non docker." )
