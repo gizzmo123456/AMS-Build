@@ -69,7 +69,12 @@ class Build( base_activities.BaseTask ):
 
                 # check if the docker image exist and pull the image if necessary
                 if not docker.image_exist_locally():
-                    return docker.pull_image()
+                    if not docker.pull_image():
+                        return False
+
+                # TODO: Create the volume mounts and append to args.
+                # TODO: determine if run was successful or not.
+                docker.run( self.hash, self.stage_data["docker"]["args"] )
 
                 return True
 

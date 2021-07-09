@@ -86,7 +86,7 @@ class Docker:
 
         self.container_name = container_name
         output = terminal_print( self.terminal, f"sudo docker run --name {container_name} {args} {self.image_name}",
-                                 prefix_label=self.print_label, **self.print_options )  # TODO: <<<
+                                 prefix_label=self.print_label, **self.print_options )
 
     @property
     def is_running(self):
