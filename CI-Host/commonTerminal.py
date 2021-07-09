@@ -20,7 +20,8 @@ def terminal_print( term, cmd, prefix_label="", **print_options ):
         (if the command is needed use term.last_cmd)
     """
     success, cmd, output = term.write( cmd )
-    _print( f"{prefix_label}\n{cmd}\n{output}\n(command run successfully: {success})", **print_options )
+    _print( f"{prefix_label}\n\n{'-'*6}terminal{'-'*6}\n{cmd}\n{output}\n{'-'*4}EOF - success: {success}{'-'*4}\n", **print_options )
+
     return output
 
 
