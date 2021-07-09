@@ -88,6 +88,18 @@ class Docker:
         output = terminal_print( self.terminal, f"sudo docker run --name {container_name} {args} {self.image_name}",
                                  prefix_label=self.print_label, **self.print_options )  # TODO: <<<
 
+    @property
+    def is_running(self):
+        """Is the container running?"""
+
+        if self.container_name is None:
+            _print( f"{self.print_label} Unable to see if container is running. container name not set" )
+            return False
+
+        output = terminal_print( self.terminal, "sudo docker ps --format {{lower .Image}}\t{{lower .Names}}")
+
+        return re.search( f'{re.escape(self.image_name)}\s+{re.escape(self.container_name)}', output ) is not None
+
     def stop(self, timeout=10, kill=False):
         """
             sends a SIGTERM to the container. if the container does not exit within the timeout period
