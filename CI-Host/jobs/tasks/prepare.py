@@ -1,4 +1,5 @@
 import commonProject
+import commonTerminal
 import jobs.base_activity as base_activities
 import user_access_control as uac
 import terminal
@@ -65,16 +66,6 @@ class Prepare( base_activities.BaseTask ):
             else:
                 _print( self.print_label, "Unable to load 'ssh' config.")
 
-    def terminal_write(self, term, cmd ):
-        """
-            writes to the terminal and prints the cmd and output to stdout if supplied otherwise prints directly to console
-            :return output
-            (if the command is needed use term.last_cmd)
-        """
-        success, cmd, output = term.write( cmd )
-        _print( f"{self.print_label}\n{cmd}\n{output}\n(command run successfully: {success})", **self.redirect_print )
-        return output
-
     def activity(self):
 
         if "run" not in self.stage_data:
@@ -85,23 +76,23 @@ class Prepare( base_activities.BaseTask ):
         with terminal.Terminal( log_filepath=self.job.output_log_path ) as term:
 
             # change the directory to the project source.
-            self.terminal_write( term, f"cd {self._data['project_source_path']}")
+            commonTerminal.terminal_print( term, f"cd {self._data['project_source_path']}", self.print_label, **self.redirect_print)
 
             # start start ssh agent and cache the pid
             # TODO: it might be worth moving start SSH agent and Add keys to a terminal helper module/class.
             if "ssh" in self._data:
-                output = self.terminal_write(term, "eval $(ssh-agent -s)" )
+                output = commonTerminal.terminal_print(term, "eval $(ssh-agent -s)", self.print_label, **self.redirect_print )
                 pid = re.findall(r'Agent pid ([0-9]+)', output)
 
                 if len( pid ) != 1:
                     _print("Failed to capture SSH agent pid. Killing agent.", message_type=DEBUG.LOGS.MSG_TYPE_ERROR, **self.redirect_print )
-                    self.terminal_write( term, "eval $(ssh-agent -k)")
+                    commonTerminal.terminal_print( term, "eval $(ssh-agent -k)", self.print_label, **self.redirect_print)
                 else:
                     self._data["ssh"]["pid"] = pid[0]
 
                 # load the ssh-key into the agent.
-                output = self.terminal_write(term, "ssh-add {BASE_DIR}/CI-Host/data/.secrets/.ssh/{project}/{key_name}"
-                                             .format(BASE_DIR=const.BASE_DIRECTORY, project=self.job.project, key_name=self._data["ssh"]["key-name"]))
+                output = commonTerminal.terminal_print( term, f"ssh-add {const.BASE_DIRECTORY}/CI-Host/data/.secrets/.ssh/{self.job.project}/{self._data['ssh']['key-name']}",
+                                              self.print_label, **self.redirect_print )
 
                 key_added = re.findall(r'^(Identity added:)', output)
 
@@ -116,12 +107,12 @@ class Prepare( base_activities.BaseTask ):
             run_cmd = self.stage_data["run"]
 
             for cmd in run_cmd:
-                self.terminal_write( term, cmd )
+                commonTerminal.terminal_print( term, cmd, self.print_label, **self.redirect_print )
 
             # assuming that the repo/project has been updated.
             # if the git hash has not been supplied to job get the latest git hash for this job.
             if "git-commit-hash" not in self.job.data:
-                git_hash = self.terminal_write( term, "git rev-parse HEAD" )
+                git_hash = commonTerminal.terminal_print( term, "git rev-parse HEAD", self.print_label, **self.redirect_print )
                 git_commit_hash = re.findall( r'\n([a-z0-9]+)\r', git_hash ) # i could use '{40}' insted of '+'
                 if len( git_commit_hash ) == 1:
                     self.job.add_unique_data( **{"git-commit-hash": git_commit_hash} )
@@ -130,7 +121,7 @@ class Prepare( base_activities.BaseTask ):
 
             # TODO: Should probably add a method to run this when exiting the with statement, to make sure it is run.
             if "pid" in self._data["ssh"]:
-                output = self.terminal_write(term, "eval $(ssh-agent -k)" )
+                output = commonTerminal.terminal_print(term, "eval $(ssh-agent -k)", self.print_label, **self.redirect_print )
                 killed_pid = re.findall(r'Agent pid ([0-9]+) killed', output)
                 if len(killed_pid) == 1 and killed_pid[0] == self._data["ssh"]["pid"]:
                     # remove the pid key to show that no ssh agents are running.
