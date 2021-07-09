@@ -85,7 +85,7 @@ class Docker:
             return
 
         self.container_name = container_name
-        output = terminal_print( self.terminal, f"sudo docker run --name {container_name} {args} {self.image_name}",
+        output = terminal_print( self.terminal, f"sudo docker run --name {container_name} {args} {self.image_name}; echo $?",
                                  prefix_label=self.print_label, **self.print_options )
 
     @property
@@ -114,7 +114,7 @@ class Docker:
             _print( f"{self.print_label} Unable to {method} container. Container name not set.",
                     prefix_label=self.print_label, **self.print_options )
 
-        output = terminal_print( self.terminal, f"sudo docker {method} {timeout} {self.container_name}; echo $?",
+        output = terminal_print( self.terminal, f"sudo docker {method} {timeout} {self.container_name}",
                                  prefix_label=self.print_label, **self.print_options )
 
         # this should return the container name if stopped successfully
