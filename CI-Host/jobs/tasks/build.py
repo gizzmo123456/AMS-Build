@@ -76,7 +76,7 @@ class Build( base_activities.BaseTask ):
                 # TODO: determine if run was successful or not.
                 exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
 
-                _print( self.print_label, f"Container exited with code: {exit_code} " )
+                _print( self.print_label, f"Container exited with code: {exit_code} ", **self.redirect_print )
 
                 return True
 
@@ -91,4 +91,4 @@ class Build( base_activities.BaseTask ):
                 docker = commonTerminal.Docker( term, self.stage_data["docker"]["image"], self.print_label, **self.redirect_print )
                 docker.stop()
             else:
-                _print( f"{self.print_label} Unable to stop build. No support for non docker." )
+                _print( f"{self.print_label} Unable to stop build. No support for non docker.", **self.redirect_print )
