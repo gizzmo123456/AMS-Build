@@ -79,7 +79,7 @@ class Docker:
         return output[:5].lower() != "error" and output[:7].lower() != "invalid"
 
     def run(self, container_name, args):
-
+        """Runs the container returning the exit code"""
         if self.container_name is not None:
             _print( f"{self.print_label} Unable to run container, already running. ", **self.print_options )
             return
@@ -87,6 +87,8 @@ class Docker:
         self.container_name = container_name
         output = terminal_print( self.terminal, f"sudo docker run --name {container_name} {args} {self.image_name}; echo $?",
                                  prefix_label=self.print_label, **self.print_options )
+
+        return output.split("\n")[-1:]
 
     @property
     def is_running(self):

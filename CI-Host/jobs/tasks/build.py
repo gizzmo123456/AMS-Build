@@ -74,7 +74,9 @@ class Build( base_activities.BaseTask ):
 
                 # TODO: Create the volume mounts and append to args.
                 # TODO: determine if run was successful or not.
-                docker.run( self.hash, self.stage_data["docker"]["args"] )
+                exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
+
+                _print( self.print_label, f"Container exited with code: {exit_code} " )
 
                 return True
 
