@@ -39,6 +39,8 @@ class Terminal:
         cmd = [ "bash", "--norc", "--noediting", "-is" ]
         self.__terminal = subprocess.Popen( cmd, close_fds=False, stdin=std_slave, stdout=std_slave, stderr=std_slave )
 
+        self.pid = self.__terminal.pid
+
         # read and discard the message printed by bash at the start
         self.read() # TODO: Log somewhere..
 
