@@ -114,7 +114,7 @@ class Docker:
             _print( f"{self.print_label} Unable to {method} container. Container name not set.",
                     prefix_label=self.print_label, **self.print_options )
 
-        output = terminal_print( self.terminal, f"sudo docker {method} {timeout} {self.container_name}",
+        output = terminal_print( self.terminal, f"sudo docker {method} {timeout} {self.container_name}; echo $?",
                                  prefix_label=self.print_label, **self.print_options )
 
         # this should return the container name if stopped successfully
@@ -124,6 +124,7 @@ class Docker:
             return False
 
         # now we can remove the container allowing the same name to be used again.
+        # i could just add '--rm' to run
         success = self.remove_container()
 
         if success:
