@@ -88,7 +88,7 @@ class Docker:
         output = terminal_print( self.terminal, f"sudo docker run --name {container_name} {args} {self.image_name}; echo $?",
                                  prefix_label=self.print_label, **self.print_options )
 
-        return output.split("\n")[-1:].replace("\r", "")
+        return output.split("\n")[-1:][0].replace("\r", "")
 
     @property
     def is_running(self):
