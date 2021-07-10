@@ -120,8 +120,10 @@ class Build( base_activities.BaseTask ):
         attached = False
 
         # We must skip the read on init since it will be empty
-        with terminal.Terminal( input_str="/ #", skip_read=True, n="thread" ) as term:
+        with terminal.Terminal( n="thread" ) as term:
             # TODO: turn off console in term.
+
+            term.input_str = "/ # "
 
             attempt += 1
 
@@ -138,6 +140,8 @@ class Build( base_activities.BaseTask ):
                         return
                 else:
                     attached = True
+
+            _print( "attached! Ready to run commands in container." )
 
             # now we can inject the run commands.
             # TODO: ....
