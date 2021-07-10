@@ -76,7 +76,7 @@ class Terminal:
 
             if self.remove_escape_characters:
                 read = self.clean_escape_seq( output )
-
+            _print( read )
             output += read
 
             if output[ -len(self.input_str): ] == self.input_str:
