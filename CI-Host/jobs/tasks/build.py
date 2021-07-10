@@ -83,7 +83,7 @@ class Build( base_activities.BaseTask ):
                 # TODO: Create the volume mounts and append to args.
                 # TODO: determine if run was successful or not.
                 args = self.stage_data["docker"]["args"]
-                args += " -ti " # make sure that the tty and interactive flags are supplied.
+                args += " -ti " # make sure that the tty and interactive flags are supplied.    # it might be worth using some regex to see if there already set.
 
                 # map volumes
                 # args += " -v "
@@ -92,16 +92,16 @@ class Build( base_activities.BaseTask ):
                 # so we can interact with the containers shell.
                 # We must start a new terminal in case the input_str is different from host os.
 
-                #self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=[self.hash], kwargs={"poll": 1, "max_attempts": 5} )
-                #self.container_attach_thread.start()
+                self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=[self.hash], kwargs={"poll": 1, "max_attempts": 5} )
+                self.container_attach_thread.start()
                 _print("BobBob....")
                 exit_code = docker.run( self.hash, args )
 
                 _print( self.print_label, f"Container exited with code: {exit_code} ", **self.redirect_print )
                 _print( f"EXIT CODE: {exit_code}" ) # TODO: remove testing
 
-                #if self.container_attach_thread.is_alive():
-                #    _print("Attached thread has not exited", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
+                if self.container_attach_thread.is_alive():
+                    _print("Attached thread has not exited", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
 
                 return True
 
