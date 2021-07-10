@@ -91,10 +91,10 @@ class Build( base_activities.BaseTask ):
                 # before running the container we need to start a new thread and attach to container with a new terminal
                 # so we can interact with the containers shell.
                 # We must start a new terminal in case the input_str is different from host os.
-                _print(self.hash)
+
                 self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=[self.hash], kwargs={"poll": 1, "max_attempts": 5} )
                 self.container_attach_thread.start()
-
+                _print("BobBob....")
                 exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
 
                 _print( self.print_label, f"Container exited with code: {exit_code} ", **self.redirect_print )
@@ -108,6 +108,8 @@ class Build( base_activities.BaseTask ):
             return False
 
     def container_terminal_thread(self, container_name, poll=1, max_attempts=5):
+
+        _print("attaching....")
 
         # we must wait a sec to get the container chance to start :)
         time.sleep( poll )
