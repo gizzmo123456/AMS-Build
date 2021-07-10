@@ -75,7 +75,7 @@ class Terminal:
             read = os.read( self.stdout.fileno(), 1024 ).decode()
 
             if self.remove_escape_characters:
-                read = self.clean_escape_seq( output )
+                read = self.clean_escape_seq( read )
             _print( read )
             output += read
 
