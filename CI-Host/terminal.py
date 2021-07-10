@@ -43,7 +43,7 @@ class Terminal:
         self.pid = self.__terminal.pid
 
         # read and discard the message printed by bash at the start
-        if skip_read:
+        if not skip_read:
             self.read() # TODO: Log somewhere..
 
         _print(f"Opened new terminal -> PID: {self.__terminal.pid} (inp str: {input_str}::{n})", **self.redirect_print)
