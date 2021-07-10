@@ -173,6 +173,5 @@ class Terminal:
                 [@-~]   # Final byte
             )
         ''', re.VERBOSE)
-        ansi_escape.sub( b'', output)
 
-        return output.decode()
+        return ansi_escape.sub( b'', output).decode()
