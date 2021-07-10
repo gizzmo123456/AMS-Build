@@ -113,6 +113,7 @@ class Build( base_activities.BaseTask ):
 
         # we must wait a sec to get the container chance to start :)
         time.sleep( poll )
+        _print("Sleep Done")
 
         attempt = 0
         attached = False
