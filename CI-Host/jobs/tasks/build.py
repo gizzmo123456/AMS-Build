@@ -92,8 +92,8 @@ class Build( base_activities.BaseTask ):
                 # so we can interact with the containers shell.
                 # We must start a new terminal in case the input_str is different from host os.
 
-                self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=[self.hash], kwargs={"poll": 1, "max_attempts": 5} )
-                self.container_attach_thread.start()
+                #self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=[self.hash], kwargs={"poll": 1, "max_attempts": 5} )
+                #self.container_attach_thread.start()
                 _print("BobBob....")
                 exit_code = docker.run( self.hash, args )
 
