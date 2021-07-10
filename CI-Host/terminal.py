@@ -45,6 +45,8 @@ class Terminal:
         # read and discard the message printed by bash at the start
         if not skip_read:
             self.read() # TODO: Log somewhere..
+        else:
+            _print("Read Skipped")
 
         _print(f"Opened new terminal -> PID: {self.__terminal.pid} (inp str: {input_str}::{n})", **self.redirect_print)
 
@@ -71,6 +73,9 @@ class Terminal:
 
         while self.waitingForOutput:
             output += os.read( self.stdout.fileno(), 1024 ).decode()
+
+            if self.input_str == '/ # ':
+                _print( output )
 
             if output[ -len(self.input_str): ] == self.input_str:
                 # remove the inputted command and end input string from the output
