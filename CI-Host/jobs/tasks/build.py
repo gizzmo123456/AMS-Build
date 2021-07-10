@@ -128,7 +128,7 @@ class Build( base_activities.BaseTask ):
             _print(f"Attaching to container {container_name}")
             while not attached:
                 output = commonTerminal.terminal_print( term, f"sudo docker attach {container_name}", console=True, output_filename="")
-
+                _print("ATTACH -> ", output )
                 if output[:5].lower() == "error":
                     if attempt < max_attempts:
                         _print(f"Unable to attach to container '{container_name}'. Attempting again in {poll} seconds (attempt {attempt} of {max_attempts})")
