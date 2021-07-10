@@ -75,7 +75,7 @@ class Terminal:
             output += os.read( self.stdout.fileno(), 1024 ).decode()
 
             if self.input_str == '/ #':
-                _print( output.encode() )
+                _print( self.clean_output(output).encode() )
 
             if output[ -len(self.input_str): ] == self.input_str:
                 # remove the inputted command and end input string from the output
@@ -148,3 +148,31 @@ class Terminal:
         _print("Terminating terminal with pid:", self.__terminal.pid, **self.redirect_print)
         self.active = False
         self.__terminal.terminate()
+
+    # TESTING
+    def clean_output(self, output):
+        # See: https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
+
+        if type( output) is not bytes:
+            output = output.encode()
+
+        ansi_escape = re.compile(br'''
+            (?: # either 7-bit C1, two bytes, ESC Fe (omitting CSI)
+                \x1B
+                [@-Z\\-_]
+            |   # or a single 8-bit byte Fe (omitting CSI)
+                [\x80-\x9A\x9C-\x9F]
+            |   # or CSI + control codes
+                (?: # 7-bit CSI, ESC [ 
+                    \x1B\[
+                |   # 8-bit CSI, 9B
+                    \x9B
+                )
+                [0-?]*  # Parameter bytes
+                [ -/]*  # Intermediate bytes
+                [@-~]   # Final byte
+            )
+        ''', re.VERBOSE)
+        ansi_escape.sub( b'', output)
+
+        return output.decode()
