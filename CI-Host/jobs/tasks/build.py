@@ -86,7 +86,7 @@ class Build( base_activities.BaseTask ):
                 args += " -ti " # make sure that the tty and interactive flags are supplied.
 
                 # map volumes
-                args += " -v "
+                # args += " -v "
 
                 # before running the container we need to start a new thread and attach to container with a new terminal
                 # so we can interact with the containers shell.
@@ -95,7 +95,7 @@ class Build( base_activities.BaseTask ):
                 self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=[self.hash], kwargs={"poll": 1, "max_attempts": 5} )
                 self.container_attach_thread.start()
                 _print("BobBob....")
-                exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
+                exit_code = docker.run( self.hash, args )
 
                 _print( self.print_label, f"Container exited with code: {exit_code} ", **self.redirect_print )
                 _print( f"EXIT CODE: {exit_code}" ) # TODO: remove testing
