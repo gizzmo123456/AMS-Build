@@ -74,8 +74,8 @@ class Terminal:
         while self.waitingForOutput:
             output += os.read( self.stdout.fileno(), 1024 ).decode()
 
-            if self.input_str == '/ #':
-                _print( self.clean_output(output).encode() )
+            # if self.input_str == '/ #':
+            _print( self.clean_output(output).encode() )
 
             if output[ -len(self.input_str): ] == self.input_str:
                 # remove the inputted command and end input string from the output
