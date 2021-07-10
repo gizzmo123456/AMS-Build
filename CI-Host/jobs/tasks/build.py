@@ -1,3 +1,5 @@
+import threading
+import time
 import jobs.base_activity as base_activities
 import terminal
 import commonTerminal
@@ -31,6 +33,12 @@ class Build( base_activities.BaseTask ):
     """
 
     DEFAULT_BUILD_NAME = "{project}-{name}-{build-id}"
+    def __init__(self, name, job, stage):
+
+        super().__init__(name, job, stage)
+
+        self.container_attach_thread = None
+        self.thread_lock = threading.RLock()
 
     def set_stage_data(self, data):
 
@@ -74,14 +82,60 @@ class Build( base_activities.BaseTask ):
 
                 # TODO: Create the volume mounts and append to args.
                 # TODO: determine if run was successful or not.
+                args = self.stage_data["docker"]["args"]
+                args += " -ti " # make sure that the tty and interactive flags are supplied.
+
+                # map volumes
+                args += " -v "
+
+                # before running the container we need to start a new thread and attach to container with a new terminal
+                # so we can interact with the containers shell.
+                # We must start a new terminal in case the input_str is different from host os.
+                self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=() )
+                self.container_attach_thread.start()
+
                 exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
 
                 _print( self.print_label, f"Container exited with code: {exit_code} ", **self.redirect_print )
+
+                if self.container_attach_thread.is_alive():
+                    _print("Attached thread has not exited", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
 
                 return True
 
             _print( f"{self.print_label} No support for non docker build :(. (TODO: support <<)" )
             return False
+
+    def container_terminal_thread(self, container_name, poll=1, max_attempts=5):
+
+        # we must wait a sec to get the container chance to start :)
+        time.sleep( poll )
+
+        attempt = 0
+        attached = False
+
+        with terminal.Terminal( input_str="/ # " ) as term:
+            # TODO: turn off console in term.
+
+            attempt += 1
+
+            _print(f"Attaching to container {container_name}")
+            while not attached:
+                output = commonTerminal.terminal_print( term, f"sudo docker attach {container_name}", console=True, output_filename="")
+
+                if output[:5].lower() == "error":
+                    if attempt < max_attempts:
+                        _print(f"Unable to attach to container '{container_name}'. Attempting again in {poll} seconds (attempt {attempt} of {max_attempts})")
+                        time.sleep(poll)
+                    else:
+                        _print(f"Failed to attach to container '{container_name}' after {max_attempts} attempts. Exiting.")
+                        return
+                else:
+                    attached = True
+
+            # now we can inject the run commands.
+            # TODO: ....
+        _print( "Finished running cmds........." )
 
     def terminate(self):
 

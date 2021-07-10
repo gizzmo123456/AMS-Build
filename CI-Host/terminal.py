@@ -23,7 +23,7 @@ class Terminal:
         }
 
         self.active = True
-        self.cmd_queue = []  # change to Queue?
+        self.cmd_queue = []  # change to Queue for thread safeness? # TODO: i think this should be a queue of cmds to run on exit.
         self.print_inputs = True
         self.remove_color_formats = True
         self.waitingForOutput = False
