@@ -91,7 +91,8 @@ class Build( base_activities.BaseTask ):
                 # before running the container we need to start a new thread and attach to container with a new terminal
                 # so we can interact with the containers shell.
                 # We must start a new terminal in case the input_str is different from host os.
-                self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=( self.hash ) )
+                _print(self.hash)
+                self.container_attach_thread = threading.Thread( target=self.container_terminal_thread, args=self.hash )
                 self.container_attach_thread.start()
 
                 exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
