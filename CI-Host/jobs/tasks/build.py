@@ -98,6 +98,7 @@ class Build( base_activities.BaseTask ):
                 exit_code = docker.run( self.hash, self.stage_data["docker"]["args"] )
 
                 _print( self.print_label, f"Container exited with code: {exit_code} ", **self.redirect_print )
+                _print( f"EXIT CODE: {exit_code}" ) # TODO: remove testing
 
                 if self.container_attach_thread.is_alive():
                     _print("Attached thread has not exited", message_type=DEBUG.LOGS.MSG_TYPE_WARNING)
