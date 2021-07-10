@@ -26,7 +26,7 @@ class Terminal:
         self.active = True
         self.cmd_queue = []  # change to Queue for thread safeness? # TODO: i think this should be a queue of cmds to run on exit.
         self.print_inputs = True
-        self.remove_color_formats = True
+        self.remove_escape_characters = True
         self.waitingForOutput = False
 
         # Create a new pseudo terminal
@@ -72,19 +72,17 @@ class Terminal:
             cmd = self.input_str + cmd
 
         while self.waitingForOutput:
-            output += os.read( self.stdout.fileno(), 1024 ).decode()
+            read = os.read( self.stdout.fileno(), 1024 ).decode()
 
-            # if self.input_str == '/ #':
-            _print( self.clean_output(output).encode() )
+            if self.remove_escape_characters:
+                read = self.clean_escape_seq( output )
+
+            output += read
 
             if output[ -len(self.input_str): ] == self.input_str:
                 # remove the inputted command and end input string from the output
                 output = output[ len(input_cmd):-len(self.input_str)-1 ]
                 self.waitingForOutput = False
-
-        if self.remove_color_formats:
-            output = re.sub( r'(\033\[[0-9]*m)', '', output ) # TODO: this is major improvment. But this will do for git at least. See https://misc.flogisoft.com/bash/tip_colors_and_formatting
-                                                              #       NOTE: '\e' (or '^[') is '\033' in regex :)
 
         return cmd, output   # cmd, output (where cmd can include the input string.)
 
@@ -150,7 +148,7 @@ class Terminal:
         self.__terminal.terminate()
 
     # TESTING
-    def clean_output(self, output):
+    def clean_escape_seq(self, output):
         # See: https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
 
         if type( output) is not bytes:
