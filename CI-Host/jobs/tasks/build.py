@@ -118,7 +118,8 @@ class Build( base_activities.BaseTask ):
         attempt = 0
         attached = False
 
-        with terminal.Terminal( input_str="/ # " ) as term:
+        # We must skip the read on init since it will be empty
+        with terminal.Terminal( input_str="/ # ", skip_read=True ) as term:
             # TODO: turn off console in term.
 
             attempt += 1
