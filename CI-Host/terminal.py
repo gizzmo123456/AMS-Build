@@ -9,7 +9,7 @@ _print = DEBUG.LOGS.print
 
 class Terminal:
 
-    def __init__(self, input_str="bash-5.0# ", log_filepath="", skip_read=False ):
+    def __init__(self, input_str="bash-5.0# ", log_filepath="", skip_read=False, n="" ):
         """
 
         :param input_str:       waiting for input string
@@ -46,7 +46,7 @@ class Terminal:
         if skip_read:
             self.read() # TODO: Log somewhere..
 
-        _print(f"Opened new terminal -> PID: {self.__terminal.pid} ", **self.redirect_print)
+        _print(f"Opened new terminal -> PID: {self.__terminal.pid} (inp str: {input_str}::{n})", **self.redirect_print)
 
     def __enter__(self):
         return self

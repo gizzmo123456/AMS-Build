@@ -68,7 +68,7 @@ class Build( base_activities.BaseTask ):
 
     def activity(self):
 
-        with terminal.Terminal( log_filepath=self.job.output_log_path ) as term:
+        with terminal.Terminal( log_filepath=self.job.output_log_path, n="helloo" ) as term:
 
             # configure docker if used.
             if self.stage_data["docker"] is not None:
@@ -120,7 +120,7 @@ class Build( base_activities.BaseTask ):
         attached = False
 
         # We must skip the read on init since it will be empty
-        with terminal.Terminal( input_str="/ # ", skip_read=True ) as term:
+        with terminal.Terminal( input_str="/ # ", skip_read=True, n="thread" ) as term:
             # TODO: turn off console in term.
 
             attempt += 1
