@@ -68,7 +68,7 @@ class Build( base_activities.BaseTask ):
 
     def activity(self):
 
-        with terminal.Terminal( log_filepath=self.job.output_log_path, n="helloo" ) as term:
+        with terminal.Terminal( log_filepath=self.job.output_log_path ) as term:
 
             # configure docker if used.
             if self.stage_data["docker"] is not None:
@@ -120,16 +120,16 @@ class Build( base_activities.BaseTask ):
         attached = False
 
         # We must skip the read on init since it will be empty
-        with terminal.Terminal( n="thread" ) as term:
+        with terminal.Terminal( ) as term:
             # TODO: turn off console in term.
 
-            term.input_str = "/ # "
+            term.input_str = "\ # " # TODO: this should only be set if attach has been successful
 
             attempt += 1
 
             _print(f"Attaching to container {container_name}")
             while not attached:
-                output = commonTerminal.terminal_print( term, f"sudo docker attach {container_name}", console=True, output_filename="")
+                output = commonTerminal.terminal_print( term, f"sudo docker attach {container_name}",  console=True, output_filename="")
                 _print("ATTACH -> ", output )
                 if output[:5].lower() == "error":
                     if attempt < max_attempts:

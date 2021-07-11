@@ -9,7 +9,7 @@ _print = DEBUG.LOGS.print
 
 class Terminal:
 
-    def __init__(self, input_str="bash-5.0# ", log_filepath="", skip_read=False, n="" ):
+    def __init__(self, input_str="bash-5.0# ", log_filepath="", skip_read=False ):
         """
 
         :param input_str:       waiting for input string
@@ -48,7 +48,7 @@ class Terminal:
         else:
             _print("Read Skipped")
 
-        _print(f"Opened new terminal -> PID: {self.__terminal.pid} (inp str: {input_str}::{n})", **self.redirect_print)
+        _print(f"Opened new terminal -> PID: {self.__terminal.pid}", **self.redirect_print)
 
     def __enter__(self):
         return self
@@ -89,7 +89,8 @@ class Terminal:
     def write(self, cmd):
         """
             writes to the stdin and waits for the output.
-        :param cmd: command to execute
+        :param cmd:                 command to execute
+        :param new_input_str:   if supplied updates the input string after the command has been run!
         :returns: successful, cmd, output (or message if not successful) (if print inputs is set, the input str is included in the cmd string)
         """
 
@@ -109,6 +110,68 @@ class Terminal:
         cmd_input_str, output = self.read()
 
         return True, cmd_input_str, output
+
+    def write_expects(self, cmd, expects, new_input_string=None):
+        """
+            writes to the stdin and waits for the output.
+        :param cmd:                 command to run
+        :param expects:             what is expected to be return in the output.
+                                    dict {} keys: "begins", "contains", "ends". Value: String
+                                    is:       the output is equal to value.
+                                    begins:   the output begins with value.
+                                    contains: the output contains value.
+                                    end:     the output ends with value.
+                                    flags:    regex flags. See https://docs.python.org/3/library/re.html#module-contents
+                                    All keys are optional, but at least 1 key is required. (with the exception of flags which must be supplied with one of the other keys)
+                                    if 'is' is supplied, the other keys are ignored, since it looks for an exact match.
+        :param new_input_string:    (ignored if None) the new input_str to be used if the expected
+                                    output was returned from the command.
+        :return:                    successful, inputted command, output
+                                    successful if the expected output is returned
+        """
+
+        if type(expects) is not dict:
+            _print( f"Terminal ({self.pid}): Unable to write command. Expects param must be of type dict", **self.redirect_print )
+            return False, cmd, ""
+
+        expects_keys = ["is", "begin", "contains", "end"]  # ignore flags as its a params for the re method.
+        found = False
+
+        for k in expects_keys:
+            if k in expects_keys:
+                found = True
+                break
+
+        if not found:
+            _print(f"Terminal ({self.pid}) Unable to write command. Expects must contain at least one of the following keys. { expects_keys }")
+            return
+
+        successful, cmd, output = self.write( cmd )
+
+        if not successful:
+            return successful, cmd, output
+
+        regex = r""
+
+        # build the regex to be used.
+        if "is" in expects:
+            regex = rf"(^{expects['is']}$)"
+        else:   # (^Many)[\s\S]*(bob)[\s\S]*(world$) # TODO: <<
+            if "begin" in expects:
+                regex += rf"(^{expects['begin']})"
+            elif "contains" in expects:
+                regex += rf"[\s\S]*({expects['contains']})"
+            elif "end" in expects:
+                regex += rf"[\s\S]*({expects['end']}$)"
+
+            _print( f"Terminal ({self.pid}): Expects RE: {regex}" )
+
+        match = re.search( regex, output, flags=expects.setdefault( "flags", 0 ) ) is not None
+
+        if not match and new_input_string is not None:
+            self.input_str = new_input_string
+
+        return match, cmd, output
 
     def queue_cmd(self, cmd="echo ' '"):
         """
@@ -154,6 +217,7 @@ class Terminal:
         if type( output) is not bytes:
             output = output.encode()
 
+        # TODO: this should be cached statically.
         ansi_escape = re.compile(br'''
             (?: # either 7-bit C1, two bytes, ESC Fe (omitting CSI)
                 \x1B
