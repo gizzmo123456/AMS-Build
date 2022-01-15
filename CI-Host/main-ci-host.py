@@ -151,6 +151,7 @@ def task_worker(job):
 
     _print("Starting new task")
     if job.get_config_value("dummy-build", default_value=False):
+        #
         _print( "Simulating task task" )
         job.build_status = job.BUILD_STATUS_DUMMY
         slept_time = 0
@@ -182,6 +183,9 @@ if __name__ == "__main__":
     # Set up Debug
     DEBUG.LOGS.init()
     _print = DEBUG.LOGS.print
+
+    # Initialize
+    _print("Initializing, Hold tight...")
 
     # make sure that the install script as been run.
     if not common.installed():
@@ -252,14 +256,11 @@ if __name__ == "__main__":
     webhook_thread.start()
     web_interface_thread.start()
 
-    # Initialize
-    _print("Initializing, Hold tight...")
-
     # create an instance of user manager to create user files if not already setup.
     user_manager.UserManager()  # make sure this is last. so the test account details are not berried in the log
 
     _print("Initializing, Complete!")
-    _print("Starting...")
+    _print("Waiting to receive a task!")
 
     while alive:
 

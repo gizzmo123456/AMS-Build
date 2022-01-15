@@ -38,7 +38,7 @@ class BuildTask:
         """
         :param uac:             The UAC of the user that triggered the build
         :param project_name:    name of project
-        :param git_hash:      build hash
+        :param git_hash:        build hash
         """
 
         self.complete_callback = complete_callback      # callback params: build_task, successful
