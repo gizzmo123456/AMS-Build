@@ -690,5 +690,5 @@ Reset AMS-Build and you good to go :D
 [Project Build Info](./CI-projects/exampleProject/projectBuildInfoJSON.md)
 
 ###### Other
-[TODO](./TODO.md)  
+[TODO](./TODO-1-0-x.md)  
 [Change Log](./changeLog.md)
