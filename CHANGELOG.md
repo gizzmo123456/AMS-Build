@@ -2,6 +2,12 @@
 
 # Change log since version 1.0.0
 
+## Version 1.1.0
+- Updated python version to 3.9
+- Updated Requirement version
+  - FileLock 3.0.12 to 3.4.2
+  - pycryptodome 3.9.8 to 3.12.0
+
 ## Version 1.0.4b (09/02/2021)
 - Improved socket wrapper prints and redirected to file
 - Add page redirect to login->auth
