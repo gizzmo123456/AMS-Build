@@ -1,4 +1,12 @@
 # AMS-Build 
+
+
+# NOTE: The development of this branch is discontinued. 
+## All features developed on this branch have been dropped and will be redeveloped as necessary
+### One of the main development goals it to keep things simple, both from a backend and frontend prospective. However, it began to become just be as complex as every other automation tool :(
+
+
+
 ###### AMS - *Automation Made Simple* 
 
 ## Overview

@@ -1,6 +1,6 @@
 # python and pyCharm
 .idea/*
-*/__pycache__
+__pycache__/
 
 
 # ignore all projects except for the blank and example project

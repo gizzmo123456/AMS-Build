@@ -1,0 +1,1573 @@
+
+=======================================================
+Initializing Socket Wrapper AT 09/02/2021 @ 12:36:57.047890 
+=======================================================
+| 02/09/2021 @ 12:36:58.684280 | 0 New con from ('127.0.0.1', 55403) 
+| 02/09/2021 @ 12:36:58.684280 |  Con 0 is Connecting to Passthrough 
+| 02/09/2021 @ 12:36:58.686282 | Start Receive 0 
+| 02/09/2021 @ 12:36:58.687281 | Start Send 0 
+| 02/09/2021 @ 12:36:58.687281 | 1 New con from ('127.0.0.1', 55404) 
+| 02/09/2021 @ 12:36:58.687281 |  Con 1 is Connecting to Passthrough 
+| 02/09/2021 @ 12:36:58.689280 | Start Receive 1 
+| 02/09/2021 @ 12:36:58.690280 | Start Send 1 
+| 02/09/2021 @ 12:36:58.698286 | Sockets Closed! 0 
+| 02/09/2021 @ 12:36:58.698286 | Exit Receive 0 
+| 02/09/2021 @ 12:36:58.698286 | Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 02/09/2021 @ 12:36:58.732285 | Sockets Closed! 1 
+| 02/09/2021 @ 12:36:58.732285 | Exit Receive 1 
+| 02/09/2021 @ 12:36:58.732285 | Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 02/09/2021 @ 12:36:58.935320 | 2 New con from ('127.0.0.1', 55407) 
+| 02/09/2021 @ 12:36:58.935320 |  Con 2 is Connecting to Passthrough 
+| 02/09/2021 @ 12:36:58.936322 | Start Receive 2 
+| 02/09/2021 @ 12:36:58.937320 | Start Send 2 
+| 02/09/2021 @ 12:36:59.939062 | Sockets Closed! 2 
+| 02/09/2021 @ 12:36:59.939062 | Exit Receive 2 
+| 02/09/2021 @ 12:36:59.939062 | Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+
+=======================================================
+Initializing Socket Wrapper AT 09/02/2021 @ 14:42:27.819931 
+=======================================================
+| 09/02/2021 @ 14:42:36.227366 | 0 New con from ('127.0.0.1', 58004) 
+| 09/02/2021 @ 14:42:36.227366 |  Con 0 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:36.229365 | Start Receive 0 
+| 09/02/2021 @ 14:42:36.229365 | Start Send 0 
+| 09/02/2021 @ 14:42:36.230365 | 1 New con from ('127.0.0.1', 58005) 
+| 09/02/2021 @ 14:42:36.230365 |  Con 1 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:36.232358 | Start Receive 1 
+| 09/02/2021 @ 14:42:36.233361 | Start Send 1 
+| 09/02/2021 @ 14:42:36.241355 | Sockets Closed! 0 
+| 09/02/2021 @ 14:42:36.242360 | Exit Receive 0 
+| 09/02/2021 @ 14:42:36.242360 | 0 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:36.256361 | Sockets Closed! 1 
+| 09/02/2021 @ 14:42:36.257356 | Exit Receive 1 
+| 09/02/2021 @ 14:42:36.257356 | 1 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:36.478088 | 2 New con from ('127.0.0.1', 58010) 
+| 09/02/2021 @ 14:42:36.478088 |  Con 2 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:36.489086 | Start Receive 2 
+| 09/02/2021 @ 14:42:36.489086 | Start Send 2 
+| 09/02/2021 @ 14:42:37.076384 | 3 New con from ('127.0.0.1', 58014) 
+| 09/02/2021 @ 14:42:37.076384 |  Con 3 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:37.078417 | Start Receive 3 
+| 09/02/2021 @ 14:42:37.079388 | Start Send 3 
+| 09/02/2021 @ 14:42:37.490461 | Sockets Closed! 2 
+| 09/02/2021 @ 14:42:37.491460 | Exit Receive 2 
+| 09/02/2021 @ 14:42:37.491460 | 2 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:38.079433 | Sockets Closed! 3 
+| 09/02/2021 @ 14:42:38.080397 | Exit Receive 3 
+| 09/02/2021 @ 14:42:38.080397 | 3 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:41.348980 | 4 New con from ('127.0.0.1', 58019) 
+| 09/02/2021 @ 14:42:41.348980 |  Con 4 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:41.350949 | Start Receive 4 
+| 09/02/2021 @ 14:42:41.351951 | Start Send 4 
+| 09/02/2021 @ 14:42:41.351951 | 5 New con from ('127.0.0.1', 58020) 
+| 09/02/2021 @ 14:42:41.351951 |  Con 5 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:41.353948 | Start Receive 5 
+| 09/02/2021 @ 14:42:41.354947 | Start Send 5 
+| 09/02/2021 @ 14:42:42.353410 | Sockets Closed! 4 
+| 09/02/2021 @ 14:42:42.353410 | Exit Receive 4 
+| 09/02/2021 @ 14:42:42.353410 | 4 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:42.355394 | Sockets Closed! 5 
+| 09/02/2021 @ 14:42:42.355394 | Exit Receive 5 
+| 09/02/2021 @ 14:42:42.356372 | 5 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:58.504943 | 6 New con from ('127.0.0.1', 58030) 
+| 09/02/2021 @ 14:42:58.504943 |  Con 6 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:58.506920 | Start Receive 6 
+| 09/02/2021 @ 14:42:58.507922 | Start Send 6 
+| 09/02/2021 @ 14:42:58.508923 | 7 New con from ('127.0.0.1', 58031) 
+| 09/02/2021 @ 14:42:58.508923 |  Con 7 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:58.509922 | Start Receive 7 
+| 09/02/2021 @ 14:42:58.510927 | Start Send 7 
+| 09/02/2021 @ 14:42:58.517927 | Exit Receive 6 
+| 09/02/2021 @ 14:42:58.517927 | 6 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:58.517927 | Sockets Closed! 6 
+| 09/02/2021 @ 14:42:58.757078 | 8 New con from ('127.0.0.1', 58034) 
+| 09/02/2021 @ 14:42:58.758074 |  Con 8 is Connecting to Passthrough 
+| 09/02/2021 @ 14:42:58.759078 | Start Receive 8 
+| 09/02/2021 @ 14:42:58.760079 | Start Send 8 
+| 09/02/2021 @ 14:42:59.512321 | Sockets Closed! 7 
+| 09/02/2021 @ 14:42:59.512321 | Exit Receive 7 
+| 09/02/2021 @ 14:42:59.512321 | 7 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:42:59.760948 | Sockets Closed! 8 
+| 09/02/2021 @ 14:42:59.761957 | Exit Receive 8 
+| 09/02/2021 @ 14:42:59.761957 | 8 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+
+=======================================================
+Initializing Socket Wrapper AT 09/02/2021 @ 14:43:35.877371 
+=======================================================
+| 09/02/2021 @ 14:43:37.640128 | 0 New con from ('127.0.0.1', 58047) 
+| 09/02/2021 @ 14:43:37.640128 |  Con 0 is Connecting to Passthrough 
+| 09/02/2021 @ 14:43:37.642125 | Start Receive 0 
+| 09/02/2021 @ 14:43:37.642125 | Start Send 0 
+| 09/02/2021 @ 14:43:37.649135 | Sockets Closed! 0 
+| 09/02/2021 @ 14:43:37.650135 | Exit Receive 0 
+| 09/02/2021 @ 14:43:37.650135 | 0 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:43:37.893092 | 1 New con from ('127.0.0.1', 58050) 
+| 09/02/2021 @ 14:43:37.893092 |  Con 1 is Connecting to Passthrough 
+| 09/02/2021 @ 14:43:37.903121 | Start Receive 1 
+| 09/02/2021 @ 14:43:37.904120 | Start Send 1 
+| 09/02/2021 @ 14:43:38.141139 | 2 New con from ('127.0.0.1', 58048) 
+| 09/02/2021 @ 14:43:38.141139 |  Con 2 is Connecting to Passthrough 
+| 09/02/2021 @ 14:43:38.143143 | Start Receive 2 
+| 09/02/2021 @ 14:43:38.143143 | Start Send 2 
+| 09/02/2021 @ 14:43:38.904933 | Sockets Closed! 1 
+| 09/02/2021 @ 14:43:38.904933 | Exit Receive 1 
+| 09/02/2021 @ 14:43:38.904933 | 1 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:43:39.145979 | Sockets Closed! 2 
+| 09/02/2021 @ 14:43:39.145979 | Exit Receive 2 
+| 09/02/2021 @ 14:43:39.145979 | 2 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:43:55.818381 | 3 New con from ('127.0.0.1', 58059) 
+| 09/02/2021 @ 14:43:55.818381 |  Con 3 is Connecting to Passthrough 
+| 09/02/2021 @ 14:43:55.820365 | Start Receive 3 
+| 09/02/2021 @ 14:43:55.821358 | Start Send 3 
+| 09/02/2021 @ 14:43:55.822369 | 4 New con from ('127.0.0.1', 58060) 
+| 09/02/2021 @ 14:43:55.822369 |  Con 4 is Connecting to Passthrough 
+| 09/02/2021 @ 14:43:55.823358 | Start Receive 4 
+| 09/02/2021 @ 14:43:55.824363 | Start Send 4 
+| 09/02/2021 @ 14:43:55.834357 | Sockets Closed! 3 
+| 09/02/2021 @ 14:43:55.834357 | Exit Receive 3 
+| 09/02/2021 @ 14:43:55.834357 | 3 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:43:55.863364 | Sockets Closed! 4 
+| 09/02/2021 @ 14:43:55.864356 | Exit Receive 4 
+| 09/02/2021 @ 14:43:55.864356 | 4 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:43:56.067380 | 5 New con from ('127.0.0.1', 58063) 
+| 09/02/2021 @ 14:43:56.068359 |  Con 5 is Connecting to Passthrough 
+| 09/02/2021 @ 14:43:56.069358 | Start Receive 5 
+| 09/02/2021 @ 14:43:56.069358 | Start Send 5 
+| 09/02/2021 @ 14:43:57.070012 | Sockets Closed! 5 
+| 09/02/2021 @ 14:43:57.070012 | Exit Receive 5 
+| 09/02/2021 @ 14:43:57.071011 | 5 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:08.342996 | 6 New con from ('127.0.0.1', 58073) 
+| 09/02/2021 @ 14:44:08.342996 |  Con 6 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:08.344981 | Start Receive 6 
+| 09/02/2021 @ 14:44:08.345991 | Start Send 6 
+| 09/02/2021 @ 14:44:08.345991 | 7 New con from ('127.0.0.1', 58074) 
+| 09/02/2021 @ 14:44:08.345991 |  Con 7 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:08.347983 | Start Receive 7 
+| 09/02/2021 @ 14:44:08.347983 | Start Send 7 
+| 09/02/2021 @ 14:44:08.400980 | Sockets Closed! 6 
+| 09/02/2021 @ 14:44:08.400980 | Exit Receive 6 
+| 09/02/2021 @ 14:44:08.400980 | 6 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:08.421982 | Sockets Closed! 7 
+| 09/02/2021 @ 14:44:08.421982 | Exit Receive 7 
+| 09/02/2021 @ 14:44:08.421982 | 7 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:08.594979 | 8 New con from ('127.0.0.1', 58077) 
+| 09/02/2021 @ 14:44:08.595981 |  Con 8 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:08.596979 | Start Receive 8 
+| 09/02/2021 @ 14:44:08.597979 | Start Send 8 
+| 09/02/2021 @ 14:44:09.599845 | Sockets Closed! 8 
+| 09/02/2021 @ 14:44:09.599845 | Exit Receive 8 
+| 09/02/2021 @ 14:44:09.599845 | 8 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:17.075305 | 9 New con from ('127.0.0.1', 58083) 
+| 09/02/2021 @ 14:44:17.075305 |  Con 9 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:17.078308 | Start Receive 9 
+| 09/02/2021 @ 14:44:17.079308 | Start Send 9 
+| 09/02/2021 @ 14:44:17.079308 | 10 New con from ('127.0.0.1', 58084) 
+| 09/02/2021 @ 14:44:17.079308 |  Con 10 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:17.082307 | Start Receive 10 
+| 09/02/2021 @ 14:44:17.083307 | Start Send 10 
+| 09/02/2021 @ 14:44:17.114304 | Sockets Closed! 9 
+| 09/02/2021 @ 14:44:17.115304 | Exit Receive 9 
+| 09/02/2021 @ 14:44:17.115304 | 9 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:17.141309 | Sockets Closed! 10 
+| 09/02/2021 @ 14:44:17.142307 | Exit Receive 10 
+| 09/02/2021 @ 14:44:17.142307 | 10 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:17.327639 | 11 New con from ('127.0.0.1', 58087) 
+| 09/02/2021 @ 14:44:17.327639 |  Con 11 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:17.328629 | Start Receive 11 
+| 09/02/2021 @ 14:44:17.329628 | Start Send 11 
+| 09/02/2021 @ 14:44:18.330870 | Sockets Closed! 11 
+| 09/02/2021 @ 14:44:18.330870 | Exit Receive 11 
+| 09/02/2021 @ 14:44:18.330870 | 11 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:27.455956 | 12 New con from ('127.0.0.1', 58095) 
+| 09/02/2021 @ 14:44:27.455956 |  Con 12 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:27.458953 | Start Receive 12 
+| 09/02/2021 @ 14:44:27.458953 | Start Send 12 
+| 09/02/2021 @ 14:44:27.459956 | 13 New con from ('127.0.0.1', 58096) 
+| 09/02/2021 @ 14:44:27.459956 |  Con 13 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:27.460958 | Start Receive 13 
+| 09/02/2021 @ 14:44:27.460958 | Start Send 13 
+| 09/02/2021 @ 14:44:27.484952 | Sockets Closed! 12 
+| 09/02/2021 @ 14:44:27.484952 | Exit Receive 12 
+| 09/02/2021 @ 14:44:27.484952 | 12 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:27.509950 | Sockets Closed! 13 
+| 09/02/2021 @ 14:44:27.509950 | Exit Receive 13 
+| 09/02/2021 @ 14:44:27.509950 | 13 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:27.707081 | 14 New con from ('127.0.0.1', 58099) 
+| 09/02/2021 @ 14:44:27.707081 |  Con 14 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:27.708082 | Start Receive 14 
+| 09/02/2021 @ 14:44:27.709084 | Start Send 14 
+| 09/02/2021 @ 14:44:28.711065 | Sockets Closed! 14 
+| 09/02/2021 @ 14:44:28.711065 | Exit Receive 14 
+| 09/02/2021 @ 14:44:28.712066 | 14 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:31.353830 | 15 New con from ('127.0.0.1', 58105) 
+| 09/02/2021 @ 14:44:31.353830 |  Con 15 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:31.364856 | Start Receive 15 
+| 09/02/2021 @ 14:44:31.366856 | Start Send 15 
+| 09/02/2021 @ 14:44:31.370831 | Sockets Closed! 15 
+| 09/02/2021 @ 14:44:31.371818 | Exit Receive 15 
+| 09/02/2021 @ 14:44:31.371818 | 15 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:31.373823 | 16 New con from ('127.0.0.1', 58107) 
+| 09/02/2021 @ 14:44:31.373823 |  Con 16 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:31.375836 | Start Receive 16 
+| 09/02/2021 @ 14:44:31.376834 | Start Send 16 
+| 09/02/2021 @ 14:44:31.391823 | Sockets Closed! 16 
+| 09/02/2021 @ 14:44:31.392823 | Exit Receive 16 
+| 09/02/2021 @ 14:44:31.392823 | 16 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:54.132951 | 17 New con from ('127.0.0.1', 58114) 
+| 09/02/2021 @ 14:44:54.132951 |  Con 17 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:54.134935 | Start Receive 17 
+| 09/02/2021 @ 14:44:54.135936 | Start Send 17 
+| 09/02/2021 @ 14:44:54.135936 | 18 New con from ('127.0.0.1', 58115) 
+| 09/02/2021 @ 14:44:54.135936 |  Con 18 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:54.137933 | Start Receive 18 
+| 09/02/2021 @ 14:44:54.137933 | Start Send 18 
+| 09/02/2021 @ 14:44:54.157934 | Sockets Closed! 17 
+| 09/02/2021 @ 14:44:54.158934 | Exit Receive 17 
+| 09/02/2021 @ 14:44:54.158934 | 17 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:54.191934 | Sockets Closed! 18 
+| 09/02/2021 @ 14:44:54.192933 | Exit Receive 18 
+| 09/02/2021 @ 14:44:54.192933 | 18 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:44:54.386931 | 19 New con from ('127.0.0.1', 58118) 
+| 09/02/2021 @ 14:44:54.386931 |  Con 19 is Connecting to Passthrough 
+| 09/02/2021 @ 14:44:54.387933 | Start Receive 19 
+| 09/02/2021 @ 14:44:54.388932 | Start Send 19 
+| 09/02/2021 @ 14:44:55.390683 | Sockets Closed! 19 
+| 09/02/2021 @ 14:44:55.390683 | Exit Receive 19 
+| 09/02/2021 @ 14:44:55.390683 | 19 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:21.277324 | 20 New con from ('127.0.0.1', 58127) 
+| 09/02/2021 @ 14:45:21.277324 |  Con 20 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:21.280364 | Start Receive 20 
+| 09/02/2021 @ 14:45:21.281327 | Start Send 20 
+| 09/02/2021 @ 14:45:21.282327 | 21 New con from ('127.0.0.1', 58128) 
+| 09/02/2021 @ 14:45:21.282327 |  Con 21 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:21.285330 | Start Receive 21 
+| 09/02/2021 @ 14:45:21.286328 | Start Send 21 
+| 09/02/2021 @ 14:45:21.312322 | Exit Receive 20 
+| 09/02/2021 @ 14:45:21.312322 | 20 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:21.313320 | Sockets Closed! 20 
+| 09/02/2021 @ 14:45:21.338322 | Sockets Closed! 21 
+| 09/02/2021 @ 14:45:21.338322 | Exit Receive 21 
+| 09/02/2021 @ 14:45:21.338322 | 21 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:21.528277 | 22 New con from ('127.0.0.1', 58131) 
+| 09/02/2021 @ 14:45:21.528277 |  Con 22 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:21.529283 | Start Receive 22 
+| 09/02/2021 @ 14:45:21.530280 | Start Send 22 
+| 09/02/2021 @ 14:45:22.531359 | Sockets Closed! 22 
+| 09/02/2021 @ 14:45:22.531359 | Exit Receive 22 
+| 09/02/2021 @ 14:45:22.531359 | 22 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:29.908222 | 23 New con from ('127.0.0.1', 58136) 
+| 09/02/2021 @ 14:45:29.908222 |  Con 23 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:29.910223 | Start Receive 23 
+| 09/02/2021 @ 14:45:29.911220 | Start Send 23 
+| 09/02/2021 @ 14:45:29.911220 | 24 New con from ('127.0.0.1', 58137) 
+| 09/02/2021 @ 14:45:29.911220 |  Con 24 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:29.912219 | Start Receive 24 
+| 09/02/2021 @ 14:45:29.913219 | Start Send 24 
+| 09/02/2021 @ 14:45:29.940219 | Sockets Closed! 23 
+| 09/02/2021 @ 14:45:29.940219 | Exit Receive 23 
+| 09/02/2021 @ 14:45:29.940219 | 23 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:29.972218 | Sockets Closed! 24 
+| 09/02/2021 @ 14:45:29.972218 | Exit Receive 24 
+| 09/02/2021 @ 14:45:29.972218 | 24 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:30.160369 | 25 New con from ('127.0.0.1', 58140) 
+| 09/02/2021 @ 14:45:30.160369 |  Con 25 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:30.162319 | Start Receive 25 
+| 09/02/2021 @ 14:45:30.162319 | Start Send 25 
+| 09/02/2021 @ 14:45:31.163091 | Sockets Closed! 25 
+| 09/02/2021 @ 14:45:31.164094 | Exit Receive 25 
+| 09/02/2021 @ 14:45:31.164094 | 25 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:48.916493 | 26 New con from ('127.0.0.1', 58147) 
+| 09/02/2021 @ 14:45:48.916493 |  Con 26 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:48.927497 | Start Receive 26 
+| 09/02/2021 @ 14:45:48.928495 | Start Send 26 
+| 09/02/2021 @ 14:45:48.928495 | 27 New con from ('127.0.0.1', 58148) 
+| 09/02/2021 @ 14:45:48.928495 |  Con 27 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:48.929500 | Start Receive 27 
+| 09/02/2021 @ 14:45:48.930496 | Start Send 27 
+| 09/02/2021 @ 14:45:48.944494 | Sockets Closed! 26 
+| 09/02/2021 @ 14:45:48.945494 | Exit Receive 26 
+| 09/02/2021 @ 14:45:48.945494 | 26 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:49.023304 | Sockets Closed! 27 
+| 09/02/2021 @ 14:45:49.023304 | Exit Receive 27 
+| 09/02/2021 @ 14:45:49.023304 | 27 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:49.166348 | 28 New con from ('127.0.0.1', 58151) 
+| 09/02/2021 @ 14:45:49.166348 |  Con 28 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:49.168351 | Start Receive 28 
+| 09/02/2021 @ 14:45:49.169353 | Start Send 28 
+| 09/02/2021 @ 14:45:50.169617 | Sockets Closed! 28 
+| 09/02/2021 @ 14:45:50.169617 | Exit Receive 28 
+| 09/02/2021 @ 14:45:50.169617 | 28 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:57.517429 | 29 New con from ('127.0.0.1', 58160) 
+| 09/02/2021 @ 14:45:57.517429 |  Con 29 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:57.519398 | Start Receive 29 
+| 09/02/2021 @ 14:45:57.520390 | Start Send 29 
+| 09/02/2021 @ 14:45:57.520390 | 30 New con from ('127.0.0.1', 58161) 
+| 09/02/2021 @ 14:45:57.520390 |  Con 30 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:57.521394 | Start Receive 30 
+| 09/02/2021 @ 14:45:57.522394 | Start Send 30 
+| 09/02/2021 @ 14:45:57.550394 | Sockets Closed! 29 
+| 09/02/2021 @ 14:45:57.550394 | Exit Receive 29 
+| 09/02/2021 @ 14:45:57.550394 | 29 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:57.577390 | Sockets Closed! 30 
+| 09/02/2021 @ 14:45:57.578389 | Exit Receive 30 
+| 09/02/2021 @ 14:45:57.578389 | 30 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:45:57.768390 | 31 New con from ('127.0.0.1', 58164) 
+| 09/02/2021 @ 14:45:57.768390 |  Con 31 is Connecting to Passthrough 
+| 09/02/2021 @ 14:45:57.770389 | Start Receive 31 
+| 09/02/2021 @ 14:45:57.771387 | Start Send 31 
+| 09/02/2021 @ 14:45:58.771396 | Sockets Closed! 31 
+| 09/02/2021 @ 14:45:58.771396 | Exit Receive 31 
+| 09/02/2021 @ 14:45:58.771396 | 31 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:46:03.898593 | 32 New con from ('127.0.0.1', 58170) 
+| 09/02/2021 @ 14:46:03.898593 |  Con 32 is Connecting to Passthrough 
+| 09/02/2021 @ 14:46:03.910597 | Start Receive 32 
+| 09/02/2021 @ 14:46:03.911593 | Start Send 32 
+| 09/02/2021 @ 14:46:03.912593 | 33 New con from ('127.0.0.1', 58171) 
+| 09/02/2021 @ 14:46:03.912593 |  Con 33 is Connecting to Passthrough 
+| 09/02/2021 @ 14:46:03.914598 | Start Receive 33 
+| 09/02/2021 @ 14:46:03.915595 | Start Send 33 
+| 09/02/2021 @ 14:46:03.939593 | Sockets Closed! 32 
+| 09/02/2021 @ 14:46:03.939593 | Exit Receive 32 
+| 09/02/2021 @ 14:46:03.940594 | 32 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:46:03.969594 | Sockets Closed! 33 
+| 09/02/2021 @ 14:46:03.969594 | Exit Receive 33 
+| 09/02/2021 @ 14:46:03.969594 | 33 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:46:04.149617 | 34 New con from ('127.0.0.1', 58174) 
+| 09/02/2021 @ 14:46:04.149617 |  Con 34 is Connecting to Passthrough 
+| 09/02/2021 @ 14:46:04.150623 | Start Receive 34 
+| 09/02/2021 @ 14:46:04.151617 | Start Send 34 
+| 09/02/2021 @ 14:46:05.153344 | Sockets Closed! 34 
+| 09/02/2021 @ 14:46:05.153344 | Exit Receive 34 
+| 09/02/2021 @ 14:46:05.153344 | 34 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:15.457595 | 35 New con from ('127.0.0.1', 58190) 
+| 09/02/2021 @ 14:47:15.457595 |  Con 35 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:15.460593 | Start Receive 35 
+| 09/02/2021 @ 14:47:15.461594 | Start Send 35 
+| 09/02/2021 @ 14:47:15.462592 | 36 New con from ('127.0.0.1', 58191) 
+| 09/02/2021 @ 14:47:15.462592 |  Con 36 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:15.463592 | Start Receive 36 
+| 09/02/2021 @ 14:47:15.464592 | Start Send 36 
+| 09/02/2021 @ 14:47:15.498592 | Exit Receive 35 
+| 09/02/2021 @ 14:47:15.499593 | Sockets Closed! 35 
+| 09/02/2021 @ 14:47:15.507592 | Sockets Closed! 36 
+| 09/02/2021 @ 14:47:15.507592 | Exit Receive 36 
+| 09/02/2021 @ 14:47:15.507592 | 36 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:15.708596 | 37 New con from ('127.0.0.1', 58194) 
+| 09/02/2021 @ 14:47:15.708596 |  Con 37 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:15.711600 | Start Receive 37 
+| 09/02/2021 @ 14:47:15.712596 | Start Send 37 
+| 09/02/2021 @ 14:47:16.713833 | Sockets Closed! 37 
+| 09/02/2021 @ 14:47:16.713833 | Exit Receive 37 
+| 09/02/2021 @ 14:47:16.713833 | 37 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:27.821471 | 38 New con from ('127.0.0.1', 58217) 
+| 09/02/2021 @ 14:47:27.821471 |  Con 38 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:27.823472 | Start Receive 38 
+| 09/02/2021 @ 14:47:27.823472 | Start Send 38 
+| 09/02/2021 @ 14:47:27.824472 | 39 New con from ('127.0.0.1', 58218) 
+| 09/02/2021 @ 14:47:27.824472 |  Con 39 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:27.825473 | Start Receive 39 
+| 09/02/2021 @ 14:47:27.825473 | Start Send 39 
+| 09/02/2021 @ 14:47:27.913472 | Sockets Closed! 38 
+| 09/02/2021 @ 14:47:27.913472 | Exit Receive 38 
+| 09/02/2021 @ 14:47:27.913472 | 38 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:27.950474 | Sockets Closed! 39 
+| 09/02/2021 @ 14:47:27.950474 | Exit Receive 39 
+| 09/02/2021 @ 14:47:27.950474 | 39 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:28.073576 | 40 New con from ('127.0.0.1', 58224) 
+| 09/02/2021 @ 14:47:28.073576 |  Con 40 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:28.075578 | Start Receive 40 
+| 09/02/2021 @ 14:47:28.075578 | Start Send 40 
+| 09/02/2021 @ 14:47:28.087577 | Sockets Closed! 40 
+| 09/02/2021 @ 14:47:28.087577 | Exit Receive 40 
+| 09/02/2021 @ 14:47:28.087577 | 40 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:34.360434 | 41 New con from ('127.0.0.1', 58229) 
+| 09/02/2021 @ 14:47:34.361433 |  Con 41 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:34.363432 | Start Receive 41 
+| 09/02/2021 @ 14:47:34.363432 | Start Send 41 
+| 09/02/2021 @ 14:47:34.416430 | Sockets Closed! 41 
+| 09/02/2021 @ 14:47:34.417433 | Exit Receive 41 
+| 09/02/2021 @ 14:47:34.417433 | 41 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:34.613312 | 42 New con from ('127.0.0.1', 58232) 
+| 09/02/2021 @ 14:47:34.613312 |  Con 42 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:34.614316 | Start Receive 42 
+| 09/02/2021 @ 14:47:34.615309 | Start Send 42 
+| 09/02/2021 @ 14:47:34.629311 | Sockets Closed! 42 
+| 09/02/2021 @ 14:47:34.629311 | Exit Receive 42 
+| 09/02/2021 @ 14:47:34.629311 | 42 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:34.718347 | 43 New con from ('127.0.0.1', 58234) 
+| 09/02/2021 @ 14:47:34.718347 |  Con 43 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:34.720326 | Start Receive 43 
+| 09/02/2021 @ 14:47:34.721313 | Start Send 43 
+| 09/02/2021 @ 14:47:35.722877 | Sockets Closed! 43 
+| 09/02/2021 @ 14:47:35.722877 | Exit Receive 43 
+| 09/02/2021 @ 14:47:35.722877 | 43 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:43.032291 | 44 New con from ('127.0.0.1', 58242) 
+| 09/02/2021 @ 14:47:43.032291 |  Con 44 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:43.034293 | Start Receive 44 
+| 09/02/2021 @ 14:47:43.034293 | Start Send 44 
+| 09/02/2021 @ 14:47:43.035293 | 45 New con from ('127.0.0.1', 58243) 
+| 09/02/2021 @ 14:47:43.035293 |  Con 45 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:43.037296 | Start Receive 45 
+| 09/02/2021 @ 14:47:43.038294 | Start Send 45 
+| 09/02/2021 @ 14:47:43.047294 | Exit Receive 44 
+| 09/02/2021 @ 14:47:43.048292 | Sockets Closed! 44 
+| 09/02/2021 @ 14:47:43.054292 | Sockets Closed! 45 
+| 09/02/2021 @ 14:47:43.054292 | Exit Receive 45 
+| 09/02/2021 @ 14:47:43.054292 | 45 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:43.283523 | 46 New con from ('127.0.0.1', 58246) 
+| 09/02/2021 @ 14:47:43.283523 |  Con 46 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:43.284518 | Start Receive 46 
+| 09/02/2021 @ 14:47:43.285518 | Start Send 46 
+| 09/02/2021 @ 14:47:43.295521 | Sockets Closed! 46 
+| 09/02/2021 @ 14:47:43.295521 | Exit Receive 46 
+| 09/02/2021 @ 14:47:43.296521 | 46 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:58.105039 | 47 New con from ('127.0.0.1', 58252) 
+| 09/02/2021 @ 14:47:58.105039 |  Con 47 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:58.106044 | Start Receive 47 
+| 09/02/2021 @ 14:47:58.107062 | Start Send 47 
+| 09/02/2021 @ 14:47:58.107062 | 48 New con from ('127.0.0.1', 58253) 
+| 09/02/2021 @ 14:47:58.107062 |  Con 48 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:58.110041 | Start Receive 48 
+| 09/02/2021 @ 14:47:58.111091 | Start Send 48 
+| 09/02/2021 @ 14:47:58.123041 | Exit Receive 47 
+| 09/02/2021 @ 14:47:58.124038 | 47 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:58.124038 | Sockets Closed! 47 
+| 09/02/2021 @ 14:47:58.160454 | Sockets Closed! 48 
+| 09/02/2021 @ 14:47:58.160454 | Exit Receive 48 
+| 09/02/2021 @ 14:47:58.160454 | 48 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:47:58.356565 | 49 New con from ('127.0.0.1', 58256) 
+| 09/02/2021 @ 14:47:58.356565 |  Con 49 is Connecting to Passthrough 
+| 09/02/2021 @ 14:47:58.358565 | Start Receive 49 
+| 09/02/2021 @ 14:47:58.359567 | Start Send 49 
+| 09/02/2021 @ 14:47:59.361406 | Sockets Closed! 49 
+| 09/02/2021 @ 14:47:59.361406 | Exit Receive 49 
+| 09/02/2021 @ 14:47:59.361406 | 49 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:11.768337 | 50 New con from ('127.0.0.1', 58262) 
+| 09/02/2021 @ 14:48:11.768337 |  Con 50 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:11.769320 | Start Receive 50 
+| 09/02/2021 @ 14:48:11.770322 | Start Send 50 
+| 09/02/2021 @ 14:48:11.770322 | 51 New con from ('127.0.0.1', 58263) 
+| 09/02/2021 @ 14:48:11.770322 |  Con 51 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:11.771323 | Start Receive 51 
+| 09/02/2021 @ 14:48:11.772321 | Start Send 51 
+| 09/02/2021 @ 14:48:11.796320 | Sockets Closed! 50 
+| 09/02/2021 @ 14:48:11.796320 | Exit Receive 50 
+| 09/02/2021 @ 14:48:11.796320 | 50 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:12.019498 | 52 New con from ('127.0.0.1', 58266) 
+| 09/02/2021 @ 14:48:12.019498 |  Con 52 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:12.031459 | Start Receive 52 
+| 09/02/2021 @ 14:48:12.032458 | Start Send 52 
+| 09/02/2021 @ 14:48:12.773482 | Sockets Closed! 51 
+| 09/02/2021 @ 14:48:12.773482 | Exit Receive 51 
+| 09/02/2021 @ 14:48:12.773482 | 51 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:13.032732 | Sockets Closed! 52 
+| 09/02/2021 @ 14:48:13.033700 | Exit Receive 52 
+| 09/02/2021 @ 14:48:13.033700 | 52 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:31.238367 | 53 New con from ('127.0.0.1', 58274) 
+| 09/02/2021 @ 14:48:31.238367 |  Con 53 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:31.241365 | Start Receive 53 
+| 09/02/2021 @ 14:48:31.241365 | Start Send 53 
+| 09/02/2021 @ 14:48:31.243365 | 54 New con from ('127.0.0.1', 58275) 
+| 09/02/2021 @ 14:48:31.243365 |  Con 54 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:31.245367 | Start Receive 54 
+| 09/02/2021 @ 14:48:31.245367 | Start Send 54 
+| 09/02/2021 @ 14:48:32.243543 | Sockets Closed! 53 
+| 09/02/2021 @ 14:48:32.243543 | Exit Receive 53 
+| 09/02/2021 @ 14:48:32.243543 | 53 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:32.246583 | Sockets Closed! 54 
+| 09/02/2021 @ 14:48:32.246583 | Exit Receive 54 
+| 09/02/2021 @ 14:48:32.246583 | 54 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:41.628458 | 55 New con from ('127.0.0.1', 58286) 
+| 09/02/2021 @ 14:48:41.629450 |  Con 55 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:41.632466 | Start Receive 55 
+| 09/02/2021 @ 14:48:41.633452 | Start Send 55 
+| 09/02/2021 @ 14:48:41.634453 | 56 New con from ('127.0.0.1', 58287) 
+| 09/02/2021 @ 14:48:41.634453 |  Con 56 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:41.638456 | Start Receive 56 
+| 09/02/2021 @ 14:48:41.640456 | Start Send 56 
+| 09/02/2021 @ 14:48:41.679451 | Sockets Closed! 55 
+| 09/02/2021 @ 14:48:41.679451 | Exit Receive 55 
+| 09/02/2021 @ 14:48:41.679451 | 55 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:41.714452 | Sockets Closed! 56 
+| 09/02/2021 @ 14:48:41.714452 | Exit Receive 56 
+| 09/02/2021 @ 14:48:41.714452 | 56 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:41.879433 | 57 New con from ('127.0.0.1', 58290) 
+| 09/02/2021 @ 14:48:41.879433 |  Con 57 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:41.882430 | Start Receive 57 
+| 09/02/2021 @ 14:48:41.883426 | Start Send 57 
+| 09/02/2021 @ 14:48:41.897418 | Sockets Closed! 57 
+| 09/02/2021 @ 14:48:41.897418 | Exit Receive 57 
+| 09/02/2021 @ 14:48:41.897418 | 57 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:56.118643 | 58 New con from ('127.0.0.1', 58295) 
+| 09/02/2021 @ 14:48:56.118643 |  Con 58 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:56.119644 | Start Receive 58 
+| 09/02/2021 @ 14:48:56.120645 | Start Send 58 
+| 09/02/2021 @ 14:48:56.121644 | 59 New con from ('127.0.0.1', 58296) 
+| 09/02/2021 @ 14:48:56.121644 |  Con 59 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:56.122648 | Start Receive 59 
+| 09/02/2021 @ 14:48:56.122648 | Start Send 59 
+| 09/02/2021 @ 14:48:56.131645 | Sockets Closed! 58 
+| 09/02/2021 @ 14:48:56.131645 | Exit Receive 58 
+| 09/02/2021 @ 14:48:56.131645 | 58 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:56.138651 | Sockets Closed! 59 
+| 09/02/2021 @ 14:48:56.139646 | Exit Receive 59 
+| 09/02/2021 @ 14:48:56.139646 | 59 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:56.370819 | 60 New con from ('127.0.0.1', 58299) 
+| 09/02/2021 @ 14:48:56.370819 |  Con 60 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:56.373785 | Start Receive 60 
+| 09/02/2021 @ 14:48:56.373785 | Start Send 60 
+| 09/02/2021 @ 14:48:56.386784 | Sockets Closed! 60 
+| 09/02/2021 @ 14:48:56.386784 | Exit Receive 60 
+| 09/02/2021 @ 14:48:56.386784 | 60 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:58.786921 | 61 New con from ('127.0.0.1', 58304) 
+| 09/02/2021 @ 14:48:58.786921 |  Con 61 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:58.787920 | Start Receive 61 
+| 09/02/2021 @ 14:48:58.788920 | Start Send 61 
+| 09/02/2021 @ 14:48:58.788920 | 62 New con from ('127.0.0.1', 58305) 
+| 09/02/2021 @ 14:48:58.788920 |  Con 62 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:58.790922 | Start Receive 62 
+| 09/02/2021 @ 14:48:58.790922 | Start Send 62 
+| 09/02/2021 @ 14:48:58.797921 | Sockets Closed! 61 
+| 09/02/2021 @ 14:48:58.797921 | Exit Receive 61 
+| 09/02/2021 @ 14:48:58.797921 | 61 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:58.821920 | Sockets Closed! 62 
+| 09/02/2021 @ 14:48:58.822921 | Exit Receive 62 
+| 09/02/2021 @ 14:48:58.822921 | 62 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:48:59.037012 | 63 New con from ('127.0.0.1', 58308) 
+| 09/02/2021 @ 14:48:59.037012 |  Con 63 is Connecting to Passthrough 
+| 09/02/2021 @ 14:48:59.039013 | Start Receive 63 
+| 09/02/2021 @ 14:48:59.040014 | Start Send 63 
+| 09/02/2021 @ 14:49:00.041851 | Sockets Closed! 63 
+| 09/02/2021 @ 14:49:00.041851 | Exit Receive 63 
+| 09/02/2021 @ 14:49:00.041851 | 63 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:07.880718 | 64 New con from ('127.0.0.1', 58315) 
+| 09/02/2021 @ 14:49:07.881712 |  Con 64 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:07.882724 | Start Receive 64 
+| 09/02/2021 @ 14:49:07.883716 | Start Send 64 
+| 09/02/2021 @ 14:49:07.884721 | 65 New con from ('127.0.0.1', 58316) 
+| 09/02/2021 @ 14:49:07.884721 |  Con 65 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:07.885715 | Start Receive 65 
+| 09/02/2021 @ 14:49:07.887724 | Start Send 65 
+| 09/02/2021 @ 14:49:07.913717 | Sockets Closed! 64 
+| 09/02/2021 @ 14:49:07.914720 | Exit Receive 64 
+| 09/02/2021 @ 14:49:07.914720 | 64 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:08.134469 | 66 New con from ('127.0.0.1', 58319) 
+| 09/02/2021 @ 14:49:08.134469 |  Con 66 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:08.136429 | Start Receive 66 
+| 09/02/2021 @ 14:49:08.137437 | Start Send 66 
+| 09/02/2021 @ 14:49:08.887942 | Sockets Closed! 65 
+| 09/02/2021 @ 14:49:08.887942 | Exit Receive 65 
+| 09/02/2021 @ 14:49:08.887942 | 65 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:09.139399 | Sockets Closed! 66 
+| 09/02/2021 @ 14:49:09.139399 | Exit Receive 66 
+| 09/02/2021 @ 14:49:09.139399 | 66 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:15.289343 | 67 New con from ('127.0.0.1', 58325) 
+| 09/02/2021 @ 14:49:15.289343 |  Con 67 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:15.290343 | Start Receive 67 
+| 09/02/2021 @ 14:49:15.291347 | Start Send 67 
+| 09/02/2021 @ 14:49:15.292343 | 68 New con from ('127.0.0.1', 58326) 
+| 09/02/2021 @ 14:49:15.292343 |  Con 68 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:15.294343 | Start Receive 68 
+| 09/02/2021 @ 14:49:15.295347 | Start Send 68 
+| 09/02/2021 @ 14:49:15.315343 | Sockets Closed! 67 
+| 09/02/2021 @ 14:49:15.316344 | Exit Receive 67 
+| 09/02/2021 @ 14:49:15.316344 | 67 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:15.539343 | 69 New con from ('127.0.0.1', 58329) 
+| 09/02/2021 @ 14:49:15.540342 |  Con 69 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:15.541341 | Start Receive 69 
+| 09/02/2021 @ 14:49:15.542341 | Start Send 69 
+| 09/02/2021 @ 14:49:16.295419 | Sockets Closed! 68 
+| 09/02/2021 @ 14:49:16.295419 | Exit Receive 68 
+| 09/02/2021 @ 14:49:16.295419 | 68 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:16.542416 | Sockets Closed! 69 
+| 09/02/2021 @ 14:49:16.542416 | Exit Receive 69 
+| 09/02/2021 @ 14:49:16.542416 | 69 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:18.352393 | 70 New con from ('127.0.0.1', 58334) 
+| 09/02/2021 @ 14:49:18.353392 |  Con 70 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:18.354393 | Start Receive 70 
+| 09/02/2021 @ 14:49:18.354393 | Start Send 70 
+| 09/02/2021 @ 14:49:18.355393 | 71 New con from ('127.0.0.1', 58335) 
+| 09/02/2021 @ 14:49:18.355393 |  Con 71 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:18.357395 | Start Receive 71 
+| 09/02/2021 @ 14:49:18.357395 | Start Send 71 
+| 09/02/2021 @ 14:49:18.366394 | Sockets Closed! 70 
+| 09/02/2021 @ 14:49:18.367394 | Exit Receive 70 
+| 09/02/2021 @ 14:49:18.367394 | 70 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:18.373394 | Sockets Closed! 71 
+| 09/02/2021 @ 14:49:18.373394 | Exit Receive 71 
+| 09/02/2021 @ 14:49:18.373394 | 71 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:18.605373 | 72 New con from ('127.0.0.1', 58338) 
+| 09/02/2021 @ 14:49:18.605373 |  Con 72 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:18.607374 | Start Receive 72 
+| 09/02/2021 @ 14:49:18.607374 | Start Send 72 
+| 09/02/2021 @ 14:49:18.615372 | Sockets Closed! 72 
+| 09/02/2021 @ 14:49:18.615372 | Exit Receive 72 
+| 09/02/2021 @ 14:49:18.615372 | 72 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:23.663204 | 73 New con from ('127.0.0.1', 58345) 
+| 09/02/2021 @ 14:49:23.663204 |  Con 73 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:23.664200 | Start Receive 73 
+| 09/02/2021 @ 14:49:23.665204 | Start Send 73 
+| 09/02/2021 @ 14:49:23.666213 | 74 New con from ('127.0.0.1', 58346) 
+| 09/02/2021 @ 14:49:23.666213 |  Con 74 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:23.668214 | Start Receive 74 
+| 09/02/2021 @ 14:49:23.669206 | Start Send 74 
+| 09/02/2021 @ 14:49:24.666511 | Sockets Closed! 73 
+| 09/02/2021 @ 14:49:24.667515 | Exit Receive 73 
+| 09/02/2021 @ 14:49:24.667515 | 73 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:24.670510 | Sockets Closed! 74 
+| 09/02/2021 @ 14:49:24.670510 | Exit Receive 74 
+| 09/02/2021 @ 14:49:24.670510 | 74 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:31.369689 | 75 New con from ('127.0.0.1', 58352) 
+| 09/02/2021 @ 14:49:31.369689 |  Con 75 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:31.371693 | Start Receive 75 
+| 09/02/2021 @ 14:49:31.372704 | Start Send 75 
+| 09/02/2021 @ 14:49:31.372704 | 76 New con from ('127.0.0.1', 58353) 
+| 09/02/2021 @ 14:49:31.372704 |  Con 76 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:31.373694 | Start Receive 76 
+| 09/02/2021 @ 14:49:31.374689 | Start Send 76 
+| 09/02/2021 @ 14:49:32.373301 | Sockets Closed! 75 
+| 09/02/2021 @ 14:49:32.374254 | Exit Receive 75 
+| 09/02/2021 @ 14:49:32.374254 | 75 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:32.375278 | Sockets Closed! 76 
+| 09/02/2021 @ 14:49:32.375278 | Exit Receive 76 
+| 09/02/2021 @ 14:49:32.376259 | 76 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:33.938479 | 77 New con from ('127.0.0.1', 58358) 
+| 09/02/2021 @ 14:49:33.938479 |  Con 77 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:33.940479 | Start Receive 77 
+| 09/02/2021 @ 14:49:33.941479 | Start Send 77 
+| 09/02/2021 @ 14:49:33.942475 | 78 New con from ('127.0.0.1', 58359) 
+| 09/02/2021 @ 14:49:33.942475 |  Con 78 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:33.944474 | Start Receive 78 
+| 09/02/2021 @ 14:49:33.945474 | Start Send 78 
+| 09/02/2021 @ 14:49:34.943119 | Sockets Closed! 77 
+| 09/02/2021 @ 14:49:34.943119 | Exit Receive 77 
+| 09/02/2021 @ 14:49:34.943119 | 77 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:34.946122 | Sockets Closed! 78 
+| 09/02/2021 @ 14:49:34.946122 | Exit Receive 78 
+| 09/02/2021 @ 14:49:34.946122 | 78 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:37.740206 | 79 New con from ('127.0.0.1', 58364) 
+| 09/02/2021 @ 14:49:37.740206 |  Con 79 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:37.742206 | Start Receive 79 
+| 09/02/2021 @ 14:49:37.742206 | Start Send 79 
+| 09/02/2021 @ 14:49:37.743204 | 80 New con from ('127.0.0.1', 58365) 
+| 09/02/2021 @ 14:49:37.743204 |  Con 80 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:37.744206 | Start Receive 80 
+| 09/02/2021 @ 14:49:37.745206 | Start Send 80 
+| 09/02/2021 @ 14:49:38.743632 | Sockets Closed! 79 
+| 09/02/2021 @ 14:49:38.743632 | Exit Receive 79 
+| 09/02/2021 @ 14:49:38.743632 | 79 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:38.746639 | Sockets Closed! 80 
+| 09/02/2021 @ 14:49:38.746639 | Exit Receive 80 
+| 09/02/2021 @ 14:49:38.746639 | 80 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:39.554899 | 81 New con from ('127.0.0.1', 58370) 
+| 09/02/2021 @ 14:49:39.555860 |  Con 81 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:39.557863 | Start Receive 81 
+| 09/02/2021 @ 14:49:39.557863 | Start Send 81 
+| 09/02/2021 @ 14:49:39.557863 | 82 New con from ('127.0.0.1', 58371) 
+| 09/02/2021 @ 14:49:39.557863 |  Con 82 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:39.559865 | Start Receive 82 
+| 09/02/2021 @ 14:49:39.559865 | Start Send 82 
+| 09/02/2021 @ 14:49:40.558432 | Sockets Closed! 81 
+| 09/02/2021 @ 14:49:40.559433 | Exit Receive 81 
+| 09/02/2021 @ 14:49:40.559433 | 81 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:40.561436 | Sockets Closed! 82 
+| 09/02/2021 @ 14:49:40.561436 | Exit Receive 82 
+| 09/02/2021 @ 14:49:40.561436 | 82 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:49.189375 | 83 New con from ('127.0.0.1', 58379) 
+| 09/02/2021 @ 14:49:49.189375 |  Con 83 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:49.193379 | Start Receive 83 
+| 09/02/2021 @ 14:49:49.194388 | Start Send 83 
+| 09/02/2021 @ 14:49:49.194388 | 84 New con from ('127.0.0.1', 58380) 
+| 09/02/2021 @ 14:49:49.194388 |  Con 84 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:49.197377 | Start Receive 84 
+| 09/02/2021 @ 14:49:49.198404 | Start Send 84 
+| 09/02/2021 @ 14:49:49.211381 | Exit Receive 83 
+| 09/02/2021 @ 14:49:49.211381 | Sockets Closed! 83 
+| 09/02/2021 @ 14:49:49.245375 | Sockets Closed! 84 
+| 09/02/2021 @ 14:49:49.245375 | Exit Receive 84 
+| 09/02/2021 @ 14:49:49.246381 | 84 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:49:49.439403 | 85 New con from ('127.0.0.1', 58383) 
+| 09/02/2021 @ 14:49:49.439403 |  Con 85 is Connecting to Passthrough 
+| 09/02/2021 @ 14:49:49.441405 | Start Receive 85 
+| 09/02/2021 @ 14:49:49.441405 | Start Send 85 
+| 09/02/2021 @ 14:49:50.442588 | Sockets Closed! 85 
+| 09/02/2021 @ 14:49:50.442588 | Exit Receive 85 
+| 09/02/2021 @ 14:49:50.443593 | 85 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:13.558582 | 86 New con from ('127.0.0.1', 58390) 
+| 09/02/2021 @ 14:50:13.558582 |  Con 86 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:13.559564 | Start Receive 86 
+| 09/02/2021 @ 14:50:13.560554 | Start Send 86 
+| 09/02/2021 @ 14:50:13.561550 | 87 New con from ('127.0.0.1', 58391) 
+| 09/02/2021 @ 14:50:13.561550 |  Con 87 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:13.563551 | Start Receive 87 
+| 09/02/2021 @ 14:50:13.564555 | Start Send 87 
+| 09/02/2021 @ 14:50:13.588547 | Exit Receive 86 
+| 09/02/2021 @ 14:50:13.588547 | 86 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:13.589547 | Sockets Closed! 86 
+| 09/02/2021 @ 14:50:13.627548 | Sockets Closed! 87 
+| 09/02/2021 @ 14:50:13.627548 | Exit Receive 87 
+| 09/02/2021 @ 14:50:13.627548 | 87 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:13.810727 | 88 New con from ('127.0.0.1', 58394) 
+| 09/02/2021 @ 14:50:13.810727 |  Con 88 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:13.812727 | Start Receive 88 
+| 09/02/2021 @ 14:50:13.812727 | Start Send 88 
+| 09/02/2021 @ 14:50:14.814699 | Sockets Closed! 88 
+| 09/02/2021 @ 14:50:14.814699 | Exit Receive 88 
+| 09/02/2021 @ 14:50:14.814699 | 88 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:20.598933 | 89 New con from ('127.0.0.1', 58400) 
+| 09/02/2021 @ 14:50:20.598933 |  Con 89 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:20.601932 | Start Receive 89 
+| 09/02/2021 @ 14:50:20.602932 | Start Send 89 
+| 09/02/2021 @ 14:50:20.602932 | 90 New con from ('127.0.0.1', 58401) 
+| 09/02/2021 @ 14:50:20.602932 |  Con 90 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:20.604937 | Start Receive 90 
+| 09/02/2021 @ 14:50:20.605934 | Start Send 90 
+| 09/02/2021 @ 14:50:20.614939 | Sockets Closed! 89 
+| 09/02/2021 @ 14:50:20.615931 | Exit Receive 89 
+| 09/02/2021 @ 14:50:20.615931 | 89 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:20.649933 | Sockets Closed! 90 
+| 09/02/2021 @ 14:50:20.649933 | Exit Receive 90 
+| 09/02/2021 @ 14:50:20.649933 | 90 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:20.849477 | 91 New con from ('127.0.0.1', 58404) 
+| 09/02/2021 @ 14:50:20.849477 |  Con 91 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:20.850472 | Start Receive 91 
+| 09/02/2021 @ 14:50:20.851475 | Start Send 91 
+| 09/02/2021 @ 14:50:21.851598 | Sockets Closed! 91 
+| 09/02/2021 @ 14:50:21.852577 | Exit Receive 91 
+| 09/02/2021 @ 14:50:21.852577 | 91 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:27.502539 | 92 New con from ('127.0.0.1', 58411) 
+| 09/02/2021 @ 14:50:27.502539 |  Con 92 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:27.513552 | Start Receive 92 
+| 09/02/2021 @ 14:50:27.514551 | Start Send 92 
+| 09/02/2021 @ 14:50:27.516518 | 93 New con from ('127.0.0.1', 58412) 
+| 09/02/2021 @ 14:50:27.516518 |  Con 93 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:27.518517 | Start Receive 93 
+| 09/02/2021 @ 14:50:27.519517 | Start Send 93 
+| 09/02/2021 @ 14:50:27.531516 | Sockets Closed! 92 
+| 09/02/2021 @ 14:50:27.531516 | Exit Receive 92 
+| 09/02/2021 @ 14:50:27.531516 | 92 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:27.540510 | Sockets Closed! 93 
+| 09/02/2021 @ 14:50:27.540510 | Exit Receive 93 
+| 09/02/2021 @ 14:50:27.540510 | 93 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:27.753723 | 94 New con from ('127.0.0.1', 58415) 
+| 09/02/2021 @ 14:50:27.753723 |  Con 94 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:27.755725 | Start Receive 94 
+| 09/02/2021 @ 14:50:27.756703 | Start Send 94 
+| 09/02/2021 @ 14:50:28.757582 | Sockets Closed! 94 
+| 09/02/2021 @ 14:50:28.757582 | Exit Receive 94 
+| 09/02/2021 @ 14:50:28.757582 | 94 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:51.153811 | 95 New con from ('127.0.0.1', 58424) 
+| 09/02/2021 @ 14:50:51.153811 |  Con 95 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:51.166777 | Start Receive 95 
+| 09/02/2021 @ 14:50:51.166777 | Start Send 95 
+| 09/02/2021 @ 14:50:51.167776 | 96 New con from ('127.0.0.1', 58425) 
+| 09/02/2021 @ 14:50:51.167776 |  Con 96 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:51.171776 | Start Receive 96 
+| 09/02/2021 @ 14:50:51.172785 | Start Send 96 
+| 09/02/2021 @ 14:50:51.190773 | Sockets Closed! 95 
+| 09/02/2021 @ 14:50:51.190773 | Exit Receive 95 
+| 09/02/2021 @ 14:50:51.190773 | 95 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:51.405812 | 97 New con from ('127.0.0.1', 58428) 
+| 09/02/2021 @ 14:50:51.405812 |  Con 97 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:51.408810 | Start Receive 97 
+| 09/02/2021 @ 14:50:51.408810 | Start Send 97 
+| 09/02/2021 @ 14:50:52.174531 | Sockets Closed! 96 
+| 09/02/2021 @ 14:50:52.174531 | Exit Receive 96 
+| 09/02/2021 @ 14:50:52.175531 | 96 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:52.210525 | Sockets Closed! 97 
+| 09/02/2021 @ 14:50:52.210525 | Exit Receive 97 
+| 09/02/2021 @ 14:50:52.210525 | 97 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:52.505844 | 98 New con from ('127.0.0.1', 58431) 
+| 09/02/2021 @ 14:50:52.505844 |  Con 98 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:52.507846 | Start Receive 98 
+| 09/02/2021 @ 14:50:52.508845 | Start Send 98 
+| 09/02/2021 @ 14:50:52.513841 | Sockets Closed! 98 
+| 09/02/2021 @ 14:50:52.513841 | Exit Receive 98 
+| 09/02/2021 @ 14:50:52.513841 | 98 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:52.840639 | 99 New con from ('127.0.0.1', 58436) 
+| 09/02/2021 @ 14:50:52.840639 |  Con 99 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:52.843638 | Start Receive 99 
+| 09/02/2021 @ 14:50:52.844641 | Start Send 99 
+| 09/02/2021 @ 14:50:52.850659 | Sockets Closed! 99 
+| 09/02/2021 @ 14:50:52.850659 | Exit Receive 99 
+| 09/02/2021 @ 14:50:52.850659 | 99 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:50:53.093481 | 100 New con from ('127.0.0.1', 58438) 
+| 09/02/2021 @ 14:50:53.093481 |  Con 100 is Connecting to Passthrough 
+| 09/02/2021 @ 14:50:53.095478 | Start Receive 100 
+| 09/02/2021 @ 14:50:53.096482 | Start Send 100 
+| 09/02/2021 @ 14:50:54.097469 | Sockets Closed! 100 
+| 09/02/2021 @ 14:50:54.098476 | Exit Receive 100 
+| 09/02/2021 @ 14:50:54.098476 | 100 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:01.843284 | 101 New con from ('127.0.0.1', 58443) 
+| 09/02/2021 @ 14:51:01.843284 |  Con 101 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:01.844284 | Start Receive 101 
+| 09/02/2021 @ 14:51:01.845284 | Start Send 101 
+| 09/02/2021 @ 14:51:01.846284 | 102 New con from ('127.0.0.1', 58444) 
+| 09/02/2021 @ 14:51:01.846284 |  Con 102 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:01.848288 | Start Receive 102 
+| 09/02/2021 @ 14:51:01.848288 | Start Send 102 
+| 09/02/2021 @ 14:51:01.868281 | Sockets Closed! 101 
+| 09/02/2021 @ 14:51:01.868281 | Exit Receive 101 
+| 09/02/2021 @ 14:51:01.868281 | 101 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:01.892279 | Sockets Closed! 102 
+| 09/02/2021 @ 14:51:01.892279 | Exit Receive 102 
+| 09/02/2021 @ 14:51:01.892279 | 102 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:02.094444 | 103 New con from ('127.0.0.1', 58447) 
+| 09/02/2021 @ 14:51:02.094444 |  Con 103 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:02.096443 | Start Receive 103 
+| 09/02/2021 @ 14:51:02.097445 | Start Send 103 
+| 09/02/2021 @ 14:51:03.098238 | Sockets Closed! 103 
+| 09/02/2021 @ 14:51:03.099239 | Exit Receive 103 
+| 09/02/2021 @ 14:51:03.099239 | 103 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:07.239553 | 104 New con from ('127.0.0.1', 58453) 
+| 09/02/2021 @ 14:51:07.239553 |  Con 104 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:07.241517 | Start Receive 104 
+| 09/02/2021 @ 14:51:07.242515 | Start Send 104 
+| 09/02/2021 @ 14:51:07.242515 | 105 New con from ('127.0.0.1', 58454) 
+| 09/02/2021 @ 14:51:07.242515 |  Con 105 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:07.243518 | Start Receive 105 
+| 09/02/2021 @ 14:51:07.244516 | Start Send 105 
+| 09/02/2021 @ 14:51:07.268515 | Sockets Closed! 104 
+| 09/02/2021 @ 14:51:07.268515 | Exit Receive 104 
+| 09/02/2021 @ 14:51:07.268515 | 104 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:07.289515 | Sockets Closed! 105 
+| 09/02/2021 @ 14:51:07.290514 | Exit Receive 105 
+| 09/02/2021 @ 14:51:07.290514 | 105 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:07.491504 | 106 New con from ('127.0.0.1', 58459) 
+| 09/02/2021 @ 14:51:07.491504 |  Con 106 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:07.493495 | Start Receive 106 
+| 09/02/2021 @ 14:51:07.494495 | Start Send 106 
+| 09/02/2021 @ 14:51:07.504498 | Sockets Closed! 106 
+| 09/02/2021 @ 14:51:07.504498 | Exit Receive 106 
+| 09/02/2021 @ 14:51:07.504498 | 106 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:07.622495 | 107 New con from ('127.0.0.1', 58461) 
+| 09/02/2021 @ 14:51:07.622495 |  Con 107 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:07.624504 | Start Receive 107 
+| 09/02/2021 @ 14:51:07.625492 | Start Send 107 
+| 09/02/2021 @ 14:51:07.634492 | Exit Receive 107 
+| 09/02/2021 @ 14:51:07.634492 | 107 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:07.635494 | Sockets Closed! 107 
+| 09/02/2021 @ 14:51:09.201535 | 108 New con from ('127.0.0.1', 58468) 
+| 09/02/2021 @ 14:51:09.201535 |  Con 108 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:09.203525 | Start Receive 108 
+| 09/02/2021 @ 14:51:09.205522 | Start Send 108 
+| 09/02/2021 @ 14:51:09.234523 | Sockets Closed! 108 
+| 09/02/2021 @ 14:51:09.234523 | Exit Receive 108 
+| 09/02/2021 @ 14:51:09.235521 | 108 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:09.453625 | 109 New con from ('127.0.0.1', 58471) 
+| 09/02/2021 @ 14:51:09.453625 |  Con 109 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:09.464636 | Start Receive 109 
+| 09/02/2021 @ 14:51:09.466624 | Start Send 109 
+| 09/02/2021 @ 14:51:09.475596 | Sockets Closed! 109 
+| 09/02/2021 @ 14:51:09.475596 | Exit Receive 109 
+| 09/02/2021 @ 14:51:09.475596 | 109 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:09.538631 | 110 New con from ('127.0.0.1', 58473) 
+| 09/02/2021 @ 14:51:09.538631 |  Con 110 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:09.549631 | Start Receive 110 
+| 09/02/2021 @ 14:51:09.550633 | Start Send 110 
+| 09/02/2021 @ 14:51:10.552436 | Sockets Closed! 110 
+| 09/02/2021 @ 14:51:10.552436 | Exit Receive 110 
+| 09/02/2021 @ 14:51:10.552436 | 110 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:11.236350 | 111 New con from ('127.0.0.1', 58478) 
+| 09/02/2021 @ 14:51:11.236350 |  Con 111 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:11.239308 | Start Receive 111 
+| 09/02/2021 @ 14:51:11.239308 | Start Send 111 
+| 09/02/2021 @ 14:51:11.239308 | 112 New con from ('127.0.0.1', 58479) 
+| 09/02/2021 @ 14:51:11.240310 |  Con 112 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:11.241309 | Start Receive 112 
+| 09/02/2021 @ 14:51:11.242314 | Start Send 112 
+| 09/02/2021 @ 14:51:11.251320 | Exit Receive 111 
+| 09/02/2021 @ 14:51:11.251320 | 111 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:11.251320 | Sockets Closed! 111 
+| 09/02/2021 @ 14:51:11.485389 | 113 New con from ('127.0.0.1', 58482) 
+| 09/02/2021 @ 14:51:11.485389 |  Con 113 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:11.486409 | Start Receive 113 
+| 09/02/2021 @ 14:51:11.487410 | Start Send 113 
+| 09/02/2021 @ 14:51:12.243093 | Sockets Closed! 112 
+| 09/02/2021 @ 14:51:12.243093 | Exit Receive 112 
+| 09/02/2021 @ 14:51:12.244064 | 112 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:12.488504 | Sockets Closed! 113 
+| 09/02/2021 @ 14:51:12.488504 | Exit Receive 113 
+| 09/02/2021 @ 14:51:12.488504 | 113 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:20.940435 | 114 New con from ('127.0.0.1', 58487) 
+| 09/02/2021 @ 14:51:20.941406 |  Con 114 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:20.943417 | Start Receive 114 
+| 09/02/2021 @ 14:51:20.944411 | Start Send 114 
+| 09/02/2021 @ 14:51:20.944411 | 115 New con from ('127.0.0.1', 58488) 
+| 09/02/2021 @ 14:51:20.944411 |  Con 115 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:20.946415 | Start Receive 115 
+| 09/02/2021 @ 14:51:20.946415 | Start Send 115 
+| 09/02/2021 @ 14:51:20.955414 | Sockets Closed! 114 
+| 09/02/2021 @ 14:51:20.955414 | Exit Receive 114 
+| 09/02/2021 @ 14:51:20.955414 | 114 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:21.192521 | 116 New con from ('127.0.0.1', 58491) 
+| 09/02/2021 @ 14:51:21.192521 |  Con 116 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:21.195519 | Start Receive 116 
+| 09/02/2021 @ 14:51:21.196512 | Start Send 116 
+| 09/02/2021 @ 14:51:21.947971 | Sockets Closed! 115 
+| 09/02/2021 @ 14:51:21.947971 | Exit Receive 115 
+| 09/02/2021 @ 14:51:21.947971 | 115 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:22.198455 | Sockets Closed! 116 
+| 09/02/2021 @ 14:51:22.199456 | Exit Receive 116 
+| 09/02/2021 @ 14:51:22.199456 | 116 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:24.606975 | 117 New con from ('127.0.0.1', 58496) 
+| 09/02/2021 @ 14:51:24.606975 |  Con 117 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:24.608938 | Start Receive 117 
+| 09/02/2021 @ 14:51:24.609936 | Start Send 117 
+| 09/02/2021 @ 14:51:24.609936 | 118 New con from ('127.0.0.1', 58497) 
+| 09/02/2021 @ 14:51:24.609936 |  Con 118 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:24.611939 | Start Receive 118 
+| 09/02/2021 @ 14:51:24.612937 | Start Send 118 
+| 09/02/2021 @ 14:51:24.621937 | Sockets Closed! 117 
+| 09/02/2021 @ 14:51:24.622943 | Exit Receive 117 
+| 09/02/2021 @ 14:51:24.622943 | 117 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:24.858936 | 119 New con from ('127.0.0.1', 58500) 
+| 09/02/2021 @ 14:51:24.858936 |  Con 119 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:24.860937 | Start Receive 119 
+| 09/02/2021 @ 14:51:24.861941 | Start Send 119 
+| 09/02/2021 @ 14:51:25.613487 | Sockets Closed! 118 
+| 09/02/2021 @ 14:51:25.614486 | Exit Receive 118 
+| 09/02/2021 @ 14:51:25.614486 | 118 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:25.863599 | Sockets Closed! 119 
+| 09/02/2021 @ 14:51:25.863599 | Exit Receive 119 
+| 09/02/2021 @ 14:51:25.863599 | 119 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:51:38.589273 | 120 New con from ('127.0.0.1', 58506) 
+| 09/02/2021 @ 14:51:38.589273 |  Con 120 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:38.591273 | Start Receive 120 
+| 09/02/2021 @ 14:51:38.591273 | Start Send 120 
+| 09/02/2021 @ 14:51:38.598270 | Exit Receive 120 
+| 09/02/2021 @ 14:51:38.599274 | Sockets Closed! 120 
+| 09/02/2021 @ 14:51:38.841272 | 121 New con from ('127.0.0.1', 58508) 
+| 09/02/2021 @ 14:51:38.842271 |  Con 121 is Connecting to Passthrough 
+| 09/02/2021 @ 14:51:38.843272 | Start Receive 121 
+| 09/02/2021 @ 14:51:38.843272 | Start Send 121 
+| 09/02/2021 @ 14:51:39.843309 | Sockets Closed! 121 
+| 09/02/2021 @ 14:51:39.844281 | Exit Receive 121 
+| 09/02/2021 @ 14:51:39.844281 | 121 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:03.715572 | 122 New con from ('127.0.0.1', 58516) 
+| 09/02/2021 @ 14:52:03.715572 |  Con 122 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:03.717568 | Start Receive 122 
+| 09/02/2021 @ 14:52:03.717568 | Start Send 122 
+| 09/02/2021 @ 14:52:03.718585 | 123 New con from ('127.0.0.1', 58517) 
+| 09/02/2021 @ 14:52:03.718585 |  Con 123 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:03.719570 | Start Receive 123 
+| 09/02/2021 @ 14:52:03.720570 | Start Send 123 
+| 09/02/2021 @ 14:52:03.730578 | Sockets Closed! 122 
+| 09/02/2021 @ 14:52:03.730578 | Exit Receive 122 
+| 09/02/2021 @ 14:52:03.731578 | 122 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:03.741569 | Sockets Closed! 123 
+| 09/02/2021 @ 14:52:03.741569 | Exit Receive 123 
+| 09/02/2021 @ 14:52:03.741569 | 123 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:03.965775 | 124 New con from ('127.0.0.1', 58520) 
+| 09/02/2021 @ 14:52:03.965775 |  Con 124 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:03.966774 | Start Receive 124 
+| 09/02/2021 @ 14:52:03.967774 | Start Send 124 
+| 09/02/2021 @ 14:52:03.974772 | Sockets Closed! 124 
+| 09/02/2021 @ 14:52:03.974772 | Exit Receive 124 
+| 09/02/2021 @ 14:52:03.974772 | 124 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:07.876819 | 125 New con from ('127.0.0.1', 58526) 
+| 09/02/2021 @ 14:52:07.876819 |  Con 125 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:07.887841 | Start Receive 125 
+| 09/02/2021 @ 14:52:07.888827 | Start Send 125 
+| 09/02/2021 @ 14:52:07.888827 | 126 New con from ('127.0.0.1', 58527) 
+| 09/02/2021 @ 14:52:07.888827 |  Con 126 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:07.891818 | Start Receive 126 
+| 09/02/2021 @ 14:52:07.892820 | Start Send 126 
+| 09/02/2021 @ 14:52:07.892820 | Exit Receive 125 
+| 09/02/2021 @ 14:52:07.892820 | 125 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:07.892820 | Sockets Closed! 125 
+| 09/02/2021 @ 14:52:07.926820 | Sockets Closed! 126 
+| 09/02/2021 @ 14:52:07.926820 | Exit Receive 126 
+| 09/02/2021 @ 14:52:07.926820 | 126 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:08.127934 | 127 New con from ('127.0.0.1', 58530) 
+| 09/02/2021 @ 14:52:08.128933 |  Con 127 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:08.131932 | Start Receive 127 
+| 09/02/2021 @ 14:52:08.132932 | Start Send 127 
+| 09/02/2021 @ 14:52:09.133065 | Sockets Closed! 127 
+| 09/02/2021 @ 14:52:09.134047 | Exit Receive 127 
+| 09/02/2021 @ 14:52:09.134047 | 127 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:15.405170 | 128 New con from ('127.0.0.1', 58538) 
+| 09/02/2021 @ 14:52:15.406170 |  Con 128 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:15.407171 | Start Receive 128 
+| 09/02/2021 @ 14:52:15.408171 | Start Send 128 
+| 09/02/2021 @ 14:52:15.408171 | 129 New con from ('127.0.0.1', 58539) 
+| 09/02/2021 @ 14:52:15.408171 |  Con 129 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:15.409171 | Start Receive 129 
+| 09/02/2021 @ 14:52:15.410169 | Start Send 129 
+| 09/02/2021 @ 14:52:15.425170 | Sockets Closed! 128 
+| 09/02/2021 @ 14:52:15.425170 | Exit Receive 128 
+| 09/02/2021 @ 14:52:15.425170 | 128 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:15.432172 | Sockets Closed! 129 
+| 09/02/2021 @ 14:52:15.432172 | Exit Receive 129 
+| 09/02/2021 @ 14:52:15.432172 | 129 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:52:15.656205 | 130 New con from ('127.0.0.1', 58542) 
+| 09/02/2021 @ 14:52:15.656205 |  Con 130 is Connecting to Passthrough 
+| 09/02/2021 @ 14:52:15.658177 | Start Receive 130 
+| 09/02/2021 @ 14:52:15.658177 | Start Send 130 
+| 09/02/2021 @ 14:52:16.659544 | Sockets Closed! 130 
+| 09/02/2021 @ 14:52:16.659544 | Exit Receive 130 
+| 09/02/2021 @ 14:52:16.659544 | 130 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:47.728394 | 131 New con from ('127.0.0.1', 58599) 
+| 09/02/2021 @ 14:56:47.728394 |  Con 131 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:47.730392 | Start Receive 131 
+| 09/02/2021 @ 14:56:47.731392 | Start Send 131 
+| 09/02/2021 @ 14:56:47.731392 | 132 New con from ('127.0.0.1', 58600) 
+| 09/02/2021 @ 14:56:47.731392 |  Con 132 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:47.733398 | Start Receive 132 
+| 09/02/2021 @ 14:56:47.734397 | Start Send 132 
+| 09/02/2021 @ 14:56:47.744392 | Sockets Closed! 131 
+| 09/02/2021 @ 14:56:47.745393 | Exit Receive 131 
+| 09/02/2021 @ 14:56:47.745393 | 131 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:47.979394 | 133 New con from ('127.0.0.1', 58603) 
+| 09/02/2021 @ 14:56:47.980405 |  Con 133 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:47.981399 | Start Receive 133 
+| 09/02/2021 @ 14:56:47.982402 | Start Send 133 
+| 09/02/2021 @ 14:56:48.736828 | Sockets Closed! 132 
+| 09/02/2021 @ 14:56:48.736828 | Exit Receive 132 
+| 09/02/2021 @ 14:56:48.736828 | 132 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:48.983841 | Sockets Closed! 133 
+| 09/02/2021 @ 14:56:48.983841 | Exit Receive 133 
+| 09/02/2021 @ 14:56:48.983841 | 133 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:52.992114 | 134 New con from ('127.0.0.1', 58608) 
+| 09/02/2021 @ 14:56:52.992114 |  Con 134 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:53.003119 | Start Receive 134 
+| 09/02/2021 @ 14:56:53.004119 | Start Send 134 
+| 09/02/2021 @ 14:56:53.033107 | Sockets Closed! 134 
+| 09/02/2021 @ 14:56:53.033107 | Exit Receive 134 
+| 09/02/2021 @ 14:56:53.034109 | 134 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:53.164112 | 135 New con from ('127.0.0.1', 58611) 
+| 09/02/2021 @ 14:56:53.164112 |  Con 135 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:53.175106 | Start Receive 135 
+| 09/02/2021 @ 14:56:53.176105 | Start Send 135 
+| 09/02/2021 @ 14:56:53.180106 | Sockets Closed! 135 
+| 09/02/2021 @ 14:56:53.181107 | Exit Receive 135 
+| 09/02/2021 @ 14:56:53.181107 | 135 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:53.244978 | 136 New con from ('127.0.0.1', 58613) 
+| 09/02/2021 @ 14:56:53.244978 |  Con 136 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:53.245966 | Start Receive 136 
+| 09/02/2021 @ 14:56:53.246969 | Start Send 136 
+| 09/02/2021 @ 14:56:53.259974 | Sockets Closed! 136 
+| 09/02/2021 @ 14:56:53.259974 | Exit Receive 136 
+| 09/02/2021 @ 14:56:53.259974 | 136 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:53.380014 | 137 New con from ('127.0.0.1', 58615) 
+| 09/02/2021 @ 14:56:53.380985 |  Con 137 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:53.382068 | Start Receive 137 
+| 09/02/2021 @ 14:56:53.383030 | Start Send 137 
+| 09/02/2021 @ 14:56:54.305587 | Sockets Closed! 137 
+| 09/02/2021 @ 14:56:54.305587 | Exit Receive 137 
+| 09/02/2021 @ 14:56:54.305587 | 137 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:54.600662 | 138 New con from ('127.0.0.1', 58618) 
+| 09/02/2021 @ 14:56:54.600662 |  Con 138 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:54.602626 | Start Receive 138 
+| 09/02/2021 @ 14:56:54.602626 | Start Send 138 
+| 09/02/2021 @ 14:56:54.615624 | Sockets Closed! 138 
+| 09/02/2021 @ 14:56:54.615624 | Exit Receive 138 
+| 09/02/2021 @ 14:56:54.615624 | 138 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:54.949840 | 139 New con from ('127.0.0.1', 58622) 
+| 09/02/2021 @ 14:56:54.949840 |  Con 139 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:54.950841 | Start Receive 139 
+| 09/02/2021 @ 14:56:54.951843 | Start Send 139 
+| 09/02/2021 @ 14:56:54.958840 | Sockets Closed! 139 
+| 09/02/2021 @ 14:56:54.958840 | Exit Receive 139 
+| 09/02/2021 @ 14:56:54.958840 | 139 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:56:55.200560 | 140 New con from ('127.0.0.1', 58624) 
+| 09/02/2021 @ 14:56:55.200560 |  Con 140 is Connecting to Passthrough 
+| 09/02/2021 @ 14:56:55.202561 | Start Receive 140 
+| 09/02/2021 @ 14:56:55.202561 | Start Send 140 
+| 09/02/2021 @ 14:56:56.202634 | Sockets Closed! 140 
+| 09/02/2021 @ 14:56:56.202634 | Exit Receive 140 
+| 09/02/2021 @ 14:56:56.202634 | 140 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:16.142121 | 141 New con from ('127.0.0.1', 58639) 
+| 09/02/2021 @ 14:57:16.142121 |  Con 141 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:16.143119 | Start Receive 141 
+| 09/02/2021 @ 14:57:16.144121 | Start Send 141 
+| 09/02/2021 @ 14:57:16.144121 | 142 New con from ('127.0.0.1', 58640) 
+| 09/02/2021 @ 14:57:16.144121 |  Con 142 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:16.145120 | Start Receive 142 
+| 09/02/2021 @ 14:57:16.146120 | Start Send 142 
+| 09/02/2021 @ 14:57:16.170119 | Exit Receive 141 
+| 09/02/2021 @ 14:57:16.170119 | Sockets Closed! 141 
+| 09/02/2021 @ 14:57:16.185119 | Sockets Closed! 142 
+| 09/02/2021 @ 14:57:16.185119 | Exit Receive 142 
+| 09/02/2021 @ 14:57:16.185119 | 142 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:16.393482 | 143 New con from ('127.0.0.1', 58644) 
+| 09/02/2021 @ 14:57:16.393482 |  Con 143 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:16.394483 | Start Receive 143 
+| 09/02/2021 @ 14:57:16.395482 | Start Send 143 
+| 09/02/2021 @ 14:57:16.405489 | Sockets Closed! 143 
+| 09/02/2021 @ 14:57:16.406489 | Exit Receive 143 
+| 09/02/2021 @ 14:57:16.406489 | 143 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:16.511487 | 144 New con from ('127.0.0.1', 58646) 
+| 09/02/2021 @ 14:57:16.511487 |  Con 144 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:16.513477 | Start Receive 144 
+| 09/02/2021 @ 14:57:16.513477 | Start Send 144 
+| 09/02/2021 @ 14:57:16.520476 | Sockets Closed! 144 
+| 09/02/2021 @ 14:57:16.520476 | Exit Receive 144 
+| 09/02/2021 @ 14:57:16.520476 | 144 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:21.462657 | 145 New con from ('127.0.0.1', 58651) 
+| 09/02/2021 @ 14:57:21.463651 |  Con 145 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:21.465648 | Start Receive 145 
+| 09/02/2021 @ 14:57:21.467649 | Start Send 145 
+| 09/02/2021 @ 14:57:21.467649 | 146 New con from ('127.0.0.1', 58652) 
+| 09/02/2021 @ 14:57:21.468649 |  Con 146 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:21.471650 | Start Receive 146 
+| 09/02/2021 @ 14:57:21.472650 | Start Send 146 
+| 09/02/2021 @ 14:57:21.483653 | Exit Receive 145 
+| 09/02/2021 @ 14:57:21.483653 | Sockets Closed! 145 
+| 09/02/2021 @ 14:57:21.493649 | Sockets Closed! 146 
+| 09/02/2021 @ 14:57:21.494651 | Exit Receive 146 
+| 09/02/2021 @ 14:57:21.494651 | 146 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:21.714784 | 147 New con from ('127.0.0.1', 58655) 
+| 09/02/2021 @ 14:57:21.714784 |  Con 147 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:21.716789 | Start Receive 147 
+| 09/02/2021 @ 14:57:21.717783 | Start Send 147 
+| 09/02/2021 @ 14:57:21.726782 | Sockets Closed! 147 
+| 09/02/2021 @ 14:57:21.726782 | Exit Receive 147 
+| 09/02/2021 @ 14:57:21.726782 | 147 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:23.039168 | 148 New con from ('127.0.0.1', 58660) 
+| 09/02/2021 @ 14:57:23.039168 |  Con 148 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:23.041201 | Start Receive 148 
+| 09/02/2021 @ 14:57:23.041201 | Start Send 148 
+| 09/02/2021 @ 14:57:23.042168 | 149 New con from ('127.0.0.1', 58661) 
+| 09/02/2021 @ 14:57:23.042168 |  Con 149 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:23.045167 | Start Receive 149 
+| 09/02/2021 @ 14:57:23.046170 | Start Send 149 
+| 09/02/2021 @ 14:57:23.056200 | Sockets Closed! 148 
+| 09/02/2021 @ 14:57:23.057190 | Exit Receive 148 
+| 09/02/2021 @ 14:57:23.057190 | 148 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:23.092172 | Sockets Closed! 149 
+| 09/02/2021 @ 14:57:23.092172 | Exit Receive 149 
+| 09/02/2021 @ 14:57:23.092172 | 149 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:23.290474 | 150 New con from ('127.0.0.1', 58664) 
+| 09/02/2021 @ 14:57:23.290474 |  Con 150 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:23.293467 | Start Receive 150 
+| 09/02/2021 @ 14:57:23.294460 | Start Send 150 
+| 09/02/2021 @ 14:57:23.602115 | Sockets Closed! 150 
+| 09/02/2021 @ 14:57:23.602115 | Exit Receive 150 
+| 09/02/2021 @ 14:57:23.602115 | 150 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:23.896309 | 151 New con from ('127.0.0.1', 58667) 
+| 09/02/2021 @ 14:57:23.897310 |  Con 151 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:23.907311 | Start Receive 151 
+| 09/02/2021 @ 14:57:23.908309 | Start Send 151 
+| 09/02/2021 @ 14:57:23.911309 | Sockets Closed! 151 
+| 09/02/2021 @ 14:57:23.911309 | Exit Receive 151 
+| 09/02/2021 @ 14:57:23.911309 | 151 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:34.383922 | 152 New con from ('127.0.0.1', 58674) 
+| 09/02/2021 @ 14:57:34.383922 |  Con 152 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:34.394935 | Start Receive 152 
+| 09/02/2021 @ 14:57:34.395917 | Start Send 152 
+| 09/02/2021 @ 14:57:34.396916 | 153 New con from ('127.0.0.1', 58675) 
+| 09/02/2021 @ 14:57:34.396916 |  Con 153 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:34.399914 | Start Receive 153 
+| 09/02/2021 @ 14:57:34.400916 | Start Send 153 
+| 09/02/2021 @ 14:57:34.402928 | Sockets Closed! 152 
+| 09/02/2021 @ 14:57:34.402928 | Exit Receive 152 
+| 09/02/2021 @ 14:57:34.402928 | 152 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:34.437917 | Sockets Closed! 153 
+| 09/02/2021 @ 14:57:34.437917 | Exit Receive 153 
+| 09/02/2021 @ 14:57:34.437917 | 153 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:34.633311 | 154 New con from ('127.0.0.1', 58678) 
+| 09/02/2021 @ 14:57:34.633311 |  Con 154 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:34.634292 | Start Receive 154 
+| 09/02/2021 @ 14:57:34.635291 | Start Send 154 
+| 09/02/2021 @ 14:57:35.635950 | Sockets Closed! 154 
+| 09/02/2021 @ 14:57:35.635950 | Exit Receive 154 
+| 09/02/2021 @ 14:57:35.636947 | 154 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:43.700708 | 155 New con from ('127.0.0.1', 58684) 
+| 09/02/2021 @ 14:57:43.700708 |  Con 155 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:43.702684 | Start Receive 155 
+| 09/02/2021 @ 14:57:43.702684 | Start Send 155 
+| 09/02/2021 @ 14:57:43.702684 | 156 New con from ('127.0.0.1', 58685) 
+| 09/02/2021 @ 14:57:43.702684 |  Con 156 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:43.704687 | Start Receive 156 
+| 09/02/2021 @ 14:57:43.705684 | Start Send 156 
+| 09/02/2021 @ 14:57:43.729684 | Sockets Closed! 155 
+| 09/02/2021 @ 14:57:43.729684 | Exit Receive 155 
+| 09/02/2021 @ 14:57:43.729684 | 155 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:43.764682 | Sockets Closed! 156 
+| 09/02/2021 @ 14:57:43.765683 | Exit Receive 156 
+| 09/02/2021 @ 14:57:43.765683 | 156 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:43.952755 | 157 New con from ('127.0.0.1', 58688) 
+| 09/02/2021 @ 14:57:43.952755 |  Con 157 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:43.954730 | Start Receive 157 
+| 09/02/2021 @ 14:57:43.955748 | Start Send 157 
+| 09/02/2021 @ 14:57:44.955891 | Sockets Closed! 157 
+| 09/02/2021 @ 14:57:44.955891 | Exit Receive 157 
+| 09/02/2021 @ 14:57:44.955891 | 157 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:50.847041 | 158 New con from ('127.0.0.1', 58695) 
+| 09/02/2021 @ 14:57:50.848041 |  Con 158 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:50.849042 | Start Receive 158 
+| 09/02/2021 @ 14:57:50.850046 | Start Send 158 
+| 09/02/2021 @ 14:57:50.850046 | 159 New con from ('127.0.0.1', 58696) 
+| 09/02/2021 @ 14:57:50.850046 |  Con 159 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:50.853046 | Start Receive 159 
+| 09/02/2021 @ 14:57:50.854044 | Start Send 159 
+| 09/02/2021 @ 14:57:50.882042 | Sockets Closed! 158 
+| 09/02/2021 @ 14:57:50.882042 | Exit Receive 158 
+| 09/02/2021 @ 14:57:50.882042 | 158 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:50.888044 | Sockets Closed! 159 
+| 09/02/2021 @ 14:57:50.888044 | Exit Receive 159 
+| 09/02/2021 @ 14:57:50.888044 | 159 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:57:51.100092 | 160 New con from ('127.0.0.1', 58699) 
+| 09/02/2021 @ 14:57:51.100092 |  Con 160 is Connecting to Passthrough 
+| 09/02/2021 @ 14:57:51.102103 | Start Receive 160 
+| 09/02/2021 @ 14:57:51.103081 | Start Send 160 
+| 09/02/2021 @ 14:57:52.103453 | Sockets Closed! 160 
+| 09/02/2021 @ 14:57:52.103453 | Exit Receive 160 
+| 09/02/2021 @ 14:57:52.104453 | 160 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:00.074006 | 161 New con from ('127.0.0.1', 58703) 
+| 09/02/2021 @ 14:58:00.074006 |  Con 161 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:00.086014 | Start Receive 161 
+| 09/02/2021 @ 14:58:00.087007 | Start Send 161 
+| 09/02/2021 @ 14:58:00.087007 | 162 New con from ('127.0.0.1', 58704) 
+| 09/02/2021 @ 14:58:00.088012 |  Con 162 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:00.089006 | Start Receive 162 
+| 09/02/2021 @ 14:58:00.090007 | Start Send 162 
+| 09/02/2021 @ 14:58:00.386208 | Sockets Closed! 161 
+| 09/02/2021 @ 14:58:00.387207 | Exit Receive 161 
+| 09/02/2021 @ 14:58:00.387207 | 161 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:00.425210 | Sockets Closed! 162 
+| 09/02/2021 @ 14:58:00.425210 | Exit Receive 162 
+| 09/02/2021 @ 14:58:00.425210 | 162 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:00.724055 | 163 New con from ('127.0.0.1', 58708) 
+| 09/02/2021 @ 14:58:00.725054 |  Con 163 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:00.726062 | Start Receive 163 
+| 09/02/2021 @ 14:58:00.727055 | Start Send 163 
+| 09/02/2021 @ 14:58:00.733054 | Sockets Closed! 163 
+| 09/02/2021 @ 14:58:00.734053 | Exit Receive 163 
+| 09/02/2021 @ 14:58:00.734053 | 163 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:01.907743 | 164 New con from ('127.0.0.1', 58713) 
+| 09/02/2021 @ 14:58:01.907743 |  Con 164 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:01.909705 | Start Receive 164 
+| 09/02/2021 @ 14:58:01.909705 | Start Send 164 
+| 09/02/2021 @ 14:58:01.910702 | 165 New con from ('127.0.0.1', 58714) 
+| 09/02/2021 @ 14:58:01.910702 |  Con 165 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:01.912705 | Start Receive 165 
+| 09/02/2021 @ 14:58:01.912705 | Start Send 165 
+| 09/02/2021 @ 14:58:01.921702 | Sockets Closed! 164 
+| 09/02/2021 @ 14:58:01.922703 | Exit Receive 164 
+| 09/02/2021 @ 14:58:01.922703 | 164 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:01.928703 | Sockets Closed! 165 
+| 09/02/2021 @ 14:58:01.929703 | Exit Receive 165 
+| 09/02/2021 @ 14:58:01.929703 | 165 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:02.159690 | 166 New con from ('127.0.0.1', 58717) 
+| 09/02/2021 @ 14:58:02.159690 |  Con 166 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:02.160690 | Start Receive 166 
+| 09/02/2021 @ 14:58:02.161686 | Start Send 166 
+| 09/02/2021 @ 14:58:02.167690 | Sockets Closed! 166 
+| 09/02/2021 @ 14:58:02.167690 | Exit Receive 166 
+| 09/02/2021 @ 14:58:02.167690 | 166 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:05.999992 | 167 New con from ('127.0.0.1', 58723) 
+| 09/02/2021 @ 14:58:05.999992 |  Con 167 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:06.002952 | Start Receive 167 
+| 09/02/2021 @ 14:58:06.002952 | Start Send 167 
+| 09/02/2021 @ 14:58:06.011961 | Sockets Closed! 167 
+| 09/02/2021 @ 14:58:06.011961 | Exit Receive 167 
+| 09/02/2021 @ 14:58:06.011961 | 167 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:06.251524 | 168 New con from ('127.0.0.1', 58726) 
+| 09/02/2021 @ 14:58:06.251524 |  Con 168 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:06.262510 | Start Receive 168 
+| 09/02/2021 @ 14:58:06.263507 | Start Send 168 
+| 09/02/2021 @ 14:58:06.266507 | Sockets Closed! 168 
+| 09/02/2021 @ 14:58:06.266507 | Exit Receive 168 
+| 09/02/2021 @ 14:58:06.267504 | 168 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:06.499621 | 169 New con from ('127.0.0.1', 58724) 
+| 09/02/2021 @ 14:58:06.499621 |  Con 169 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:06.501619 | Start Receive 169 
+| 09/02/2021 @ 14:58:06.502596 | Start Send 169 
+| 09/02/2021 @ 14:58:07.504375 | Sockets Closed! 169 
+| 09/02/2021 @ 14:58:07.504375 | Exit Receive 169 
+| 09/02/2021 @ 14:58:07.504375 | 169 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+
+=======================================================
+Initializing Socket Wrapper AT 09/02/2021 @ 14:58:13.252407 
+=======================================================
+| 09/02/2021 @ 14:58:15.712617 | 0 New con from ('127.0.0.1', 58736) 
+| 09/02/2021 @ 14:58:15.712617 |  Con 0 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:15.714619 | Start Receive 0 
+| 09/02/2021 @ 14:58:15.715618 | Start Send 0 
+| 09/02/2021 @ 14:58:15.715618 | 1 New con from ('127.0.0.1', 58737) 
+| 09/02/2021 @ 14:58:15.715618 |  Con 1 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:15.717619 | Start Receive 1 
+| 09/02/2021 @ 14:58:15.718617 | Start Send 1 
+| 09/02/2021 @ 14:58:15.726623 | Sockets Closed! 0 
+| 09/02/2021 @ 14:58:15.726623 | Exit Receive 0 
+| 09/02/2021 @ 14:58:15.726623 | 0 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:15.752619 | Sockets Closed! 1 
+| 09/02/2021 @ 14:58:15.752619 | Exit Receive 1 
+| 09/02/2021 @ 14:58:15.752619 | 1 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:15.962773 | 2 New con from ('127.0.0.1', 58740) 
+| 09/02/2021 @ 14:58:15.962773 |  Con 2 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:15.963774 | Start Receive 2 
+| 09/02/2021 @ 14:58:15.964773 | Start Send 2 
+| 09/02/2021 @ 14:58:16.966410 | Sockets Closed! 2 
+| 09/02/2021 @ 14:58:16.966410 | Exit Receive 2 
+| 09/02/2021 @ 14:58:16.966410 | 2 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:22.428145 | 3 New con from ('127.0.0.1', 58745) 
+| 09/02/2021 @ 14:58:22.428145 |  Con 3 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:22.430110 | Start Receive 3 
+| 09/02/2021 @ 14:58:22.431114 | Start Send 3 
+| 09/02/2021 @ 14:58:22.432111 | 4 New con from ('127.0.0.1', 58746) 
+| 09/02/2021 @ 14:58:22.432111 |  Con 4 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:22.435111 | Start Receive 4 
+| 09/02/2021 @ 14:58:22.436118 | Start Send 4 
+| 09/02/2021 @ 14:58:22.470106 | Sockets Closed! 3 
+| 09/02/2021 @ 14:58:22.470106 | Exit Receive 3 
+| 09/02/2021 @ 14:58:22.470106 | 3 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:22.483106 | Sockets Closed! 4 
+| 09/02/2021 @ 14:58:22.483106 | Exit Receive 4 
+| 09/02/2021 @ 14:58:22.483106 | 4 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:22.678104 | 5 New con from ('127.0.0.1', 58749) 
+| 09/02/2021 @ 14:58:22.678104 |  Con 5 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:22.680104 | Start Receive 5 
+| 09/02/2021 @ 14:58:22.680104 | Start Send 5 
+| 09/02/2021 @ 14:58:23.681077 | Sockets Closed! 5 
+| 09/02/2021 @ 14:58:23.681077 | Exit Receive 5 
+| 09/02/2021 @ 14:58:23.682044 | 5 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:39.304488 | 6 New con from ('127.0.0.1', 58759) 
+| 09/02/2021 @ 14:58:39.304488 |  Con 6 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:39.316519 | Start Receive 6 
+| 09/02/2021 @ 14:58:39.317520 | Start Send 6 
+| 09/02/2021 @ 14:58:39.317520 | 7 New con from ('127.0.0.1', 58760) 
+| 09/02/2021 @ 14:58:39.317520 |  Con 7 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:39.319494 | Start Receive 7 
+| 09/02/2021 @ 14:58:39.320514 | Start Send 7 
+| 09/02/2021 @ 14:58:40.317762 | Sockets Closed! 6 
+| 09/02/2021 @ 14:58:40.318770 | Exit Receive 6 
+| 09/02/2021 @ 14:58:40.318770 | 6 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:40.320774 | Sockets Closed! 7 
+| 09/02/2021 @ 14:58:40.321765 | Exit Receive 7 
+| 09/02/2021 @ 14:58:40.321765 | 7 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:51.741672 | 8 New con from ('127.0.0.1', 58783) 
+| 09/02/2021 @ 14:58:51.741672 |  Con 8 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:51.742677 | Start Receive 8 
+| 09/02/2021 @ 14:58:51.743681 | Start Send 8 
+| 09/02/2021 @ 14:58:51.743681 | 9 New con from ('127.0.0.1', 58784) 
+| 09/02/2021 @ 14:58:51.743681 |  Con 9 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:51.745666 | Start Receive 9 
+| 09/02/2021 @ 14:58:51.746670 | Start Send 9 
+| 09/02/2021 @ 14:58:52.376002 | Sockets Closed! 8 
+| 09/02/2021 @ 14:58:52.376002 | Exit Receive 8 
+| 09/02/2021 @ 14:58:52.376002 | 8 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:52.460005 | Sockets Closed! 9 
+| 09/02/2021 @ 14:58:52.460005 | Exit Receive 9 
+| 09/02/2021 @ 14:58:52.460005 | 9 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:52.768859 | 10 New con from ('127.0.0.1', 58789) 
+| 09/02/2021 @ 14:58:52.768859 |  Con 10 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:52.770854 | Start Receive 10 
+| 09/02/2021 @ 14:58:52.770854 | Start Send 10 
+| 09/02/2021 @ 14:58:52.786856 | Sockets Closed! 10 
+| 09/02/2021 @ 14:58:52.786856 | Exit Receive 10 
+| 09/02/2021 @ 14:58:52.786856 | 10 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:53.017943 | 11 New con from ('127.0.0.1', 58791) 
+| 09/02/2021 @ 14:58:53.017943 |  Con 11 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:53.019945 | Start Receive 11 
+| 09/02/2021 @ 14:58:53.020921 | Start Send 11 
+| 09/02/2021 @ 14:58:54.021019 | Exit Receive 11 
+| 09/02/2021 @ 14:58:54.022016 | Sockets Closed! 11 
+| 09/02/2021 @ 14:58:54.022016 | 11 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:55.050491 | 12 New con from ('127.0.0.1', 58796) 
+| 09/02/2021 @ 14:58:55.050491 |  Con 12 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:55.052466 | Start Receive 12 
+| 09/02/2021 @ 14:58:55.053466 | Start Send 12 
+| 09/02/2021 @ 14:58:55.080464 | Sockets Closed! 12 
+| 09/02/2021 @ 14:58:55.080464 | Exit Receive 12 
+| 09/02/2021 @ 14:58:55.080464 | 12 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:55.302928 | 13 New con from ('127.0.0.1', 58799) 
+| 09/02/2021 @ 14:58:55.302928 |  Con 13 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:55.303938 | Start Receive 13 
+| 09/02/2021 @ 14:58:55.304929 | Start Send 13 
+| 09/02/2021 @ 14:58:55.323926 | Sockets Closed! 13 
+| 09/02/2021 @ 14:58:55.324926 | Exit Receive 13 
+| 09/02/2021 @ 14:58:55.324926 | 13 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:55.382940 | 14 New con from ('127.0.0.1', 58801) 
+| 09/02/2021 @ 14:58:55.382940 |  Con 14 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:55.384929 | Start Receive 14 
+| 09/02/2021 @ 14:58:55.384929 | Start Send 14 
+| 09/02/2021 @ 14:58:56.061751 | Sockets Closed! 14 
+| 09/02/2021 @ 14:58:56.061751 | Exit Receive 14 
+| 09/02/2021 @ 14:58:56.062748 | 14 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:58:56.346874 | 15 New con from ('127.0.0.1', 58804) 
+| 09/02/2021 @ 14:58:56.346874 |  Con 15 is Connecting to Passthrough 
+| 09/02/2021 @ 14:58:56.348866 | Start Receive 15 
+| 09/02/2021 @ 14:58:56.348866 | Start Send 15 
+| 09/02/2021 @ 14:58:57.349828 | Sockets Closed! 15 
+| 09/02/2021 @ 14:58:57.349828 | Exit Receive 15 
+| 09/02/2021 @ 14:58:57.350860 | 15 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:59:23.096100 | 16 New con from ('127.0.0.1', 58811) 
+| 09/02/2021 @ 14:59:23.097068 |  Con 16 is Connecting to Passthrough 
+| 09/02/2021 @ 14:59:23.099070 | Start Receive 16 
+| 09/02/2021 @ 14:59:23.100080 | Start Send 16 
+| 09/02/2021 @ 14:59:23.114068 | Exit Receive 16 
+| 09/02/2021 @ 14:59:23.114068 | Sockets Closed! 16 
+| 09/02/2021 @ 14:59:23.347371 | 17 New con from ('127.0.0.1', 58813) 
+| 09/02/2021 @ 14:59:23.347371 |  Con 17 is Connecting to Passthrough 
+| 09/02/2021 @ 14:59:23.350335 | Start Receive 17 
+| 09/02/2021 @ 14:59:23.351339 | Start Send 17 
+| 09/02/2021 @ 14:59:24.352675 | Sockets Closed! 17 
+| 09/02/2021 @ 14:59:24.352675 | Exit Receive 17 
+| 09/02/2021 @ 14:59:24.352675 | 17 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:59:53.097087 | 18 New con from ('127.0.0.1', 58822) 
+| 09/02/2021 @ 14:59:53.097087 |  Con 18 is Connecting to Passthrough 
+| 09/02/2021 @ 14:59:53.108094 | Start Receive 18 
+| 09/02/2021 @ 14:59:53.109095 | Start Send 18 
+| 09/02/2021 @ 14:59:53.110095 | 19 New con from ('127.0.0.1', 58823) 
+| 09/02/2021 @ 14:59:53.111087 |  Con 19 is Connecting to Passthrough 
+| 09/02/2021 @ 14:59:53.112088 | Exit Receive 18 
+| 09/02/2021 @ 14:59:53.113090 | Start Receive 19 
+| 09/02/2021 @ 14:59:53.114089 | Start Send 19 
+| 09/02/2021 @ 14:59:53.115087 | Sockets Closed! 18 
+| 09/02/2021 @ 14:59:53.134095 | Sockets Closed! 19 
+| 09/02/2021 @ 14:59:53.135087 | Exit Receive 19 
+| 09/02/2021 @ 14:59:53.135087 | 19 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:59:53.348485 | 20 New con from ('127.0.0.1', 58827) 
+| 09/02/2021 @ 14:59:53.348485 |  Con 20 is Connecting to Passthrough 
+| 09/02/2021 @ 14:59:53.349490 | Start Receive 20 
+| 09/02/2021 @ 14:59:53.350487 | Start Send 20 
+| 09/02/2021 @ 14:59:53.359485 | Sockets Closed! 20 
+| 09/02/2021 @ 14:59:53.359485 | Exit Receive 20 
+| 09/02/2021 @ 14:59:53.359485 | 20 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 14:59:53.598652 | 21 New con from ('127.0.0.1', 58825) 
+| 09/02/2021 @ 14:59:53.598652 |  Con 21 is Connecting to Passthrough 
+| 09/02/2021 @ 14:59:53.600619 | Start Receive 21 
+| 09/02/2021 @ 14:59:53.600619 | Start Send 21 
+| 09/02/2021 @ 14:59:54.601545 | Sockets Closed! 21 
+| 09/02/2021 @ 14:59:54.602513 | Exit Receive 21 
+| 09/02/2021 @ 14:59:54.602513 | 21 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:00:23.097843 | 22 New con from ('127.0.0.1', 58839) 
+| 09/02/2021 @ 15:00:23.097843 |  Con 22 is Connecting to Passthrough 
+| 09/02/2021 @ 15:00:23.109879 | Start Receive 22 
+| 09/02/2021 @ 15:00:23.110871 | Start Send 22 
+| 09/02/2021 @ 15:00:23.113855 | Exit Receive 22 
+| 09/02/2021 @ 15:00:23.114852 | Sockets Closed! 22 
+| 09/02/2021 @ 15:00:23.348995 | 23 New con from ('127.0.0.1', 58841) 
+| 09/02/2021 @ 15:00:23.348995 |  Con 23 is Connecting to Passthrough 
+| 09/02/2021 @ 15:00:23.351995 | Start Receive 23 
+| 09/02/2021 @ 15:00:23.353000 | Start Send 23 
+| 09/02/2021 @ 15:00:24.354971 | Sockets Closed! 23 
+| 09/02/2021 @ 15:00:24.354971 | Exit Receive 23 
+| 09/02/2021 @ 15:00:24.354971 | 23 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:00:53.101120 | 24 New con from ('127.0.0.1', 58852) 
+| 09/02/2021 @ 15:00:53.101120 |  Con 24 is Connecting to Passthrough 
+| 09/02/2021 @ 15:00:53.103119 | Start Receive 24 
+| 09/02/2021 @ 15:00:53.104118 | Start Send 24 
+| 09/02/2021 @ 15:00:53.105117 | 25 New con from ('127.0.0.1', 58853) 
+| 09/02/2021 @ 15:00:53.105117 |  Con 25 is Connecting to Passthrough 
+| 09/02/2021 @ 15:00:53.106123 | Start Receive 25 
+| 09/02/2021 @ 15:00:53.107122 | Start Send 25 
+| 09/02/2021 @ 15:00:53.114120 | Sockets Closed! 24 
+| 09/02/2021 @ 15:00:53.114120 | Exit Receive 24 
+| 09/02/2021 @ 15:00:53.114120 | 24 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:00:53.123120 | Exit Receive 25 
+| 09/02/2021 @ 15:00:53.123120 | Sockets Closed! 25 
+| 09/02/2021 @ 15:00:53.351119 | 26 New con from ('127.0.0.1', 58857) 
+| 09/02/2021 @ 15:00:53.351119 |  Con 26 is Connecting to Passthrough 
+| 09/02/2021 @ 15:00:53.353121 | Start Receive 26 
+| 09/02/2021 @ 15:00:53.354123 | Start Send 26 
+| 09/02/2021 @ 15:00:53.363126 | Sockets Closed! 26 
+| 09/02/2021 @ 15:00:53.363126 | Exit Receive 26 
+| 09/02/2021 @ 15:00:53.363126 | 26 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:00:53.603576 | 27 New con from ('127.0.0.1', 58855) 
+| 09/02/2021 @ 15:00:53.603576 |  Con 27 is Connecting to Passthrough 
+| 09/02/2021 @ 15:00:53.606557 | Start Receive 27 
+| 09/02/2021 @ 15:00:53.606557 | Start Send 27 
+| 09/02/2021 @ 15:00:54.609499 | Sockets Closed! 27 
+| 09/02/2021 @ 15:00:54.609499 | Exit Receive 27 
+| 09/02/2021 @ 15:00:54.609499 | 27 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:23.096185 | 28 New con from ('127.0.0.1', 58867) 
+| 09/02/2021 @ 15:01:23.097148 |  Con 28 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:23.098150 | Start Receive 28 
+| 09/02/2021 @ 15:01:23.099150 | Start Send 28 
+| 09/02/2021 @ 15:01:23.111161 | Sockets Closed! 28 
+| 09/02/2021 @ 15:01:23.111161 | Exit Receive 28 
+| 09/02/2021 @ 15:01:23.111161 | 28 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:23.347328 | 29 New con from ('127.0.0.1', 58869) 
+| 09/02/2021 @ 15:01:23.347328 |  Con 29 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:23.350332 | Start Receive 29 
+| 09/02/2021 @ 15:01:23.351335 | Start Send 29 
+| 09/02/2021 @ 15:01:24.352052 | Sockets Closed! 29 
+| 09/02/2021 @ 15:01:24.353039 | Exit Receive 29 
+| 09/02/2021 @ 15:01:24.353039 | 29 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:32.932354 | 30 New con from ('127.0.0.1', 58875) 
+| 09/02/2021 @ 15:01:32.932354 |  Con 30 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:32.933355 | Start Receive 30 
+| 09/02/2021 @ 15:01:32.934353 | Start Send 30 
+| 09/02/2021 @ 15:01:32.934353 | 31 New con from ('127.0.0.1', 58876) 
+| 09/02/2021 @ 15:01:32.934353 |  Con 31 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:32.935356 | Start Receive 31 
+| 09/02/2021 @ 15:01:32.936355 | Start Send 31 
+| 09/02/2021 @ 15:01:32.941355 | Sockets Closed! 30 
+| 09/02/2021 @ 15:01:32.941355 | Exit Receive 30 
+| 09/02/2021 @ 15:01:32.941355 | 30 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:33.185383 | 32 New con from ('127.0.0.1', 58879) 
+| 09/02/2021 @ 15:01:33.185383 |  Con 32 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:33.186354 | Start Receive 32 
+| 09/02/2021 @ 15:01:33.187393 | Start Send 32 
+| 09/02/2021 @ 15:01:33.938078 | Sockets Closed! 31 
+| 09/02/2021 @ 15:01:33.938078 | Exit Receive 31 
+| 09/02/2021 @ 15:01:33.938078 | 31 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:34.187881 | Sockets Closed! 32 
+| 09/02/2021 @ 15:01:34.187881 | Exit Receive 32 
+| 09/02/2021 @ 15:01:34.188863 | 32 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:37.704251 | 33 New con from ('127.0.0.1', 58884) 
+| 09/02/2021 @ 15:01:37.704251 |  Con 33 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:37.706254 | Start Receive 33 
+| 09/02/2021 @ 15:01:37.707252 | Start Send 33 
+| 09/02/2021 @ 15:01:37.707252 | 34 New con from ('127.0.0.1', 58885) 
+| 09/02/2021 @ 15:01:37.707252 |  Con 34 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:37.709255 | Start Receive 34 
+| 09/02/2021 @ 15:01:37.710253 | Start Send 34 
+| 09/02/2021 @ 15:01:37.720253 | Exit Receive 33 
+| 09/02/2021 @ 15:01:37.720253 | Sockets Closed! 33 
+| 09/02/2021 @ 15:01:37.729255 | Sockets Closed! 34 
+| 09/02/2021 @ 15:01:37.729255 | Exit Receive 34 
+| 09/02/2021 @ 15:01:37.729255 | 34 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:37.954324 | 35 New con from ('127.0.0.1', 58888) 
+| 09/02/2021 @ 15:01:37.954324 |  Con 35 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:37.956321 | Start Receive 35 
+| 09/02/2021 @ 15:01:37.957326 | Start Send 35 
+| 09/02/2021 @ 15:01:37.965324 | Sockets Closed! 35 
+| 09/02/2021 @ 15:01:37.965324 | Exit Receive 35 
+| 09/02/2021 @ 15:01:37.965324 | 35 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:40.105276 | 36 New con from ('127.0.0.1', 58895) 
+| 09/02/2021 @ 15:01:40.105276 |  Con 36 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:40.116274 | Start Receive 36 
+| 09/02/2021 @ 15:01:40.117276 | Start Send 36 
+| 09/02/2021 @ 15:01:40.117276 | 37 New con from ('127.0.0.1', 58896) 
+| 09/02/2021 @ 15:01:40.118273 |  Con 37 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:40.123274 | Sockets Closed! 36 
+| 09/02/2021 @ 15:01:40.123274 | Exit Receive 36 
+| 09/02/2021 @ 15:01:40.124275 | 36 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:40.131276 | Start Receive 37 
+| 09/02/2021 @ 15:01:40.131276 | Start Send 37 
+| 09/02/2021 @ 15:01:40.358274 | 38 New con from ('127.0.0.1', 58899) 
+| 09/02/2021 @ 15:01:40.358274 |  Con 38 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:40.360273 | Start Receive 38 
+| 09/02/2021 @ 15:01:40.360273 | Start Send 38 
+| 09/02/2021 @ 15:01:41.133708 | Sockets Closed! 37 
+| 09/02/2021 @ 15:01:41.133708 | Exit Receive 37 
+| 09/02/2021 @ 15:01:41.133708 | 37 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:41.361877 | Sockets Closed! 38 
+| 09/02/2021 @ 15:01:41.361877 | Exit Receive 38 
+| 09/02/2021 @ 15:01:41.362845 | 38 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:44.918162 | 39 New con from ('127.0.0.1', 58904) 
+| 09/02/2021 @ 15:01:44.919145 |  Con 39 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:44.920138 | Start Receive 39 
+| 09/02/2021 @ 15:01:44.921142 | Start Send 39 
+| 09/02/2021 @ 15:01:44.921142 | 40 New con from ('127.0.0.1', 58905) 
+| 09/02/2021 @ 15:01:44.921142 |  Con 40 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:44.922138 | Start Receive 40 
+| 09/02/2021 @ 15:01:44.923139 | Start Send 40 
+| 09/02/2021 @ 15:01:44.940138 | Sockets Closed! 39 
+| 09/02/2021 @ 15:01:44.940138 | Exit Receive 39 
+| 09/02/2021 @ 15:01:44.940138 | 39 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:44.952138 | Sockets Closed! 40 
+| 09/02/2021 @ 15:01:44.952138 | Exit Receive 40 
+| 09/02/2021 @ 15:01:44.952138 | 40 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
+| 09/02/2021 @ 15:01:45.171618 | 41 New con from ('127.0.0.1', 58908) 
+| 09/02/2021 @ 15:01:45.171618 |  Con 41 is Connecting to Passthrough 
+| 09/02/2021 @ 15:01:45.173580 | Start Receive 41 
+| 09/02/2021 @ 15:01:45.173580 | Start Send 41 
+| 09/02/2021 @ 15:01:46.173595 | Sockets Closed! 41 
+| 09/02/2021 @ 15:01:46.173595 | Exit Receive 41 
+| 09/02/2021 @ 15:01:46.173595 | 41 Exception:  [WinError 10038] An operation was attempted on something that is not a socket 
