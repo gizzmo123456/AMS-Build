@@ -2,7 +2,81 @@
 
 # Change log since version 1.0.0
 
-## Version 1.0.4b (09/02/2021)
+# Version 1.1.0b1 (release data)
+###### (11/07/21)
+- Added write expects to terminal
+
+###### (10/07/21)
+- Added 2nd thread to interact with a docker container. 
+
+###### (09/07/21)
+- Added commonTerminal.Docker class for common docker commands
+  - Image exist locally
+  - Pull image
+  - Run image
+  - Container is running
+  - Remove container
+  - Stop/Kill container
+- Added docker section to build activity
+
+
+###### (08/07/21)
+- Added invalid state to activities
+- Added skip job if an invalid activity is created.
+- Added rename activity if the name is not unique by append an index.
+-
+
+###### (07/07/21)
+- Changed Terminal read/write to return tuple containing the last cmd ran and output
+- Added option to terminal to remove output colors 
+  Tho this requires further improvements. However, it works for 'git' atm
+- Fixed git keys in jobs.data to be consistent with other keys
+- Add commonTerminal for common terminal functions and classes
+  - Moved terminal_print from prepare to commonTerminal
+
+
+###### (06/07/21)
+- Changed project 'build' directory name to 'output'
+- Added created output dir and log file to job.
+- Added 'display_timestamp' to DEBUG.LOG.print as an optional param (default: True)
+- Added activity method to prepare.
+  - loads ssh agent if required
+  - runs 'run' commands from pipeline/config
+  - captures the git commit hash if not already supplied to job.
+  
+###### (05/07/21)
+- Added terminal
+- Added method to activity to set relevant data into job
+- Added add_unique_data to job to set data if not already set
+- Added execute to job and activity
+- 
+
+###### (04/07/21)
+- Added short hash property to job and BaseActivity
+- Added create jobs from pipeline to job queue
+- 
+
+###### (02/07/21)
+- Changed UAC, to now load in the access level rather than it being supplied to the constructor
+  - changed update user projects to update user, now it updates the access level as well.
+  - the access level for UAC with origin 'webhook' is now set when set_webhook is called.
+- Added helper script
+  - with method to get all direct and indirect subclasses of type
+- Added base activity and subclasses for BaseAction and BaseTask
+  - Added dictionary to job for activities of type Action and Task
+  - Added activities import file, so the activities dictionary is filled automatically
+
+###### (01/07/21)
+- Moved job queue into its own dedicated module
+- Added method to UAC to authorize (inbound) webhooks
+  This prevents the need to load in webhook config file outside the UAC module.
+  - Fixes possible stack overflow when attempting to load the webhook config file
+    without the correct information supplied.
+  - Integrated into webhook module and commonProject.get_project_config 
+- Renamed access level WEBHOOK to TRIGGER in UAC.
+  (WEBHOOK will be removed soon)
+
+## Version 1.0.4f2 (09/02/2021)
 - Improved socket wrapper prints and redirected to file
 - Add page redirect to login->auth
 
