@@ -1,6 +1,6 @@
 # python and pyCharm
 .idea/*
-*/__pycache__
+__pycache__/
 
 
 # ignore all projects except for the blank and example project
@@ -20,14 +20,13 @@ CI-projects/exampleProject/builds
 !CI-projects/exampleProject/*/SHOWFILE
 !CI-projects/blankProject/*/.SHOWFILE
 
-
-
 # Generated files.
 CI-Host/data/configs/ams_path_conf.json
 CI-projects/*/projectBuildInfo.json
 CI-projects/*/projectInfo.json
 CI-Host/data/*.json
 CI-Host/data/new_user
+CI-Host/data/logs/
 
 CI-Host/data/.secrets/*
 
