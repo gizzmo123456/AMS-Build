@@ -23,6 +23,7 @@ if [ "$pipInstalled" = "python 3" ]; then
 else
   echo "Pip 3 is not installed. Please install pip3 (sudo apt install python3-pip) before continuing"
   exit 1
+fi;
 
 echo "Installing Python 3 Requirements..."
 pip3 install -r ./requirements.txt
