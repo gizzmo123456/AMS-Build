@@ -1,6 +1,13 @@
-import subprocess
+OS = "WIN"
+
 from subprocess import Popen, PIPE, STDOUT
-subprocess.STD_INPUT_HANDLE
+
+# if we are running on linux/unix its better to use pty
+# and pty does not support windows (although included).
+# it might work with wsl2
+if OS == "LINUX":
+    import pty
+    import os
 
 class Terminal:
 
@@ -15,12 +22,25 @@ class Terminal:
         # TODO: NOTE: We should properly add some form of
         #       limit on what process can be launched so we can have more control
         self.process_name = process_name
+
+        self._popen_stdin  = PIPE
+        self._popen_stdout = PIPE
+        self._popen_stderr = STDOUT
+
+        self.stdin = self.stdout = None
+
+        if OS != "WIN":
+            std_master, std_slave = pty.openpty()
+            self.stdin = os.fdopen( std_master, 'r')
+            self.stdout = self.stdin
+            self._popen_stdin = self._popen_stdout = self._popen_stderr = std_slave
+
         # TODO: process and stdOut need to be changed to None, this is for intellisense only
-        self.process  = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=STDOUT ) # None
-        # NOTE: for some reason we cant set process.stdin into a var,
-        #       it seems to prevent it from updating when an input is submited.
-        #       So we have to read directly from self.process.stdin
-        self.stdout   = self.process.stdout # None
+        self.process  = Popen( [self.process_name], close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdin, stderr=self._popen_stderr ) # None
+
+        if self.stdin == None:
+            self.stdin    = self.process.stdin # None
+            self.stdout   = self.process.stdout # None
 
         self.prompt   = prompt
         self.last_cmd = ""
@@ -28,12 +48,26 @@ class Terminal:
         self.executing_cmd = None
 
     def __enter__(self):
-        self.process = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=PIPE )
-        self.stdout = self.process.stdout # None
+        #self.process = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=PIPE )
+        #self.stdin    = self.process.stdin # None
+        #self.stdout = self.process.stdout # None
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.process.kill() # ensure that the process has been stoped.
+
+    def __read(self):
+        return self.stdout.readline() if OS == "WIN" else os.read( self.stdout.fileno(), 1024 )
+
+    def __peek(self):
+        return self.stdout.peek(1) if OS == "WIN" else os.pread( self.stdout.fileno(), 1024, 0 )
+
+    def __write(self, cmd):
+        if OS == "WIN":
+            self.process.stdin.write(f"{cmd}\n".encode())
+            self.process.stdin.flush()
+        else:
+            os.write(self.stdin.fileno(), cmd.encode() + b'\n')
 
     def read(self, return_prompt=False, read_input=True, return_input=True):
         """
@@ -49,8 +83,8 @@ class Terminal:
         std_output = ""
 
         while True:
-            # print( "<<<<", self.stdout.peek(2))
-            line = self.stdout.readline().decode()
+            # print( "<<<<", self.__peek())
+            line = self.__read().decode() # self.stdout.readline().decode()
             # print( "@@@", line )
             # the input string should end with just '\n' rather than '\r\n'
 
@@ -61,7 +95,7 @@ class Terminal:
                 has_read_input = True
 
             if has_read_input or not read_input:
-                peek_line = self.stdout.peek(1)
+                peek_line = self.__peek()
                 # print( ">>>>", peek_line )
                 # Powershell only. Should this be regex?
                 # print("####", peek_line[:2] == b"PS", peek_line[-2:] == b"> ")
@@ -93,8 +127,7 @@ class Terminal:
         self.last_cmd = cmd
         self.executing_cmd = cmd
 
-        self.process.stdin.write( f"{cmd}\n".encode() )
-        self.process.stdin.flush()
+        self.__write( cmd )
 
         return True
 
