@@ -53,7 +53,24 @@ and when return the value to be sent we just have ``page content, status, conten
 i think it would make more sense to handle errors via the stats code. and the content would be
 an additional message to display :)
 
+# build_task.py
+To start we need to break down build_task into smaller tasks.
+- BaseTask
+- UpdateTask
+- BuildTask
+- RunTasks (later)
 
+Where BaseTask is the base class for all tasks.
+- base tasks implements __init__, execute and dummyExecute. Execute will now return either
+``None`` for no further action/tasks to be preformed or a tuple ``(BaseTask:nextTask, bool:queue)``
+- Pipeline.v2.json is the new proposed pipeline file.
+  I propose that a pipeline handler is added similar to config manager
+  This can then be used to set any default values and check for basic errors.
+  And I think it would make it easier to modify in the future.
+  It would also make it easier to pass around the different build stages.
+  and it could keep track of the position with in the pipeline.
+- In terms of fixing the pipeline file not updating until after the pull command is run, 
+  see accepted answer: https://stackoverflow.com/questions/16230838/is-it-possible-to-pull-just-one-file-in-git
 
 ------------------------------------------------------------------------
 Release v1.1.x Ideas
