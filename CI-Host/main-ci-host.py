@@ -206,6 +206,7 @@ if __name__ == "__main__":
 
     # setup queue items
     # All Queue items action (execution) callback functions must container exactly one param, q_item.
+    # the q_item it the QueueItem instance executing this action
     queue_item.QueueItem.add_action("build_finished", lambda q_item: True )   # queue unblocking task
     queue_item.QueueItem.add_action("cancel_task", cancel_task )
 
@@ -224,6 +225,7 @@ if __name__ == "__main__":
     web_interface.WebInterface.shared_task_queue = sharded_queue.clone( ["build", "cancel_task"] )
 
     # build tasks
+    # TODO: move max tasks to the config
     max_running_tasks = 1
     pending_tasks = [] # build task object
     active_tasks = []  # tuple (thread, build task object)
@@ -257,7 +259,7 @@ if __name__ == "__main__":
     web_interface_thread.start()
 
     # create an instance of user manager to create user files if not already setup.
-    user_manager.UserManager()  # make sure this is last. so the test account details are not berried in the log
+    user_manager.UserManager()  # make sure this is last. so the default account details are not berried in the log
 
     _print("Initializing, Complete!")
     _print("Waiting to receive a task!")

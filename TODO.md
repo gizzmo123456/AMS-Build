@@ -34,9 +34,7 @@ Release v1.1.x Improvements.
 - [ ] Improve password store
   - [ ] Add SHA1
   - [ ] Move encryption keys to cloud platform (ie. AWS, Azure or GCP) (most likely to only add support for AWS atm)
-  - [ ] Add secondary salt
-  - [ ] remove space from password store.
-  - [ ] And change format so it's the other way around.
+  - [ ] And change format, so it's the other way around.
 
 - [ ] Add date/time format to const.py
 - [ ] Improve install.sh script to detect dependencies (maybe)
@@ -57,3 +55,9 @@ Release v1.1.x From 1.0.x backlog
 [ ] When starting the ssh-agent it should capture the pid in case the shell doent exit cleanly
 [ ] Build Deletion (WWW) (maybe auto deletion as well?)
 [ ] Add Project Storage limits.
+
+------------------------------------------------------------------------
+Release v1.1.x From 1.0.x backlog
+------------------------------------------------------------------------
+
+
