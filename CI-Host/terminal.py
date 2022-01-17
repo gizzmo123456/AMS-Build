@@ -9,6 +9,9 @@ from subprocess import Popen, PIPE, STDOUT
 import os
 import re
 
+import DEBUG
+_print = DEBUG.LOGS.print
+
 # if we are running on linux/unix its better to use pty
 # and pty does not support windows (although included).
 # it might work with wsl2
@@ -56,17 +59,17 @@ class Terminal:
         """
 
         if len( process_and_options ) == 0:
-            print("Error: at least one process and option must be supplied!")
+            _print("Error: at least one process and option must be supplied!")
             return
 
         if process_and_options[0] in Terminal.UNSUPPORTED_SHELLS:
-            print(f"Error: {process_and_options[0]} is not currently supported. please consider using an alturnative { Terminal.SUPPORTED_SHELLS }")
+            _print(f"Error: {process_and_options[0]} is not currently supported. please consider using an alturnative { Terminal.SUPPORTED_SHELLS }")
             return
         elif process_and_options[0] not in Terminal.SUPPORTED_SHELLS:
-            print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
+            _print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
 
         if len( prompt ) == 0:
-            print("Warning: Prompt can not be empty. setting to default.")
+            _print("Warning: Prompt can not be empty. setting to default.")
             prompt = Terminal.DEFAULT_PROMPT
 
         # TODO: NOTE: We should properly add some form of
@@ -186,29 +189,25 @@ class Terminal:
         std_output = ""
 
         while True:
-            if self.__peek() is not None:
-                print( "PEEK: ", self.__peek().encode() )
+
             line = self.__read()
-            print("LINE:", line)
 
             # the input string should end with just '\n' rather than '\r\n'
             if line is not None and read_input and not has_read_input and line == self.__expected_input_line():
-                print("Read input :)")
                 if return_input:
                     std_output += line
                 has_read_input = True
 
             if has_read_input or not read_input:
                 peek_line = self.__peek()
-                print( "PEEK >>", peek_line )
-                # Powershell only. Should this be regex?
-                print(f'{peek_line[:2] == "PS"} and {peek_line[-1:] == ">"}')
+
                 if peek_line == self.__expected_prompt():
-                    # print("Next")
+
                     if return_prompt:
                         std_output += peek_line
 
                     self.last_prompt = peek_line
+
                     self.executing_cmd = None
                     return std_output
 
@@ -225,8 +224,6 @@ class Terminal:
 
         if self.executing_cmd is not None:
             return False
-
-        # print( f"write cmd {cmd}")
 
         self.last_cmd = cmd
         self.executing_cmd = cmd
@@ -264,20 +261,23 @@ class Terminal:
 
 if __name__ == "__main__":
 
-    print( "starting" )
+    DEBUG.LOGS.init()
+
+    _print( "starting" )
 
     with Terminal(["cmd"]) as aaa:
 
         if aaa is not None:
 
             std = aaa.read(read_input=False)
-            print(std)
-            print(aaa.executing_cmd)
+            _print(std)
 
             inp = ""
             while inp != "exit":
 
-                inp = input ( aaa.last_prompt )
+                _print(aaa.last_prompt )
+
+                inp = input ()
 
                 if inp == "exit":
                     break
@@ -285,4 +285,4 @@ if __name__ == "__main__":
                     exit(-1)
 
                 std = aaa.read()
-                print(std)
+                _print(std)
