@@ -1,16 +1,14 @@
 OS = "WIN"
 
 from subprocess import Popen, PIPE, STDOUT
+import os
 
 # if we are running on linux/unix its better to use pty
 # and pty does not support windows (although included).
 # it might work with wsl2
-if OS == "LINUX":
-    import pty
-    import os
+
 
 class Terminal:
-
 
     def __init__(self, process_name, prompt):
         """
@@ -23,51 +21,55 @@ class Terminal:
         #       limit on what process can be launched so we can have more control
         self.process_name = process_name
 
-        self._popen_stdin  = PIPE
-        self._popen_stdout = PIPE
-        self._popen_stderr = STDOUT
+        self.process  = Popen( [self.process_name], close_fds=False, stdin=PIPE, stdout=PIPE, stderr=STDOUT )
 
-        self.stdin = self.stdout = None
+        self.stdin = self.process.stdin
+        self.stdout = self.process.stdout
 
-        if OS != "WIN":
-            std_master, std_slave = pty.openpty()
-            self.stdin = os.fdopen( std_master, 'r')
-            self.stdout = self.stdin
-            self._popen_stdin = self._popen_stdout = self._popen_stderr = std_slave
-
-        # TODO: process and stdOut need to be changed to None, this is for intellisense only
-        self.process  = Popen( [self.process_name], close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdin, stderr=self._popen_stderr ) # None
-
-        if self.stdin == None:
-            self.stdin    = self.process.stdin # None
-            self.stdout   = self.process.stdout # None
-
-        self.prompt   = prompt
+        self.prompt = prompt
+        self.lines = []
         self.last_cmd = ""
         self.last_prompt = ""
         self.executing_cmd = None
 
     def __enter__(self):
-        #self.process = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=PIPE )
-        #self.stdin    = self.process.stdin # None
-        #self.stdout = self.process.stdout # None
+        # self.process = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=PIPE )
+        # self.stdin    = self.process.stdin # None
+        # self.stdout = self.process.stdout # None
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.process.kill() # ensure that the process has been stoped.
+        self.process.kill()  # ensure that the process has been stoped.
 
     def __read(self):
-        return self.stdout.readline() if OS == "WIN" else os.read( self.stdout.fileno(), 1024 )
+
+        line_count = len(self.lines)
+        if line_count == 0 or line_count == 1:
+            # We must remember the remaining line so it can be finished.
+            first_line_start = self.lines[0] if line_count == 1 else ""
+            lines_bytes = os.read( self.stdout.fileno(), 1024 )
+
+            # split the bytes into line putting the new line back.
+            lines = [f"{line.decode()}\n" for line in lines_bytes.split( b'\n' )]
+            line_count = len(lines)
+            # we must remove the new line from the last as there was no split!
+            lines[line_count-1] = lines[line_count-1][:-1]
+            lines[0] = f"{first_line_start}{lines[0]}"
+
+            self.lines = lines
+
+        # only return the line if its complete
+        return self.lines.pop(0) if self.lines[0][-1] == "\n" else None
 
     def __peek(self):
-        return self.stdout.peek(1) if OS == "WIN" else os.pread( self.stdout.fileno(), 1024, 0 )
+        if len( self.lines ) == 0:
+            return None
+
+        return self.lines[0]
 
     def __write(self, cmd):
-        if OS == "WIN":
-            self.process.stdin.write(f"{cmd}\n".encode())
-            self.process.stdin.flush()
-        else:
-            os.write(self.stdin.fileno(), cmd.encode() + b'\n')
+        self.process.stdin.write(f"{cmd}\n".encode())
+        self.process.stdin.flush()
 
     def read(self, return_prompt=False, read_input=True, return_input=True):
         """
@@ -78,38 +80,37 @@ class Terminal:
         :param return_input:  Should the input be return in the output string. (ignored if read input is false)
         :return: string:      STD output
         """
-
         has_read_input = False
         std_output = ""
 
         while True:
-            # print( "<<<<", self.__peek())
-            line = self.__read().decode() # self.stdout.readline().decode()
-            # print( "@@@", line )
-            # the input string should end with just '\n' rather than '\r\n'
+            print( "PEEK: ", self.__peek() )
+            line = self.__read()
+            print("LINE:", line)
 
-            if read_input and not has_read_input and line[-2:] != "\r\n" and line[-1:] == "\n":
-                # print("Read input :)")
+            # the input string should end with just '\n' rather than '\r\n'
+            if line is not None and read_input and not has_read_input and line[-2:] != "\r\n" and line[-1:] == "\n":
+                print("Read input :)")
                 if return_input:
                     std_output += line
                 has_read_input = True
 
             if has_read_input or not read_input:
                 peek_line = self.__peek()
-                # print( ">>>>", peek_line )
+                print( "PEEK >>", peek_line )
                 # Powershell only. Should this be regex?
-                # print("####", peek_line[:2] == b"PS", peek_line[-2:] == b"> ")
-
-                if peek_line[:2] == b"PS" and peek_line[-2:] == b"> ":
+                print(f'{peek_line[:2] == "PS"} and {peek_line[-2:] == "> "}')
+                if peek_line[:2] == "PS" and peek_line[-2:] == "> ":
                     # print("Next")
                     if return_prompt:
-                        std_output += line
+                        std_output += peek_line
 
-                    self.last_prompt = peek_line.decode()
+                    self.last_prompt = peek_line
                     self.executing_cmd = None
                     return std_output
 
-                std_output += line
+                if line is not None:
+                    std_output += line
 
     def execute(self, cmd):
         """
@@ -127,7 +128,7 @@ class Terminal:
         self.last_cmd = cmd
         self.executing_cmd = cmd
 
-        self.__write( cmd )
+        self.__write(cmd)
 
         return True
 
