@@ -34,9 +34,8 @@ class Terminal:
             std_master, std_slave = pty.openpty()
             self.stdin = os.fdopen(std_master, 'r')
             self.stdout = self.stdin
-            self.process = Popen( process_and_options, close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdin, stderr=self._popen_stderr)  # None
 
-        self.process  = Popen( process_and_options, close_fds=False, stdin=PIPE, stdout=PIPE, stderr=STDOUT )
+        self.process = Popen( process_and_options, close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdin, stderr=self._popen_stderr)  # None
 
         if self.stdin is None:
             self.stdin = self.process.stdin
