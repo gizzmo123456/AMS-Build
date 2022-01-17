@@ -40,7 +40,8 @@ class Terminal:
 
     def __init__(self, process_and_options, prompt=DEFAULT_PROMPT, prompt_line_terminate=PROMPT_LINE_TERMINATE):
         """
-
+            Creates a sudo-terminal for windows or linux. This must be used in conjunction with the 'with statement'
+            to spawn the terminal. This is to help prevent dangling processes
         :param process_and_options:     list [] of cmd and options
                                         the first element of the list should be the shell application to run
                                         On windows we support cmd and powershell where powershell is preferred
@@ -61,6 +62,8 @@ class Terminal:
         if process_and_options[0] in Terminal.UNSUPPORTED_SHELLS:
             print(f"Error: {process_and_options[0]} is not currently supported. please consider using an alturnative { Terminal.SUPPORTED_SHELLS }")
             return
+        elif process_and_options[0] not in Terminal.SUPPORTED_SHELLS:
+            print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
 
         if len( prompt ) == 0:
             print("Warning: Prompt can not be empty. setting to default.")
@@ -68,31 +71,12 @@ class Terminal:
 
         # TODO: NOTE: We should properly add some form of
         #       limit on what process can be launched so we can have more control
-        self.process_and_options = process_and_options
+        self.__process_and_options = process_and_options
         self.application = process_and_options[0]
-
-        if self.application not in Terminal.SUPPORTED_SHELLS:
-            print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
-
-
-        # configure popen for windows or linux
-        self._popen_stdin = PIPE
-        self._popen_stdout = PIPE
-        self._popen_stderr = STDOUT
 
         self.stdin = self.stdout = None
 
-        if OS != PLATFORM_WINDOWS:
-            std_master, std_slave = pty.openpty()
-            self.stdin = os.fdopen(std_master, 'r')
-            self.stdout = self.stdin
-            self._popen_stdin = self._popen_stdout = self._popen_stderr = std_slave
-
-        self.process = Popen( process_and_options, close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdout, stderr=self._popen_stderr)  # None
-
-        if self.stdin is None:
-            self.stdin = self.process.stdin
-            self.stdout = self.process.stdout
+        self.process = None # Popen( process_and_options, close_fds=False, stdin=_popen_stdin, stdout=_popen_stdout, stderr=_popen_stderr)  # None
 
         # if its a know terminal application add the application to the start of prompt line
         if self.application in Terminal.SUPPORTED_SHELLS:
@@ -107,15 +91,29 @@ class Terminal:
         self.last_prompt = ""
         self.executing_cmd = None
 
-        print(">>>>>>>>>>>>>>>", prompt)
+    def __enter__(self):
+
+        # configure popen for windows or linux
+        _popen_stdin = PIPE
+        _popen_stdout = PIPE
+        _popen_stderr = STDOUT
+
+        if OS != PLATFORM_WINDOWS:
+            std_master, std_slave = pty.openpty()
+            self.stdin = os.fdopen(std_master, 'r')
+            self.stdout = self.stdin
+            _popen_stdin = _popen_stdout = _popen_stderr = std_slave
+
+        self.process = Popen(self.__process_and_options, close_fds=False, stdin=_popen_stdin, stdout=_popen_stdout,
+                             stderr=_popen_stderr)  # None
+
+        if self.stdin is None:
+            self.stdin = self.process.stdin
+            self.stdout = self.process.stdout
 
         # set the prompt and clear
         self.__set_prompt()
 
-    def __enter__(self):
-        # self.process = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=PIPE )
-        # self.stdin    = self.process.stdin # None
-        # self.stdout = self.process.stdout # None
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -269,29 +267,22 @@ if __name__ == "__main__":
     print( "starting" )
 
     with Terminal(["cmd"]) as aaa:
-        std = aaa.read(read_input=False)
-        print( std )
-        print( aaa.executing_cmd )
-        if not aaa.execute("dir"):
-            exit(-2)
 
-        std = aaa.read()
-        print(std)
+        if aaa is not None:
 
-        if not aaa.execute("ipconfig"):
-            exit(-3)
+            std = aaa.read(read_input=False)
+            print(std)
+            print(aaa.executing_cmd)
 
-        std = aaa.read()
-        print( std )
+            inp = ""
+            while inp != "exit":
 
-        if not aaa.execute( input( aaa.last_prompt ) ):
-            exit(-4)
+                inp = input ( aaa.last_prompt )
 
-        std = aaa.read()
-        print(std)
+                if inp == "exit":
+                    break
+                elif not aaa.execute(inp):
+                    exit(-1)
 
-        if not aaa.execute(input(aaa.last_prompt)):
-            exit(-5)
-
-        std = aaa.read()
-        print( std )
+                std = aaa.read()
+                print(std)
