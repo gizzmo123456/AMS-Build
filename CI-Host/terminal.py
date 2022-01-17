@@ -31,7 +31,12 @@ class Terminal:
     if OS == "WIN":
         SUPPORTED_SHELLS = [CMD_WIN_CMD, CMD_WIN_PS]
     else:
-        SUPPORTED_SHELLS = [CMD_LINUX_SH, CMD_LINUX_BASH]
+        SUPPORTED_SHELLS = [CMD_LINUX_BASH]
+
+    # At the present time the standard linux Shell is unsupported, for some reason its taking over the current
+    # standard input, and failing to read inputs correctly. It might work if we get sh to read from file, and use "-ic"
+    # rather then "-is" as we can specify the file to read from.
+    UNSUPPORTED_SHELLS = [CMD_LINUX_SH]
 
     def __init__(self, process_and_options, prompt=DEFAULT_PROMPT, prompt_line_terminate=PROMPT_LINE_TERMINATE):
         """
@@ -51,6 +56,10 @@ class Terminal:
 
         if len( process_and_options ) == 0:
             print("Error: at least one process and option must be supplied!")
+            return
+
+        if process_and_options[0] in Terminal.UNSUPPORTED_SHELLS:
+            print(f"Error: {process_and_options[0]} is not currently supported. please consider using an alturnative { Terminal.SUPPORTED_SHELLS }")
             return
 
         if len( prompt ) == 0:
