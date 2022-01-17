@@ -2,29 +2,45 @@ OS = "WIN"
 
 from subprocess import Popen, PIPE, STDOUT
 import os
+import re
 
 # if we are running on linux/unix its better to use pty
 # and pty does not support windows (although included).
 # it might work with wsl2
-
+if OS == "LINUX":
+    import pty
 
 class Terminal:
 
-    def __init__(self, process_name, prompt):
+    def __init__(self, process_and_options, prompt):
         """
 
-        :param process_name: the shell or process to to start
+        :param process_and_options: list [] of cmd and options
         :param prompt:       the input prompt to wait for
         """
 
         # TODO: NOTE: We should properly add some form of
         #       limit on what process can be launched so we can have more control
-        self.process_name = process_name
+        self.process_and_options = process_and_options
 
-        self.process  = Popen( [self.process_name], close_fds=False, stdin=PIPE, stdout=PIPE, stderr=STDOUT )
+        # configure popen for windows or linux
+        self._popen_stdin = PIPE
+        self._popen_stdout = PIPE
+        self._popen_stderr = STDOUT
 
-        self.stdin = self.process.stdin
-        self.stdout = self.process.stdout
+        self.stdin = self.stdout = None
+
+        if OS != "WIN":
+            std_master, std_slave = pty.openpty()
+            self.stdin = os.fdopen(std_master, 'r')
+            self.stdout = self.stdin
+            self.process = Popen( process_and_options, close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdin, stderr=self._popen_stderr)  # None
+
+        self.process  = Popen( process_and_options, close_fds=False, stdin=PIPE, stdout=PIPE, stderr=STDOUT )
+
+        if self.stdin is None:
+            self.stdin = self.process.stdin
+            self.stdout = self.process.stdout
 
         self.prompt = prompt
         self.lines = []
@@ -59,13 +75,13 @@ class Terminal:
             self.lines = lines
 
         # only return the line if its complete
-        return self.lines.pop(0) if self.lines[0][-1] == "\n" else None
+        return self.clean_escape_seq( self.lines.pop(0) ) if self.lines[0][-1] == "\n" else None
 
     def __peek(self):
         if len( self.lines ) == 0:
             return None
 
-        return self.lines[0]
+        return self.clean_escape_seq( self.lines[0] )
 
     def __write(self, cmd):
         self.process.stdin.write(f"{cmd}\n".encode())
@@ -131,6 +147,33 @@ class Terminal:
         self.__write(cmd)
 
         return True
+
+    def clean_escape_seq(self, output):
+        # See: https://stackoverflow.com/questions/14693701/how-can-i-remove-the-ansi-escape-sequences-from-a-string-in-python
+
+        if type(output) is not bytes:
+            output = output.encode()
+
+        # TODO: this should be cached statically.
+        ansi_escape = re.compile(br'''
+            (?: # either 7-bit C1, two bytes, ESC Fe (omitting CSI)
+                \x1B
+                [@-Z\\-_]
+            |   # or a single 8-bit byte Fe (omitting CSI)
+                [\x80-\x9A\x9C-\x9F]
+            |   # or CSI + control codes
+                (?: # 7-bit CSI, ESC [ 
+                    \x1B\[
+                |   # 8-bit CSI, 9B
+                    \x9B
+                )
+                [0-?]*  # Parameter bytes
+                [ -/]*  # Intermediate bytes
+                [@-~]   # Final byte
+            )
+        ''', re.VERBOSE)
+
+        return ansi_escape.sub(b'', output).decode()
 
 if __name__ == "__main__":
 
