@@ -156,8 +156,9 @@ class Terminal:
         return self.clean_escape_seq( self.lines[0] )
 
     def __write(self, cmd):
-        self.process.stdin.write(f"{cmd}\n".encode())
-        self.process.stdin.flush()
+        os.write( self.stdin.fileno(), f"{cmd}\n".encode() )
+        # self.process.stdin.write(f"{cmd}\n".encode())
+        # self.process.stdin.flush()
 
     def __expected_input_line(self):
             return f"{self.prompt}{self.last_cmd}{self.prompt_line_terminate}"
