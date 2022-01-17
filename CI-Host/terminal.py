@@ -1,4 +1,9 @@
-OS = "WIN"
+# TODO: Move to const.
+PLATFORM_WINDOWS = "WIN"
+PLATFORM_LINUX   = "LINUX"
+
+OS = PLATFORM_WINDOWS
+# TO HERE
 
 from subprocess import Popen, PIPE, STDOUT
 import os
@@ -7,21 +12,59 @@ import re
 # if we are running on linux/unix its better to use pty
 # and pty does not support windows (although included).
 # it might work with wsl2
-if OS == "LINUX":
+if OS != PLATFORM_WINDOWS:
     import pty
+    PROMPT_LINE_TERMINATE = "\r\n"
+else:
+    PROMPT_LINE_TERMINATE = "\n"
+
 
 class Terminal:
 
-    def __init__(self, process_and_options, prompt):
+    DEFAULT_PROMPT = "amsCI> "
+
+    CMD_WIN_CMD    = "cmd"
+    CMD_WIN_PS     = "powershell"
+    CMD_LINUX_BASH = "bash"
+    CMD_LINUX_SH   = "sh"
+
+    if OS == "WIN":
+        SUPPORTED_SHELLS = [CMD_WIN_CMD, CMD_WIN_PS]
+    else:
+        SUPPORTED_SHELLS = [CMD_LINUX_SH, CMD_LINUX_BASH]
+
+    def __init__(self, process_and_options, prompt=DEFAULT_PROMPT, prompt_line_terminate=PROMPT_LINE_TERMINATE):
         """
 
-        :param process_and_options: list [] of cmd and options
-        :param prompt:       the input prompt to wait for
+        :param process_and_options:     list [] of cmd and options
+                                        the first element of the list should be the shell application to run
+                                        On windows we support cmd and powershell where powershell is preferred
+                                        On Linux we support sh and bash where bash is preferred. At the present time
+                                        there is an issues with running sh where is does not receive keyboard interrupt singles.
+                                        You may use other shells or command line application however the prompt must be
+                                        an exact match.
+        :param prompt:                  the input prompt to wait for.
+                                        if using Windows cmd or powershell the prompt is set to the prompt arg
+                                        and the same for linux Bash and SH.
+        :param prompt_line_terminate:   sequence of characters that terminates the prompt line with an input
         """
+
+        if len( process_and_options ) == 0:
+            print("Error: at least one process and option must be supplied!")
+            return
+
+        if len( prompt ) == 0:
+            print("Warning: Prompt can not be empty. setting to default.")
+            prompt = Terminal.DEFAULT_PROMPT
 
         # TODO: NOTE: We should properly add some form of
         #       limit on what process can be launched so we can have more control
         self.process_and_options = process_and_options
+        self.application = process_and_options[0]
+
+        if self.application not in Terminal.SUPPORTED_SHELLS:
+            print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
+
 
         # configure popen for windows or linux
         self._popen_stdin = PIPE
@@ -30,22 +73,35 @@ class Terminal:
 
         self.stdin = self.stdout = None
 
-        if OS != "WIN":
+        if OS != PLATFORM_WINDOWS:
             std_master, std_slave = pty.openpty()
             self.stdin = os.fdopen(std_master, 'r')
             self.stdout = self.stdin
+            self._popen_stdin = self._popen_stdout = self._popen_stderr = std_slave
 
-        self.process = Popen( process_and_options, close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdin, stderr=self._popen_stderr)  # None
+        self.process = Popen( process_and_options, close_fds=False, stdin=self._popen_stdin, stdout=self._popen_stdout, stderr=self._popen_stderr)  # None
 
         if self.stdin is None:
             self.stdin = self.process.stdin
             self.stdout = self.process.stdout
 
-        self.prompt = prompt
+        # if its a know terminal application add the application to the start of prompt line
+        if self.application in Terminal.SUPPORTED_SHELLS:
+            self.prompt = f"{self.application}-{prompt}"
+        else:
+            self.prompt = prompt
+
+        self.prompt_line_terminate = prompt_line_terminate
+
         self.lines = []
         self.last_cmd = ""
         self.last_prompt = ""
         self.executing_cmd = None
+
+        print(">>>>>>>>>>>>>>>", prompt)
+
+        # set the prompt and clear
+        self.__set_prompt()
 
     def __enter__(self):
         # self.process = Popen( [self.process_name], stdin=PIPE, stdout=PIPE, stderr=PIPE )
@@ -55,6 +111,23 @@ class Terminal:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.process.kill()  # ensure that the process has been stoped.
+
+    def __set_prompt(self):
+
+        if self.application not in Terminal.SUPPORTED_SHELLS:
+            return
+
+        if OS == PLATFORM_LINUX:
+            self.execute(f"PS1='{self.prompt}'")
+        elif OS == PLATFORM_WINDOWS:
+            if self.application == Terminal.CMD_WIN_CMD:
+                # In CMD we must use $G for the grater than cymbal and $s for space
+                # TODO: I should have a look at implementing more of the special chars
+                #       https://stackoverflow.com/questions/12028372/how-do-i-change-the-command-line-prompt-in-windows
+                #       https://www.hanselman.com/blog/a-better-prompt-for-cmdexe-or-cool-prompt-environment-variables-and-a-nice-transparent-multiprompt
+                self.execute(f"set PROMPT={self.prompt.replace('>', '$G').replace(' ', '$s')}") # NOTE: these are the two main ones just to get it working
+            elif self.application == Terminal.CMD_WIN_PS:
+                self.execute(f"function prompt {{ '{self.prompt}' }}")
 
     def __read(self):
 
@@ -73,7 +146,7 @@ class Terminal:
 
             self.lines = lines
 
-        # only return the line if its complete
+        # only return the line if its complete, otherwise use __peek to view the next line and incomplete line.
         return self.clean_escape_seq( self.lines.pop(0) ) if self.lines[0][-1] == "\n" else None
 
     def __peek(self):
@@ -85,6 +158,12 @@ class Terminal:
     def __write(self, cmd):
         self.process.stdin.write(f"{cmd}\n".encode())
         self.process.stdin.flush()
+
+    def __expected_input_line(self):
+            return f"{self.prompt}{self.last_cmd}{self.prompt_line_terminate}"
+
+    def __expected_prompt(self):
+        return self.prompt
 
     def read(self, return_prompt=False, read_input=True, return_input=True):
         """
@@ -99,12 +178,13 @@ class Terminal:
         std_output = ""
 
         while True:
-            print( "PEEK: ", self.__peek() )
+            if self.__peek() is not None:
+                print( "PEEK: ", self.__peek().encode() )
             line = self.__read()
             print("LINE:", line)
 
             # the input string should end with just '\n' rather than '\r\n'
-            if line is not None and read_input and not has_read_input and line[-2:] != "\r\n" and line[-1:] == "\n":
+            if line is not None and read_input and not has_read_input and line == self.__expected_input_line():
                 print("Read input :)")
                 if return_input:
                     std_output += line
@@ -114,8 +194,8 @@ class Terminal:
                 peek_line = self.__peek()
                 print( "PEEK >>", peek_line )
                 # Powershell only. Should this be regex?
-                print(f'{peek_line[:2] == "PS"} and {peek_line[-2:] == "> "}')
-                if peek_line[:2] == "PS" and peek_line[-2:] == "> ":
+                print(f'{peek_line[:2] == "PS"} and {peek_line[-1:] == ">"}')
+                if peek_line == self.__expected_prompt():
                     # print("Next")
                     if return_prompt:
                         std_output += peek_line
@@ -178,7 +258,7 @@ if __name__ == "__main__":
 
     print( "starting" )
 
-    with Terminal("powershell", "") as aaa:
+    with Terminal(["cmd"]) as aaa:
         std = aaa.read(read_input=False)
         print( std )
         print( aaa.executing_cmd )
@@ -198,6 +278,7 @@ if __name__ == "__main__":
             exit(-4)
 
         std = aaa.read()
+        print(std)
 
         if not aaa.execute(input(aaa.last_prompt)):
             exit(-5)
