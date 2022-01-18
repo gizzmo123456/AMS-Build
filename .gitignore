@@ -24,6 +24,7 @@ CI-projects/exampleProject/builds
 
 # Generated files.
 CI-Host/data/configs/ams_path_conf.json
+CI-Host/data/configs/ams_platform_conf.json
 CI-projects/*/projectBuildInfo.json
 CI-projects/*/projectInfo.json
 CI-Host/data/*.json

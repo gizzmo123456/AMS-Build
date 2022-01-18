@@ -29,7 +29,8 @@ echo "Installing Python 3 Requirements..."
 pip3 install -r ./requirements.txt
 
 echo "Setting AMS-Build Root Directory..."
-echo '{ "default_shell": "sh", "base_directory": "'$ROOT_DIRECTORY'"}' > $ROOT_DIRECTORY'/CI-Host/data/configs/ams_path_conf.json'
+echo '{ "base_directory": "'$ROOT_DIRECTORY'" }' > $ROOT_DIRECTORY'/CI-Host/data/configs/ams_path_conf.json'
+echo '{ "os": "LINUX", "default_shell": "bash" }' > $ROOT_DIRECTORY'/CI-Host/data/configs/ams_platform_conf.json'
 
 echo "Adding Alias..."
 echo "\n" >> ~/.bashrc
