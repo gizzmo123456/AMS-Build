@@ -151,7 +151,7 @@ class Terminal:
     def __read(self):
 
         line_count = len(self.lines)
-        if line_count == 0 or line_count == 1:
+        if line_count == 0 or line_count == 1:  # should check if its got a `\n` if lc is 1
             # We must remember the remaining line so it can be finished.
             first_line_start = self.lines[0] if line_count == 1 else ""
             lines_bytes = os.read( self.stdout.fileno(), 1024 )
@@ -277,22 +277,20 @@ if __name__ == "__main__":
 
     with Terminal(SHELLS.WIN_PS) as aaa:
 
-        if aaa is not None:
+        std = aaa.read(read_input=False)
+        _print(std)
 
-            std = aaa.read(read_input=False)
+        inp = ""
+        while inp != "exit":
+
+            _print(aaa.last_prompt )
+
+            inp = input ()
+
+            if inp == "exit":
+                break
+            elif not aaa.execute(inp):
+                exit(-1)
+
+            std = aaa.read()
             _print(std)
-
-            inp = ""
-            while inp != "exit":
-
-                _print(aaa.last_prompt )
-
-                inp = input ()
-
-                if inp == "exit":
-                    break
-                elif not aaa.execute(inp):
-                    exit(-1)
-
-                std = aaa.read()
-                _print(std)
