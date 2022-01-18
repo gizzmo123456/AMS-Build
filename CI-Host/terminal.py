@@ -1,10 +1,5 @@
-# TODO: Move to const.
-PLATFORM_WINDOWS = "WIN"
-PLATFORM_LINUX   = "LINUX"
-
-
-# TO HERE
-from app_const import OS
+from constants import PLATFORM_WINDOWS, PLATFORM_LINUX
+from app_const import OS as operating_system
 from subprocess import Popen, PIPE, STDOUT
 import os
 import re
@@ -15,7 +10,7 @@ _print = DEBUG.LOGS.print
 # if we are running on linux/unix its better to use pty
 # and pty does not support windows (although included).
 # it might work with wsl2
-if OS != PLATFORM_WINDOWS:
+if operating_system != PLATFORM_WINDOWS:
     import pty
     PROMPT_LINE_TERMINATE = "\r\n"
 else:
@@ -31,7 +26,7 @@ class Terminal:
     CMD_LINUX_BASH = "bash"
     CMD_LINUX_SH   = "sh"
 
-    if OS == "WIN":
+    if operating_system == "WIN":
         SUPPORTED_SHELLS = [CMD_WIN_CMD, CMD_WIN_PS]
     else:
         SUPPORTED_SHELLS = [CMD_LINUX_BASH]
@@ -101,7 +96,7 @@ class Terminal:
         _popen_stdout = PIPE
         _popen_stderr = STDOUT
 
-        if OS != PLATFORM_WINDOWS:
+        if operating_system != PLATFORM_WINDOWS:
             std_master, std_slave = pty.openpty()
             self.stdin = os.fdopen(std_master, 'r')
             self.stdout = self.stdin
@@ -127,9 +122,9 @@ class Terminal:
         if self.application not in Terminal.SUPPORTED_SHELLS:
             return
 
-        if OS == PLATFORM_LINUX:
+        if operating_system == PLATFORM_LINUX:
             self.execute(f"PS1='{self.prompt}'")
-        elif OS == PLATFORM_WINDOWS:
+        elif operating_system == PLATFORM_WINDOWS:
             if self.application == Terminal.CMD_WIN_CMD:
                 # In CMD we must use $G for the grater than cymbal and $s for space
                 # TODO: I should have a look at implementing more of the special chars
