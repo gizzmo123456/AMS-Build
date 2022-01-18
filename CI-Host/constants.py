@@ -7,7 +7,7 @@ class PLATFORMS:
 
 class SHELLS:
     WIN_PS     = "powershell"
-    WIN_CMD    = "cms"
+    WIN_CMD    = "cmd"
     LINUX_BASH = "bash"
     LINUX_SH   = "sh"
 
