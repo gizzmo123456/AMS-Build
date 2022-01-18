@@ -1,13 +1,14 @@
+from constants import PLATFORMS, SHELLS
 import config_manager
 import urllib
 
 APP_NAME    = "ams-ci"
 APP_VERSION = "1.0.4b"
 
-OS = config_manager.ConfigManager.get( "os", "LINUX" )
+PLATFORM = config_manager.ConfigManager.get("os", PLATFORMS.LINUX)
 
 # AMS-Build setup
-DEFAULT_SHELL = config_manager.ConfigManager.get( "default_shell", "bash" )
+DEFAULT_SHELL = config_manager.ConfigManager.get( "default_shell", SHELLS.LINUX_BASH if PLATFORM is PLATFORMS.LINUX else SHELLS.WIN_PS )
 BASE_DIRECTORY = config_manager.ConfigManager.get( "base_directory", "${HOME}/ams-build")
 
 PROJECT_DIRECTORY = BASE_DIRECTORY + "/CI-projects"

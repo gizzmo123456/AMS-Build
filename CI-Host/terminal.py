@@ -1,5 +1,6 @@
-from constants import PLATFORM_WINDOWS, PLATFORM_LINUX
-from app_const import OS as operating_system
+import config_loader    # Loads in all config file.
+from constants import PLATFORMS, SHELLS
+from app_const import PLATFORM
 from subprocess import Popen, PIPE, STDOUT
 import os
 import re
@@ -10,7 +11,7 @@ _print = DEBUG.LOGS.print
 # if we are running on linux/unix its better to use pty
 # and pty does not support windows (although included).
 # it might work with wsl2
-if operating_system != PLATFORM_WINDOWS:
+if PLATFORM != PLATFORMS.WINDOWS:
     import pty
     PROMPT_LINE_TERMINATE = "\r\n"
 else:
@@ -21,20 +22,15 @@ class Terminal:
 
     DEFAULT_PROMPT = "amsCI> "
 
-    CMD_WIN_CMD    = "cmd"
-    CMD_WIN_PS     = "powershell"
-    CMD_LINUX_BASH = "bash"
-    CMD_LINUX_SH   = "sh"
-
-    if operating_system == "WIN":
-        SUPPORTED_SHELLS = [CMD_WIN_CMD, CMD_WIN_PS]
+    if PLATFORM == "WIN":
+        SUPPORTED_SHELLS = [SHELLS.WIN_CMD, SHELLS.WIN_PS]
     else:
-        SUPPORTED_SHELLS = [CMD_LINUX_BASH]
+        SUPPORTED_SHELLS = [SHELLS.LINUX_BASH]
 
     # At the present time the standard linux Shell is unsupported, for some reason its taking over the current
     # standard input, and failing to read inputs correctly. It might work if we get sh to read from file, and use "-ic"
     # rather then "-is" as we can specify the file to read from.
-    UNSUPPORTED_SHELLS = [CMD_LINUX_SH]
+    UNSUPPORTED_SHELLS = [SHELLS.LINUX_SH]
 
     def __init__(self, process_and_options, prompt=DEFAULT_PROMPT, prompt_line_terminate=PROMPT_LINE_TERMINATE):
         """
@@ -62,6 +58,7 @@ class Terminal:
             return
         elif process_and_options[0] not in Terminal.SUPPORTED_SHELLS:
             _print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
+            _print( ">>", process_and_options[0], Terminal.SUPPORTED_SHELLS )
 
         if len( prompt ) == 0:
             _print("Warning: Prompt can not be empty. setting to default.")
@@ -96,7 +93,7 @@ class Terminal:
         _popen_stdout = PIPE
         _popen_stderr = STDOUT
 
-        if operating_system != PLATFORM_WINDOWS:
+        if PLATFORM != PLATFORMS.WINDOWS:
             std_master, std_slave = pty.openpty()
             self.stdin = os.fdopen(std_master, 'r')
             self.stdout = self.stdin
@@ -122,16 +119,16 @@ class Terminal:
         if self.application not in Terminal.SUPPORTED_SHELLS:
             return
 
-        if operating_system == PLATFORM_LINUX:
+        if PLATFORM == PLATFORMS.LINUX:
             self.execute(f"PS1='{self.prompt}'")
-        elif operating_system == PLATFORM_WINDOWS:
-            if self.application == Terminal.CMD_WIN_CMD:
+        elif PLATFORM == PLATFORMS.WINDOWS:
+            if self.application == SHELLS.WIN_CMD:
                 # In CMD we must use $G for the grater than cymbal and $s for space
                 # TODO: I should have a look at implementing more of the special chars
                 #       https://stackoverflow.com/questions/12028372/how-do-i-change-the-command-line-prompt-in-windows
                 #       https://www.hanselman.com/blog/a-better-prompt-for-cmdexe-or-cool-prompt-environment-variables-and-a-nice-transparent-multiprompt
                 self.execute(f"set PROMPT={self.prompt.replace('>', '$G').replace(' ', '$s')}") # NOTE: these are the two main ones just to get it working
-            elif self.application == Terminal.CMD_WIN_PS:
+            elif self.application == SHELLS.WIN_PS:
                 self.execute(f"function prompt {{ '{self.prompt}' }}")
 
     def __read(self):
@@ -259,8 +256,9 @@ if __name__ == "__main__":
     DEBUG.LOGS.init()
 
     _print( "starting" )
+    _print( PLATFORM )
 
-    with Terminal(["cmd"]) as aaa:
+    with Terminal([SHELLS.WIN_PS]) as aaa:
 
         if aaa is not None:
 
