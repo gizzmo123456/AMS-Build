@@ -1,4 +1,6 @@
-import config_loader    # Loads in all config file.
+if __name__ == "__main__":
+    # This must be loaded in first if testing
+    import config_loader  # Loads in all config file.
 from constants import PLATFORMS, SHELLS
 from app_const import PLATFORM
 from subprocess import Popen, PIPE, STDOUT
