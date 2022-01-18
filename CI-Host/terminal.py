@@ -32,11 +32,18 @@ class Terminal:
     # rather then "-is" as we can specify the file to read from.
     UNSUPPORTED_SHELLS = [SHELLS.LINUX_SH]
 
+    DEFAULT_PROCESSES_AND_OPTIONS = {
+        SHELLS.WIN_PS:     ["powershell", ""],
+        SHELLS.WIN_CMD:    ["cmd"],
+        SHELLS.LINUX_BASH: ["bash", "--norc", "-is"],
+        SHELLS.LINUX_SH:   ["sh", "-is"] # Tho this does not work.
+    }
+
     def __init__(self, process_and_options, prompt=DEFAULT_PROMPT, prompt_line_terminate=PROMPT_LINE_TERMINATE):
         """
             Creates a sudo-terminal for windows or linux. This must be used in conjunction with the 'with statement'
             to spawn the terminal. This is to help prevent dangling processes
-        :param process_and_options:     list [] of cmd and options
+        :param process_and_options:     string to use default other wise list of cmd and options
                                         the first element of the list should be the shell application to run
                                         On windows we support cmd and powershell where powershell is preferred
                                         On Linux we support sh and bash where bash is preferred. At the present time
@@ -50,14 +57,22 @@ class Terminal:
         """
 
         if len( process_and_options ) == 0:
-            _print("Error: at least one process and option must be supplied!")
+            _print("at least one process and option must be supplied!", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
             return
 
+        if type( process_and_options ) is str:
+            if process_and_options in Terminal.DEFAULT_PROCESSES_AND_OPTIONS:
+                process_and_options = Terminal.DEFAULT_PROCESSES_AND_OPTIONS[process_and_options]
+            else:
+                process_and_options = [process_and_options]
+        elif type ( process_and_options ) is not list:
+            _print("Invalid process and options", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
+
         if process_and_options[0] in Terminal.UNSUPPORTED_SHELLS:
-            _print(f"Error: {process_and_options[0]} is not currently supported. please consider using an alturnative { Terminal.SUPPORTED_SHELLS }")
+            _print(f"{process_and_options[0]} is not currently supported. please consider using an alturnative { Terminal.SUPPORTED_SHELLS }", message_type=DEBUG.LOGS.MSG_TYPE_ERROR)
             return
         elif process_and_options[0] not in Terminal.SUPPORTED_SHELLS:
-            _print( "WARNING: The requested shell application is not officially supported. Use at your own risk!" )
+            _print( "The requested shell application is not officially supported. Use at your own risk!", message_type=DEBUG.LOGS.MSG_TYPE_WARNING )
             _print( ">>", process_and_options[0], Terminal.SUPPORTED_SHELLS )
 
         if len( prompt ) == 0:
@@ -258,7 +273,7 @@ if __name__ == "__main__":
     _print( "starting" )
     _print( PLATFORM )
 
-    with Terminal([SHELLS.WIN_PS]) as aaa:
+    with Terminal(SHELLS.WIN_PS) as aaa:
 
         if aaa is not None:
 
