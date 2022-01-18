@@ -1,4 +1,4 @@
-from const import *
+from app_const import *
 import hashlib
 import common
 import commonProject

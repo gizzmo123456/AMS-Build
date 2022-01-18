@@ -4,7 +4,7 @@ import json
 import commonProject
 import config_manager
 import DEBUG
-import const
+import app_const
 import random
 import time
 
@@ -30,10 +30,10 @@ class BaseOutWebhook:
     @staticmethod
     def __FORMAT_VALUES():  # use a func so values don't have to be static/const
         return {
-            "app_name": const.APP_NAME,
-            "app_version": const.APP_VERSION,
+            "app_name": app_const.APP_NAME,
+            "app_version": app_const.APP_VERSION,
             "quote": BaseOutWebhook.get_random_quote(),
-            "base_web_address": const.GET_BASE_WEB_ADDRESS( config_manager.ConfigManager.get( "web_interface_port", 8080 ) )
+            "base_web_address": app_const.GET_BASE_WEB_ADDRESS(config_manager.ConfigManager.get("web_interface_port", 8080))
         }
 
     def __init__( self, webhook_url ):

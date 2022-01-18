@@ -7,7 +7,7 @@ import json
 import common
 import commonProject
 import os
-from const import *
+from app_const import *
 import hashlib
 import time
 from www_page import WWWPage, WWWUser

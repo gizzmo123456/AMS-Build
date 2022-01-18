@@ -2,7 +2,7 @@
 # All public methods require a uac
 
 
-from const import *
+from app_const import *
 import common
 import os.path
 import json

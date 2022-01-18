@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer      # we use this lib so we dont have to install flask :)
 import socketserver
 import DEBUG
-from const import *
+from app_const import *
 import common
 
 _print = DEBUG.LOGS.print

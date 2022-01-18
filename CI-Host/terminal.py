@@ -2,9 +2,9 @@
 PLATFORM_WINDOWS = "WIN"
 PLATFORM_LINUX   = "LINUX"
 
-OS = PLATFORM_WINDOWS
-# TO HERE
 
+# TO HERE
+from app_const import OS
 from subprocess import Popen, PIPE, STDOUT
 import os
 import re
