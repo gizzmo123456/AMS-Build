@@ -1,3 +1,5 @@
+# Note: this is to be replaced with UAC.py
+
 import user_manager
 import commonProject
 import time
