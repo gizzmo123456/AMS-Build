@@ -132,5 +132,6 @@ if __name__ == "__main__":
     _print( "Decrypted data 64" )
     _print( decrypted_data64 )
 
+    DEBUG.LOGS.close()
 
 
