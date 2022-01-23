@@ -39,8 +39,8 @@ class Cipher:
 
 class Hash( Cipher ):
 
-    def __init__( self, cipher_name, key_length=16 ):
-        super().__init__( cipher_name, key_length )
+    def __init__( self, secrets_path, cipher_name ):
+        super().__init__( secrets_path, cipher_name )
         self.hasher = BLAKE2b.new( digest_bits=512, key=self.get_or_create_key(), update_after_digest=True )
 
     def new( self ):
@@ -51,36 +51,86 @@ class Hash( Cipher ):
 
         return self.hasher.hexdigest()
 
-# TODO: Update AES to support the base Cipher class
-class AES:
+class AES( Cipher ):
 
-    def __init__(self, nonce=None):
-        self.encryption_key = get_random_bytes(16)
-        self.cipher = crypto_aes.new(self.encryption_key, crypto_aes.MODE_CTR)
-        self.nonce = nonce
+    def __init__(self, secrets_path, cipher_name, nonce=None):
+        super().__init__( secrets_path, cipher_name, 32)
 
-    def new_cipher(self):
-        self.cipher = crypto_aes.new(self.encryption_key, crypto_aes.MODE_CTR, nonce=base64.b64decode(self.nonce) )
+        # might it be worth added __enter__, __exit__ so it can be used with the with statement
 
-    def encrypt(self, str_to_encrypt):
-        """ Encrypt using AES CTR
+    def encrypt( self, bytes_to_encrypt, non_encrypted_bytes=[], in_base64=True):
 
-        :param str_to_encrypt:  plain text string to be encrypted
-        :return:                encrypted str
-        """
+        cipher = crypto_aes.new( self.get_or_create_key(), crypto_aes.MODE_EAX )
 
-        encrypted_bytes = self.cipher.encrypt( str_to_encrypt.encode() )
-        self.nonce = base64.b64encode( self.cipher.nonce ).decode("utf-8")
+        for non_bytes in non_encrypted_bytes:
+            cipher.update( non_bytes )
 
-        return base64.b64encode( encrypted_bytes ).decode("utf-8")
+        encrypted_data, tag = cipher.encrypt_and_digest( bytes_to_encrypt )
 
-    def decrypt(self, str_to_decrypt):
-        """ Encrypt using AES CTR
+        if in_base64:
+            return {
+                "nonce": base64.b64encode( cipher.nonce ),
+                "data": base64.b64encode( encrypted_data ),
+                "tag": base64.b64encode( tag )
+            }
+        else:
+            return {
+                "nonce": cipher.nonce,
+                "data": encrypted_data,
+                "tag": tag
+            }
 
-        :param str_to_decrypt:  plain text string to be encrypted
-        :return:                encrypted str
-        """
+        pass
 
-        decoded_str = base64.b64decode( str_to_decrypt )
+    def decrypt( self, decrypt_values, non_encrypted_data=[], from_base64=True ):
 
-        return "".join( map ( chr, self.cipher.decrypt( decoded_str ) ) )
+        if from_base64:
+            for key in decrypt_values:
+                decrypt_values[ key ] = base64.b64decode( decrypt_values[key] )
+
+        cipher = crypto_aes.new( self.get_or_create_key(), crypto_aes.MODE_EAX, nonce=decrypt_values["nonce"] )
+
+        for non_encrypted in non_encrypted_data:
+            cipher.update( non_encrypted )
+
+        try:
+            return cipher.decrypt_and_verify( decrypt_values["data"], decrypt_values["tag"] )
+        except (ValueError, KeyError):
+            return None
+
+
+if __name__ == "__main__":
+
+    import DEBUG
+    _print = DEBUG.LOGS.print
+
+    DEBUG.LOGS.init()
+    path = "./data/.secrets/"
+
+    data_to_encrypt = b"Helloo World!"
+    data_to_not_encrypt = [ b"Header1", b"Header2", b"Header3" ]
+
+    encrypt_cipher = AES( path, "TEST_AES_CIPHER" )
+    encrypt_cipher64 = AES( path, "TEST_AES_CIPHER" )
+
+    encrypted_data = encrypt_cipher.encrypt( data_to_encrypt, data_to_not_encrypt, in_base64=False )
+    encrypted_data64 = encrypt_cipher64.encrypt( data_to_encrypt, data_to_not_encrypt, in_base64=True )
+
+    _print( "Encrypted data" )
+    _print( encrypted_data )
+    _print( "Encrypted data 64" )
+    _print( encrypted_data64 )
+
+    decrypt_cipher = AES( path, "TEST_AES_CIPHER", nonce=encrypted_data["nonce"])
+    decrypt_cipher64 = AES( path, "TEST_AES_CIPHER", nonce=base64.b64decode( encrypted_data64["nonce"] ) )
+
+    decrypted_data = decrypt_cipher.decrypt( encrypted_data, [], from_base64=False )
+    decrypted_data64 = decrypt_cipher.decrypt( encrypted_data64, [], from_base64=True )
+
+    _print( "Decrypted data" )
+    _print( decrypted_data )
+    _print( "Decrypted data 64" )
+    _print( decrypted_data64 )
+
+
+
