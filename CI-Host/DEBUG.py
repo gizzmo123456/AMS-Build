@@ -84,17 +84,19 @@ class LOGS:
 
         print("started debug thread")
 
-        LOGS.active = True
+        LOGS.active = running = True
 
-        while LOGS.active:
+        while running:
 
             log = LOGS.print_que.get(block=True, timeout=None)
 
             if len(log) == 5:
                 log_time, log_type, message, output_file, console = log
             elif len(log) == 1 and log[0] == QUEUE_UNBLOCK_MESSAGE:
-                print("Killing Debug thread")
-                break
+                if not LOGS.active:
+                    running = False
+                    print("Killing Debug thread")
+                continue
             else:
                 print("Error: Invalid Debug Log Message (", log, ") ")
                 continue
